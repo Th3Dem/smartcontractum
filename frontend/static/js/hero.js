@@ -217,65 +217,101 @@ document.addEventListener('DOMContentLoaded', () => {
             canvas.height = height;
         }
 
-        class FastCosmicShard {
+        class FluidCosmicShard {
             constructor() {
+                this.noiseOffset = Math.random() * 100;
+                this.noiseSpeed = Math.random() * 0.015 + 0.008;
+                this.swirlDir = Math.random() > 0.5 ? 1 : -1;
                 this.reset(true);
             }
 
             reset(initial = false) {
                 this.x = initial ? Math.random() * (width || 800) : (Math.random() > 0.5 ? 0 : width);
                 this.y = Math.random() * (height || 500);
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = (Math.random() - 0.5) * 0.4;
-                this.size = Math.random() * 4 + 2;
+                this.vx = (Math.random() - 0.5) * 0.35;
+                this.vy = (Math.random() - 0.5) * 0.35;
+                this.baseSize = Math.random() * 3.5 + 2;
                 this.colorPrefix = colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
-                this.alpha = (Math.random() * 0.35 + 0.15).toFixed(2);
+                this.baseAlpha = Math.random() * 0.35 + 0.2;
                 this.angle = Math.random() * 6.28;
-                this.angularVelocity = (Math.random() - 0.5) * 0.02;
-                this.type = Math.floor(Math.random() * 2); // Diamond or Circle
+                this.angularVelocity = (Math.random() - 0.5) * 0.018;
+                this.type = Math.floor(Math.random() * 2);
             }
 
             update(localMouseX, localMouseY) {
-                this.x += this.vx;
-                this.y += this.vy;
+                this.noiseOffset += this.noiseSpeed;
                 this.angle += this.angularVelocity;
 
-                // Ultra-fast squared distance check (avoids expensive Math.sqrt)
+                // Organic fluid wave drift
+                const ambientWaveX = Math.cos(this.noiseOffset) * 0.12;
+                const ambientWaveY = Math.sin(this.noiseOffset) * 0.12;
+                this.vx += ambientWaveX;
+                this.vy += ambientWaveY;
+
+                // Smooth magnetic fluid trailing around mouse
                 const dx = localMouseX - this.x;
                 const dy = localMouseY - this.y;
                 const distSq = dx * dx + dy * dy;
+                const INFLUENCE_RADIUS = 260;
+                const INFLUENCE_SQ = INFLUENCE_RADIUS * INFLUENCE_RADIUS;
 
-                if (distSq < 28900 && distSq > 100) { // 170px radius
-                    const invDist = 1 / Math.sqrt(distSq);
-                    const force = (170 - (1 / invDist)) * 0.0004;
-                    this.vx += dx * force;
-                    this.vy += dy * force;
+                if (distSq < INFLUENCE_SQ && distSq > 400) {
+                    const dist = Math.sqrt(distSq);
+                    // Soft quadratic easing factor: 0 at edge, peak in mid-range, gentle near center
+                    const normalized = 1 - (dist / INFLUENCE_RADIUS);
+                    const pullStrength = Math.sin(normalized * Math.PI) * 0.028;
+
+                    // 1. Gentle radial attraction
+                    this.vx += (dx / dist) * pullStrength;
+                    this.vy += (dy / dist) * pullStrength;
+
+                    // 2. Fluid orbital vortex / tangential swimming (prevents sharp clumping)
+                    const tangentX = -dy / dist;
+                    const tangentY = dx / dist;
+                    const swirlStrength = pullStrength * 0.65 * this.swirlDir;
+                    this.vx += tangentX * swirlStrength;
+                    this.vy += tangentY * swirlStrength;
                 }
 
-                this.vx *= 0.985;
-                this.vy *= 0.985;
+                // Smooth Viscous Liquid Damping
+                this.vx *= 0.965;
+                this.vy *= 0.965;
 
-                if (this.x < -15 || this.x > width + 15 || this.y < -15 || this.y > height + 15) {
-                    this.reset(false);
+                // Speed Cap (prevents jarring jerks or sharp snapping)
+                const currentSpeedSq = this.vx * this.vx + this.vy * this.vy;
+                const MAX_SPEED = 2.4;
+                if (currentSpeedSq > MAX_SPEED * MAX_SPEED) {
+                    const speed = Math.sqrt(currentSpeedSq);
+                    this.vx = (this.vx / speed) * MAX_SPEED;
+                    this.vy = (this.vy / speed) * MAX_SPEED;
                 }
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Wrap-around screen bounds
+                if (this.x < -20) this.x = width + 20;
+                else if (this.x > width + 20) this.x = -20;
+                if (this.y < -20) this.y = height + 20;
+                else if (this.y > height + 20) this.y = -20;
             }
 
             draw() {
                 ctx.save();
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.angle);
-                ctx.fillStyle = this.colorPrefix + this.alpha + ')';
+                ctx.fillStyle = this.colorPrefix + this.baseAlpha.toFixed(2) + ')';
 
                 ctx.beginPath();
                 if (this.type === 0) {
-                    // Optimized Fast Diamond
-                    ctx.moveTo(0, -this.size);
-                    ctx.lineTo(this.size * 0.65, 0);
-                    ctx.lineTo(0, this.size);
-                    ctx.lineTo(-this.size * 0.65, 0);
+                    // Smooth Diamond
+                    ctx.moveTo(0, -this.baseSize);
+                    ctx.lineTo(this.baseSize * 0.65, 0);
+                    ctx.lineTo(0, this.baseSize);
+                    ctx.lineTo(-this.baseSize * 0.65, 0);
                 } else {
-                    // Fast Arc
-                    ctx.arc(0, 0, this.size * 0.45, 0, 6.28);
+                    // Glowing Micro Star
+                    ctx.arc(0, 0, this.baseSize * 0.45, 0, 6.28);
                 }
                 ctx.closePath();
                 ctx.fill();
@@ -292,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { passive: true });
 
         for (let i = 0; i < SHARDS_COUNT; i++) {
-            shards.push(new FastCosmicShard());
+            shards.push(new FluidCosmicShard());
         }
 
         function animateShards() {
