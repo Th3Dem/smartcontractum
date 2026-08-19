@@ -22,7 +22,7 @@ def test_home_page_returns_200_and_html() -> None:
     # 1.1 Hero Banner
     assert "Профессиональная среда" in html
     assert "смарт-контрактов ПКСК" in html
-    assert "Официальный сбор обратной связи по Концепции ПКСК (до 30.09.2026)" in html
+    assert "SmartContractum" in html
 
 
 def test_home_page_contains_all_four_task_routes() -> None:

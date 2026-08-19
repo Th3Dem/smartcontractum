@@ -1,6 +1,6 @@
 /* ======================================================================
    SmartContractum — Block 1 Hero Section & Interactive Task Router
-   Design System: CoinMarketCap Theme + Ambient 3D Spatial Hologram
+   Design System: CoinMarketCap Theme + Cosmic Shards & 3D Crystal Matrix
 ====================================================================== */
 
 .home-page-container {
@@ -11,7 +11,7 @@
 }
 
 /* ----------------------------------------------------------------------
-   1.1 HERO BANNER WITH BACKGROUND 3D HOLOGRAPHIC CUBE
+   1.1 HERO BANNER WITH 3D CUBE & INTERACTIVE COSMIC SHARDS
 ---------------------------------------------------------------------- */
 .hero-block {
     position: relative;
@@ -20,8 +20,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 30px 0;
+    padding: 40px 0;
     overflow: visible;
+}
+
+/* Interactive Cosmic Shards Canvas (Attracted to Cursor) */
+.cosmic-shards-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
 }
 
 /* Background 3D Matrix Container (Positioned Behind Text) */
@@ -264,39 +275,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 18px;
+    gap: 20px;
     text-align: center;
     max-width: 880px;
     margin: 0 auto;
     pointer-events: auto;
 }
 
-.hero-status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 18px;
-    background: rgba(11, 20, 38, 0.9);
-    border: 1px solid rgba(246, 184, 63, 0.5);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-radius: var(--radius-full);
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #f6b83f;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-}
-
-.status-pulse-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #f6b83f;
-    border-radius: 50%;
-    box-shadow: 0 0 8px #f6b83f;
-}
-
 .hero-main-title {
-    font-size: 3.2rem;
+    font-size: 3.3rem;
     font-weight: 800;
     line-height: 1.18;
     letter-spacing: -0.035em;
@@ -316,7 +303,7 @@
 }
 
 .hero-description {
-    font-size: 1.15rem;
+    font-size: 1.18rem;
     color: #f1f5f9;
     line-height: 1.65;
     max-width: 800px;

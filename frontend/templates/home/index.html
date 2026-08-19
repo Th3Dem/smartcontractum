@@ -9,9 +9,12 @@
 {% block content %}
 <div class="home-page-container">
     <!-- ================================================================
-         1.1 HERO-БАННЕР С ФОНОВЫМ ИНТЕРАКТИВНЫМ 3D ГОЛОГРАФИЧЕСКИМ КУБОМ
+         1.1 HERO-БАННЕР С ИНТЕРАКТИВНЫМ 3D КУБОМ И КОСМИЧЕСКИМИ ОСКОЛКАМИ
     ================================================================= -->
     <section class="hero-block" id="heroBlock">
+        <!-- Interactive Cosmic Shards & Particle Field Canvas (Attracted to Cursor) -->
+        <canvas id="cosmicShardsCanvas" class="cosmic-shards-canvas" aria-hidden="true"></canvas>
+
         <!-- Background 3D Spatial Hologram (Positioned Behind Text) -->
         <div class="hero-3d-bg-matrix" id="hero3dBgMatrix" aria-hidden="true">
             <div class="scene-3d" id="scene3d">
@@ -71,12 +74,6 @@
 
         <!-- Foreground Hero Content (Elevated, 100% Readable, High-Contrast) -->
         <div class="hero-foreground-content">
-            <!-- CBR Concept Phase Status Notice -->
-            <div class="hero-status-pill">
-                <span class="status-pulse-dot"></span>
-                <span class="status-text">{{ status_notice|default("Статус: Официальный сбор обратной связи по Концепции ПКСК (до 30.09.2026)") }}</span>
-            </div>
-
             <!-- Main Heading with Crystal-Clear Contrast -->
             <h1 class="hero-main-title">
                 <span class="hero-title-white">Профессиональная среда</span> <br>
