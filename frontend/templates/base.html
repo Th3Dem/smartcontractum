@@ -83,71 +83,12 @@
                 </ul>
             </nav>
 
-            <!-- User Profile Dropdown & Login Bar -->
+            <!-- User Login / Profile Action Button -->
             <div class="header-user-bar">
-                <div class="user-dropdown-wrapper" id="userDropdownWrapper">
-                    <button type="button" class="user-profile-btn" id="btnUserDropdown" aria-expanded="false" aria-label="Меню профиля">
-                        <div class="user-avatar-small">
-                            <span>АВ</span>
-                            <span class="avatar-online-dot"></span>
-                        </div>
-                        <div class="user-meta-text">
-                            <span class="user-name-title">Александр В.</span>
-                            <span class="user-org-sub">{{ user_org|default("ООО Интегратор") }}</span>
-                        </div>
-                        <span class="dropdown-chevron">▼</span>
-                    </button>
-
-                    <!-- Dropdown Menu -->
-                    <div class="user-dropdown-menu" id="userDropdownMenu" style="display: none;">
-                        <div class="dropdown-header-box">
-                            <div class="dropdown-user-name">Александр Волков</div>
-                            <div class="dropdown-user-role">Senior Smart Contract Architect</div>
-                            <div class="dropdown-status-pill">
-                                <span class="pulse-emerald"></span>
-                                <span>Аккредитован ЦБ РФ</span>
-                            </div>
-                        </div>
-
-                        <div class="dropdown-balance-box">
-                            <span class="balance-title">Баланс роялти:</span>
-                            <span class="balance-amount">42 500 ₽</span>
-                        </div>
-
-                        <ul class="dropdown-menu-list">
-                            <li>
-                                <a href="/profile" class="dropdown-menu-link">
-                                    <span class="drop-icon">👤</span>
-                                    <span>Личный профиль</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/profile" class="dropdown-menu-link">
-                                    <span class="drop-icon">💼</span>
-                                    <span>Umbrella-Контракты</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/profile" class="dropdown-menu-link">
-                                    <span class="drop-icon">💰</span>
-                                    <span>Роялти и выплаты</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/passport" class="dropdown-menu-link">
-                                    <span class="drop-icon">📑</span>
-                                    <span>Мои Паспорта</span>
-                                </a>
-                            </li>
-                        </ul>
-
-                        <div class="dropdown-footer-box">
-                            <button type="button" class="btn-dropdown-switch-user" id="btnOpenAuthModal">
-                                <span>🔄 Сменить профиль / Вход</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <a href="/profile" class="header-login-action-btn" title="Перейти в Личный Кабинет">
+                    <span class="btn-user-icon">👤</span>
+                    <span>Личный Кабинет</span>
+                </a>
             </div>
         </div>
     </header>

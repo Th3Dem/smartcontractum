@@ -25,7 +25,7 @@ def test_index_endpoint_returns_200_and_html() -> None:
 
     # Verify core branding & metadata
     assert "SmartContractum" in html
-    assert "ООО Интегратор (Umbrella-Dev)" in html
+    assert "Личный Кабинет" in html
     assert "Фаза НИР ЦБ РФ (до 31.03.2027)" in html
     assert "ПКСК Банка России" in html
 

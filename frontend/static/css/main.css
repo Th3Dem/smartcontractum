@@ -283,22 +283,32 @@ ul {
     color: var(--accent-emerald);
 }
 
-/* User Profile Dropdown */
-.user-dropdown-wrapper {
-    position: relative;
+/* Header Login / Profile Action Button */
+.header-login-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: rgba(30, 41, 59, 0.85);
+    border: 1px solid rgba(51, 65, 85, 0.8);
+    border-radius: var(--radius-full);
+    color: #f8fafc;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-fast);
 }
 
-.user-profile-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 4px 14px 4px 6px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-full);
-    cursor: pointer;
-    color: var(--text-primary);
-    transition: all var(--transition-fast);
+.header-login-action-btn:hover {
+    background: rgba(6, 182, 212, 0.15);
+    border-color: var(--accent-cyan);
+    color: #ffffff;
+    box-shadow: 0 0 16px rgba(6, 182, 212, 0.3);
+    transform: translateY(-1px);
+}
+
+.btn-user-icon {
+    font-size: 1rem;
 }
 
 .user-profile-btn:hover {
