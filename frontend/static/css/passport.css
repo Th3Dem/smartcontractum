@@ -1,11 +1,12 @@
 /* ======================================================================
    SmartContractum — Block 3 Passport Wizard & Decision Tree Styles
+   Visual Style: CoinMarketCap Specification & Logic Visualizer
 ====================================================================== */
 
 .passport-page-container {
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 36px;
     padding-bottom: 24px;
 }
 
@@ -17,7 +18,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
 }
 
 .passport-tag-pill {
@@ -25,12 +26,12 @@
     align-items: center;
     gap: 8px;
     padding: 6px 16px;
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.35);
+    background: rgba(56, 97, 251, 0.12);
+    border: 1px solid rgba(56, 97, 251, 0.35);
     border-radius: var(--radius-full);
     font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--accent-emerald);
+    font-weight: 700;
+    color: var(--accent-cyan);
 }
 
 .pulse-emerald {
@@ -42,14 +43,14 @@
 }
 
 .passport-title {
-    font-size: 2.6rem;
+    font-size: 2.5rem;
     font-weight: 800;
     letter-spacing: -0.03em;
     color: #ffffff;
 }
 
 .passport-subtitle {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     color: var(--text-secondary);
     line-height: 1.6;
 }
@@ -58,7 +59,7 @@
 .passport-workspace-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    gap: 32px;
+    gap: 28px;
     align-items: start;
 }
 
@@ -66,12 +67,12 @@
 .wizard-form-panel, .tree-preview-panel {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    padding: 28px;
+    border-radius: var(--radius-md);
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 22px;
-    box-shadow: var(--shadow-md);
+    gap: 20px;
+    box-shadow: var(--shadow-sm);
 }
 
 .panel-header {
@@ -83,140 +84,92 @@
 }
 
 .panel-icon-box {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-md);
-    background: rgba(37, 99, 235, 0.15);
-    border: 1px solid rgba(37, 99, 235, 0.35);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background: rgba(56, 97, 251, 0.12);
+    border: 1px solid rgba(56, 97, 251, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     flex-shrink: 0;
 }
 
 .panel-icon-box.cyan {
-    background: rgba(6, 182, 212, 0.15);
-    border-color: rgba(6, 182, 212, 0.35);
+    background: rgba(97, 136, 255, 0.12);
+    border-color: rgba(97, 136, 255, 0.3);
 }
 
 .panel-title {
-    font-size: 1.22rem;
-    font-weight: 700;
+    font-size: 1.15rem;
+    font-weight: 800;
     color: #ffffff;
 }
 
-.panel-hint {
-    font-size: 0.8rem;
-    color: var(--text-muted);
+.panel-subtitle {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
 }
 
-.tree-header-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.passport-id-badge {
-    font-family: "JetBrains Mono", Consolas, monospace;
-    font-size: 0.76rem;
-    font-weight: 700;
-    padding: 2px 8px;
-    background: rgba(6, 182, 212, 0.12);
-    border: 1px solid rgba(6, 182, 212, 0.3);
-    color: var(--accent-cyan);
-    border-radius: var(--radius-sm);
-    width: fit-content;
-}
-
-/* Wizard Form */
+/* Form Styles */
 .wizard-form {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
 }
 
-.wizard-alert-box {
-    padding: 10px 14px;
-    border-radius: var(--radius-md);
-    font-size: 0.85rem;
-    font-weight: 500;
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
-.wizard-alert-box.alert-error {
-    background: rgba(244, 63, 94, 0.12);
-    border: 1px solid rgba(244, 63, 94, 0.35);
-    color: #fda4af;
+.form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
 }
 
-.wizard-alert-box.alert-success {
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.35);
-    color: #6ee7b7;
-}
-
-.step-num {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: rgba(6, 182, 212, 0.2);
-    color: var(--accent-cyan);
-    font-size: 0.72rem;
-    font-weight: 700;
-    margin-right: 6px;
-}
-
-.req {
-    color: var(--accent-rose);
-}
-
-.btn-generate-tree {
-    width: 100%;
+.btn-generate-passport {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 12px 24px;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    padding: 12px 20px;
+    background: var(--accent-blue);
     color: #ffffff;
+    font-size: 0.92rem;
     font-weight: 700;
-    font-size: 0.98rem;
+    border-radius: var(--radius-sm);
     border: none;
-    border-radius: var(--radius-md);
     cursor: pointer;
-    box-shadow: 0 4px 16px rgba(6, 182, 212, 0.25);
+    box-shadow: 0 4px 14px rgba(56, 97, 251, 0.35);
     transition: all var(--transition-fast);
 }
 
-.btn-generate-tree:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 22px rgba(6, 182, 212, 0.4);
+.btn-generate-passport:hover {
+    background: var(--accent-blue-hover);
+    transform: translateY(-1px);
 }
 
-.btn-generate-tree:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-/* Terminal Container */
-.terminal-container {
-    background: #090d16;
-    border: 1px solid rgba(6, 182, 212, 0.3);
-    border-radius: var(--radius-md);
+/* Tree Preview Terminal (CoinMarketCap Dark Terminal) */
+.terminal-window {
+    background: #080e1a;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
     overflow: hidden;
-    box-shadow: 0 0 25px rgba(6, 182, 212, 0.12);
+    display: flex;
+    flex-direction: column;
 }
 
-.terminal-topbar {
+.terminal-header {
+    background: #0b1426;
+    padding: 10px 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 16px;
-    background: #111827;
-    border-bottom: 1px solid #1f2937;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .terminal-dots {
@@ -230,114 +183,60 @@
     border-radius: 50%;
 }
 
-.dot.red { background-color: #ef4444; }
-.dot.yellow { background-color: #f59e0b; }
-.dot.green { background-color: #10b981; }
+.dot.red { background-color: #ea3943; }
+.dot.yellow { background-color: #f6b83f; }
+.dot.green { background-color: #16c784; }
 
 .terminal-title {
-    font-family: "JetBrains Mono", Consolas, monospace;
-    font-size: 0.72rem;
+    font-size: 0.76rem;
+    font-weight: 600;
     color: var(--text-muted);
-    letter-spacing: 0.5px;
-}
-
-.btn-copy-code {
-    background: transparent;
-    border: 1px solid #374151;
-    color: var(--text-secondary);
-    font-size: 0.74rem;
-    padding: 3px 8px;
-    border-radius: var(--radius-xs);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-}
-
-.btn-copy-code:hover {
-    color: var(--accent-cyan);
-    border-color: var(--accent-cyan);
+    font-family: "JetBrains Mono", monospace;
 }
 
 .terminal-body {
-    padding: 20px;
-    overflow-x: auto;
-    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
-    font-size: 0.86rem;
+    padding: 16px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.84rem;
     line-height: 1.6;
-    color: #e2e8f0;
+    color: #cbd5e1;
+    overflow-x: auto;
+    max-height: 480px;
     white-space: pre;
 }
 
-/* Actions Bar */
-.preview-actions-bar {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
+.terminal-actions-bar {
+    display: flex;
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-color);
+    flex-wrap: wrap;
 }
 
-.btn-action-secondary {
+.btn-action-outline {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 18px;
+    gap: 6px;
+    padding: 8px 14px;
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
-    color: var(--text-primary);
+    color: var(--text-secondary);
+    border-radius: var(--radius-xs);
+    font-size: 0.8rem;
     font-weight: 600;
-    font-size: 0.9rem;
-    border-radius: var(--radius-md);
     cursor: pointer;
     transition: all var(--transition-fast);
 }
 
-.btn-action-secondary:hover {
-    border-color: var(--border-focus);
-    background: var(--bg-card-hover);
-    color: var(--accent-cyan);
-}
-
-.btn-action-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 18px;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+.btn-action-outline:hover {
     color: #ffffff;
-    font-weight: 600;
-    font-size: 0.9rem;
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.25);
-    transition: all var(--transition-fast);
+    background: var(--bg-card-hover);
+    border-color: var(--accent-blue);
 }
 
-.btn-action-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
-}
-
-.compliance-note {
-    display: flex;
-    gap: 10px;
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    line-height: 1.4;
-    padding-top: 10px;
-    border-top: 1px solid rgba(51, 65, 85, 0.5);
-}
-
-/* Responsive Breakpoints */
+/* Responsive */
 @media (max-width: 960px) {
     .passport-workspace-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .passport-title {
-        font-size: 2rem;
-    }
-
-    .preview-actions-bar {
         grid-template-columns: 1fr;
     }
 }

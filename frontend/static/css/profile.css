@@ -1,5 +1,6 @@
 /* ======================================================================
    SmartContractum — Block 6 Profile & Umbrella Developer Workspace Styles
+   Visual Style: CoinMarketCap Portfolio & Developer Earnings Dashboard
 ====================================================================== */
 
 .profile-page-container {
@@ -10,40 +11,40 @@
 }
 
 /* ----------------------------------------------------------------------
-   6.1 PROFILE HERO CARD
+   6.1 PROFILE HERO CARD (CMC Style)
 ---------------------------------------------------------------------- */
 .profile-header-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    padding: 32px;
+    border-radius: var(--radius-md);
+    padding: 28px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    box-shadow: var(--shadow-md);
+    gap: 20px;
+    box-shadow: var(--shadow-sm);
 }
 
 .profile-hero-row {
     display: flex;
-    gap: 28px;
+    gap: 24px;
     align-items: flex-start;
 }
 
 .profile-avatar-box {
-    width: 84px;
-    height: 84px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    background: linear-gradient(135deg, var(--accent-blue), #6188ff);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     flex-shrink: 0;
-    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+    box-shadow: 0 4px 16px rgba(56, 97, 251, 0.35);
 }
 
 .avatar-text {
-    font-size: 2rem;
+    font-size: 1.9rem;
     font-weight: 800;
     color: #ffffff;
     letter-spacing: 1px;
@@ -81,7 +82,7 @@
 }
 
 .profile-name {
-    font-size: 1.8rem;
+    font-size: 1.7rem;
     font-weight: 800;
     color: #ffffff;
 }
@@ -91,10 +92,10 @@
     align-items: center;
     gap: 6px;
     padding: 4px 12px;
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.4);
-    color: #34d399;
-    border-radius: var(--radius-full);
+    background: rgba(22, 199, 132, 0.12);
+    border: 1px solid rgba(22, 199, 132, 0.35);
+    color: #16c784;
+    border-radius: var(--radius-xs);
     font-size: 0.78rem;
     font-weight: 700;
 }
@@ -103,7 +104,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
 }
 
 .profile-role {
@@ -129,7 +130,7 @@
 .skills-tags-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
     margin-top: 4px;
 }
 
@@ -139,14 +140,14 @@
     padding: 2px 8px;
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-xs);
     color: #cbd5e1;
 }
 
 .reputation-score-box {
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     padding: 16px 20px;
     display: flex;
     flex-direction: column;
@@ -166,13 +167,13 @@
 .rep-value {
     font-size: 1.8rem;
     font-weight: 800;
-    color: var(--accent-cyan);
-    font-family: "JetBrains Mono", monospace;
+    color: var(--accent-blue);
+    font-family: "Inter", monospace;
 }
 
 .rep-rank {
     font-size: 0.74rem;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--accent-emerald);
 }
 
@@ -180,16 +181,16 @@
 .professional-trail-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    padding-top: 20px;
+    gap: 14px;
+    padding-top: 18px;
     border-top: 1px solid var(--border-color);
 }
 
 .trail-stat-card {
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 16px;
+    border-radius: var(--radius-xs);
+    padding: 14px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -198,10 +199,10 @@
 }
 
 .trail-number {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 800;
     color: #ffffff;
-    font-family: "JetBrains Mono", monospace;
+    font-family: "Inter", monospace;
 }
 
 .trail-label {
@@ -211,14 +212,14 @@
 }
 
 /* ----------------------------------------------------------------------
-   TABS NAVIGATION
+   TABS NAVIGATION (CoinMarketCap Sub-nav style)
 ---------------------------------------------------------------------- */
 .profile-tabs-nav {
     display: flex;
-    gap: 10px;
-    background: var(--bg-surface);
-    padding: 6px;
-    border-radius: var(--radius-md);
+    gap: 6px;
+    background: var(--bg-card);
+    padding: 4px;
+    border-radius: var(--radius-sm);
     border: 1px solid var(--border-color);
     overflow-x: auto;
 }
@@ -227,13 +228,13 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 18px;
+    padding: 8px 16px;
     background: transparent;
     border: 1px solid transparent;
     color: var(--text-secondary);
     font-size: 0.88rem;
     font-weight: 600;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-xs);
     cursor: pointer;
     white-space: nowrap;
     transition: all var(--transition-fast);
@@ -241,19 +242,20 @@
 
 .tab-nav-btn:hover {
     color: #ffffff;
+    background: var(--bg-surface);
 }
 
 .tab-nav-btn.active {
-    background: var(--bg-card);
-    border-color: rgba(6, 182, 212, 0.4);
-    color: var(--accent-cyan);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    background: var(--accent-blue);
+    color: #ffffff;
+    border-color: var(--accent-blue);
+    box-shadow: 0 2px 8px rgba(56, 97, 251, 0.3);
 }
 
 .tab-counter {
     font-size: 0.72rem;
-    background: rgba(6, 182, 212, 0.2);
-    color: var(--accent-cyan);
+    background: rgba(0, 0, 0, 0.25);
+    color: #ffffff;
     padding: 1px 6px;
     border-radius: var(--radius-full);
 }
@@ -276,8 +278,8 @@
 }
 
 .section-title {
-    font-size: 1.3rem;
-    font-weight: 700;
+    font-size: 1.25rem;
+    font-weight: 800;
     color: #ffffff;
 }
 
@@ -288,14 +290,13 @@
 
 /* Umbrella Notice Box */
 .umbrella-info-box {
-    background: rgba(37, 99, 235, 0.08);
-    border: 1px solid rgba(37, 99, 235, 0.35);
-    border-radius: var(--radius-md);
+    background: rgba(56, 97, 251, 0.08);
+    border: 1px solid rgba(56, 97, 251, 0.3);
+    border-radius: var(--radius-sm);
     padding: 16px 20px;
     display: flex;
     gap: 16px;
     align-items: flex-start;
-    box-shadow: 0 0 20px rgba(37, 99, 235, 0.08);
 }
 
 .info-icon {
@@ -312,7 +313,7 @@
 .info-title {
     font-size: 0.94rem;
     font-weight: 700;
-    color: #60a5fa;
+    color: #6188ff;
 }
 
 .info-text {
@@ -326,30 +327,31 @@
     align-items: center;
     gap: 8px;
     padding: 10px 18px;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    background: var(--accent-blue);
     color: #ffffff;
     font-weight: 700;
     font-size: 0.88rem;
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     cursor: pointer;
     text-decoration: none;
-    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.25);
+    box-shadow: 0 4px 14px rgba(56, 97, 251, 0.3);
     transition: all var(--transition-fast);
 }
 
 .btn-submit-umbrella:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+    background: var(--accent-blue-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(56, 97, 251, 0.45);
 }
 
 /* Table Card Box */
 .table-card-box {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     overflow: hidden;
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-sm);
 }
 
 .profile-table {
@@ -359,7 +361,7 @@
 }
 
 .profile-table th {
-    background: var(--bg-surface);
+    background: #0e1626;
     padding: 14px 18px;
     font-size: 0.76rem;
     font-weight: 700;
@@ -377,6 +379,10 @@
 
 .profile-table tbody tr:last-child td {
     border-bottom: none;
+}
+
+.profile-table tbody tr:hover {
+    background: var(--bg-card-hover);
 }
 
 .col-bold-title {
@@ -406,68 +412,69 @@
     align-items: center;
     gap: 6px;
     padding: 3px 10px;
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-xs);
     font-size: 0.76rem;
     font-weight: 700;
 }
 
 .status-pill.status-published {
-    background: rgba(16, 185, 129, 0.15);
-    border: 1px solid rgba(16, 185, 129, 0.4);
-    color: #34d399;
+    background: rgba(22, 199, 132, 0.12);
+    border: 1px solid rgba(22, 199, 132, 0.35);
+    color: #16c784;
 }
 
 .status-pill.status-review {
-    background: rgba(245, 158, 11, 0.15);
-    border: 1px solid rgba(245, 158, 11, 0.4);
-    color: #fbbf24;
+    background: rgba(246, 184, 63, 0.12);
+    border: 1px solid rgba(246, 184, 63, 0.35);
+    color: #f6b83f;
 }
 
 .status-pill.status-audit {
-    background: rgba(6, 182, 212, 0.15);
-    border: 1px solid rgba(6, 182, 212, 0.4);
-    color: #38bdf8;
+    background: rgba(56, 97, 251, 0.12);
+    border: 1px solid rgba(56, 97, 251, 0.35);
+    color: #6188ff;
 }
 
 .payout-pill {
     font-size: 0.74rem;
     font-weight: 700;
     padding: 2px 8px;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-xs);
 }
 
 .payout-pill.paid {
-    background: rgba(16, 185, 129, 0.15);
-    color: #34d399;
+    background: rgba(22, 199, 132, 0.12);
+    color: #16c784;
 }
 
 .payout-pill.pending {
-    background: rgba(245, 158, 11, 0.15);
-    color: #fbbf24;
+    background: rgba(246, 184, 63, 0.12);
+    color: #f6b83f;
 }
 
 /* ----------------------------------------------------------------------
-   6.3 EARNINGS SUMMARY GRID
+   6.3 COINMARKETCAP PORTFOLIO / EARNINGS METRICS
 ---------------------------------------------------------------------- */
 .earnings-summary-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 16px;
 }
 
 .earning-stat-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    padding: 24px;
+    border-radius: var(--radius-md);
+    padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 6px;
+    box-shadow: var(--shadow-sm);
 }
 
 .earning-stat-card.highlight {
-    border-color: rgba(6, 182, 212, 0.45);
-    box-shadow: 0 0 20px rgba(6, 182, 212, 0.12);
+    border-color: rgba(56, 97, 251, 0.4);
+    box-shadow: 0 0 16px rgba(56, 97, 251, 0.15);
 }
 
 .earning-label {
@@ -478,9 +485,18 @@
 }
 
 .earning-value {
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 800;
     color: #ffffff;
+    font-family: "Inter", monospace;
+}
+
+.earning-value.text-emerald {
+    color: #16c784;
+}
+
+.earning-value.text-cyan {
+    color: #6188ff;
 }
 
 .earning-hint {
@@ -492,7 +508,7 @@
 .api-settings-box {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     padding: 24px;
 }
 
@@ -500,6 +516,17 @@
     display: flex;
     gap: 12px;
     align-items: center;
+}
+
+.btn-canvas-tool {
+    padding: 8px 14px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    color: #ffffff;
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
 }
 
 .form-checkbox-row {
@@ -517,31 +544,31 @@
 
 .btn-submit-umbrella-form {
     padding: 10px 20px;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    background: var(--accent-blue);
     color: #ffffff;
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     cursor: pointer;
     font-weight: 700;
 }
 
 .umbrella-alert-box {
     padding: 10px 14px;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     font-size: 0.85rem;
     font-weight: 500;
 }
 
 .umbrella-alert-box.alert-error {
-    background: rgba(244, 63, 94, 0.12);
-    border: 1px solid rgba(244, 63, 94, 0.35);
-    color: #fda4af;
+    background: rgba(234, 57, 67, 0.12);
+    border: 1px solid rgba(234, 57, 67, 0.35);
+    color: #ea3943;
 }
 
 .umbrella-alert-box.alert-success {
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.35);
-    color: #6ee7b7;
+    background: rgba(22, 199, 132, 0.12);
+    border: 1px solid rgba(22, 199, 132, 0.35);
+    color: #16c784;
 }
 
 /* Responsive */

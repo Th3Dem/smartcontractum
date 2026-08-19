@@ -44,7 +44,7 @@ def test_static_assets_availability() -> None:
     """Verify CSS and JavaScript static assets are served properly."""
     css_resp = client.get("/static/css/main.css")
     assert css_resp.status_code == 200
-    assert "--bg-primary: #0f172a;" in css_resp.text
+    assert "--bg-primary: #0b1426;" in css_resp.text
 
     js_resp = client.get("/static/js/main.js")
     assert js_resp.status_code == 200

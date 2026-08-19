@@ -1,27 +1,27 @@
 /* ======================================================================
    SmartContractum — Block 1 Hero Section & Interactive Task Router
-   Design System: Deep Slate, Cyber Glow & Task-First Grid
+   Design System: CoinMarketCap Style (Midnight Navy, CMC Royal Blue #3861fb, Mint #16c784)
 ====================================================================== */
 
 .home-page-container {
     display: flex;
     flex-direction: column;
-    gap: 56px;
+    gap: 48px;
     padding-bottom: 24px;
 }
 
 /* ----------------------------------------------------------------------
-   1.1 HERO BANNER
+   1.1 HERO BANNER (COINMARKETCAP STYLE)
 ---------------------------------------------------------------------- */
 .hero-block {
     text-align: center;
-    max-width: 920px;
+    max-width: 900px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
-    padding-top: 10px;
+    gap: 18px;
+    padding-top: 14px;
 }
 
 .hero-status-pill {
@@ -29,21 +29,20 @@
     align-items: center;
     gap: 8px;
     padding: 6px 16px;
-    background: rgba(245, 158, 11, 0.12);
-    border: 1px solid rgba(245, 158, 11, 0.35);
+    background: rgba(246, 184, 63, 0.1);
+    border: 1px solid rgba(246, 184, 63, 0.35);
     border-radius: var(--radius-full);
     font-size: 0.82rem;
     font-weight: 600;
-    color: #fbbf24;
-    box-shadow: 0 0 16px rgba(245, 158, 11, 0.15);
+    color: #f6b83f;
 }
 
 .status-pulse-dot {
     width: 8px;
     height: 8px;
-    background-color: #f59e0b;
+    background-color: #f6b83f;
     border-radius: 50%;
-    box-shadow: 0 0 8px #f59e0b;
+    box-shadow: 0 0 8px #f6b83f;
 }
 
 .hero-main-title {
@@ -55,16 +54,16 @@
 }
 
 .hero-gradient-text {
-    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue), var(--accent-violet));
+    background: linear-gradient(135deg, #3861fb, #6188ff, #16c784);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .hero-description {
-    font-size: 1.18rem;
+    font-size: 1.12rem;
     color: var(--text-secondary);
-    line-height: 1.65;
-    max-width: 800px;
+    line-height: 1.6;
+    max-width: 780px;
 }
 
 /* ----------------------------------------------------------------------
@@ -73,7 +72,7 @@
 .task-router-section {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 24px;
 }
 
 .section-heading-box {
@@ -96,89 +95,69 @@
 .router-cards-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
+    gap: 20px;
 }
 
 .route-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    padding: 28px;
+    border-radius: var(--radius-md);
+    padding: 24px;
     display: flex;
-    gap: 20px;
+    gap: 18px;
     align-items: flex-start;
     position: relative;
     text-decoration: none;
     color: inherit;
     transition: all var(--transition-smooth);
-    overflow: hidden;
-}
-
-.route-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.4), transparent);
-    opacity: 0;
-    transition: opacity var(--transition-fast);
+    box-shadow: var(--shadow-sm);
 }
 
 .route-card:hover {
-    transform: translateY(-6px);
-    border-color: var(--border-focus);
+    transform: translateY(-4px);
+    border-color: var(--accent-blue);
     background: var(--bg-card-hover);
-    box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6), var(--neon-glow);
-}
-
-.route-card:hover::before {
-    opacity: 1;
+    box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.5), 0 0 16px rgba(56, 97, 251, 0.2);
 }
 
 .route-icon-box {
-    width: 52px;
-    height: 52px;
-    border-radius: var(--radius-md);
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-sm);
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     flex-shrink: 0;
-    transition: all var(--transition-fast);
+    transition: transform var(--transition-fast);
 }
 
 .route-card:hover .route-icon-box {
-    transform: scale(1.08);
+    transform: scale(1.06);
 }
 
 .blue-glow {
-    border-color: rgba(37, 99, 235, 0.35);
-    box-shadow: 0 0 16px rgba(37, 99, 235, 0.2);
+    border-color: rgba(56, 97, 251, 0.35);
 }
 
 .cyan-glow {
-    border-color: rgba(6, 182, 212, 0.35);
-    box-shadow: 0 0 16px rgba(6, 182, 212, 0.2);
+    border-color: rgba(97, 136, 255, 0.35);
 }
 
 .emerald-glow {
-    border-color: rgba(16, 185, 129, 0.35);
-    box-shadow: 0 0 16px rgba(16, 185, 129, 0.2);
+    border-color: rgba(22, 199, 132, 0.35);
 }
 
 .violet-glow {
-    border-color: rgba(139, 92, 246, 0.35);
-    box-shadow: 0 0 16px rgba(139, 92, 246, 0.2);
+    border-color: rgba(140, 82, 255, 0.35);
 }
 
 .route-content {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
     flex: 1;
 }
 
@@ -186,11 +165,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 10px;
 }
 
 .route-title {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: #ffffff;
     letter-spacing: -0.3px;
@@ -198,55 +177,56 @@
 }
 
 .route-card:hover .route-title {
-    color: var(--accent-cyan);
+    color: var(--accent-blue);
 }
 
 .route-arrow {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: var(--text-muted);
     transition: all var(--transition-fast);
 }
 
 .route-card:hover .route-arrow {
-    color: var(--accent-cyan);
+    color: var(--accent-blue);
     transform: translateX(4px);
 }
 
 .route-subtext {
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     color: var(--text-secondary);
     line-height: 1.5;
 }
 
 .route-card-badge {
     position: absolute;
-    bottom: 14px;
-    right: 18px;
+    bottom: 12px;
+    right: 16px;
     font-size: 0.72rem;
     font-weight: 600;
     color: var(--text-muted);
-    background: rgba(15, 23, 42, 0.6);
+    background: var(--bg-surface);
     padding: 2px 8px;
-    border-radius: var(--radius-full);
-    border: 1px solid rgba(51, 65, 85, 0.4);
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--border-color);
 }
 
 /* ----------------------------------------------------------------------
-   1.3 ECOSYSTEM & LIVE STATS SECTION
+   1.3 COINMARKETCAP ECOSYSTEM STATS BAR
 ---------------------------------------------------------------------- */
 .stats-counter-section {
     margin-top: 10px;
 }
 
 .stats-panel-box {
-    background: var(--bg-surface);
+    background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    padding: 32px 24px;
+    border-radius: var(--radius-md);
+    padding: 28px 24px;
     display: flex;
     align-items: center;
     justify-content: space-around;
     gap: 20px;
+    box-shadow: var(--shadow-sm);
 }
 
 .stat-counter-card {
@@ -254,12 +234,12 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 6px;
+    gap: 4px;
     flex: 1;
 }
 
 .stat-number {
-    font-size: 2.2rem;
+    font-size: 2.1rem;
     font-weight: 800;
     color: #ffffff;
     letter-spacing: -0.5px;
@@ -268,16 +248,16 @@
 }
 
 .stat-label {
-    font-size: 0.84rem;
+    font-size: 0.82rem;
     color: var(--text-secondary);
     font-weight: 500;
-    max-width: 180px;
+    max-width: 190px;
     line-height: 1.35;
 }
 
 .stat-divider {
     width: 1px;
-    height: 48px;
+    height: 44px;
     background-color: var(--border-color);
 }
 
@@ -296,7 +276,7 @@
     .stats-panel-box {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 24px;
+        gap: 20px;
     }
 
     .stat-divider {
