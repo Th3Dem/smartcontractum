@@ -3,19 +3,114 @@
 {% block title %}SmartContractum — Здесь рождаются смарт-контракты | ПКСК Банка России{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/hero.css?v=2.9.0">
+<link rel="stylesheet" href="/static/css/hero.css?v=3.0.0">
 {% endblock %}
 
 {% block content %}
 <div class="home-page-container">
     <!-- ================================================================
-         1.1 HERO BANNER (Full-Height First Viewport: 3D Crystal & Main UTP)
+         1.1 HERO BANNER (Full-Height Viewport: 3D Blockchain Cube Behind UTP)
     ================================================================= -->
     <section class="hero-3d-banner" id="heroBanner">
         <!-- Interactive Canvas Background for Floating Cosmic Shards -->
         <canvas id="cosmicShardsCanvas" class="cosmic-shards-canvas"></canvas>
 
-        <!-- Foreground Hero Content (Centered, 100% Readable, High-Contrast) -->
+        <!-- 3D Spatial Blockchain & Smart Contract Node Matrix (Positioned BEHIND Text) -->
+        <div class="hero-3d-bg-matrix" id="hero3dBgMatrix">
+            <div class="scene-3d" id="cube3dViewport">
+                <!-- Cryptographic Ambient Nebula Glow -->
+                <div class="ambient-glow-nebula"></div>
+
+                <!-- 4 Concentric Blockchain Protocol Orbital Rings -->
+                <div class="orbit-halo ring-outer">
+                    <div class="orbit-satellite sat-1" title="Validator Node A"></div>
+                    <div class="orbit-satellite sat-2" title="Oracle Feed B"></div>
+                </div>
+                <div class="orbit-halo ring-mid">
+                    <div class="orbit-satellite sat-3" title="PKSC Core Node"></div>
+                </div>
+                <div class="orbit-halo ring-inner">
+                    <div class="orbit-satellite sat-4" title="Smart Contract State Channel"></div>
+                </div>
+                <div class="orbit-halo ring-tilted"></div>
+
+                <!-- 3D Smart Contract Blockchain Cube (200px) -->
+                <div class="crystal-3d-cube" id="crystal3dCube">
+                    <!-- Internal Laser Coordinate Axes (X, Y, Z) -->
+                    <div class="cube-axis axis-x"></div>
+                    <div class="cube-axis axis-y"></div>
+                    <div class="cube-axis axis-z"></div>
+
+                    <!-- Smart Contract Execution Core (Glowing State Machine) -->
+                    <div class="quantum-core-nucleus">
+                        <div class="core-contract-symbol">0x</div>
+                    </div>
+
+                    <!-- 6 Blockchain Smart Contract Facets with Cryptographic Code Snippets -->
+                    <div class="cube-facet facet-front">
+                        <div class="facet-mesh"></div>
+                        <div class="facet-code-snippet">
+                            <span class="code-line-hi">contract PKSC {</span>
+                            <span class="code-line-dim">state: 0x7F2A...</span>
+                            <span class="code-line-ok">✓ VERIFIED</span>
+                        </div>
+                        <span class="corner-dot c-tl"></span>
+                        <span class="corner-dot c-tr"></span>
+                        <span class="corner-dot c-bl"></span>
+                        <span class="corner-dot c-br"></span>
+                    </div>
+                    <div class="cube-facet facet-back">
+                        <div class="facet-mesh"></div>
+                        <div class="facet-code-snippet">
+                            <span class="code-line-hi">block #409218</span>
+                            <span class="code-line-dim">hash: 0x9B1C...</span>
+                            <span class="code-line-ok">LEDGER B2B</span>
+                        </div>
+                        <span class="corner-dot c-tl"></span>
+                        <span class="corner-dot c-tr"></span>
+                        <span class="corner-dot c-bl"></span>
+                        <span class="corner-dot c-br"></span>
+                    </div>
+                    <div class="cube-facet facet-right">
+                        <div class="facet-mesh"></div>
+                        <div class="facet-code-snippet">
+                            <span class="code-line-hi">oracle.feed()</span>
+                            <span class="code-line-dim">GIS / FNS / CBR</span>
+                            <span class="code-line-ok">TRUSTED DATA</span>
+                        </div>
+                        <span class="corner-dot c-tl"></span>
+                        <span class="corner-dot c-tr"></span>
+                        <span class="corner-dot c-bl"></span>
+                        <span class="corner-dot c-br"></span>
+                    </div>
+                    <div class="cube-facet facet-left">
+                        <div class="facet-mesh"></div>
+                        <div class="facet-code-snippet">
+                            <span class="code-line-hi">auto_execute()</span>
+                            <span class="code-line-dim">escrow.release</span>
+                            <span class="code-line-ok">ZERO TRUST</span>
+                        </div>
+                        <span class="corner-dot c-tl"></span>
+                        <span class="corner-dot c-tr"></span>
+                        <span class="corner-dot c-bl"></span>
+                        <span class="corner-dot c-br"></span>
+                    </div>
+                    <div class="cube-facet facet-top">
+                        <div class="facet-mesh"></div>
+                        <div class="facet-center-glyph">⌘</div>
+                    </div>
+                    <div class="cube-facet facet-bottom">
+                        <div class="facet-mesh"></div>
+                        <div class="facet-center-glyph">⚡</div>
+                    </div>
+                </div>
+
+                <!-- Ambient Floor Cryptographic Shadow -->
+                <div class="cube-ground-shadow"></div>
+            </div>
+        </div>
+
+        <!-- Foreground Hero Content (Elevated, 100% Readable, High-Contrast) -->
         <div class="hero-foreground-content">
             <!-- Sleek Cyber-Minimalist Mission Motto (Pure Typography, Floating) -->
             <div class="hero-eyebrow-pill" id="heroEyebrow">
@@ -28,71 +123,7 @@
                 <span class="eyebrow-item">РЕШЕНИЯ</span>
             </div>
 
-            <!-- 3D Interactive Crystal Logo (Centered, Real-Time Mouse Physics) -->
-            <div class="hero-3d-crystal-wrapper" id="hero3dBgMatrix">
-                <div class="scene-3d" id="cube3dViewport">
-                    <!-- Ambient Nebula Radial Backlight -->
-                    <div class="ambient-glow-nebula"></div>
-
-                    <!-- Concentric Gyroscope Orbital Rings -->
-                    <div class="orbit-halo ring-outer"></div>
-                    <div class="orbit-halo ring-mid"></div>
-                    <div class="orbit-halo ring-inner"></div>
-                    <div class="orbit-halo ring-tilted"></div>
-
-                    <!-- 3D Pure Hologram Crystal Cube (150px) -->
-                    <div class="crystal-3d-cube" id="crystal3dCube">
-                        <!-- Internal Laser Coordinate Axes (X, Y, Z) -->
-                        <div class="cube-axis axis-x"></div>
-                        <div class="cube-axis axis-y"></div>
-                        <div class="cube-axis axis-z"></div>
-
-                        <!-- Glowing Quantum Core Nucleus -->
-                        <div class="quantum-core-nucleus"></div>
-
-                        <!-- 6 Glassmorphic Crystal Facets -->
-                        <div class="cube-facet facet-front">
-                            <div class="facet-mesh"></div>
-                            <span class="corner-dot c-tl"></span>
-                            <span class="corner-dot c-tr"></span>
-                            <span class="corner-dot c-bl"></span>
-                            <span class="corner-dot c-br"></span>
-                        </div>
-                        <div class="cube-facet facet-back">
-                            <div class="facet-mesh"></div>
-                            <span class="corner-dot c-tl"></span>
-                            <span class="corner-dot c-tr"></span>
-                            <span class="corner-dot c-bl"></span>
-                            <span class="corner-dot c-br"></span>
-                        </div>
-                        <div class="cube-facet facet-right">
-                            <div class="facet-mesh"></div>
-                            <span class="corner-dot c-tl"></span>
-                            <span class="corner-dot c-tr"></span>
-                            <span class="corner-dot c-bl"></span>
-                            <span class="corner-dot c-br"></span>
-                        </div>
-                        <div class="cube-facet facet-left">
-                            <div class="facet-mesh"></div>
-                            <span class="corner-dot c-tl"></span>
-                            <span class="corner-dot c-tr"></span>
-                            <span class="corner-dot c-bl"></span>
-                            <span class="corner-dot c-br"></span>
-                        </div>
-                        <div class="cube-facet facet-top">
-                            <div class="facet-mesh"></div>
-                        </div>
-                        <div class="cube-facet facet-bottom">
-                            <div class="facet-mesh"></div>
-                        </div>
-                    </div>
-
-                    <!-- Ambient Ground Shadow -->
-                    <div class="cube-ground-shadow"></div>
-                </div>
-            </div>
-
-            <!-- Main Heading with Crystal-Clear Contrast (Enlarged) -->
+            <!-- Main Heading with Crystal-Clear Contrast (Enlarged, Positioned in Foreground) -->
             <h1 class="hero-main-title">
                 <span class="hero-title-white">Здесь рождаются</span> <br>
                 <span class="hero-title-cyan">смарт-контракты</span>
@@ -378,5 +409,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/hero.js?v=2.9.0" defer></script>
+<script src="/static/js/hero.js?v=3.0.0" defer></script>
 {% endblock %}

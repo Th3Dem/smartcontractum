@@ -1,6 +1,6 @@
 /* ======================================================================
    SmartContractum — Block 1 Hero Section & Interactive Task Router
-   Design System: CoinMarketCap Theme + Cosmic Shards & 3D Crystal Matrix
+   Design System: CoinMarketCap Theme + Cosmic Shards & 3D Blockchain Matrix
 ====================================================================== */
 
 .home-page-container {
@@ -11,7 +11,7 @@
 }
 
 /* ----------------------------------------------------------------------
-   1.1 HERO BANNER WITH 3D CUBE & INTERACTIVE COSMIC SHARDS
+   1.1 HERO BANNER (Full Viewport: 3D Blockchain Matrix Behind UTP)
 ---------------------------------------------------------------------- */
 .hero-3d-banner {
     position: relative;
@@ -38,23 +38,28 @@
 }
 
 /* ----------------------------------------------------------------------
-   3D CRYSTAL LOGO & GYROSCOPIC ORBITAL RINGS
+   3D SPATIAL BLOCKCHAIN MATRIX LAYER (Positioned BEHIND Text)
 ---------------------------------------------------------------------- */
-.hero-3d-crystal-wrapper {
+.hero-3d-bg-matrix {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 100%;
-    height: 170px;
+    max-width: 900px;
+    height: 520px;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    user-select: none;
+    z-index: 1;
     pointer-events: none;
-    margin: 4px 0;
+    user-select: none;
+    opacity: 0.72;
 }
 
 .scene-3d {
-    width: 160px;
-    height: 160px;
+    width: 240px;
+    height: 240px;
     position: relative;
     transform-style: preserve-3d;
     perspective: 1200px;
@@ -67,15 +72,15 @@
 /* Ambient Radial Nebula Glow */
 .ambient-glow-nebula {
     position: absolute;
-    width: 380px;
-    height: 380px;
-    background: radial-gradient(circle, rgba(56, 97, 251, 0.28) 0%, rgba(97, 136, 255, 0.14) 35%, rgba(22, 199, 132, 0.08) 55%, transparent 75%);
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(circle, rgba(56, 97, 251, 0.32) 0%, rgba(97, 136, 255, 0.16) 35%, rgba(22, 199, 132, 0.09) 55%, transparent 75%);
     border-radius: 50%;
-    filter: blur(28px);
+    filter: blur(34px);
     pointer-events: none;
 }
 
-/* 4 Concentric Gyroscope Orbital Rings */
+/* 4 Concentric Blockchain Protocol Orbital Rings */
 .orbit-halo {
     position: absolute;
     border-radius: 50%;
@@ -84,37 +89,52 @@
 }
 
 .ring-outer {
-    width: 280px;
-    height: 280px;
-    border: 1.5px dashed rgba(56, 97, 251, 0.35);
+    width: 440px;
+    height: 440px;
+    border: 1.5px dashed rgba(56, 97, 251, 0.38);
     transform: rotateX(72deg) rotateZ(0deg);
-    animation: spinRingOuter 22s linear infinite;
-    box-shadow: 0 0 20px rgba(56, 97, 251, 0.2);
+    animation: spinRingOuter 26s linear infinite;
+    box-shadow: 0 0 24px rgba(56, 97, 251, 0.2);
 }
 
 .ring-mid {
-    width: 230px;
-    height: 230px;
-    border: 1px solid rgba(22, 199, 132, 0.3);
+    width: 350px;
+    height: 350px;
+    border: 1px solid rgba(22, 199, 132, 0.32);
     transform: rotateX(65deg) rotateY(25deg) rotateZ(0deg);
-    animation: spinRingMid 30s linear infinite reverse;
+    animation: spinRingMid 32s linear infinite reverse;
 }
 
 .ring-inner {
-    width: 180px;
-    height: 180px;
-    border: 1px dotted rgba(97, 136, 255, 0.4);
+    width: 270px;
+    height: 270px;
+    border: 1px dotted rgba(97, 136, 255, 0.42);
     transform: rotateX(58deg) rotateY(-30deg) rotateZ(0deg);
-    animation: spinRingInner 16s linear infinite;
+    animation: spinRingInner 18s linear infinite;
 }
 
 .ring-tilted {
-    width: 210px;
-    height: 210px;
-    border: 1px solid rgba(246, 184, 63, 0.25);
+    width: 310px;
+    height: 310px;
+    border: 1px solid rgba(246, 184, 63, 0.28);
     transform: rotateX(80deg) rotateY(45deg) rotateZ(0deg);
-    animation: spinRingTilted 25s linear infinite;
+    animation: spinRingTilted 28s linear infinite;
 }
+
+/* Orbiting Blockchain Satellites (Validator Nodes) */
+.orbit-satellite {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #38bdf8;
+    box-shadow: 0 0 12px #38bdf8, 0 0 22px #3861fb;
+}
+
+.sat-1 { top: 0; left: 50%; margin-left: -5px; margin-top: -5px; }
+.sat-2 { bottom: 0; left: 50%; margin-left: -5px; margin-bottom: -5px; background: #16c784; box-shadow: 0 0 12px #16c784; }
+.sat-3 { top: 50%; right: 0; margin-top: -5px; margin-right: -5px; background: #6188ff; box-shadow: 0 0 12px #6188ff; }
+.sat-4 { top: 50%; left: 0; margin-top: -5px; margin-left: -5px; background: #f6b83f; box-shadow: 0 0 12px #f6b83f; }
 
 @keyframes spinRingOuter {
     0% { transform: rotateX(72deg) rotateZ(0deg); }
@@ -136,36 +156,48 @@
     100% { transform: rotateX(80deg) rotateY(45deg) rotateZ(360deg); }
 }
 
-/* 3D Pure Crystal Cube (Size: 130px) */
+/* 3D Smart Contract Blockchain Cube (200px) */
 .crystal-3d-cube {
-    width: 130px;
-    height: 130px;
+    width: 200px;
+    height: 200px;
     position: relative;
     transform-style: preserve-3d;
     transform: rotateX(-18deg) rotateY(32deg);
     will-change: transform;
 }
 
-/* Glowing Quantum Core Nucleus in Center of Cube */
+/* Smart Contract State Execution Core (Glowing Nucleus) */
 .quantum-core-nucleus {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 50px;
-    height: 50px;
-    margin-top: -25px;
-    margin-left: -25px;
+    width: 64px;
+    height: 64px;
+    margin-top: -32px;
+    margin-left: -32px;
     border-radius: 50%;
     background: radial-gradient(circle, #3861fb 0%, #6188ff 45%, #16c784 75%, transparent 100%);
     filter: blur(6px);
-    opacity: 0.85;
+    opacity: 0.88;
     animation: corePulse 4s ease-in-out infinite;
     transform: translateZ(0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.core-contract-symbol {
+    color: #ffffff;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-weight: 800;
+    font-size: 1.15rem;
+    text-shadow: 0 0 10px #38bdf8;
+    pointer-events: none;
 }
 
 @keyframes corePulse {
-    0%, 100% { transform: scale(0.9) translateZ(0); opacity: 0.7; }
-    50% { transform: scale(1.2) translateZ(0); opacity: 1; }
+    0%, 100% { transform: scale(0.9) translateZ(0); opacity: 0.75; }
+    50% { transform: scale(1.15) translateZ(0); opacity: 1; }
 }
 
 /* 3D Laser Axis Vectors inside Cube */
@@ -178,9 +210,9 @@
 }
 
 .cube-axis.axis-x {
-    width: 100px;
+    width: 140px;
     height: 1.5px;
-    margin-left: -50px;
+    margin-left: -70px;
     margin-top: -0.75px;
     background: linear-gradient(90deg, transparent, #3861fb, transparent);
     box-shadow: 0 0 8px #3861fb;
@@ -188,38 +220,41 @@
 
 .cube-axis.axis-y {
     width: 1.5px;
-    height: 100px;
+    height: 140px;
     margin-left: -0.75px;
-    margin-top: -50px;
+    margin-top: -70px;
     background: linear-gradient(180deg, transparent, #16c784, transparent);
     box-shadow: 0 0 8px #16c784;
 }
 
 .cube-axis.axis-z {
     width: 1.5px;
-    height: 100px;
+    height: 140px;
     margin-left: -0.75px;
-    margin-top: -50px;
+    margin-top: -70px;
     background: linear-gradient(180deg, transparent, #6188ff, transparent);
     transform: rotateX(90deg);
     box-shadow: 0 0 8px #6188ff;
 }
 
-/* 6 High-End Glassmorphic Facets (130px size -> 65px translation) */
+/* 6 High-End Glassmorphic Facets with Cryptographic Cipher Data (200px size -> 100px translation) */
 .cube-facet {
     position: absolute;
-    width: 130px;
-    height: 130px;
-    background: rgba(14, 22, 38, 0.38);
-    border: 1.5px solid rgba(56, 97, 251, 0.45);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    box-shadow: inset 0 0 20px rgba(56, 97, 251, 0.2), 0 0 16px rgba(56, 97, 251, 0.12);
-    border-radius: 12px;
+    width: 200px;
+    height: 200px;
+    background: rgba(13, 20, 36, 0.45);
+    border: 1.5px solid rgba(56, 97, 251, 0.48);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: inset 0 0 24px rgba(56, 97, 251, 0.22), 0 0 20px rgba(56, 97, 251, 0.15);
+    border-radius: 16px;
     overflow: hidden;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: center;
+    padding: 14px;
+    box-sizing: border-box;
 }
 
 .facet-mesh {
@@ -228,8 +263,46 @@
     background-image: 
         linear-gradient(to right, rgba(56, 97, 251, 0.12) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(56, 97, 251, 0.12) 1px, transparent 1px);
-    background-size: 20px 20px;
+    background-size: 25px 25px;
     opacity: 0.5;
+}
+
+.facet-code-snippet {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    text-align: left;
+    pointer-events: none;
+}
+
+.code-line-hi {
+    color: #38bdf8;
+    font-weight: 700;
+    font-size: 0.72rem;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
+.code-line-dim {
+    color: #808a9d;
+    font-size: 0.66rem;
+}
+
+.code-line-ok {
+    color: #16c784;
+    font-weight: 700;
+    font-size: 0.64rem;
+    letter-spacing: 0.06em;
+}
+
+.facet-center-glyph {
+    position: relative;
+    z-index: 2;
+    font-size: 1.8rem;
+    color: rgba(56, 189, 248, 0.7);
+    margin: auto;
 }
 
 .corner-dot {
@@ -246,23 +319,23 @@
 .corner-dot.c-bl { bottom: 6px; left: 6px; background: #6188ff; box-shadow: 0 0 6px #6188ff; }
 .corner-dot.c-br { bottom: 6px; right: 6px; }
 
-/* 3D Cube Faces Transformation (130px / 2 = 65px) */
-.facet-front  { transform: translateZ(65px); }
-.facet-back   { transform: rotateY(180deg) translateZ(65px); }
-.facet-right  { transform: rotateY(90deg) translateZ(65px); border-color: rgba(97, 136, 255, 0.45); }
-.facet-left   { transform: rotateY(-90deg) translateZ(65px); border-color: rgba(22, 199, 132, 0.45); }
-.facet-top    { transform: rotateX(90deg) translateZ(65px); background: rgba(20, 30, 52, 0.45); }
-.facet-bottom { transform: rotateX(-90deg) translateZ(65px); background: rgba(10, 16, 28, 0.6); }
+/* 3D Cube Faces Transformation (200px / 2 = 100px) */
+.facet-front  { transform: translateZ(100px); }
+.facet-back   { transform: rotateY(180deg) translateZ(100px); }
+.facet-right  { transform: rotateY(90deg) translateZ(100px); border-color: rgba(97, 136, 255, 0.48); }
+.facet-left   { transform: rotateY(-90deg) translateZ(100px); border-color: rgba(22, 199, 132, 0.48); }
+.facet-top    { transform: rotateX(90deg) translateZ(100px); background: rgba(20, 30, 52, 0.45); align-items: center; }
+.facet-bottom { transform: rotateX(-90deg) translateZ(100px); background: rgba(10, 16, 28, 0.6); align-items: center; }
 
 /* Ambient Floor Shadow */
 .cube-ground-shadow {
     position: absolute;
-    bottom: -45px;
-    width: 180px;
-    height: 36px;
+    bottom: -60px;
+    width: 240px;
+    height: 48px;
     background: radial-gradient(ellipse at center, rgba(56, 97, 251, 0.5) 0%, rgba(22, 199, 132, 0.25) 45%, transparent 75%);
     border-radius: 50%;
-    filter: blur(12px);
+    filter: blur(14px);
     animation: shadowPulse 8s ease-in-out infinite;
     pointer-events: none;
 }
@@ -272,7 +345,7 @@
         transform: translateY(0px) rotateX(0deg);
     }
     50% {
-        transform: translateY(-12px) rotateX(2deg);
+        transform: translateY(-14px) rotateX(2deg);
     }
 }
 
@@ -288,7 +361,7 @@
 }
 
 /* ----------------------------------------------------------------------
-   FOREGROUND HERO CONTENT (Crisp, High Contrast & Elevated)
+   FOREGROUND HERO CONTENT (Elevated, 100% Readable, High-Contrast)
 ---------------------------------------------------------------------- */
 .hero-foreground-content {
     position: relative;
@@ -297,8 +370,8 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 16px;
-    max-width: 920px;
+    gap: 24px;
+    max-width: 940px;
     margin: 0 auto;
     width: 100%;
     pointer-events: auto;
@@ -338,9 +411,9 @@
     font-weight: 800;
 }
 
-/* Enlarged H1 Title for Powerful Presence */
+/* Enlarged H1 Title for Powerful Contrast over 3D Background */
 .hero-main-title {
-    font-size: 4.2rem;
+    font-size: 4.4rem;
     font-weight: 800;
     line-height: 1.12;
     letter-spacing: -0.04em;
@@ -351,7 +424,7 @@
 .hero-title-white {
     color: #ffffff;
     font-weight: 800;
-    text-shadow: 0 4px 32px rgba(0, 0, 0, 0.95), 0 2px 10px rgba(0, 0, 0, 0.9);
+    text-shadow: 0 4px 36px rgba(0, 0, 0, 0.95), 0 2px 12px rgba(0, 0, 0, 0.9);
 }
 
 .hero-title-cyan {
@@ -359,7 +432,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 800;
-    filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 28px rgba(56, 189, 248, 0.5));
+    filter: drop-shadow(0 4px 28px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 32px rgba(56, 189, 248, 0.55));
     letter-spacing: -0.025em;
 }
 
@@ -386,7 +459,7 @@
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    margin-top: 20px;
+    margin-top: 14px;
     transition: all var(--transition-fast);
 }
 
@@ -723,12 +796,8 @@
         font-size: 3.0rem;
     }
 
-    .hero-3d-crystal-wrapper {
-        height: 140px;
-    }
-
-    .scene-3d {
-        transform: scale(0.85);
+    .hero-3d-bg-matrix {
+        transform: translate(-50%, -50%) scale(0.75);
     }
 
     .stats-panel-box {

@@ -151,6 +151,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             cube.style.transform = `translate3d(${currentTransX.toFixed(2)}px, ${(currentTransY + idleOffset).toFixed(2)}px, 0) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg)`;
 
+            const matrix = document.getElementById('hero3dBgMatrix');
+            if (matrix) {
+                matrix.style.transform = `translate(calc(-50% + ${(currentTransX * 0.4).toFixed(1)}px), calc(-50% + ${(currentTransY * 0.4).toFixed(1)}px))`;
+            }
+
             requestAnimationFrame(render3DPhysics);
         }
 
