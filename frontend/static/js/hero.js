@@ -296,35 +296,13 @@ document.addEventListener('DOMContentLoaded', () => {
             cursorX += (targetMouseX - cursorX) * 0.1;
             cursorY += (targetMouseY - cursorY) * 0.1;
 
-            // 1. Cursor Magnetic Light Flare & Aura
-            if (isMouseActive) {
-                const radialGradient = ctx.createRadialGradient(cursorX, cursorY, 0, cursorX, cursorY, 160);
-                radialGradient.addColorStop(0, 'rgba(56, 97, 251, 0.15)');
-                radialGradient.addColorStop(0.5, 'rgba(22, 199, 132, 0.06)');
-                radialGradient.addColorStop(1, 'transparent');
-                ctx.fillStyle = radialGradient;
-                ctx.beginPath();
-                ctx.arc(cursorX, cursorY, 160, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            // 2. Update & draw all shards
-            const nearestToCursor = [];
-
+            // Update & draw all shards
             for (let i = 0; i < shards.length; i++) {
                 const shard = shards[i];
                 shard.update(cursorX, cursorY);
                 shard.draw();
 
-                // Track distance to cursor for tether lines
-                if (isMouseActive) {
-                    const dMouse = Math.hypot(cursorX - shard.x, cursorY - shard.y);
-                    if (dMouse < 140) {
-                        nearestToCursor.push({ shard, dist: dMouse });
-                    }
-                }
-
-                // Constellation lines between adjacent shards
+                // Subtle constellation lines between adjacent shards
                 for (let j = i + 1; j < shards.length; j++) {
                     const s2 = shards[j];
                     const dx = shard.x - s2.x;
@@ -340,24 +318,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         ctx.lineWidth = 0.75;
                         ctx.stroke();
                     }
-                }
-            }
-
-            // 3. Interactive Force-Field Tether Lines to Cursor
-            if (isMouseActive && nearestToCursor.length > 0) {
-                nearestToCursor.sort((a, b) => a.dist - b.dist);
-                const tetherCount = Math.min(3, nearestToCursor.length);
-                for (let k = 0; k < tetherCount; k++) {
-                    const { shard, dist } = nearestToCursor[k];
-                    const alpha = (1 - dist / 140) * 0.4;
-                    ctx.beginPath();
-                    ctx.moveTo(cursorX, cursorY);
-                    ctx.lineTo(shard.x, shard.y);
-                    ctx.strokeStyle = `rgba(97, 136, 255, ${alpha})`;
-                    ctx.lineWidth = 1;
-                    ctx.setLineDash([4, 4]);
-                    ctx.stroke();
-                    ctx.setLineDash([]);
                 }
             }
 
