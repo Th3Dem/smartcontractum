@@ -416,7 +416,7 @@
 
 .router-cards-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
 }
 
@@ -433,6 +433,15 @@
     color: inherit;
     transition: all var(--transition-smooth);
     box-shadow: var(--shadow-sm);
+    min-height: 140px;
+}
+
+.route-card-btn {
+    font-family: inherit;
+    font-size: inherit;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
 }
 
 .route-card:hover {
@@ -476,11 +485,20 @@
     border-color: rgba(140, 82, 255, 0.35);
 }
 
+.sky-glow {
+    border-color: rgba(56, 189, 248, 0.35);
+}
+
+.amber-glow {
+    border-color: rgba(246, 184, 63, 0.35);
+}
+
 .route-content {
     display: flex;
     flex-direction: column;
     gap: 6px;
     flex: 1;
+    padding-bottom: 18px;
 }
 
 .route-header {
@@ -491,11 +509,12 @@
 }
 
 .route-title {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #ffffff;
     letter-spacing: -0.3px;
     transition: color var(--transition-fast);
+    margin: 0;
 }
 
 .route-card:hover .route-title {
@@ -514,9 +533,10 @@
 }
 
 .route-subtext {
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     color: var(--text-secondary);
-    line-height: 1.5;
+    line-height: 1.48;
+    margin: 0;
 }
 
 .route-card-badge {
@@ -530,6 +550,83 @@
     padding: 2px 8px;
     border-radius: var(--radius-xs);
     border: 1px solid var(--border-color);
+}
+
+/* ----------------------------------------------------------------------
+   1.4 SPECIALIST ROLE SELECTOR MODAL STYLES
+---------------------------------------------------------------------- */
+.specialist-modal-card {
+    max-width: 680px;
+    width: 100%;
+}
+
+.modal-subtitle {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.specialist-roles-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.role-chip-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: #11141f;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--transition-fast);
+}
+
+.role-chip-card:hover {
+    border-color: var(--accent-blue);
+    background: var(--bg-surface);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(56, 97, 251, 0.25);
+}
+
+.role-chip-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.role-chip-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.role-chip-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.role-chip-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.35;
+}
+
+.role-chip-arrow {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    transition: all var(--transition-fast);
+}
+
+.role-chip-card:hover .role-chip-arrow {
+    color: var(--accent-blue);
+    transform: translateX(3px);
 }
 
 /* ----------------------------------------------------------------------
@@ -588,17 +685,19 @@
 /* ----------------------------------------------------------------------
    RESPONSIVE BREAKPOINTS
 ---------------------------------------------------------------------- */
+@media (max-width: 1080px) {
+    .router-cards-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 @media (max-width: 860px) {
     .hero-main-title {
-        font-size: 2.2rem;
+        font-size: 2.3rem;
     }
 
     .hero-3d-bg-matrix {
         transform: translate(-50%, -50%) scale(0.7);
-    }
-
-    .router-cards-grid {
-        grid-template-columns: 1fr;
     }
 
     .stats-panel-box {
@@ -609,5 +708,19 @@
 
     .stat-divider {
         display: none;
+    }
+}
+
+@media (max-width: 680px) {
+    .router-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .specialist-roles-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-main-title {
+        font-size: 2rem;
     }
 }

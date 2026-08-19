@@ -1,4 +1,4 @@
-"""QA & Reliability Test Suite for Block 1: Hero Section & Task Router."""
+"""QA & Reliability Test Suite for Block 1: Hero Section & 6-Action Task Router."""
 
 import sys
 from pathlib import Path
@@ -13,7 +13,7 @@ client = TestClient(app)
 
 
 def test_home_page_returns_200_and_html() -> None:
-    """Verify GET / renders homepage HTML extending base shell."""
+    """Verify GET / renders homepage HTML extending base shell with Hero UTP."""
     response = client.get("/")
     assert response.status_code == 200
     assert "text/html" in response.headers.get("content-type", "")
@@ -31,31 +31,102 @@ def test_home_page_returns_200_and_html() -> None:
     assert "SmartContractum" in html
 
 
-def test_home_page_contains_all_four_task_routes() -> None:
-    """Verify all 4 core user scenario links exist in compiled HTML."""
+def test_home_page_contains_all_six_action_routes() -> None:
+    """Verify all 6 core user scenario cards exist in compiled HTML."""
     response = client.get("/")
     assert response.status_code == 200
     html = response.text
 
-    # Route 1: Бизнес-задача -> Паспорт
+    # Card 1: У меня есть бизнес-задача -> Паспорт
     assert 'href="/passport"' in html
-    assert "Есть бизнес-задача" in html
-    assert "Сформировать Паспорт и «Дерево решений»" in html
+    assert "У меня есть бизнес-задача" in html
+    assert "Поможем понять, нужен ли смарт-контракт" in html
 
-    # Route 2: Собрать контракт -> Конструктор
-    assert 'href="/builder"' in html
-    assert "Собрать контракт" in html
-    assert "Визуальный Low-code конструктор" in html
+    # Card 2: Ищу готовое решение -> Каталог решений
+    assert 'href="/solutions"' in html
+    assert "Ищу готовое решение" in html
+    assert "Сценарии, типовые компоненты и готовые разработки" in html
 
-    # Route 3: Найти данные -> Маркетплейс Оракулов
+    # Card 3: Ищу специалиста или услугу -> Модальный подбор
+    assert "btnSpecialistModalTrigger" in html
+    assert "Ищу специалиста или услугу" in html
+    assert "Разработчики, эксперты, команды, аудиторы и интеграторы" in html
+
+    # Card 4: Я специалист и хочу участвовать -> Кабинет специалиста
+    assert 'href="/profile/join"' in html
+    assert "Я специалист и хочу участвовать" in html
+    assert "Проекты, рабочие группы, публикация разработок" in html
+
+    # Card 5: Данные и оракулы -> Маркетплейс Оракулов
     assert 'href="/data-sources"' in html
-    assert "Найти данные" in html
-    assert "Каталог ГИС, Банковских и Открытых API источников" in html
+    assert "Данные и оракулы" in html
+    assert "Найти источник данных или предложить свои данные рынку" in html
 
-    # Route 4: Комьюнити -> Лента сообщества & Форум
-    assert 'href="/feed"' in html or 'href="/forum"' in html
-    assert "Комьюнити" in html
-    assert "Форум" in html
+    # Card 6: Хочу разобраться в ПКСК -> База знаний & Форум
+    assert 'href="/knowledge"' in html
+    assert "Хочу разобраться в ПКСК" in html
+    assert "Знания, изменения, открытые вопросы и обучение" in html
+
+
+def test_specialist_modal_and_role_chips() -> None:
+    """Verify modal markup and 6 role sub-selection chips in HTML."""
+    response = client.get("/")
+    assert response.status_code == 200
+    html = response.text
+
+    assert "specialistModal" in html
+    assert "Кого или что вы ищете?" in html
+    assert "role=developer" in html
+    assert "role=team" in html
+    assert "role=audit" in html
+    assert "role=expert" in html
+    assert "role=integrator" in html
+    assert "role=consultant" in html
+
+
+def test_target_action_routes_return_200() -> None:
+    """Verify all 6 action target endpoints return HTTP 200 OK."""
+    # 1. Passport Generator
+    resp1 = client.get("/passport")
+    assert resp1.status_code == 200
+
+    # 2. Ready Solutions
+    resp2 = client.get("/solutions")
+    assert resp2.status_code == 200
+
+    # 3. Services Marketplace (default & role filters)
+    resp3_all = client.get("/marketplace/services")
+    assert resp3_all.status_code == 200
+
+    resp3_role = client.get("/marketplace/services?role=developer")
+    assert resp3_role.status_code == 200
+
+    # 4. Specialist Onboarding / Join
+    resp4 = client.get("/profile/join")
+    assert resp4.status_code == 200
+
+    # 5. Data Sources & Oracles
+    resp5 = client.get("/data-sources")
+    assert resp5.status_code == 200
+
+    # 6. Knowledge Hub & Forum
+    resp6 = client.get("/knowledge")
+    assert resp6.status_code == 200
+
+
+def test_schema_org_navigation_metadata() -> None:
+    """Verify Schema.org SiteNavigationElement metadata in HTML."""
+    response = client.get("/")
+    assert response.status_code == 200
+    html = response.text
+
+    assert "SiteNavigationElement" in html
+    assert "https://smartcontractum.ru/passport" in html
+    assert "https://smartcontractum.ru/solutions" in html
+    assert "https://smartcontractum.ru/marketplace/services" in html
+    assert "https://smartcontractum.ru/profile/join" in html
+    assert "https://smartcontractum.ru/data-sources" in html
+    assert "https://smartcontractum.ru/knowledge" in html
 
 
 def test_home_page_contains_ecosystem_stats_counters() -> None:
@@ -76,7 +147,6 @@ def test_system_stats_api_endpoint() -> None:
     assert response.status_code == 200
     data = response.json()
 
-    # Verify keys
     assert "status" in data or "registered_experts" in data or "stats" in data
     if "stats" in data:
         stats = data["stats"]
@@ -89,12 +159,3 @@ def test_system_stats_api_endpoint() -> None:
             data.get("registered_experts", 0) > 0
             or data.get("experts_count", 0) > 0
         )
-
-
-def test_route_aliases_availability() -> None:
-    """Verify /data-sources and /forum aliases return 200 OK."""
-    resp_sources = client.get("/data-sources")
-    assert resp_sources.status_code == 200
-
-    resp_forum = client.get("/forum")
-    assert resp_forum.status_code == 200

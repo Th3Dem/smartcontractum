@@ -46,12 +46,57 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 2. Interactive Route Cards Click Analytics / Transition
+    // 2. Interactive Route Cards & Specialist Modal Controller
+    const specialistModal = document.getElementById('specialistModal');
+    const btnSpecialistTrigger = document.getElementById('btnSpecialistModalTrigger');
+    const btnCloseSpecialist = document.getElementById('btnCloseSpecialistModal');
+
+    function openSpecialistModal() {
+        if (specialistModal) {
+            specialistModal.classList.add('is-active');
+            specialistModal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeSpecialistModal() {
+        if (specialistModal) {
+            specialistModal.classList.remove('is-active');
+            specialistModal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+    }
+
+    if (btnSpecialistTrigger) {
+        btnSpecialistTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            openSpecialistModal();
+        });
+    }
+
+    if (btnCloseSpecialist) {
+        btnCloseSpecialist.addEventListener('click', closeSpecialistModal);
+    }
+
+    if (specialistModal) {
+        specialistModal.addEventListener('click', (e) => {
+            if (e.target === specialistModal) closeSpecialistModal();
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && specialistModal && specialistModal.classList.contains('is-active')) {
+            closeSpecialistModal();
+        }
+    });
+
+    // Analytics event logger for all hero action routes
     const routeCards = document.querySelectorAll('.route-card');
     routeCards.forEach((card) => {
-        card.addEventListener('click', (e) => {
-            const route = card.getAttribute('data-route');
-            console.info(`Navigating to route intent: ${route}`);
+        card.addEventListener('click', () => {
+            const target = card.getAttribute('data-action-target') || card.getAttribute('data-route');
+            const eventName = card.getAttribute('data-analytics-event') || 'hero_action_click';
+            console.info(`[Analytics] Event: ${eventName}, Target: ${target}`);
         });
     });
 

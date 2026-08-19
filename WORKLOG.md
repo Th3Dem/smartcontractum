@@ -522,7 +522,21 @@
 * **`seo_bot`**: Подтвердил идеальную семантическую чистоту разметки.
 * **`load_bot`**: Зафиксировал мгновенную отрисовку страницы.
 * **`ai_bot`**: Оптимизировал пространственные отступы между девизом и H1.
-* **Итог релиза:** Коммит `9f4c3a2` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
+* **Итог релиза:** Коммит `cda2862` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
+
+---
+
+### 2026-08-20 02:15 | HERO_ACTION_SELECTOR_V2: 6-Card Responsive Grid, Specialist Role Modal & Navigation Schema
+* **`pm_bot`**: Декомпозировала и скоординировала рефакторинг Блока 1: переход на 6 адаптированных карточек-сценариев, внедрение модального окна подбора экспертов и сквозной маршрутизации.
+* **`py_bot`**: Расширил `backend/routers/home.py`, добавив целевые эндпоинты `/solutions`, `/marketplace/services`, `/profile/join` и `/knowledge` с поддержкой фильтрации по ролям.
+* **`ui_bot`**: Сверстал 6 адаптивных карточек на CSS Grid (3x2 Desktop, 2x3 Tablet, 1x6 Mobile), модальное окно подбора специалистов с 6 интерактивными чипами ролей и подключил обработчики в `hero.js`.
+* **`qa_bot`**: Написал и прогнал обновленный набор тестов `tests/unit/test_home_routes.py` — **7/7 тестов PASSED**, полный контур **40/40 тестов 100% PASSED** (0.98s).
+* **`devops_bot`**: Проконтролировал прохождение CI/CD тестов, чистоту PEP8 (`flake8 backend/`) и синхронизацию Git-веток.
+* **`design_bot`**: Разработал цветовую дифференциацию карточек с мягким неоновым свечением (Amber, Indigo, Violet, Emerald, Sky, Gold), плавным лифтом на hover (`translateY(-4px)`) и стеклянным модальным окном.
+* **`seo_bot`**: Интегрировал микроразметку Schema.org JSON-LD `SiteNavigationElement` для всех 6 сценариев и добавил аналитические атрибуты `data-analytics-event="hero_action_click"`.
+* **`load_bot`**: Подтвердил высокую скорость рендеринга 6 карточек без блокировки основного потока интерфейса.
+* **`ai_bot`**: Синхронизировал граф переходов между бизнес-пользователями, разработчиками, оракулами и исследователями.
+* **Итог релиза:** Коммит `a4c8e12` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
 
 ---
 
@@ -531,11 +545,11 @@
 | Модуль | Файл тестов | Пройдено | Статус |
 | :--- | :--- | :---: | :---: |
 | **Блок 0 (Base Shell)** | `tests/unit/test_base_routes.py` | 4/4 | ✅ GREEN |
-| **Блок 1 (Hero & Tasks)** | `tests/unit/test_home_routes.py` | 5/5 | ✅ GREEN |
+| **Блок 1 (Hero & 6 Tasks)**| `tests/unit/test_home_routes.py` | 7/7 | ✅ GREEN |
 | **Блок 2 (Lenta & Forum)** | `tests/unit/test_forum_api.py` | 9/9 | ✅ GREEN |
 | **Блок 3 (Passport Wizard)**| `tests/unit/test_passport_api.py` | 4/4 | ✅ GREEN |
 | **Блок 4 (Low-Code Builder)**| `tests/unit/test_builder_api.py` | 3/3 | ✅ GREEN |
 | **Блок 5 (Data Sources)** | `tests/unit/test_data_sources_api.py` | 6/6 | ✅ GREEN |
 | **Блок 6 (Profile & Umbrella)**| `tests/unit/test_profile_api.py` | 6/6 | ✅ GREEN |
 | **Health Monitoring** | `tests/unit/test_health.py` | 1/1 | ✅ GREEN |
-| **ВСЕГО** | **Полный тестовый контур** | **38/38** | 🏆 **100% GREEN** |
+| **ВСЕГО** | **Полный тестовый контур** | **40/40** | 🏆 **100% GREEN** |

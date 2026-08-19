@@ -3,58 +3,36 @@
 {% block title %}SmartContractum — Здесь рождаются смарт-контракты | ПКСК Банка России{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/hero.css?v=2.7.0">
+<link rel="stylesheet" href="/static/css/hero.css?v=2.8.0">
 {% endblock %}
 
 {% block content %}
 <div class="home-page-container">
     <!-- ================================================================
-         1.1 HERO-БАННЕР С ИНТЕРАКТИВНЫМ 3D КУБОМ И КОСМИЧЕСКИМИ ОСКОЛКАМИ
+         1.1 HERO BANNER (3D Crystal Cube & Deep Contrast Typography)
     ================================================================= -->
-    <section class="hero-block" id="heroBlock">
-        <!-- Interactive Cosmic Shards & Particle Field Canvas (Attracted to Cursor) -->
-        <canvas id="cosmicShardsCanvas" class="cosmic-shards-canvas" aria-hidden="true"></canvas>
+    <section class="hero-3d-banner" id="heroBanner">
+        <!-- Interactive Canvas Background for Floating Cosmic Shards -->
+        <canvas id="cosmicShardsCanvas" class="cosmic-shards-canvas"></canvas>
 
-        <!-- Background 3D Spatial Hologram (Positioned Behind Text) -->
-        <div class="hero-3d-bg-matrix" id="hero3dBgMatrix" aria-hidden="true">
-            <div class="scene-3d" id="scene3d">
-                <!-- Ambient Space Glow -->
-                <div class="ambient-glow-nebula"></div>
+        <!-- 3D Background Matrix Layer -->
+        <div class="hero-3d-bg-matrix" id="hero3dBgMatrix">
+            <div class="cube-3d-viewport" id="cube3dViewport">
+                <div class="cube-3d-object" id="cube3dObject">
+                    <!-- Internal Laser Coordinate Axes (X, Y, Z) -->
+                    <div class="cube-axis-laser axis-x"></div>
+                    <div class="cube-axis-laser axis-y"></div>
+                    <div class="cube-axis-laser axis-z"></div>
 
-                <!-- 4 Concentric Gyroscope Orbital Rings -->
-                <div class="orbit-halo ring-outer">
-                    <span class="orbit-satellite sat-blue"></span>
-                </div>
-                <div class="orbit-halo ring-mid">
-                    <span class="orbit-satellite sat-mint"></span>
-                </div>
-                <div class="orbit-halo ring-inner">
-                    <span class="orbit-satellite sat-cyan"></span>
-                </div>
-                <div class="orbit-halo ring-tilted"></div>
+                    <!-- Glowing Quantum Core -->
+                    <div class="cube-quantum-core"></div>
 
-                <!-- Floating 3D Pure Crystal Cube (Large, Textless) -->
-                <div class="crystal-3d-cube" id="crystal3dCube">
-                    <!-- Glowing Quantum Core Nucleus & Energy Vectors in Center -->
-                    <div class="quantum-core-nucleus"></div>
-                    <div class="cube-axis axis-x"></div>
-                    <div class="cube-axis axis-y"></div>
-                    <div class="cube-axis axis-z"></div>
-
-                    <!-- 6 High-End Translucent Glass Facets with Circuit Mesh -->
+                    <!-- 6 Pure Semi-Transparent Hologram Crystal Facets (No Text) -->
                     <div class="cube-facet facet-front">
                         <div class="facet-mesh"></div>
-                        <div class="corner-dot c-tl"></div>
-                        <div class="corner-dot c-tr"></div>
-                        <div class="corner-dot c-bl"></div>
-                        <div class="corner-dot c-br"></div>
                     </div>
                     <div class="cube-facet facet-back">
                         <div class="facet-mesh"></div>
-                        <div class="corner-dot c-tl"></div>
-                        <div class="corner-dot c-tr"></div>
-                        <div class="corner-dot c-bl"></div>
-                        <div class="corner-dot c-br"></div>
                     </div>
                     <div class="cube-facet facet-right">
                         <div class="facet-mesh"></div>
@@ -102,7 +80,7 @@
     </section>
 
     <!-- ================================================================
-         1.2 СЕЛЕКТОР ЗАДАЧ ("Что вы хотите сделать?" / Entry Point)
+         1.2 СЕЛЕКТОР ЗАДАЧ ("Что вы хотите сделать?" / 6-Card Action Grid)
     ================================================================= -->
     <section class="task-router-section">
         <div class="section-heading-box">
@@ -111,64 +89,94 @@
         </div>
 
         <div class="router-cards-grid">
-            <!-- Route 1: Бизнес-задача -> Паспорт -->
-            <a href="/passport" class="route-card" data-route="passport">
+            <!-- Card 1: У меня есть бизнес-задача -> Паспорт -->
+            <a href="/passport" class="route-card" data-route="passport" data-analytics-event="hero_action_click" data-action-target="passport">
                 <div class="route-icon-box blue-glow">
-                    <span class="route-icon">💼</span>
+                    <span class="route-icon">💡</span>
                 </div>
                 <div class="route-content">
                     <div class="route-header">
-                        <h3 class="route-title">Есть бизнес-задача</h3>
+                        <h3 class="route-title">У меня есть бизнес-задача</h3>
                         <span class="route-arrow">→</span>
                     </div>
-                    <p class="route-subtext">Сформировать Паспорт и «Дерево решений» без раскрытия кода.</p>
+                    <p class="route-subtext">Поможем понять, нужен ли смарт-контракт, сформировать сценарий и паспорт решения.</p>
                 </div>
-                <div class="route-card-badge">Генератор Паспорта</div>
+                <div class="route-card-badge">Паспорт решения</div>
             </a>
 
-            <!-- Route 2: Собрать контракт -> Конструктор -->
-            <a href="/builder" class="route-card" data-route="builder">
+            <!-- Card 2: Ищу готовое решение -> Каталог решений -->
+            <a href="/solutions" class="route-card" data-route="solutions" data-analytics-event="hero_action_click" data-action-target="solutions">
                 <div class="route-icon-box cyan-glow">
-                    <span class="route-icon">👨‍💻</span>
+                    <span class="route-icon">📦</span>
                 </div>
                 <div class="route-content">
                     <div class="route-header">
-                        <h3 class="route-title">Собрать контракт</h3>
+                        <h3 class="route-title">Ищу готовое решение</h3>
                         <span class="route-arrow">→</span>
                     </div>
-                    <p class="route-subtext">Визуальный Low-code конструктор и 5-этапный пред-аудит.</p>
+                    <p class="route-subtext">Сценарии, типовые компоненты и готовые разработки.</p>
                 </div>
-                <div class="route-card-badge">Low-Code Студия</div>
+                <div class="route-card-badge">Каталог решений</div>
             </a>
 
-            <!-- Route 3: Найти данные -> Маркетплейс Оракулов -->
-            <a href="/data-sources" class="route-card" data-route="sources">
+            <!-- Card 3: Ищу специалиста или услугу -> Быстрый модальный подвыбор ролей -->
+            <button type="button" class="route-card route-card-btn" id="btnSpecialistModalTrigger" data-route="specialist-modal" data-analytics-event="hero_action_click" data-action-target="specialist_modal" aria-haspopup="dialog">
+                <div class="route-icon-box violet-glow">
+                    <span class="route-icon">🔍</span>
+                </div>
+                <div class="route-content">
+                    <div class="route-header">
+                        <h3 class="route-title">Ищу специалиста или услугу</h3>
+                        <span class="route-arrow">→</span>
+                    </div>
+                    <p class="route-subtext">Разработчики, эксперты, команды, аудиторы и интеграторы.</p>
+                </div>
+                <div class="route-card-badge">Подбор экспертов</div>
+            </button>
+
+            <!-- Card 4: Я специалист и хочу участвовать -> Кабинет специалиста -->
+            <a href="/profile/join" class="route-card" data-route="profile-join" data-analytics-event="hero_action_click" data-action-target="profile_join">
                 <div class="route-icon-box emerald-glow">
+                    <span class="route-icon">🚀</span>
+                </div>
+                <div class="route-content">
+                    <div class="route-header">
+                        <h3 class="route-title">Я специалист и хочу участвовать</h3>
+                        <span class="route-arrow">→</span>
+                    </div>
+                    <p class="route-subtext">Проекты, рабочие группы, публикация разработок и профессиональная репутация.</p>
+                </div>
+                <div class="route-card-badge">Вход для профи</div>
+            </a>
+
+            <!-- Card 5: Данные и оракулы -> Маркетплейс Оракулов -->
+            <a href="/data-sources" class="route-card" data-route="sources" data-analytics-event="hero_action_click" data-action-target="data_sources">
+                <div class="route-icon-box sky-glow">
                     <span class="route-icon">📊</span>
                 </div>
                 <div class="route-content">
                     <div class="route-header">
-                        <h3 class="route-title">Найти данные</h3>
+                        <h3 class="route-title">Данные и оракулы</h3>
                         <span class="route-arrow">→</span>
                     </div>
-                    <p class="route-subtext">Каталог ГИС, Банковских и Открытых API источников.</p>
+                    <p class="route-subtext">Найти источник данных или предложить свои данные рынку.</p>
                 </div>
-                <div class="route-card-badge">Маркетплейс Оракулов</div>
+                <div class="route-card-badge">Маркетплейс данных</div>
             </a>
 
-            <!-- Route 4: Комьюнити -> Лента сообщества & Форум -->
-            <a href="/feed" class="route-card" data-route="forum">
-                <div class="route-icon-box violet-glow">
-                    <span class="route-icon">💬</span>
+            <!-- Card 6: Хочу разобраться в ПКСК -> База знаний & Форум НИР -->
+            <a href="/knowledge" class="route-card" data-route="knowledge" data-analytics-event="hero_action_click" data-action-target="knowledge">
+                <div class="route-icon-box amber-glow">
+                    <span class="route-icon">🎓</span>
                 </div>
                 <div class="route-content">
                     <div class="route-header">
-                        <h3 class="route-title">Комьюнити</h3>
+                        <h3 class="route-title">Хочу разобраться в ПКСК</h3>
                         <span class="route-arrow">→</span>
                     </div>
-                    <p class="route-subtext">Лента сообщества, обсуждение требований ЦБ РФ, АБР и экспертный форум.</p>
+                    <p class="route-subtext">Знания, изменения, открытые вопросы и обучение.</p>
                 </div>
-                <div class="route-card-badge">Лента & Форум</div>
+                <div class="route-card-badge">База знаний</div>
             </a>
         </div>
     </section>
@@ -204,23 +212,157 @@
     </section>
 </div>
 
-<!-- SEO Structured Data Schema.org JSON-LD -->
+<!-- ====================================================================
+     1.4 МОДАЛЬНОЕ ОКНО ПОДВЫБОРА РОЛЕЙ СПЕЦИАЛИСТОВ (Role Selector Modal)
+==================================================================== -->
+<div class="modal-overlay" id="specialistModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card specialist-modal-card">
+        <div class="modal-header">
+            <div class="modal-title-group">
+                <span class="modal-icon">🔍</span>
+                <div>
+                    <h3 class="modal-title">Кого или что вы ищете?</h3>
+                    <p class="modal-subtitle">Выберите категорию для быстрого перехода в каталог специалистов</p>
+                </div>
+            </div>
+            <button class="modal-close-btn" id="btnCloseSpecialistModal" aria-label="Закрыть окно подбора">✕</button>
+        </div>
+
+        <div class="specialist-roles-grid">
+            <!-- Role 1: Разработчик -->
+            <a href="/marketplace/services?role=developer" class="role-chip-card" data-role="developer">
+                <span class="role-chip-icon">👨‍💻</span>
+                <div class="role-chip-info">
+                    <strong class="role-chip-name">Разработчик</strong>
+                    <span class="role-chip-desc">Смарт-контракты, бэкенд, Web3</span>
+                </div>
+                <span class="role-chip-arrow">→</span>
+            </a>
+
+            <!-- Role 2: Команда -->
+            <a href="/marketplace/services?role=team" class="role-chip-card" data-role="team">
+                <span class="role-chip-icon">👥</span>
+                <div class="role-chip-info">
+                    <strong class="role-chip-name">Команда</strong>
+                    <span class="role-chip-desc">Комплексная заказная разработка</span>
+                </div>
+                <span class="role-chip-arrow">→</span>
+            </a>
+
+            <!-- Role 3: Аудит ИБ -->
+            <a href="/marketplace/services?role=audit" class="role-chip-card" data-role="audit">
+                <span class="role-chip-icon">🛡️</span>
+                <div class="role-chip-info">
+                    <strong class="role-chip-name">Аудит ИБ</strong>
+                    <span class="role-chip-desc">Пред-аудит, SAST, верификация</span>
+                </div>
+                <span class="role-chip-arrow">→</span>
+            </a>
+
+            <!-- Role 4: Эксперт -->
+            <a href="/marketplace/services?role=expert" class="role-chip-card" data-role="expert">
+                <span class="role-chip-icon">🎖️</span>
+                <div class="role-chip-info">
+                    <strong class="role-chip-name">Эксперт</strong>
+                    <span class="role-chip-desc">Архитектура ПлЦР и комплаенс</span>
+                </div>
+                <span class="role-chip-arrow">→</span>
+            </a>
+
+            <!-- Role 5: Интегратор -->
+            <a href="/marketplace/services?role=integrator" class="role-chip-card" data-role="integrator">
+                <span class="role-chip-icon">🏢</span>
+                <div class="role-chip-info">
+                    <strong class="role-chip-name">Интегратор</strong>
+                    <span class="role-chip-desc">Шлюзы к АБС, ERP и контуру ПКСК</span>
+                </div>
+                <span class="role-chip-arrow">→</span>
+            </a>
+
+            <!-- Role 6: Консультант -->
+            <a href="/marketplace/services?role=consultant" class="role-chip-card" data-role="consultant">
+                <span class="role-chip-icon">💼</span>
+                <div class="role-chip-info">
+                    <strong class="role-chip-name">Консультант</strong>
+                    <span class="role-chip-desc">Бизнес-моделирование и право</span>
+                </div>
+                <span class="role-chip-arrow">→</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ====================================================================
+     1.5 SEO STRUCTURED DATA SCHEMA.ORG (siteNavigationElement)
+==================================================================== -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "SmartContractum",
-  "url": "https://smartcontractum.ru",
-  "description": "Профессиональная среда смарт-контрактов ПКСК Банка России. Umbrella-интегратор и визуальный конструктор решений.",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://smartcontractum.ru/feed?tag={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "SmartContractum",
+      "url": "https://smartcontractum.ru",
+      "description": "Здесь рождаются смарт-контракты. Профессиональная платформа и мост к ПКСК Банка России.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://smartcontractum.ru/feed?tag={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "name": "Ключевые сценарии и маршруты платформы",
+      "itemListElement": [
+        {
+          "@type": "SiteNavigationElement",
+          "position": 1,
+          "name": "У меня есть бизнес-задача",
+          "description": "Поможем понять, нужен ли смарт-контракт, сформировать сценарий и паспорт решения.",
+          "url": "https://smartcontractum.ru/passport"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 2,
+          "name": "Ищу готовое решение",
+          "description": "Сценарии, типовые компоненты и готовые разработки.",
+          "url": "https://smartcontractum.ru/solutions"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 3,
+          "name": "Ищу специалиста или услугу",
+          "description": "Разработчики, эксперты, команды, аудиторы и интеграторы.",
+          "url": "https://smartcontractum.ru/marketplace/services"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 4,
+          "name": "Я специалист и хочу участвовать",
+          "description": "Проекты, рабочие группы, публикация разработок и профессиональная репутация.",
+          "url": "https://smartcontractum.ru/profile/join"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 5,
+          "name": "Данные и оракулы",
+          "description": "Найти источник данных или предложить свои данные рынку.",
+          "url": "https://smartcontractum.ru/data-sources"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 6,
+          "name": "Хочу разобраться в ПКСК",
+          "description": "Знания, изменения, открытые вопросы и обучение.",
+          "url": "https://smartcontractum.ru/knowledge"
+        }
+      ]
+    }
+  ]
 }
 </script>
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/hero.js" defer></script>
+<script src="/static/js/hero.js?v=2.8.0" defer></script>
 {% endblock %}
