@@ -3,59 +3,21 @@
 {% block title %}SmartContractum — Здесь рождаются смарт-контракты | ПКСК Банка России{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/hero.css?v=2.8.0">
+<link rel="stylesheet" href="/static/css/hero.css?v=2.9.0">
 {% endblock %}
 
 {% block content %}
 <div class="home-page-container">
     <!-- ================================================================
-         1.1 HERO BANNER (3D Crystal Cube & Deep Contrast Typography)
+         1.1 HERO BANNER (Full-Height First Viewport: 3D Crystal & Main UTP)
     ================================================================= -->
     <section class="hero-3d-banner" id="heroBanner">
         <!-- Interactive Canvas Background for Floating Cosmic Shards -->
         <canvas id="cosmicShardsCanvas" class="cosmic-shards-canvas"></canvas>
 
-        <!-- 3D Background Matrix Layer -->
-        <div class="hero-3d-bg-matrix" id="hero3dBgMatrix">
-            <div class="cube-3d-viewport" id="cube3dViewport">
-                <div class="cube-3d-object" id="cube3dObject">
-                    <!-- Internal Laser Coordinate Axes (X, Y, Z) -->
-                    <div class="cube-axis-laser axis-x"></div>
-                    <div class="cube-axis-laser axis-y"></div>
-                    <div class="cube-axis-laser axis-z"></div>
-
-                    <!-- Glowing Quantum Core -->
-                    <div class="cube-quantum-core"></div>
-
-                    <!-- 6 Pure Semi-Transparent Hologram Crystal Facets (No Text) -->
-                    <div class="cube-facet facet-front">
-                        <div class="facet-mesh"></div>
-                    </div>
-                    <div class="cube-facet facet-back">
-                        <div class="facet-mesh"></div>
-                    </div>
-                    <div class="cube-facet facet-right">
-                        <div class="facet-mesh"></div>
-                    </div>
-                    <div class="cube-facet facet-left">
-                        <div class="facet-mesh"></div>
-                    </div>
-                    <div class="cube-facet facet-top">
-                        <div class="facet-mesh"></div>
-                    </div>
-                    <div class="cube-facet facet-bottom">
-                        <div class="facet-mesh"></div>
-                    </div>
-                </div>
-
-                <!-- Ambient Ground Shadow -->
-                <div class="cube-ground-shadow"></div>
-            </div>
-        </div>
-
-        <!-- Foreground Hero Content (Elevated, 100% Readable, High-Contrast) -->
+        <!-- Foreground Hero Content (Centered, 100% Readable, High-Contrast) -->
         <div class="hero-foreground-content">
-            <!-- Sleek Cyber-Minimalist Mission Motto (Pure Typography, No Icons, No Animations) -->
+            <!-- Sleek Cyber-Minimalist Mission Motto (Pure Typography, Floating) -->
             <div class="hero-eyebrow-pill" id="heroEyebrow">
                 <span class="eyebrow-item">ИДЕИ</span>
                 <span class="eyebrow-sep">·</span>
@@ -66,7 +28,71 @@
                 <span class="eyebrow-item">РЕШЕНИЯ</span>
             </div>
 
-            <!-- Main Heading with Crystal-Clear Contrast -->
+            <!-- 3D Interactive Crystal Logo (Centered, Real-Time Mouse Physics) -->
+            <div class="hero-3d-crystal-wrapper" id="hero3dBgMatrix">
+                <div class="scene-3d" id="cube3dViewport">
+                    <!-- Ambient Nebula Radial Backlight -->
+                    <div class="ambient-glow-nebula"></div>
+
+                    <!-- Concentric Gyroscope Orbital Rings -->
+                    <div class="orbit-halo ring-outer"></div>
+                    <div class="orbit-halo ring-mid"></div>
+                    <div class="orbit-halo ring-inner"></div>
+                    <div class="orbit-halo ring-tilted"></div>
+
+                    <!-- 3D Pure Hologram Crystal Cube (150px) -->
+                    <div class="crystal-3d-cube" id="crystal3dCube">
+                        <!-- Internal Laser Coordinate Axes (X, Y, Z) -->
+                        <div class="cube-axis axis-x"></div>
+                        <div class="cube-axis axis-y"></div>
+                        <div class="cube-axis axis-z"></div>
+
+                        <!-- Glowing Quantum Core Nucleus -->
+                        <div class="quantum-core-nucleus"></div>
+
+                        <!-- 6 Glassmorphic Crystal Facets -->
+                        <div class="cube-facet facet-front">
+                            <div class="facet-mesh"></div>
+                            <span class="corner-dot c-tl"></span>
+                            <span class="corner-dot c-tr"></span>
+                            <span class="corner-dot c-bl"></span>
+                            <span class="corner-dot c-br"></span>
+                        </div>
+                        <div class="cube-facet facet-back">
+                            <div class="facet-mesh"></div>
+                            <span class="corner-dot c-tl"></span>
+                            <span class="corner-dot c-tr"></span>
+                            <span class="corner-dot c-bl"></span>
+                            <span class="corner-dot c-br"></span>
+                        </div>
+                        <div class="cube-facet facet-right">
+                            <div class="facet-mesh"></div>
+                            <span class="corner-dot c-tl"></span>
+                            <span class="corner-dot c-tr"></span>
+                            <span class="corner-dot c-bl"></span>
+                            <span class="corner-dot c-br"></span>
+                        </div>
+                        <div class="cube-facet facet-left">
+                            <div class="facet-mesh"></div>
+                            <span class="corner-dot c-tl"></span>
+                            <span class="corner-dot c-tr"></span>
+                            <span class="corner-dot c-bl"></span>
+                            <span class="corner-dot c-br"></span>
+                        </div>
+                        <div class="cube-facet facet-top">
+                            <div class="facet-mesh"></div>
+                        </div>
+                        <div class="cube-facet facet-bottom">
+                            <div class="facet-mesh"></div>
+                        </div>
+                    </div>
+
+                    <!-- Ambient Ground Shadow -->
+                    <div class="cube-ground-shadow"></div>
+                </div>
+            </div>
+
+            <!-- Main Heading with Crystal-Clear Contrast (Enlarged) -->
             <h1 class="hero-main-title">
                 <span class="hero-title-white">Здесь рождаются</span> <br>
                 <span class="hero-title-cyan">смарт-контракты</span>
@@ -76,13 +102,19 @@
             <p class="hero-description">
                 Место, где бизнес-задачи встречаются с разработчиками, экспертами и поставщиками данных и превращаются в новые решения на базе ПКСК Банка России.
             </p>
+
+            <!-- Scroll Indicator to Task Actions Below -->
+            <a href="#taskRouterSection" class="hero-scroll-cue" aria-label="Перейти к выбору сценариев">
+                <span class="scroll-cue-text">Что вы хотите сделать?</span>
+                <span class="scroll-cue-arrow">↓</span>
+            </a>
         </div>
     </section>
 
     <!-- ================================================================
          1.2 СЕЛЕКТОР ЗАДАЧ ("Что вы хотите сделать?" / 6-Card Action Grid)
     ================================================================= -->
-    <section class="task-router-section">
+    <section class="task-router-section" id="taskRouterSection">
         <div class="section-heading-box">
             <h2 class="section-title">Что вы хотите сделать?</h2>
             <p class="section-subtitle">Выберите ключевой пользовательский сценарий для старта работы</p>
@@ -91,14 +123,11 @@
         <div class="router-cards-grid">
             <!-- Card 1: У меня есть бизнес-задача -> Паспорт -->
             <a href="/passport" class="route-card" data-route="passport" data-analytics-event="hero_action_click" data-action-target="passport">
-                <div class="route-icon-box blue-glow">
+                <div class="route-icon-box amber-glow">
                     <span class="route-icon">💡</span>
                 </div>
                 <div class="route-content">
-                    <div class="route-header">
-                        <h3 class="route-title">У меня есть бизнес-задача</h3>
-                        <span class="route-arrow">→</span>
-                    </div>
+                    <h3 class="route-title">У меня есть бизнес-задача</h3>
                     <p class="route-subtext">Поможем понять, нужен ли смарт-контракт, сформировать сценарий и паспорт решения.</p>
                 </div>
                 <div class="route-card-badge">Паспорт решения</div>
@@ -110,10 +139,7 @@
                     <span class="route-icon">📦</span>
                 </div>
                 <div class="route-content">
-                    <div class="route-header">
-                        <h3 class="route-title">Ищу готовое решение</h3>
-                        <span class="route-arrow">→</span>
-                    </div>
+                    <h3 class="route-title">Ищу готовое решение</h3>
                     <p class="route-subtext">Сценарии, типовые компоненты и готовые разработки.</p>
                 </div>
                 <div class="route-card-badge">Каталог решений</div>
@@ -125,10 +151,7 @@
                     <span class="route-icon">🔍</span>
                 </div>
                 <div class="route-content">
-                    <div class="route-header">
-                        <h3 class="route-title">Ищу специалиста или услугу</h3>
-                        <span class="route-arrow">→</span>
-                    </div>
+                    <h3 class="route-title">Ищу специалиста или услугу</h3>
                     <p class="route-subtext">Разработчики, эксперты, команды, аудиторы и интеграторы.</p>
                 </div>
                 <div class="route-card-badge">Подбор экспертов</div>
@@ -140,10 +163,7 @@
                     <span class="route-icon">🚀</span>
                 </div>
                 <div class="route-content">
-                    <div class="route-header">
-                        <h3 class="route-title">Я специалист и хочу участвовать</h3>
-                        <span class="route-arrow">→</span>
-                    </div>
+                    <h3 class="route-title">Я специалист и хочу участвовать</h3>
                     <p class="route-subtext">Проекты, рабочие группы, публикация разработок и профессиональная репутация.</p>
                 </div>
                 <div class="route-card-badge">Вход для профи</div>
@@ -155,10 +175,7 @@
                     <span class="route-icon">📊</span>
                 </div>
                 <div class="route-content">
-                    <div class="route-header">
-                        <h3 class="route-title">Данные и оракулы</h3>
-                        <span class="route-arrow">→</span>
-                    </div>
+                    <h3 class="route-title">Данные и оракулы</h3>
                     <p class="route-subtext">Найти источник данных или предложить свои данные рынку.</p>
                 </div>
                 <div class="route-card-badge">Маркетплейс данных</div>
@@ -166,14 +183,11 @@
 
             <!-- Card 6: Хочу разобраться в ПКСК -> База знаний & Форум НИР -->
             <a href="/knowledge" class="route-card" data-route="knowledge" data-analytics-event="hero_action_click" data-action-target="knowledge">
-                <div class="route-icon-box amber-glow">
+                <div class="route-icon-box gold-glow">
                     <span class="route-icon">🎓</span>
                 </div>
                 <div class="route-content">
-                    <div class="route-header">
-                        <h3 class="route-title">Хочу разобраться в ПКСК</h3>
-                        <span class="route-arrow">→</span>
-                    </div>
+                    <h3 class="route-title">Хочу разобраться в ПКСК</h3>
                     <p class="route-subtext">Знания, изменения, открытые вопросы и обучение.</p>
                 </div>
                 <div class="route-card-badge">База знаний</div>
@@ -364,5 +378,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/hero.js?v=2.8.0" defer></script>
+<script src="/static/js/hero.js?v=2.9.0" defer></script>
 {% endblock %}
