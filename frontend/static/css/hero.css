@@ -46,15 +46,15 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
-    max-width: 900px;
-    height: 520px;
+    max-width: 1350px;
+    height: 600px;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1;
     pointer-events: none;
     user-select: none;
-    opacity: 0.72;
+    opacity: 0.82;
 }
 
 .scene-3d {
@@ -62,25 +62,25 @@
     height: 240px;
     position: relative;
     transform-style: preserve-3d;
-    perspective: 1200px;
+    perspective: 1400px;
     display: flex;
     align-items: center;
     justify-content: center;
     animation: ambientFloat 8s ease-in-out infinite;
 }
 
-/* Ambient Radial Nebula Glow */
+/* Ambient Radial Nebula Glow (Expanded) */
 .ambient-glow-nebula {
     position: absolute;
-    width: 520px;
-    height: 520px;
-    background: radial-gradient(circle, rgba(56, 97, 251, 0.32) 0%, rgba(97, 136, 255, 0.16) 35%, rgba(22, 199, 132, 0.09) 55%, transparent 75%);
+    width: 750px;
+    height: 750px;
+    background: radial-gradient(circle, rgba(56, 97, 251, 0.28) 0%, rgba(97, 136, 255, 0.14) 40%, rgba(22, 199, 132, 0.08) 60%, transparent 80%);
     border-radius: 50%;
-    filter: blur(34px);
+    filter: blur(48px);
     pointer-events: none;
 }
 
-/* 4 Concentric Blockchain Protocol Orbital Rings */
+/* 5 Concentric Blockchain Atomic Orbital Rings (Ultra-Wide, Sweeping Past Text) */
 .orbit-halo {
     position: absolute;
     border-radius: 50%;
@@ -88,72 +88,89 @@
     transform-style: preserve-3d;
 }
 
+.ring-ultra {
+    width: 1050px;
+    height: 1050px;
+    border: 1.5px dashed rgba(97, 136, 255, 0.3);
+    transform: rotateX(76deg) rotateY(15deg) rotateZ(0deg);
+    animation: spinRingUltra 38s linear infinite;
+    box-shadow: 0 0 32px rgba(56, 97, 251, 0.15);
+}
+
 .ring-outer {
-    width: 440px;
-    height: 440px;
-    border: 1.5px dashed rgba(56, 97, 251, 0.38);
-    transform: rotateX(72deg) rotateZ(0deg);
-    animation: spinRingOuter 26s linear infinite;
-    box-shadow: 0 0 24px rgba(56, 97, 251, 0.2);
-}
-
-.ring-mid {
-    width: 350px;
-    height: 350px;
-    border: 1px solid rgba(22, 199, 132, 0.32);
-    transform: rotateX(65deg) rotateY(25deg) rotateZ(0deg);
-    animation: spinRingMid 32s linear infinite reverse;
-}
-
-.ring-inner {
-    width: 270px;
-    height: 270px;
-    border: 1px dotted rgba(97, 136, 255, 0.42);
-    transform: rotateX(58deg) rotateY(-30deg) rotateZ(0deg);
-    animation: spinRingInner 18s linear infinite;
+    width: 900px;
+    height: 900px;
+    border: 1.8px dashed rgba(56, 97, 251, 0.42);
+    transform: rotateX(70deg) rotateZ(0deg);
+    animation: spinRingOuter 28s linear infinite;
+    box-shadow: 0 0 28px rgba(56, 97, 251, 0.22);
 }
 
 .ring-tilted {
-    width: 310px;
-    height: 310px;
-    border: 1px solid rgba(246, 184, 63, 0.28);
-    transform: rotateX(80deg) rotateY(45deg) rotateZ(0deg);
-    animation: spinRingTilted 28s linear infinite;
+    width: 780px;
+    height: 780px;
+    border: 1.5px solid rgba(246, 184, 63, 0.32);
+    transform: rotateX(82deg) rotateY(45deg) rotateZ(0deg);
+    animation: spinRingTilted 32s linear infinite;
 }
 
-/* Orbiting Blockchain Satellites (Validator Nodes) */
+.ring-mid {
+    width: 650px;
+    height: 650px;
+    border: 1.5px solid rgba(56, 189, 248, 0.38);
+    transform: rotateX(64deg) rotateY(25deg) rotateZ(0deg);
+    animation: spinRingMid 24s linear infinite reverse;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+}
+
+.ring-inner {
+    width: 480px;
+    height: 480px;
+    border: 1.5px dotted rgba(22, 199, 132, 0.45);
+    transform: rotateX(56deg) rotateY(-30deg) rotateZ(0deg);
+    animation: spinRingInner 18s linear infinite;
+}
+
+/* Orbiting Blockchain Satellites / Atomic Particles */
 .orbit-satellite {
     position: absolute;
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: #38bdf8;
-    box-shadow: 0 0 12px #38bdf8, 0 0 22px #3861fb;
+    box-shadow: 0 0 16px #38bdf8, 0 0 28px #3861fb;
 }
 
-.sat-1 { top: 0; left: 50%; margin-left: -5px; margin-top: -5px; }
-.sat-2 { bottom: 0; left: 50%; margin-left: -5px; margin-bottom: -5px; background: #16c784; box-shadow: 0 0 12px #16c784; }
-.sat-3 { top: 50%; right: 0; margin-top: -5px; margin-right: -5px; background: #6188ff; box-shadow: 0 0 12px #6188ff; }
-.sat-4 { top: 50%; left: 0; margin-top: -5px; margin-left: -5px; background: #f6b83f; box-shadow: 0 0 12px #f6b83f; }
+.sat-1 { top: 0; left: 50%; margin-left: -6px; margin-top: -6px; }
+.sat-2 { bottom: 0; left: 50%; margin-left: -6px; margin-bottom: -6px; background: #16c784; box-shadow: 0 0 16px #16c784, 0 0 24px #16c784; }
+.sat-3 { top: 50%; right: 0; margin-top: -6px; margin-right: -6px; background: #6188ff; box-shadow: 0 0 16px #6188ff, 0 0 24px #3861fb; }
+.sat-4 { top: 50%; left: 0; margin-top: -6px; margin-left: -6px; background: #f6b83f; box-shadow: 0 0 16px #f6b83f, 0 0 24px #f6b83f; }
+.sat-5 { top: 25%; left: 10%; margin-left: -6px; margin-top: -6px; background: #38bdf8; box-shadow: 0 0 18px #38bdf8; }
+.sat-6 { bottom: 25%; right: 10%; margin-right: -6px; margin-bottom: -6px; background: #ec4899; box-shadow: 0 0 18px #ec4899; }
+
+@keyframes spinRingUltra {
+    0% { transform: rotateX(76deg) rotateY(15deg) rotateZ(0deg); }
+    100% { transform: rotateX(76deg) rotateY(15deg) rotateZ(360deg); }
+}
 
 @keyframes spinRingOuter {
-    0% { transform: rotateX(72deg) rotateZ(0deg); }
-    100% { transform: rotateX(72deg) rotateZ(360deg); }
+    0% { transform: rotateX(70deg) rotateZ(0deg); }
+    100% { transform: rotateX(70deg) rotateZ(360deg); }
 }
 
 @keyframes spinRingMid {
-    0% { transform: rotateX(65deg) rotateY(25deg) rotateZ(0deg); }
-    100% { transform: rotateX(65deg) rotateY(25deg) rotateZ(-360deg); }
+    0% { transform: rotateX(64deg) rotateY(25deg) rotateZ(0deg); }
+    100% { transform: rotateX(64deg) rotateY(25deg) rotateZ(-360deg); }
 }
 
 @keyframes spinRingInner {
-    0% { transform: rotateX(58deg) rotateY(-30deg) rotateZ(0deg); }
-    100% { transform: rotateX(58deg) rotateY(-30deg) rotateZ(360deg); }
+    0% { transform: rotateX(56deg) rotateY(-30deg) rotateZ(0deg); }
+    100% { transform: rotateX(56deg) rotateY(-30deg) rotateZ(360deg); }
 }
 
 @keyframes spinRingTilted {
-    0% { transform: rotateX(80deg) rotateY(45deg) rotateZ(0deg); }
-    100% { transform: rotateX(80deg) rotateY(45deg) rotateZ(360deg); }
+    0% { transform: rotateX(82deg) rotateY(45deg) rotateZ(0deg); }
+    100% { transform: rotateX(82deg) rotateY(45deg) rotateZ(360deg); }
 }
 
 /* 3D Smart Contract Blockchain Cube (200px) */
