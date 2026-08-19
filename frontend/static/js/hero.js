@@ -1,6 +1,6 @@
 /**
  * SmartContractum — Block 1 Hero Section & Interactive Router Controller
- * Dynamic Async Stats Fetcher, 3D Web3 Emblem Parallax & Card Interactions
+ * Dynamic Async Stats Fetcher & Global Full-Viewport 3D Spatial Hologram Physics
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -55,33 +55,70 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. 3D Holographic Cube Parallax Tilt Interaction
-    const heroWrapper = document.getElementById('hero3dWrapper');
+    // 3. Global Full-Viewport 3D Spatial Hologram Physics & Mouse Tracking
     const cube = document.getElementById('crystal3dCube');
+    const backdrop = document.getElementById('hero3dBackdrop');
 
-    if (heroWrapper && cube) {
-        let isHovered = false;
+    if (cube) {
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetRotX = -20;
+        let targetRotY = 32;
+        let currentRotX = -20;
+        let currentRotY = 32;
+        let targetTransX = 0;
+        let targetTransY = 0;
+        let currentTransX = 0;
+        let currentTransY = 0;
 
-        heroWrapper.addEventListener('mouseenter', () => {
-            isHovered = true;
-        });
+        // Base Idle Animation Phase
+        let idleClock = 0;
 
-        heroWrapper.addEventListener('mouseleave', () => {
-            isHovered = false;
-            cube.style.transform = 'rotateX(-22deg) rotateY(35deg)';
-        });
+        function onPointerMove(clientX, clientY) {
+            const normX = (clientX / window.innerWidth - 0.5) * 2;   // -1.0 to 1.0
+            const normY = (clientY / window.innerHeight - 0.5) * 2;  // -1.0 to 1.0
 
-        heroWrapper.addEventListener('mousemove', (e) => {
-            if (!isHovered) return;
-            const rect = heroWrapper.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
+            targetRotX = -20 - normY * 36;
+            targetRotY = 32 + normX * 52;
+            targetTransX = normX * 30;
+            targetTransY = normY * 20;
+        }
 
-            const rotateX = -22 + (y / (rect.height / 2)) * -25;
-            const rotateY = 35 + (x / (rect.width / 2)) * 35;
+        // Global Mouse Move Listener across ENTIRE Screen
+        window.addEventListener('mousemove', (e) => {
+            onPointerMove(e.clientX, e.clientY);
+        }, { passive: true });
 
-            cube.style.transform = `rotateX(${rotateX.toFixed(1)}deg) rotateY(${rotateY.toFixed(1)}deg) scale(1.08)`;
-        });
+        // Touch Tracking for Mobile & Tablets
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches && e.touches[0]) {
+                onPointerMove(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: true });
+
+        // Smooth Lerp Animation Loop (60 FPS)
+        function render3DPhysics() {
+            idleClock += 0.02;
+            const idleOffset = Math.sin(idleClock) * 4;
+
+            // Damping Linear Interpolation
+            currentRotX += (targetRotX - currentRotX) * 0.06;
+            currentRotY += (targetRotY - currentRotY) * 0.06;
+            currentTransX += (targetTransX - currentTransX) * 0.05;
+            currentTransY += (targetTransY - currentTransY) * 0.05;
+
+            // Apply 3D matrix transform to cube
+            cube.style.transform = `translate3d(${currentTransX.toFixed(2)}px, ${(currentTransY + idleOffset).toFixed(2)}px, 0) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg)`;
+
+            // Subtle parallax on ambient scene
+            if (backdrop) {
+                backdrop.style.transform = `translate(calc(-50% + ${(currentTransX * 0.4).toFixed(1)}px), calc(-50% + ${(currentTransY * 0.4).toFixed(1)}px))`;
+            }
+
+            requestAnimationFrame(render3DPhysics);
+        }
+
+        render3DPhysics();
     }
 
     updateSystemStats();

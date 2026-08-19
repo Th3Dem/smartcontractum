@@ -1,6 +1,6 @@
 /* ======================================================================
    SmartContractum — Block 1 Hero Section & Interactive Task Router
-   Design System: CoinMarketCap Style + 3D Holographic Web3 Emblem
+   Visual System: CoinMarketCap Style + Ambient 3D Spatial Hologram Backdrop
 ====================================================================== */
 
 .home-page-container {
@@ -11,203 +11,266 @@
 }
 
 /* ----------------------------------------------------------------------
-   1.1 HERO BANNER & 3D SMART CONTRACT EMBLEM
+   1.1 HERO BANNER WITH BACKGROUND 3D HOLOGRAPHIC CUBE
 ---------------------------------------------------------------------- */
 .hero-block {
-    text-align: center;
-    max-width: 900px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    padding-top: 10px;
-}
-
-/* 3D Holographic Scene Container */
-.hero-3d-emblem-wrapper {
-    width: 220px;
-    height: 200px;
     position: relative;
+    width: 100%;
+    min-height: 440px;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: grab;
-    user-select: none;
-    margin-bottom: 4px;
+    padding: 30px 0;
+    overflow: visible;
 }
 
-.hero-3d-emblem-wrapper:active {
-    cursor: grabbing;
+/* Background 3D Hologram Container (Behind Text) */
+.hero-3d-backdrop {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 800px;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    pointer-events: none;
+    user-select: none;
 }
 
 .scene-3d {
-    width: 140px;
-    height: 140px;
+    width: 260px;
+    height: 260px;
     position: relative;
     transform-style: preserve-3d;
-    perspective: 1000px;
+    perspective: 1200px;
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: floatCube 6s ease-in-out infinite;
+    animation: ambientFloat 8s ease-in-out infinite;
 }
 
-/* Concentric Orbital Rings */
-.orbit-halo {
+/* Ambient Radial Nebula Glow */
+.ambient-nebula-glow {
+    position: absolute;
+    width: 540px;
+    height: 540px;
+    background: radial-gradient(circle, rgba(56, 97, 251, 0.22) 0%, rgba(97, 136, 255, 0.12) 35%, rgba(22, 199, 132, 0.08) 55%, transparent 75%);
+    border-radius: 50%;
+    filter: blur(32px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 4 Concentric Gyroscope Orbital Rings */
+.orbit-ring {
     position: absolute;
     border-radius: 50%;
     pointer-events: none;
     transform-style: preserve-3d;
 }
 
-.ring-primary {
-    width: 190px;
-    height: 190px;
-    border: 1.5px dashed rgba(56, 97, 251, 0.45);
-    transform: rotateX(72deg) rotateZ(0deg);
-    animation: spinRingPrimary 12s linear infinite;
-    box-shadow: 0 0 20px rgba(56, 97, 251, 0.25);
+.ring-outer {
+    width: 380px;
+    height: 380px;
+    border: 1.5px dashed rgba(56, 97, 251, 0.35);
+    transform: rotateX(74deg) rotateZ(0deg);
+    animation: spinRingOuter 20s linear infinite;
+    box-shadow: 0 0 24px rgba(56, 97, 251, 0.2);
 }
 
-.ring-secondary {
-    width: 230px;
-    height: 230px;
-    border: 1px solid rgba(22, 199, 132, 0.35);
-    transform: rotateX(68deg) rotateY(30deg) rotateZ(0deg);
-    animation: spinRingSecondary 18s linear infinite reverse;
+.ring-mid {
+    width: 320px;
+    height: 320px;
+    border: 1px solid rgba(22, 199, 132, 0.3);
+    transform: rotateX(66deg) rotateY(25deg) rotateZ(0deg);
+    animation: spinRingMid 28s linear infinite reverse;
 }
 
-.ring-tertiary {
-    width: 160px;
-    height: 160px;
+.ring-inner {
+    width: 240px;
+    height: 240px;
     border: 1px dotted rgba(97, 136, 255, 0.4);
-    transform: rotateX(60deg) rotateY(-25deg) rotateZ(0deg);
-    animation: spinRingTertiary 10s linear infinite;
+    transform: rotateX(60deg) rotateY(-30deg) rotateZ(0deg);
+    animation: spinRingInner 15s linear infinite;
 }
 
-@keyframes spinRingPrimary {
-    0% { transform: rotateX(72deg) rotateZ(0deg); }
-    100% { transform: rotateX(72deg) rotateZ(360deg); }
+.ring-tilted {
+    width: 290px;
+    height: 290px;
+    border: 1px solid rgba(246, 184, 63, 0.25);
+    transform: rotateX(82deg) rotateY(45deg) rotateZ(0deg);
+    animation: spinRingTilted 24s linear infinite;
 }
 
-@keyframes spinRingSecondary {
-    0% { transform: rotateX(68deg) rotateY(30deg) rotateZ(0deg); }
-    100% { transform: rotateX(68deg) rotateY(30deg) rotateZ(-360deg); }
+/* Beacons on rings */
+.orbit-beacon {
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    transform: translateX(-50%);
 }
 
-@keyframes spinRingTertiary {
-    0% { transform: rotateX(60deg) rotateY(-25deg) rotateZ(0deg); }
-    100% { transform: rotateX(60deg) rotateY(-25deg) rotateZ(360deg); }
+.beacon-blue { background: #3861fb; box-shadow: 0 0 12px #3861fb; }
+.beacon-mint { background: #16c784; box-shadow: 0 0 12px #16c784; }
+.beacon-cyan { background: #6188ff; box-shadow: 0 0 12px #6188ff; }
+
+@keyframes spinRingOuter {
+    0% { transform: rotateX(74deg) rotateZ(0deg); }
+    100% { transform: rotateX(74deg) rotateZ(360deg); }
 }
 
-/* 3D Isometric Crystal Cube */
+@keyframes spinRingMid {
+    0% { transform: rotateX(66deg) rotateY(25deg) rotateZ(0deg); }
+    100% { transform: rotateX(66deg) rotateY(25deg) rotateZ(-360deg); }
+}
+
+@keyframes spinRingInner {
+    0% { transform: rotateX(60deg) rotateY(-30deg) rotateZ(0deg); }
+    100% { transform: rotateX(60deg) rotateY(-30deg) rotateZ(360deg); }
+}
+
+@keyframes spinRingTilted {
+    0% { transform: rotateX(82deg) rotateY(45deg) rotateZ(0deg); }
+    100% { transform: rotateX(82deg) rotateY(45deg) rotateZ(360deg); }
+}
+
+/* 3D Pure Glass Crystal Cube (Large: 170px, No Text) */
 .crystal-3d-cube {
-    width: 90px;
-    height: 90px;
+    width: 170px;
+    height: 170px;
     position: relative;
     transform-style: preserve-3d;
-    transform: rotateX(-22deg) rotateY(35deg);
-    transition: transform 0.15s ease-out;
+    transform: rotateX(-20deg) rotateY(32deg);
+    will-change: transform;
 }
 
-.cube-facet {
+/* Glowing Quantum Nucleus Core in the Center of Cube */
+.quantum-core-sphere {
     position: absolute;
-    width: 90px;
-    height: 90px;
-    background: rgba(17, 25, 40, 0.85);
-    border: 1.5px solid rgba(56, 97, 251, 0.6);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: inset 0 0 16px rgba(56, 97, 251, 0.3), 0 0 12px rgba(56, 97, 251, 0.2);
-    border-radius: 8px;
-}
-
-.facet-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    padding: 6px;
-    text-align: center;
-}
-
-.facet-code-tag {
-    font-size: 0.58rem;
-    font-weight: 700;
-    color: var(--text-muted);
-    font-family: "JetBrains Mono", monospace;
-    letter-spacing: -0.2px;
-}
-
-.facet-icon {
-    font-size: 1.3rem;
-    filter: drop-shadow(0 0 6px rgba(56, 97, 251, 0.6));
-}
-
-.facet-sub {
-    font-size: 0.56rem;
-    font-weight: 800;
-    color: var(--accent-emerald);
-    letter-spacing: 0.3px;
-}
-
-.facet-brand {
-    font-size: 0.62rem;
-    font-weight: 800;
-    color: #ffffff;
-}
-
-.facet-logo-badge {
-    font-size: 0.6rem;
-    font-weight: 800;
-    background: var(--accent-blue);
-    color: #ffffff;
-    padding: 1px 6px;
-    border-radius: var(--radius-xs);
-    margin-top: 2px;
-}
-
-.facet-core-glow {
-    width: 40px;
-    height: 40px;
-    background: radial-gradient(circle, #3861fb 0%, #16c784 70%, transparent 100%);
+    top: 50%;
+    left: 50%;
+    width: 60px;
+    height: 60px;
+    margin-top: -30px;
+    margin-left: -30px;
     border-radius: 50%;
-    filter: blur(6px);
+    background: radial-gradient(circle, #3861fb 0%, #6188ff 45%, #16c784 75%, transparent 100%);
+    filter: blur(8px);
+    opacity: 0.9;
+    animation: corePulse 4s ease-in-out infinite;
+    transform: translateZ(0);
+}
+
+.core-inner-energy {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #ffffff;
+    filter: blur(4px);
     opacity: 0.8;
 }
 
-/* 3D Cube Faces Transformation Positioning (90px size -> 45px translation) */
-.facet-front  { transform: translateZ(45px); }
-.facet-back   { transform: rotateY(180deg) translateZ(45px); }
-.facet-right  { transform: rotateY(90deg) translateZ(45px); border-color: rgba(97, 136, 255, 0.6); }
-.facet-left   { transform: rotateY(-90deg) translateZ(45px); border-color: rgba(22, 199, 132, 0.6); }
-.facet-top    { transform: rotateX(90deg) translateZ(45px); background: rgba(23, 32, 53, 0.9); }
-.facet-bottom { transform: rotateX(-90deg) translateZ(45px); background: rgba(8, 14, 26, 0.95); }
+@keyframes corePulse {
+    0%, 100% { transform: scale(0.9) translateZ(0); opacity: 0.75; }
+    50% { transform: scale(1.2) translateZ(0); opacity: 1; }
+}
 
-/* Ambient Ground Shadow & Reflection */
+/* 6 High-End Glassmorphic Facets (170px size -> 85px translation) */
+.cube-facet {
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    background: rgba(14, 22, 38, 0.42);
+    border: 1.5px solid rgba(56, 97, 251, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: inset 0 0 24px rgba(56, 97, 251, 0.22), 0 0 20px rgba(56, 97, 251, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.facet-grid-mesh {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(to right, rgba(56, 97, 251, 0.12) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 97, 251, 0.12) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.6;
+}
+
+.facet-glow-corner {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+}
+
+.facet-glow-corner.top-left {
+    top: 6px;
+    left: 6px;
+    border-top: 2px solid #3861fb;
+    border-left: 2px solid #3861fb;
+}
+
+.facet-glow-corner.top-right {
+    top: 6px;
+    right: 6px;
+    border-top: 2px solid #16c784;
+    border-right: 2px solid #16c784;
+}
+
+.facet-glow-corner.bottom-left {
+    bottom: 6px;
+    left: 6px;
+    border-bottom: 2px solid #6188ff;
+    border-left: 2px solid #6188ff;
+}
+
+.facet-glow-corner.bottom-right {
+    bottom: 6px;
+    right: 6px;
+    border-bottom: 2px solid #3861fb;
+    border-right: 2px solid #3861fb;
+}
+
+/* 3D Cube Faces Transformation (170px / 2 = 85px) */
+.facet-front  { transform: translateZ(85px); }
+.facet-back   { transform: rotateY(180deg) translateZ(85px); }
+.facet-right  { transform: rotateY(90deg) translateZ(85px); border-color: rgba(97, 136, 255, 0.45); }
+.facet-left   { transform: rotateY(-90deg) translateZ(85px); border-color: rgba(22, 199, 132, 0.45); }
+.facet-top    { transform: rotateX(90deg) translateZ(85px); background: rgba(20, 30, 52, 0.5); }
+.facet-bottom { transform: rotateX(-90deg) translateZ(85px); background: rgba(10, 16, 28, 0.65); }
+
+/* Ambient Floor Reflection & Shadow */
 .cube-ambient-shadow {
     position: absolute;
-    bottom: -35px;
-    width: 120px;
-    height: 30px;
-    background: radial-gradient(ellipse at center, rgba(56, 97, 251, 0.45) 0%, rgba(22, 199, 132, 0.2) 40%, transparent 70%);
+    bottom: -60px;
+    width: 240px;
+    height: 48px;
+    background: radial-gradient(ellipse at center, rgba(56, 97, 251, 0.5) 0%, rgba(22, 199, 132, 0.25) 45%, transparent 75%);
     border-radius: 50%;
-    filter: blur(8px);
-    animation: shadowPulse 6s ease-in-out infinite;
+    filter: blur(12px);
+    animation: shadowPulse 8s ease-in-out infinite;
     pointer-events: none;
 }
 
-@keyframes floatCube {
+@keyframes ambientFloat {
     0%, 100% {
         transform: translateY(0px) rotateX(0deg);
     }
     50% {
-        transform: translateY(-12px) rotateX(4deg);
+        transform: translateY(-16px) rotateX(3deg);
     }
 }
 
@@ -222,18 +285,36 @@
     }
 }
 
-/* CBR Concept Phase Status Notice */
+/* ----------------------------------------------------------------------
+   FOREGROUND HERO CONTENT (Crisp, High Contrast & Elevated)
+---------------------------------------------------------------------- */
+.hero-content-foreground {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    text-align: center;
+    max-width: 860px;
+    margin: 0 auto;
+    pointer-events: auto;
+}
+
 .hero-status-pill {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 6px 16px;
-    background: rgba(246, 184, 63, 0.1);
-    border: 1px solid rgba(246, 184, 63, 0.35);
+    padding: 6px 18px;
+    background: rgba(11, 20, 38, 0.85);
+    border: 1px solid rgba(246, 184, 63, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-radius: var(--radius-full);
     font-size: 0.82rem;
     font-weight: 600;
     color: #f6b83f;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .status-pulse-dot {
@@ -245,24 +326,27 @@
 }
 
 .hero-main-title {
-    font-size: 3rem;
+    font-size: 3.2rem;
     font-weight: 800;
     line-height: 1.15;
     letter-spacing: -0.035em;
     color: #ffffff;
+    text-shadow: 0 4px 24px rgba(11, 20, 38, 0.9), 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 .hero-gradient-text {
     background: linear-gradient(135deg, #3861fb, #6188ff, #16c784);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 16px rgba(56, 97, 251, 0.4));
 }
 
 .hero-description {
-    font-size: 1.12rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    max-width: 780px;
+    font-size: 1.15rem;
+    color: #cbd5e1;
+    line-height: 1.65;
+    max-width: 800px;
+    text-shadow: 0 2px 12px rgba(11, 20, 38, 0.9);
 }
 
 /* ----------------------------------------------------------------------
@@ -272,6 +356,8 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
+    position: relative;
+    z-index: 2;
 }
 
 .section-heading-box {
@@ -414,6 +500,8 @@
 ---------------------------------------------------------------------- */
 .stats-counter-section {
     margin-top: 10px;
+    position: relative;
+    z-index: 2;
 }
 
 .stats-panel-box {
@@ -466,6 +554,10 @@
 @media (max-width: 860px) {
     .hero-main-title {
         font-size: 2.2rem;
+    }
+
+    .hero-3d-backdrop {
+        transform: translate(-50%, -50%) scale(0.75);
     }
 
     .router-cards-grid {
