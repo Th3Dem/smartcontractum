@@ -9,83 +9,79 @@
 {% block content %}
 <div class="home-page-container">
     <!-- ================================================================
-         1.1 HERO-БАННЕР С ФОНОВЫМ ИНТЕРАКТИВНЫМ 3D ГОЛОГРАФИЧЕСКИМ КУБОМ
+         1.1 HERO-БАННЕР C 3D МОДНЫМ ЛОГОТИПОМ ЭКОСИСТЕМЫ
     ================================================================= -->
     <section class="hero-block" id="heroBlock">
-        <!-- Background 3D Holographic Scene (Behind Text) -->
-        <div class="hero-3d-backdrop" id="hero3dBackdrop" aria-hidden="true">
+        <!-- 3D Holographic Smart Contract Emblem -->
+        <div class="hero-3d-emblem-wrapper" id="hero3dWrapper" title="Интерактивный 3D смарт-контрактный узел ПКСК">
             <div class="scene-3d" id="scene3d">
-                <!-- Ambient Nebula Glow -->
-                <div class="ambient-nebula-glow"></div>
+                <!-- Outer Orbital Hologram Rings -->
+                <div class="orbit-halo ring-primary"></div>
+                <div class="orbit-halo ring-secondary"></div>
+                <div class="orbit-halo ring-tertiary"></div>
 
-                <!-- 4 Concentric Gyroscope Orbital Rings -->
-                <div class="orbit-ring ring-outer">
-                    <span class="orbit-beacon beacon-blue"></span>
-                </div>
-                <div class="orbit-ring ring-mid">
-                    <span class="orbit-beacon beacon-mint"></span>
-                </div>
-                <div class="orbit-ring ring-inner">
-                    <span class="orbit-beacon beacon-cyan"></span>
-                </div>
-                <div class="orbit-ring ring-tilted"></div>
-
-                <!-- Floating 3D Pure Glass Crystal Cube (Large, No Text) -->
+                <!-- Floating 3D Isometric Crystal Cube -->
                 <div class="crystal-3d-cube" id="crystal3dCube">
-                    <!-- Glowing Quantum Core Inside Cube -->
-                    <div class="quantum-core-sphere">
-                        <div class="core-inner-energy"></div>
-                    </div>
-
-                    <!-- 6 High-End Glassmorphic Facets -->
                     <div class="cube-facet facet-front">
-                        <div class="facet-grid-mesh"></div>
-                        <div class="facet-glow-corner top-left"></div>
-                        <div class="facet-glow-corner bottom-right"></div>
+                        <div class="facet-inner">
+                            <span class="facet-code-tag">SC_NODE_01</span>
+                            <span class="facet-icon">⚡</span>
+                            <span class="facet-sub">PROD_BRIDGE</span>
+                        </div>
                     </div>
                     <div class="cube-facet facet-back">
-                        <div class="facet-grid-mesh"></div>
-                        <div class="facet-glow-corner top-right"></div>
-                        <div class="facet-glow-corner bottom-left"></div>
+                        <div class="facet-inner">
+                            <span class="facet-code-tag">CBR_AUDIT</span>
+                            <span class="facet-icon">🔒</span>
+                            <span class="facet-sub">GOST_READY</span>
+                        </div>
                     </div>
                     <div class="cube-facet facet-right">
-                        <div class="facet-grid-mesh"></div>
+                        <div class="facet-inner">
+                            <span class="facet-code-tag">ORACLE_GIS</span>
+                            <span class="facet-icon">📊</span>
+                            <span class="facet-sub">TRUST_LEVEL_1</span>
+                        </div>
                     </div>
                     <div class="cube-facet facet-left">
-                        <div class="facet-grid-mesh"></div>
+                        <div class="facet-inner">
+                            <span class="facet-code-tag">DECISION_TREE</span>
+                            <span class="facet-icon">📑</span>
+                            <span class="facet-sub">NO_CODE_PASS</span>
+                        </div>
                     </div>
                     <div class="cube-facet facet-top">
-                        <div class="facet-grid-mesh"></div>
+                        <div class="facet-inner">
+                            <span class="facet-brand">SmartContractum</span>
+                            <span class="facet-logo-badge">ПКСК</span>
+                        </div>
                     </div>
                     <div class="cube-facet facet-bottom">
-                        <div class="facet-grid-mesh"></div>
+                        <div class="facet-core-glow"></div>
                     </div>
                 </div>
 
-                <!-- Ground Ambient Radial Glow & Reflection -->
+                <!-- Ground Ambient Radial Glow -->
                 <div class="cube-ambient-shadow"></div>
             </div>
         </div>
 
-        <!-- Foreground Hero Content (Elevated z-index) -->
-        <div class="hero-content-foreground">
-            <!-- CBR Concept Phase Status Notice -->
-            <div class="hero-status-pill">
-                <span class="status-pulse-dot"></span>
-                <span class="status-text">{{ status_notice|default("Статус: Официальный сбор обратной связи по Концепции ПКСК (до 30.09.2026)") }}</span>
-            </div>
-
-            <!-- Main Heading -->
-            <h1 class="hero-main-title">
-                Профессиональная среда <br>
-                <span class="hero-gradient-text">смарт-контрактов ПКСК</span>
-            </h1>
-
-            <!-- Subtitle -->
-            <p class="hero-description">
-                Объединяем знания, бизнес-сценарии, разработчиков и доверенные источники данных до и после старта промышленной инфраструктуры ЦБ РФ.
-            </p>
+        <!-- CBR Concept Phase Status Notice -->
+        <div class="hero-status-pill">
+            <span class="status-pulse-dot"></span>
+            <span class="status-text">{{ status_notice|default("Статус: Официальный сбор обратной связи по Концепции ПКСК (до 30.09.2026)") }}</span>
         </div>
+
+        <!-- Main Heading -->
+        <h1 class="hero-main-title">
+            Профессиональная среда <br>
+            <span class="hero-gradient-text">смарт-контрактов ПКСК</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="hero-description">
+            Объединяем знания, бизнес-сценарии, разработчиков и доверенные источники данных до и после старта промышленной инфраструктуры ЦБ РФ.
+        </p>
     </section>
 
     <!-- ================================================================
