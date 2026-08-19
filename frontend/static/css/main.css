@@ -235,7 +235,20 @@ ul {
     font-size: 1.25rem;
     font-weight: 800;
     letter-spacing: -0.4px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.logo-smart {
     color: #ffffff;
+    font-weight: 800;
+}
+
+.logo-contractum {
+    background: linear-gradient(135deg, #3861fb 0%, #6188ff 50%, #16c784 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
 }
 
 .logo-badge {
@@ -394,7 +407,8 @@ ul {
 .footer-brand-title {
     font-size: 1.15rem;
     font-weight: 800;
-    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
 }
 
 .footer-desc {
