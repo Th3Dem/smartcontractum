@@ -220,21 +220,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.y = homeY;
                 this.vx = 0;
                 this.vy = 0;
-                this.baseSize = Math.random() * 2.4 + 1.2;
+                // Variable particle size tiers: 65% micro, 25% medium, 10% large prominent nodes
+                const sizeTier = Math.random();
+                if (sizeTier > 0.90) {
+                    this.baseSize = Math.random() * 3.5 + 5.5; // Large crystal node (5.5 - 9px)
+                    this.tier = 2;
+                } else if (sizeTier > 0.65) {
+                    this.baseSize = Math.random() * 2.5 + 3.2; // Medium crystal shard (3.2 - 5.7px)
+                    this.tier = 1;
+                } else {
+                    this.baseSize = Math.random() * 1.8 + 1.2; // Micro star (1.2 - 3px)
+                    this.tier = 0;
+                }
+
                 this.colorPrefix = colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
-                this.baseAlpha = Math.random() * 0.24 + 0.14;
+                this.baseAlpha = this.tier === 2 ? 0.38 : (Math.random() * 0.24 + 0.14);
                 this.currentAlpha = this.baseAlpha;
                 this.angle = Math.random() * 6.28;
                 this.angularVelocity = 0;
                 this.swirlDir = Math.random() > 0.5 ? 1 : -1;
-                this.type = Math.floor(Math.random() * 3); // Diamond, Star Circle, Cross Dot
+                this.type = Math.floor(Math.random() * 3); // Diamond, Star Circle, Cross
             }
 
             update(localMouseX, localMouseY, isMouseActive) {
                 const dxMouse = localMouseX - this.x;
                 const dyMouse = localMouseY - this.y;
                 const distSqMouse = dxMouse * dxMouse + dyMouse * dyMouse;
-                const INFLUENCE_RADIUS = 200;
+                const INFLUENCE_RADIUS = 210;
                 const INFLUENCE_SQ = INFLUENCE_RADIUS * INFLUENCE_RADIUS;
 
                 const dxHome = this.homeX - this.x;
@@ -247,9 +259,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     const distMouse = Math.sqrt(distSqMouse);
                     // Soft quadratic easing factor
                     const proximity = 1 - (distMouse / INFLUENCE_RADIUS);
-                    const force = Math.sin(proximity * Math.PI) * 0.013;
+                    const force = Math.sin(proximity * Math.PI) * 0.022;
 
-                    // 1. Ultra-gentle attraction
+                    // 1. Smooth attraction toward cursor
                     this.vx += (dxMouse / distMouse) * force;
                     this.vy += (dyMouse / distMouse) * force;
 
@@ -260,13 +272,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     this.vx += tangentX * swirlForce;
                     this.vy += tangentY * swirlForce;
 
-                    this.angularVelocity += 0.0012 * this.swirlDir;
-                    this.currentAlpha += (Math.min(0.7, this.baseAlpha + 0.38) - this.currentAlpha) * 0.06;
+                    this.angularVelocity += 0.0016 * this.swirlDir;
+                    this.currentAlpha += (Math.min(0.75, this.baseAlpha + 0.38) - this.currentAlpha) * 0.06;
                 } else {
-                    // Soft spring return to home station
-                    if (distHomeSq > 0.3) {
+                    // Symmetric return flight: flies back to home with the exact same energetic curve
+                    if (distHomeSq > 0.35) {
                         const distHome = Math.sqrt(distHomeSq);
-                        const returnForce = Math.min(distHome * 0.012, 0.06);
+                        // Matches the forward attraction force curve
+                        const returnForce = Math.sin(Math.min(distHome / 90, 1) * (Math.PI / 2)) * 0.022;
                         this.vx += (dxHome / distHome) * returnForce;
                         this.vy += (dyHome / distHome) * returnForce;
                     } else {
@@ -281,21 +294,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // Viscous liquid damping
-                this.vx *= 0.92;
-                this.vy *= 0.92;
+                this.vx *= 0.925;
+                this.vy *= 0.925;
                 this.angularVelocity *= 0.93;
 
                 // Speed cap for silk-smooth float
                 const speedSq = this.vx * this.vx + this.vy * this.vy;
-                const MAX_SPEED = 1.4;
+                const MAX_SPEED = 1.7;
                 if (speedSq > MAX_SPEED * MAX_SPEED) {
                     const speed = Math.sqrt(speedSq);
                     this.vx = (this.vx / speed) * MAX_SPEED;
                     this.vy = (this.vy / speed) * MAX_SPEED;
                 }
 
-                if (Math.abs(this.vx) < 0.004) this.vx = 0;
-                if (Math.abs(this.vy) < 0.004) this.vy = 0;
+                if (Math.abs(this.vx) < 0.003) this.vx = 0;
+                if (Math.abs(this.vy) < 0.003) this.vy = 0;
 
                 this.x += this.vx;
                 this.y += this.vy;
@@ -325,6 +338,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 ctx.closePath();
                 ctx.fill();
+
+                // Extra subtle halo for larger nodes (Tier 2)
+                if (this.tier === 2) {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.baseSize * 1.3, 0, 6.28);
+                    ctx.fillStyle = this.colorPrefix + (this.currentAlpha * 0.25).toFixed(2) + ')';
+                    ctx.fill();
+                }
+
                 ctx.restore();
             }
         }
