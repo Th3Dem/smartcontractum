@@ -1,0 +1,475 @@
+/* ======================================================================
+   SmartContractum — Block 4 Low-Code Builder & Audit Simulator Styles
+====================================================================== */
+
+.builder-page-container {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    padding-bottom: 24px;
+}
+
+/* Header */
+.builder-header-box {
+    text-align: center;
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.builder-tag-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: rgba(6, 182, 212, 0.12);
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    border-radius: var(--radius-full);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent-cyan);
+}
+
+.pulse-cyan {
+    width: 8px;
+    height: 8px;
+    background-color: var(--accent-cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent-cyan);
+}
+
+.builder-main-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+}
+
+.builder-subtitle {
+    font-size: 1.08rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* 2-Column Workspace Grid */
+.builder-workspace-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 32px;
+    align-items: start;
+}
+
+/* Canvas Panel */
+.builder-canvas-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    box-shadow: var(--shadow-md);
+    background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.canvas-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.canvas-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.canvas-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: rgba(37, 99, 235, 0.2);
+    border: 1px solid rgba(37, 99, 235, 0.4);
+    color: #60a5fa;
+    padding: 2px 8px;
+    border-radius: var(--radius-xs);
+}
+
+.canvas-scenario-name {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.btn-canvas-tool {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    padding: 5px 12px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btn-canvas-tool:hover {
+    border-color: var(--border-focus);
+    color: #ffffff;
+}
+
+/* Flow Container */
+.canvas-flow-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 0;
+}
+
+/* Node Cards */
+.canvas-node-card {
+    width: 100%;
+    max-width: 580px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all var(--transition-smooth);
+    position: relative;
+}
+
+.canvas-node-card:hover {
+    transform: translateY(-3px);
+}
+
+.node-amber {
+    border-color: rgba(245, 158, 11, 0.45);
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.12);
+}
+
+.node-cyan {
+    border-color: rgba(6, 182, 212, 0.45);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.12);
+}
+
+.node-emerald {
+    border-color: rgba(16, 185, 129, 0.45);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.12);
+}
+
+.node-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.node-icon {
+    font-size: 1.3rem;
+}
+
+.node-badge {
+    font-size: 0.74rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+}
+
+.badge-amber {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    color: #fbbf24;
+}
+
+.badge-cyan {
+    background: rgba(6, 182, 212, 0.15);
+    border: 1px solid rgba(6, 182, 212, 0.4);
+    color: #38bdf8;
+}
+
+.badge-emerald {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #34d399;
+}
+
+.node-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.node-desc {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Flow Connectors */
+.flow-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 38px;
+    justify-content: center;
+    position: relative;
+}
+
+.connector-line {
+    width: 2px;
+    height: 24px;
+    background: linear-gradient(180deg, rgba(6, 182, 212, 0.8), rgba(16, 185, 129, 0.8));
+    box-shadow: 0 0 8px rgba(6, 182, 212, 0.4);
+}
+
+.connector-arrow {
+    font-size: 0.9rem;
+    color: var(--accent-cyan);
+    margin-top: -6px;
+}
+
+/* Canvas Footer Bar */
+.canvas-footer-bar {
+    padding-top: 10px;
+}
+
+.btn-start-audit {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(6, 182, 212, 0.3);
+    transition: all var(--transition-fast);
+}
+
+.btn-start-audit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(6, 182, 212, 0.45);
+}
+
+.btn-start-audit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* ----------------------------------------------------------------------
+   AUDIT PIPELINE SIDEBAR (Правая колонка)
+---------------------------------------------------------------------- */
+.builder-audit-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: var(--shadow-md);
+}
+
+.audit-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.audit-icon-box {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.audit-panel-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.audit-panel-hint {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+/* Audit Steps */
+.audit-steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.audit-step-item {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    transition: all var(--transition-fast);
+}
+
+.audit-step-item.step-in-progress {
+    border-color: rgba(245, 158, 11, 0.5);
+    background: rgba(245, 158, 11, 0.06);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.15);
+}
+
+.audit-step-item.step-completed {
+    border-color: rgba(16, 185, 129, 0.4);
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.step-indicator {
+    font-size: 1rem;
+    margin-top: 1px;
+}
+
+.step-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.step-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.step-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.step-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: var(--radius-xs);
+    background: rgba(51, 65, 85, 0.4);
+    color: var(--text-muted);
+}
+
+.step-badge.badge-in-progress {
+    background: rgba(245, 158, 11, 0.18);
+    color: #fbbf24;
+}
+
+.step-badge.badge-completed {
+    background: rgba(16, 185, 129, 0.18);
+    color: #34d399;
+}
+
+.step-details {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.35;
+}
+
+/* Certificate Completion Box */
+.audit-certificate-box {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+}
+
+.cert-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cert-icon {
+    font-size: 1.2rem;
+}
+
+.cert-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.cert-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.cert-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cert-hash {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.72rem;
+    color: var(--accent-cyan);
+    background: rgba(15, 23, 42, 0.6);
+    padding: 2px 6px;
+    border-radius: var(--radius-xs);
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.btn-cert-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.5);
+    color: #34d399;
+    font-size: 0.84rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.btn-cert-action:hover {
+    background: rgba(16, 185, 129, 0.3);
+    color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+    .builder-workspace-grid {
+        grid-template-columns: 1fr;
+    }
+}

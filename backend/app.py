@@ -62,18 +62,21 @@ if STATIC_DIR.exists():
 try:
     from backend.routers.home import router as home_router  # noqa: E402
     from backend.routers.passport import router as passport_router  # noqa: E402
+    from backend.routers.builder import router as builder_router  # noqa: E402
     from backend.routers.forum import router as forum_router  # noqa: E402
     from backend.routers.system import router as system_router  # noqa: E402
     from backend.routers.base import router as base_router  # noqa: E402
 except ModuleNotFoundError:
     from routers.home import router as home_router  # type: ignore  # noqa: E402
     from routers.passport import router as passport_router  # type: ignore  # noqa: E402
+    from routers.builder import router as builder_router  # type: ignore  # noqa: E402
     from routers.forum import router as forum_router  # type: ignore  # noqa: E402
     from routers.system import router as system_router  # type: ignore  # noqa: E402
     from routers.base import router as base_router  # type: ignore  # noqa: E402
 
 app.include_router(home_router)
 app.include_router(passport_router)
+app.include_router(builder_router)
 app.include_router(forum_router)
 app.include_router(system_router)
 app.include_router(base_router)

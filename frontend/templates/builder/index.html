@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}Low-Code Конструктор & 5-этапный пред-аудит — SmartContractum{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/builder.css">
+{% endblock %}
+
+{% block content %}
+<div class="builder-page-container">
+    <!-- Top Header -->
+    <div class="builder-header-box">
+        <div class="builder-tag-pill">
+            <span class="pulse-cyan"></span>
+            <span>Студия Конструктора & Конвейер Безопасности ПКСК</span>
+        </div>
+        <h1 class="builder-main-title">Low-Code Конструктор & 5-этапный пред-аудит</h1>
+        <p class="builder-subtitle">
+            Визуальное проектирование логики смарт-контрактов и автоматическая симуляция пред-аудита безопасности по стандартам Банка России и АБР.
+        </p>
+    </div>
+
+    <!-- 2-Column Main Workspace -->
+    <div class="builder-workspace-grid">
+        <!-- ============================================================
+             4.1 INTERACTIVE CANVAS (Левая часть: Холст узлов)
+        ============================================================ -->
+        <section class="builder-canvas-panel">
+            <div class="canvas-topbar">
+                <div class="canvas-meta">
+                    <span class="canvas-badge">СЦЕНАРИЙ</span>
+                    <span class="canvas-scenario-name">№409-АПК: Поставка зерна с эскроу-депонированием</span>
+                </div>
+                <div class="canvas-controls">
+                    <button type="button" class="btn-canvas-tool" id="btnResetCanvas" title="Сбросить холст">🔄 Сброс</button>
+                </div>
+            </div>
+
+            <!-- Canvas Field -->
+            <div class="canvas-flow-container" id="canvasFlow">
+                <!-- Node 1: Входной Триггер (Amber) -->
+                <div class="canvas-node-card node-amber" id="node1">
+                    <div class="node-header">
+                        <span class="node-icon">⚡</span>
+                        <span class="node-badge badge-amber">1. Входной Триггер</span>
+                    </div>
+                    <h3 class="node-title">Инициация сделки & Депонирование</h3>
+                    <p class="node-desc">Покупатель акцептует условия договора поставки №409-АПК и блокирует средства на счете Эскроу в ПлЦР.</p>
+                </div>
+
+                <!-- Animated Connector 1 -->
+                <div class="flow-connector">
+                    <div class="connector-line line-1"></div>
+                    <span class="connector-arrow">↓</span>
+                </div>
+
+                <!-- Node 2: Проверка Оракула / ГИС (Cyan) -->
+                <div class="canvas-node-card node-cyan" id="node2">
+                    <div class="node-header">
+                        <span class="node-icon">🌐</span>
+                        <span class="node-badge badge-cyan">2. Проверка Оракула / ГИС</span>
+                    </div>
+                    <h3 class="node-title">Верификация в ГИС Зерно + ФНС</h3>
+                    <p class="node-desc">Опрос доверенного оракула: подтверждение подписания электронного УПД и статуса благонадежности в ФНС.</p>
+                </div>
+
+                <!-- Animated Connector 2 -->
+                <div class="flow-connector">
+                    <div class="connector-line line-2"></div>
+                    <span class="connector-arrow">↓</span>
+                </div>
+
+                <!-- Node 3: Исполняющее Действие (Emerald) -->
+                <div class="canvas-node-card node-emerald" id="node3">
+                    <div class="node-header">
+                        <span class="node-icon">💰</span>
+                        <span class="node-badge badge-emerald">3. Исполняющее Действие</span>
+                    </div>
+                    <h3 class="node-title">Мгновенный перевод Цифровых Рублей</h3>
+                    <p class="node-desc">Формирование криптографического распоряжения на списание с Эскроу и зачисление на кошелек Поставщика.</p>
+                </div>
+            </div>
+
+            <!-- Canvas Action Button -->
+            <div class="canvas-footer-bar">
+                <button type="button" class="btn-start-audit" id="btnStartAuditSimulation">
+                    <span id="auditSpinner" class="audit-spinner" style="display: none;">⏳</span>
+                    <span>⚡ Запустить 5-этапную проверку ЦБ РФ</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ============================================================
+             4.2 5-STAGE AUDIT PIPELINE WIDGET (Правая часть: Конвейер)
+        ============================================================ -->
+        <aside class="builder-audit-panel">
+            <div class="audit-panel-header">
+                <div class="audit-icon-box">🛡️</div>
+                <div>
+                    <h2 class="audit-panel-title">5-этапный пред-аудит ИБ</h2>
+                    <span class="audit-panel-hint">Стандарты Банка России & АБР</span>
+                </div>
+            </div>
+
+            <!-- Pipeline Steps List -->
+            <div class="audit-steps-list" id="auditStepsContainer">
+                <!-- Step 1 -->
+                <div class="audit-step-item" id="stepItem1" data-step="1">
+                    <div class="step-indicator">
+                        <span class="step-status-icon">⚪</span>
+                    </div>
+                    <div class="step-info">
+                        <div class="step-title-row">
+                            <span class="step-name">1. Описание логики</span>
+                            <span class="step-badge" id="stepBadge1">В очереди</span>
+                        </div>
+                        <p class="step-details">Паспорт и Дерево решений валидированы по стандарту ПКСК</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="audit-step-item" id="stepItem2" data-step="2">
+                    <div class="step-indicator">
+                        <span class="step-status-icon">⚪</span>
+                    </div>
+                    <div class="step-info">
+                        <div class="step-title-row">
+                            <span class="step-name">2. Авто-проверка кода</span>
+                            <span class="step-badge" id="stepBadge2">В очереди</span>
+                        </div>
+                        <p class="step-details">SAST сканирование (Bandit / Trivy): поиск дефектов</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="audit-step-item" id="stepItem3" data-step="3">
+                    <div class="step-indicator">
+                        <span class="step-status-icon">⚪</span>
+                    </div>
+                    <div class="step-info">
+                        <div class="step-title-row">
+                            <span class="step-name">3. Экспертный ИБ-аудит</span>
+                            <span class="step-badge" id="stepBadge3">В очереди</span>
+                        </div>
+                        <p class="step-details">Симуляция профиля безопасности Standoff 365 / BI.ZONE</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="audit-step-item" id="stepItem4" data-step="4">
+                    <div class="step-indicator">
+                        <span class="step-status-icon">⚪</span>
+                    </div>
+                    <div class="step-info">
+                        <div class="step-title-row">
+                            <span class="step-name">4. Тестовая среда</span>
+                            <span class="step-badge" id="stepBadge4">В очереди</span>
+                        </div>
+                        <p class="step-details">Стресс-тест нагрузки 1 500 TPS и проверка таймаутов</p>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="audit-step-item" id="stepItem5" data-step="5">
+                    <div class="step-indicator">
+                        <span class="step-status-icon">⚪</span>
+                    </div>
+                    <div class="step-info">
+                        <div class="step-title-row">
+                            <span class="step-name">5. Публикация на Витрине</span>
+                            <span class="step-badge" id="stepBadge5">В очереди</span>
+                        </div>
+                        <p class="step-details">Реестр доверенных контрактов & Контрольная сумма</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audit Completion Box (Hidden by default) -->
+            <div class="audit-certificate-box" id="auditCertificateBox" style="display: none;">
+                <div class="cert-header">
+                    <span class="cert-icon">🎖️</span>
+                    <span class="cert-title">Пред-аудит успешно пройден!</span>
+                </div>
+                <div class="cert-meta">
+                    <div class="cert-row">
+                        <span>Оценка комплаенса:</span>
+                        <strong class="text-emerald" id="certScore">A+ (Compliant)</strong>
+                    </div>
+                    <div class="cert-row">
+                        <span>Хэш целостности:</span>
+                        <code class="cert-hash" id="certHash">--</code>
+                    </div>
+                </div>
+                <a href="/feed" class="btn-cert-action">💬 Обсудить на Форуме →</a>
+            </div>
+        </aside>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/builder.js" defer></script>
+{% endblock %}

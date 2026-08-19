@@ -18,20 +18,6 @@ DEFAULT_CONTEXT = {
 }
 
 
-@router.get("/builder", summary="Visual Decision Tree Builder")
-async def render_builder(request: Request) -> Response:
-    """Render Smart Contract Decision Tree Builder."""
-    context: dict[str, Any] = {
-        "active_nav": "builder",
-        **DEFAULT_CONTEXT,
-    }
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context=context,
-    )
-
-
 @router.get("/sources", summary="Trusted Oracle Sources")
 async def render_sources(request: Request) -> Response:
     """Render Trusted Oracle Sources Registry."""
