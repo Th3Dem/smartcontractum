@@ -20,9 +20,10 @@ def test_home_page_returns_200_and_html() -> None:
 
     html = response.text
     # 1.1 Hero Banner
-    assert "Профессиональная инфраструктура" in html
-    assert "будущего рынка смарт-контрактов" in html
-    assert "Объединяем бизнес, разработчиков, экспертов" in html
+    assert "Здесь рождаются" in html
+    assert "смарт-контракты" in html
+    assert "Место, где бизнес-задачи встречаются" in html
+    assert "ПКСК Банка России" in html
     assert "SmartContractum" in html
 
 
