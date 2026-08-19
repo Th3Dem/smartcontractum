@@ -9,79 +9,85 @@
 {% block content %}
 <div class="home-page-container">
     <!-- ================================================================
-         1.1 HERO-БАННЕР C 3D МОДНЫМ ЛОГОТИПОМ ЭКОСИСТЕМЫ
+         1.1 HERO-БАННЕР С ФОНОВЫМ ИНТЕРАКТИВНЫМ 3D ГОЛОГРАФИЧЕСКИМ КУБОМ
     ================================================================= -->
     <section class="hero-block" id="heroBlock">
-        <!-- 3D Holographic Smart Contract Emblem -->
-        <div class="hero-3d-emblem-wrapper" id="hero3dWrapper" title="Интерактивный 3D смарт-контрактный узел ПКСК">
+        <!-- Background 3D Spatial Hologram (Positioned Behind Text) -->
+        <div class="hero-3d-bg-matrix" id="hero3dBgMatrix" aria-hidden="true">
             <div class="scene-3d" id="scene3d">
-                <!-- Outer Orbital Hologram Rings -->
-                <div class="orbit-halo ring-primary"></div>
-                <div class="orbit-halo ring-secondary"></div>
-                <div class="orbit-halo ring-tertiary"></div>
+                <!-- Ambient Space Glow -->
+                <div class="ambient-glow-nebula"></div>
 
-                <!-- Floating 3D Isometric Crystal Cube -->
+                <!-- 4 Concentric Gyroscope Orbital Rings -->
+                <div class="orbit-halo ring-outer">
+                    <span class="orbit-satellite sat-blue"></span>
+                </div>
+                <div class="orbit-halo ring-mid">
+                    <span class="orbit-satellite sat-mint"></span>
+                </div>
+                <div class="orbit-halo ring-inner">
+                    <span class="orbit-satellite sat-cyan"></span>
+                </div>
+                <div class="orbit-halo ring-tilted"></div>
+
+                <!-- Floating 3D Pure Crystal Cube (Large, Textless) -->
                 <div class="crystal-3d-cube" id="crystal3dCube">
+                    <!-- Glowing Quantum Core Nucleus in Center -->
+                    <div class="quantum-core-nucleus"></div>
+
+                    <!-- 6 High-End Translucent Glass Facets with Circuit Mesh -->
                     <div class="cube-facet facet-front">
-                        <div class="facet-inner">
-                            <span class="facet-code-tag">SC_NODE_01</span>
-                            <span class="facet-icon">⚡</span>
-                            <span class="facet-sub">PROD_BRIDGE</span>
-                        </div>
+                        <div class="facet-mesh"></div>
+                        <div class="corner-dot c-tl"></div>
+                        <div class="corner-dot c-tr"></div>
+                        <div class="corner-dot c-bl"></div>
+                        <div class="corner-dot c-br"></div>
                     </div>
                     <div class="cube-facet facet-back">
-                        <div class="facet-inner">
-                            <span class="facet-code-tag">CBR_AUDIT</span>
-                            <span class="facet-icon">🔒</span>
-                            <span class="facet-sub">GOST_READY</span>
-                        </div>
+                        <div class="facet-mesh"></div>
+                        <div class="corner-dot c-tl"></div>
+                        <div class="corner-dot c-tr"></div>
+                        <div class="corner-dot c-bl"></div>
+                        <div class="corner-dot c-br"></div>
                     </div>
                     <div class="cube-facet facet-right">
-                        <div class="facet-inner">
-                            <span class="facet-code-tag">ORACLE_GIS</span>
-                            <span class="facet-icon">📊</span>
-                            <span class="facet-sub">TRUST_LEVEL_1</span>
-                        </div>
+                        <div class="facet-mesh"></div>
                     </div>
                     <div class="cube-facet facet-left">
-                        <div class="facet-inner">
-                            <span class="facet-code-tag">DECISION_TREE</span>
-                            <span class="facet-icon">📑</span>
-                            <span class="facet-sub">NO_CODE_PASS</span>
-                        </div>
+                        <div class="facet-mesh"></div>
                     </div>
                     <div class="cube-facet facet-top">
-                        <div class="facet-inner">
-                            <span class="facet-brand">SmartContractum</span>
-                            <span class="facet-logo-badge">ПКСК</span>
-                        </div>
+                        <div class="facet-mesh"></div>
                     </div>
                     <div class="cube-facet facet-bottom">
-                        <div class="facet-core-glow"></div>
+                        <div class="facet-mesh"></div>
                     </div>
                 </div>
 
-                <!-- Ground Ambient Radial Glow -->
-                <div class="cube-ambient-shadow"></div>
+                <!-- Ambient Ground Shadow -->
+                <div class="cube-ground-shadow"></div>
             </div>
         </div>
 
-        <!-- CBR Concept Phase Status Notice -->
-        <div class="hero-status-pill">
-            <span class="status-pulse-dot"></span>
-            <span class="status-text">{{ status_notice|default("Статус: Официальный сбор обратной связи по Концепции ПКСК (до 30.09.2026)") }}</span>
+        <!-- Foreground Hero Content (Elevated, 100% Readable, High-Contrast) -->
+        <div class="hero-foreground-content">
+            <!-- CBR Concept Phase Status Notice -->
+            <div class="hero-status-pill">
+                <span class="status-pulse-dot"></span>
+                <span class="status-text">{{ status_notice|default("Статус: Официальный сбор обратной связи по Концепции ПКСК (до 30.09.2026)") }}</span>
+            </div>
+
+            <!-- Main Heading with Crystal-Clear Contrast -->
+            <h1 class="hero-main-title">
+                <span class="hero-title-white">Профессиональная среда</span> <br>
+                <span class="hero-title-cyan">смарт-контрактов ПКСК</span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="hero-description">
+                Объединяем знания, бизнес-сценарии, разработчиков и доверенные источники данных до и после старта промышленной инфраструктуры ЦБ РФ.
+            </p>
         </div>
-
-        <!-- Main Heading -->
-        <h1 class="hero-main-title">
-            Профессиональная среда <br>
-            <span class="hero-gradient-text">смарт-контрактов ПКСК</span>
-        </h1>
-
-        <!-- Subtitle -->
-        <p class="hero-description">
-            Объединяем знания, бизнес-сценарии, разработчиков и доверенные источники данных до и после старта промышленной инфраструктуры ЦБ РФ.
-        </p>
     </section>
 
     <!-- ================================================================
