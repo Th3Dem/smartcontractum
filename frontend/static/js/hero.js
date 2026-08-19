@@ -133,12 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let cursorX = 0;
         let cursorY = 0;
 
-        // Cryptographic Telemetry Tags
-        const cryptoTags = [
-            '0x7F4A', 'SHA256', 'SLA 99.9%', 'CBR_NODE', 'ESCROW_OK',
-            'GAS 0.001', 'BLOCK #1480', 'GOST_2026', 'ORACLE_V1', 'ZKP_VALID'
-        ];
-
         const colors = [
             { r: 56, g: 97, b: 251 },   // CMC Royal Blue
             { r: 97, g: 136, b: 255 },  // Electric Cyan
@@ -175,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.angularVelocity = (Math.random() - 0.5) * 0.035;
                 this.type = Math.floor(Math.random() * 4); // 0: diamond, 1: triangle, 2: crystal polygon, 3: quantum star
                 this.depth = Math.random() * 0.7 + 0.6; // Parallax depth
-                this.tag = Math.random() > 0.65 ? cryptoTags[Math.floor(Math.random() * cryptoTags.length)] : null;
                 this.pulsePhase = Math.random() * Math.PI * 2;
             }
 
@@ -272,15 +265,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.closePath();
                 ctx.fill();
                 ctx.stroke();
-
-                // Render micro bytecode tag on active shards
-                if (this.tag && effectiveAlpha > 0.4) {
-                    ctx.rotate(-this.angle); // Keep text horizontal
-                    ctx.font = '9px "JetBrains Mono", Consolas, monospace';
-                    ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${effectiveAlpha * 0.65})`;
-                    ctx.shadowBlur = 0;
-                    ctx.fillText(this.tag, 10, -4);
-                }
 
                 ctx.restore();
             }
