@@ -67,55 +67,6 @@
     max-width: 800px;
 }
 
-.hero-action-buttons-row {
-    display: flex;
-    gap: 16px;
-    margin-top: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.hero-primary-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 24px;
-    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 0.95rem;
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    box-shadow: 0 4px 20px rgba(6, 182, 212, 0.3);
-    transition: all var(--transition-fast);
-}
-
-.hero-primary-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(6, 182, 212, 0.45);
-}
-
-.hero-secondary-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 24px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    color: #ffffff;
-    font-weight: 600;
-    font-size: 0.95rem;
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    transition: all var(--transition-fast);
-}
-
-.hero-secondary-btn:hover {
-    background: var(--bg-surface);
-    border-color: var(--accent-cyan);
-    transform: translateY(-2px);
-}
-
 /* ----------------------------------------------------------------------
    1.2 TASK SELECTOR ("ЧТО ВЫ ХОТИТЕ СДЕЛАТЬ?")
 ---------------------------------------------------------------------- */
@@ -144,17 +95,17 @@
 
 .router-cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
 }
 
 .route-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
-    padding: 26px;
+    padding: 28px;
     display: flex;
-    gap: 18px;
+    gap: 20px;
     align-items: flex-start;
     position: relative;
     text-decoration: none;
@@ -187,15 +138,15 @@
 }
 
 .route-icon-box {
-    width: 50px;
-    height: 50px;
+    width: 52px;
+    height: 52px;
     border-radius: var(--radius-md);
     background: var(--bg-surface);
     border: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     flex-shrink: 0;
     transition: all var(--transition-fast);
 }
@@ -224,11 +175,6 @@
     box-shadow: 0 0 16px rgba(139, 92, 246, 0.2);
 }
 
-.amber-glow {
-    border-color: rgba(245, 158, 11, 0.35);
-    box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
-}
-
 .route-content {
     display: flex;
     flex-direction: column;
@@ -244,7 +190,7 @@
 }
 
 .route-title {
-    font-size: 1.18rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: #ffffff;
     letter-spacing: -0.3px;
@@ -267,16 +213,16 @@
 }
 
 .route-subtext {
-    font-size: 0.88rem;
+    font-size: 0.92rem;
     color: var(--text-secondary);
     line-height: 1.5;
 }
 
 .route-card-badge {
     position: absolute;
-    bottom: 12px;
-    right: 16px;
-    font-size: 0.7rem;
+    bottom: 14px;
+    right: 18px;
+    font-size: 0.72rem;
     font-weight: 600;
     color: var(--text-muted);
     background: rgba(15, 23, 42, 0.6);
