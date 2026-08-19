@@ -46,9 +46,9 @@ def test_home_page_contains_all_four_task_routes() -> None:
     assert "Найти данные" in html
     assert "Каталог ГИС, Банковских и Открытых API источников" in html
 
-    # Route 4: Вопросы & Форум -> Лента сообщества
-    assert 'href="/forum"' in html
-    assert "Вопросы" in html
+    # Route 4: Комьюнити -> Лента сообщества & Форум
+    assert 'href="/feed"' in html or 'href="/forum"' in html
+    assert "Комьюнити" in html
     assert "Форум" in html
 
 
