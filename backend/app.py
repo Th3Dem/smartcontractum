@@ -4,6 +4,7 @@ Architecture: FastAPI 0.115+, Python 3.12, Uvicorn, PostgreSQL, Redis.
 """
 
 import logging
+import sys
 from pathlib import Path
 from typing import Any, Dict
 from fastapi import FastAPI, Request, Response, status
@@ -11,12 +12,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
+# Path discovery & robust sys.path configuration
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+BACKEND_DIR = Path(__file__).resolve().parent
+
+for p in (str(PROJECT_ROOT), str(BACKEND_DIR)):
+    if p not in sys.path:
+        sys.path.insert(0, p)
+
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("smartcontractum")
 
-# Path discovery
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
 STATIC_DIR = PROJECT_ROOT / "frontend" / "static"
 
 app = FastAPI(
@@ -52,11 +59,21 @@ if STATIC_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 # Include Routers
-from backend.routers.base import router as base_router  # noqa: E402
-from backend.routers.forum import router as forum_router  # noqa: E402
+try:
+    from backend.routers.home import router as home_router  # noqa: E402
+    from backend.routers.forum import router as forum_router  # noqa: E402
+    from backend.routers.system import router as system_router  # noqa: E402
+    from backend.routers.base import router as base_router  # noqa: E402
+except ModuleNotFoundError:
+    from routers.home import router as home_router  # type: ignore  # noqa: E402
+    from routers.forum import router as forum_router  # type: ignore  # noqa: E402
+    from routers.system import router as system_router  # type: ignore  # noqa: E402
+    from routers.base import router as base_router  # type: ignore  # noqa: E402
 
-app.include_router(base_router)
+app.include_router(home_router)
 app.include_router(forum_router)
+app.include_router(system_router)
+app.include_router(base_router)
 
 
 class HealthResponse(BaseModel):
@@ -85,4 +102,4 @@ async def health_check() -> Dict[str, Any]:
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("backend.app:app", host="0.0.0.0", port=8000, reload=True)

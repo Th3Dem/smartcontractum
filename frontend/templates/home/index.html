@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}SmartContractum — Профессиональная среда смарт-контрактов ПКСК Банка России{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/hero.css">
+{% endblock %}
+
+{% block content %}
+<div class="home-page-container">
+    <!-- ================================================================
+         1.1 HERO-БАННЕР (Главный информационный блок)
+    ================================================================= -->
+    <section class="hero-block">
+        <!-- CBR Concept Phase Status Notice -->
+        <div class="hero-status-pill">
+            <span class="status-pulse-dot"></span>
+            <span class="status-text">{{ status_notice|default("Статус: Официальный сбор обратной связи по Концепции ПКСК (до 30.09.2026)") }}</span>
+        </div>
+
+        <!-- Main Heading -->
+        <h1 class="hero-main-title">
+            Профессиональная среда <br>
+            <span class="hero-gradient-text">смарт-контрактов ПКСК</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="hero-description">
+            Объединяем знания, бизнес-сценарии, разработчиков и доверенные источники данных до и после старта промышленной инфраструктуры ЦБ РФ.
+        </p>
+    </section>
+
+    <!-- ================================================================
+         1.2 СЕЛЕКТОР ЗАДАЧ ("Что вы хотите сделать?" / Entry Point)
+    ================================================================= -->
+    <section class="task-router-section">
+        <div class="section-heading-box">
+            <h2 class="section-title">Что вы хотите сделать?</h2>
+            <p class="section-subtitle">Выберите ключевой пользовательский сценарий для старта работы</p>
+        </div>
+
+        <div class="router-cards-grid">
+            <!-- Route 1: Бизнес-задача -> Паспорт -->
+            <a href="/passport" class="route-card" data-route="passport">
+                <div class="route-icon-box blue-glow">
+                    <span class="route-icon">💼</span>
+                </div>
+                <div class="route-content">
+                    <div class="route-header">
+                        <h3 class="route-title">Есть бизнес-задача</h3>
+                        <span class="route-arrow">→</span>
+                    </div>
+                    <p class="route-subtext">Сформировать Паспорт и «Дерево решений» без раскрытия кода.</p>
+                </div>
+                <div class="route-card-badge">Генератор Паспорта</div>
+            </a>
+
+            <!-- Route 2: Собрать контракт -> Конструктор -->
+            <a href="/builder" class="route-card" data-route="builder">
+                <div class="route-icon-box cyan-glow">
+                    <span class="route-icon">👨‍💻</span>
+                </div>
+                <div class="route-content">
+                    <div class="route-header">
+                        <h3 class="route-title">Собрать контракт</h3>
+                        <span class="route-arrow">→</span>
+                    </div>
+                    <p class="route-subtext">Визуальный Low-code конструктор и 5-этапный пред-аудит.</p>
+                </div>
+                <div class="route-card-badge">Low-Code Студия</div>
+            </a>
+
+            <!-- Route 3: Найти данные -> Маркетплейс Оракулов -->
+            <a href="/data-sources" class="route-card" data-route="sources">
+                <div class="route-icon-box emerald-glow">
+                    <span class="route-icon">📊</span>
+                </div>
+                <div class="route-content">
+                    <div class="route-header">
+                        <h3 class="route-title">Найти данные</h3>
+                        <span class="route-arrow">→</span>
+                    </div>
+                    <p class="route-subtext">Каталог ГИС, Банковских и Открытых API источников.</p>
+                </div>
+                <div class="route-card-badge">Маркетплейс Оракулов</div>
+            </a>
+
+            <!-- Route 4: Вопросы & Форум -> Лента сообщества -->
+            <a href="/forum" class="route-card" data-route="forum">
+                <div class="route-icon-box violet-glow">
+                    <span class="route-icon">💬</span>
+                </div>
+                <div class="route-content">
+                    <div class="route-header">
+                        <h3 class="route-title">Вопросы & Форум</h3>
+                        <span class="route-arrow">→</span>
+                    </div>
+                    <p class="route-subtext">Обсуждение требований ЦБ РФ, АБР и экспертный опыт.</p>
+                </div>
+                <div class="route-card-badge">Лента сообщества</div>
+            </a>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         1.3 ВИДЖЕТ ЭКОСИСТЕМЫ И СТАТИСТИКИ
+    ================================================================= -->
+    <section class="stats-counter-section">
+        <div class="stats-panel-box">
+            <div class="stat-counter-card">
+                <span class="stat-number" id="statExpertsCount">{{ stats.experts_count|default("1 480+") }}</span>
+                <span class="stat-label">Зарегистрированных экспертов</span>
+            </div>
+            <div class="stat-divider"></div>
+
+            <div class="stat-counter-card">
+                <span class="stat-number" id="statPassportsCount">{{ stats.passports_count|default("342") }}</span>
+                <span class="stat-label">Разработанных Паспортов</span>
+            </div>
+            <div class="stat-divider"></div>
+
+            <div class="stat-counter-card">
+                <span class="stat-number" id="statSourcesCount">{{ stats.data_sources_count|default("58") }}</span>
+                <span class="stat-label">Доверенных источников данных (ГИС/ИС)</span>
+            </div>
+            <div class="stat-divider"></div>
+
+            <div class="stat-counter-card">
+                <span class="stat-number" id="statScenariosCount">{{ stats.verified_scenarios_count|default("126") }}</span>
+                <span class="stat-label">Проверенных сценариев</span>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- SEO Structured Data Schema.org JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "SmartContractum",
+  "url": "https://smartcontractum.ru",
+  "description": "Профессиональная среда смарт-контрактов ПКСК Банка России. Umbrella-интегратор и визуальный конструктор решений.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://smartcontractum.ru/feed?tag={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/hero.js" defer></script>
+{% endblock %}

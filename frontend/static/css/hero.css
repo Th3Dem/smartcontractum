@@ -1,0 +1,305 @@
+/* ======================================================================
+   SmartContractum — Block 1 Hero Section & Interactive Task Router
+   Design System: Deep Slate, Cyber Glow & Task-First Grid
+====================================================================== */
+
+.home-page-container {
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+    padding-bottom: 24px;
+}
+
+/* ----------------------------------------------------------------------
+   1.1 HERO BANNER
+---------------------------------------------------------------------- */
+.hero-block {
+    text-align: center;
+    max-width: 920px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding-top: 10px;
+}
+
+.hero-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: var(--radius-full);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #fbbf24;
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.15);
+}
+
+.status-pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #f59e0b;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #f59e0b;
+}
+
+.hero-main-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+    color: #ffffff;
+}
+
+.hero-gradient-text {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue), var(--accent-violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-description {
+    font-size: 1.18rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    max-width: 800px;
+}
+
+/* ----------------------------------------------------------------------
+   1.2 TASK SELECTOR ("ЧТО ВЫ ХОТИТЕ СДЕЛАТЬ?")
+---------------------------------------------------------------------- */
+.task-router-section {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.section-heading-box {
+    text-align: center;
+}
+
+.section-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.4px;
+    margin-bottom: 6px;
+}
+
+.section-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.router-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.route-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--transition-smooth);
+    overflow: hidden;
+}
+
+.route-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.4), transparent);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.route-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--border-focus);
+    background: var(--bg-card-hover);
+    box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6), var(--neon-glow);
+}
+
+.route-card:hover::before {
+    opacity: 1;
+}
+
+.route-icon-box {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    transition: all var(--transition-fast);
+}
+
+.route-card:hover .route-icon-box {
+    transform: scale(1.08);
+}
+
+.blue-glow {
+    border-color: rgba(37, 99, 235, 0.35);
+    box-shadow: 0 0 16px rgba(37, 99, 235, 0.2);
+}
+
+.cyan-glow {
+    border-color: rgba(6, 182, 212, 0.35);
+    box-shadow: 0 0 16px rgba(6, 182, 212, 0.2);
+}
+
+.emerald-glow {
+    border-color: rgba(16, 185, 129, 0.35);
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.2);
+}
+
+.violet-glow {
+    border-color: rgba(139, 92, 246, 0.35);
+    box-shadow: 0 0 16px rgba(139, 92, 246, 0.2);
+}
+
+.route-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.route-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.route-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+    transition: color var(--transition-fast);
+}
+
+.route-card:hover .route-title {
+    color: var(--accent-cyan);
+}
+
+.route-arrow {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    transition: all var(--transition-fast);
+}
+
+.route-card:hover .route-arrow {
+    color: var(--accent-cyan);
+    transform: translateX(4px);
+}
+
+.route-subtext {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.route-card-badge {
+    position: absolute;
+    bottom: 14px;
+    right: 18px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: rgba(15, 23, 42, 0.6);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(51, 65, 85, 0.4);
+}
+
+/* ----------------------------------------------------------------------
+   1.3 ECOSYSTEM & LIVE STATS SECTION
+---------------------------------------------------------------------- */
+.stats-counter-section {
+    margin-top: 10px;
+}
+
+.stats-panel-box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 32px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.stat-counter-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    flex: 1;
+}
+
+.stat-number {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-label {
+    font-size: 0.84rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    max-width: 180px;
+    line-height: 1.35;
+}
+
+.stat-divider {
+    width: 1px;
+    height: 48px;
+    background-color: var(--border-color);
+}
+
+/* ----------------------------------------------------------------------
+   RESPONSIVE BREAKPOINTS
+---------------------------------------------------------------------- */
+@media (max-width: 860px) {
+    .hero-main-title {
+        font-size: 2.2rem;
+    }
+
+    .router-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-panel-box {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+    }
+
+    .stat-divider {
+        display: none;
+    }
+}
