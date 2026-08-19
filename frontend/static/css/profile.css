@@ -1,0 +1,566 @@
+/* ======================================================================
+   SmartContractum — Block 6 Profile & Umbrella Developer Workspace Styles
+====================================================================== */
+
+.profile-page-container {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding-bottom: 24px;
+}
+
+/* ----------------------------------------------------------------------
+   6.1 PROFILE HERO CARD
+---------------------------------------------------------------------- */
+.profile-header-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    box-shadow: var(--shadow-md);
+}
+
+.profile-hero-row {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+}
+
+.profile-avatar-box {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+}
+
+.avatar-text {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+.avatar-status-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--accent-emerald);
+    color: #ffffff;
+    font-size: 0.76rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-card);
+}
+
+.profile-main-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.profile-title-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.profile-name {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.umbrella-badge-approved {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #34d399;
+    border-radius: var(--radius-full);
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.profile-role-company {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+}
+
+.profile-role {
+    color: var(--accent-cyan);
+    font-weight: 600;
+}
+
+.bullet {
+    color: var(--text-muted);
+}
+
+.profile-company {
+    color: var(--text-secondary);
+}
+
+.profile-bio {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    max-width: 720px;
+}
+
+.skills-tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.skill-tag {
+    font-size: 0.74rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: #cbd5e1;
+}
+
+.reputation-score-box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    min-width: 140px;
+}
+
+.rep-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+.rep-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent-cyan);
+    font-family: "JetBrains Mono", monospace;
+}
+
+.rep-rank {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--accent-emerald);
+}
+
+/* Professional Trail Grid */
+.professional-trail-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.trail-stat-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+}
+
+.trail-number {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #ffffff;
+    font-family: "JetBrains Mono", monospace;
+}
+
+.trail-label {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* ----------------------------------------------------------------------
+   TABS NAVIGATION
+---------------------------------------------------------------------- */
+.profile-tabs-nav {
+    display: flex;
+    gap: 10px;
+    background: var(--bg-surface);
+    padding: 6px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    overflow-x: auto;
+}
+
+.tab-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+}
+
+.tab-nav-btn:hover {
+    color: #ffffff;
+}
+
+.tab-nav-btn.active {
+    background: var(--bg-card);
+    border-color: rgba(6, 182, 212, 0.4);
+    color: var(--accent-cyan);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.tab-counter {
+    font-size: 0.72rem;
+    background: rgba(6, 182, 212, 0.2);
+    color: var(--accent-cyan);
+    padding: 1px 6px;
+    border-radius: var(--radius-full);
+}
+
+/* ----------------------------------------------------------------------
+   TAB PANELS & CONTENT
+---------------------------------------------------------------------- */
+.tab-content-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.tab-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.section-subtitle {
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+}
+
+/* Umbrella Notice Box */
+.umbrella-info-box {
+    background: rgba(37, 99, 235, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.35);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.08);
+}
+
+.info-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.info-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-title {
+    font-size: 0.94rem;
+    font-weight: 700;
+    color: #60a5fa;
+}
+
+.info-text {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.btn-submit-umbrella {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.88rem;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.25);
+    transition: all var(--transition-fast);
+}
+
+.btn-submit-umbrella:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+}
+
+/* Table Card Box */
+.table-card-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.profile-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.profile-table th {
+    background: var(--bg-surface);
+    padding: 14px 18px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.profile-table td {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.88rem;
+    vertical-align: middle;
+}
+
+.profile-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.col-bold-title {
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.version-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.76rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    padding: 2px 6px;
+    border-radius: var(--radius-xs);
+    color: var(--accent-cyan);
+}
+
+.code-passport {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.76rem;
+    color: #cbd5e1;
+}
+
+/* Status Pills */
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.status-pill.status-published {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #34d399;
+}
+
+.status-pill.status-review {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    color: #fbbf24;
+}
+
+.status-pill.status-audit {
+    background: rgba(6, 182, 212, 0.15);
+    border: 1px solid rgba(6, 182, 212, 0.4);
+    color: #38bdf8;
+}
+
+.payout-pill {
+    font-size: 0.74rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.payout-pill.paid {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+.payout-pill.pending {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+}
+
+/* ----------------------------------------------------------------------
+   6.3 EARNINGS SUMMARY GRID
+---------------------------------------------------------------------- */
+.earnings-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.earning-stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.earning-stat-card.highlight {
+    border-color: rgba(6, 182, 212, 0.45);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.12);
+}
+
+.earning-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+.earning-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.earning-hint {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* Settings Box */
+.api-settings-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+}
+
+.api-key-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.form-checkbox-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 8px 0;
+}
+
+.checkbox-label {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+}
+
+.btn-submit-umbrella-form {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.umbrella-alert-box {
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.umbrella-alert-box.alert-error {
+    background: rgba(244, 63, 94, 0.12);
+    border: 1px solid rgba(244, 63, 94, 0.35);
+    color: #fda4af;
+}
+
+.umbrella-alert-box.alert-success {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #6ee7b7;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .profile-hero-row {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .profile-title-row {
+        justify-content: center;
+    }
+
+    .professional-trail-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .earnings-summary-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,341 @@
+{% extends "base.html" %}
+
+{% block title %}Личный Кабинет & Umbrella-Workspace — SmartContractum{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/profile.css">
+{% endblock %}
+
+{% block content %}
+<div class="profile-page-container">
+    <!-- ================================================================
+         6.1 ПРОФИЛЬ СПЕЦИАЛИСТА (LinkedIn-Style Profile & Professional Trail)
+    ================================================================= -->
+    <section class="profile-header-card">
+        <div class="profile-hero-row">
+            <!-- Avatar -->
+            <div class="profile-avatar-box">
+                <span class="avatar-text">{{ user.avatar_initials }}</span>
+                <span class="avatar-status-badge" title="Аккредитован">✓</span>
+            </div>
+
+            <!-- Meta Details -->
+            <div class="profile-main-meta">
+                <div class="profile-title-row">
+                    <h1 class="profile-name">{{ user.full_name }}</h1>
+                    <span class="umbrella-badge-approved">
+                        <span class="pulse-emerald"></span>
+                        <span>Аккредитованный автор SmartContractum</span>
+                    </span>
+                </div>
+                <div class="profile-role-company">
+                    <span class="profile-role">{{ user.role_title }}</span>
+                    <span class="bullet">•</span>
+                    <span class="profile-company">{{ user.company }}</span>
+                </div>
+                <p class="profile-bio">{{ user.bio }}</p>
+
+                <!-- Competency Tags -->
+                <div class="skills-tags-row">
+                    {% for skill in user.skills %}
+                    <span class="skill-tag">{{ skill }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Reputation Score Widget -->
+            <div class="reputation-score-box">
+                <span class="rep-label">РЕЙТИНГ ЭКСПЕРТА</span>
+                <span class="rep-value">{{ user.reputation_score }}</span>
+                <span class="rep-rank">Top 1% Комплаенс</span>
+            </div>
+        </div>
+
+        <!-- Professional Trail Stats (Профессиональный след) -->
+        <div class="professional-trail-grid">
+            <div class="trail-stat-card">
+                <span class="trail-number">{{ user.created_passports_count }}</span>
+                <span class="trail-label">Создано Паспортов</span>
+            </div>
+            <div class="trail-stat-card">
+                <span class="trail-number">{{ user.published_contracts_count }}</span>
+                <span class="trail-label">Опубликовано контрактов</span>
+            </div>
+            <div class="trail-stat-card">
+                <span class="trail-number">{{ user.forum_replies_count }}</span>
+                <span class="trail-label">Ответов на форуме</span>
+            </div>
+            <div class="trail-stat-card">
+                <span class="trail-number">{{ user.audits_conducted_count }}</span>
+                <span class="trail-label">Проведено пред-аудитов ИБ</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <div class="profile-tabs-nav" id="profileTabsNav">
+        <button type="button" class="tab-nav-btn active" data-tab="contracts">
+            <span>💼 Umbrella-Контракты & Публикации</span>
+            <span class="tab-counter">{{ contracts|length }}</span>
+        </button>
+        <button type="button" class="tab-nav-btn" data-tab="royalties">
+            <span>💰 Роялти & Финансы</span>
+        </button>
+        <button type="button" class="tab-nav-btn" data-tab="passports">
+            <span>📑 Мои Паспорта</span>
+        </button>
+        <button type="button" class="tab-nav-btn" data-tab="settings">
+            <span>⚙️ Настройки & API</span>
+        </button>
+    </div>
+
+    <!-- ================================================================
+         TAB 1: UMBRELLA-КАБИНЕТ РАЗРАБОТЧИКА (6.2)
+    ================================================================= -->
+    <div class="tab-content-panel active" id="tabContentContracts">
+        <!-- Umbrella Notice Callout -->
+        <div class="umbrella-info-box">
+            <div class="info-icon">🏛️</div>
+            <div class="info-content">
+                <h4 class="info-title">Правовой мост к ПКСК Банка России:</h4>
+                <p class="info-text">
+                    Согласно требованиям регулятора, публикация смарт-контрактов на ПКСК доступна юридическим лицам. 
+                    Платформа <strong>SmartContractum</strong> выступает аккредитованным юрлицом-интегратором, позволяя независимым инженерам 
+                    проходить пред-аудит, публиковать свои решения на Витрине ЦБ РФ и легально получать роялти от каждой сделки в Цифровых Рублях.
+                </p>
+            </div>
+        </div>
+
+        <div class="tab-section-header">
+            <div>
+                <h2 class="section-title">Опубликованные смарт-контракты</h2>
+                <span class="section-subtitle">Управление версиями и трекинг статусов рассмотрения регулятором</span>
+            </div>
+            <button type="button" class="btn-submit-umbrella" id="btnOpenUmbrellaModal">
+                <span>➕ Подать контракт на Umbrella-публикацию</span>
+            </button>
+        </div>
+
+        <!-- Contracts Table -->
+        <div class="table-card-box">
+            <table class="profile-table">
+                <thead>
+                    <tr>
+                        <th>Название контракта</th>
+                        <th>Версия</th>
+                        <th>Код Паспорта</th>
+                        <th>Роялти (%)</th>
+                        <th>Исполнений</th>
+                        <th>Статус жизненного цикла</th>
+                    </tr>
+                </thead>
+                <tbody id="contractsTableBody">
+                    {% for c in contracts %}
+                    <tr>
+                        <td class="col-bold-title">{{ c.title }}</td>
+                        <td><span class="version-tag">{{ c.version }}</span></td>
+                        <td><code class="code-passport">{{ c.passport_code }}</code></td>
+                        <td class="text-emerald font-bold">{{ c.royalty_percent }}%</td>
+                        <td class="font-bold">{{ c.executions_count }}</td>
+                        <td>
+                            <span class="status-pill {{ c.status_badge_class }}">
+                                {% if c.status_badge_class == 'status-published' %}✅
+                                {% elif c.status_badge_class == 'status-review' %}⏳
+                                {% else %}🛡️{% endif %}
+                                {{ c.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         TAB 2: КАЛЬКУЛЯТОР И ТРЕКЕР РОЯЛТИ (6.3)
+    ================================================================= -->
+    <div class="tab-content-panel" id="tabContentRoyalties" style="display: none;">
+        <!-- Earnings Metrics Grid -->
+        <div class="earnings-summary-grid">
+            <div class="earning-stat-card">
+                <span class="earning-label">ВСЕГО ИСПОЛНЕНИЙ НА ПлЦР</span>
+                <span class="earning-value font-mono">{{ total_executions }}</span>
+                <span class="earning-hint">Транзакций смарт-контрактов</span>
+            </div>
+            <div class="earning-stat-card">
+                <span class="earning-label">НАЧИСЛЕНО РОЯЛТИ</span>
+                <span class="earning-value text-emerald font-mono">{{ total_earnings|int }} ₽</span>
+                <span class="earning-hint">В Цифровых Рублях (CBDC)</span>
+            </div>
+            <div class="earning-stat-card highlight">
+                <span class="earning-label">ДОСТУПНО К ВЫВОДУ</span>
+                <span class="earning-value text-cyan font-mono">{{ available_payout|int }} ₽</span>
+                <span class="earning-hint">Выплата 1-го числа месяца</span>
+            </div>
+        </div>
+
+        <div class="tab-section-header">
+            <div>
+                <h2 class="section-title">История начислений комиссии (Ledger)</h2>
+                <span class="section-subtitle">Журнал автоматических отчислений от транзакций на платформе</span>
+            </div>
+        </div>
+
+        <!-- Ledger Table -->
+        <div class="table-card-box">
+            <table class="profile-table">
+                <thead>
+                    <tr>
+                        <th>Контракт</th>
+                        <th>Хэш транзакции</th>
+                        <th>Дата и время (МСК)</th>
+                        <th>Сумма роялти</th>
+                        <th>Статус выплаты</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in ledger %}
+                    <tr>
+                        <td class="col-bold-title">{{ item.contract_title }}</td>
+                        <td><code class="code-passport">{{ item.transaction_hash }}</code></td>
+                        <td>{{ item.execution_timestamp }}</td>
+                        <td class="text-emerald font-bold">+{{ item.amount_rub|int }} ₽</td>
+                        <td>
+                            <span class="payout-pill {% if item.payout_status == 'Выплачено' %}paid{% else %}pending{% endif %}">
+                                {{ item.payout_status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         TAB 3: МОИ ПАСПОРТА
+    ================================================================= -->
+    <div class="tab-content-panel" id="tabContentPassports" style="display: none;">
+        <div class="tab-section-header">
+            <div>
+                <h2 class="section-title">Спецификации & Паспорта</h2>
+                <span class="section-subtitle">Ваши сгенерированные деревья решений и документы ПКСК</span>
+            </div>
+            <a href="/passport" class="btn-submit-umbrella">
+                <span>➕ Создать новый Паспорт</span>
+            </a>
+        </div>
+        <div class="table-card-box">
+            <table class="profile-table">
+                <thead>
+                    <tr>
+                        <th>Название сценария</th>
+                        <th>Регистрационный код</th>
+                        <th>Статус</th>
+                        <th>Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col-bold-title">Автоматическая оплата поставки зерна №409-АПК</td>
+                        <td><code class="code-passport">SC-2026-PKSC-AGRO-01</code></td>
+                        <td><span class="status-pill status-published">✅ Верифицирован</span></td>
+                        <td><a href="/passport" class="text-cyan font-semibold">Просмотр →</a></td>
+                    </tr>
+                    <tr>
+                        <td class="col-bold-title">Безопасная сделка факторинга с ЭДО</td>
+                        <td><code class="code-passport">SC-2026-PKSC-FACT-09</code></td>
+                        <td><span class="status-pill status-audit">🛡️ Пред-аудит</span></td>
+                        <td><a href="/passport" class="text-cyan font-semibold">Просмотр →</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ================================================================
+         TAB 4: НАСТРОЙКИ & API
+    ================================================================= -->
+    <div class="tab-content-panel" id="tabContentSettings" style="display: none;">
+        <div class="tab-section-header">
+            <div>
+                <h2 class="section-title">Интеграционные API-ключи & Профиль</h2>
+                <span class="section-subtitle">Управление доступом к песочнице и шлюзам пред-аудита</span>
+            </div>
+        </div>
+        <div class="api-settings-box">
+            <div class="form-group">
+                <label class="form-label">API-ключ разработчика (Sandbox / Testnet):</label>
+                <div class="api-key-row">
+                    <input type="text" class="form-input font-mono" value="sc_live_pksc_892f3a10e7b99c2d" readonly>
+                    <button type="button" class="btn-canvas-tool" onclick="navigator.clipboard.writeText('sc_live_pksc_892f3a10e7b99c2d')">📋 Скопировать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ====================================================================
+     MODAL: ПОДАЧА СМАРТ-КОНТРАКТА НА UMBRELLA-ПУБЛИКАЦИЮ (6.2)
+==================================================================== -->
+<div class="modal-overlay" id="umbrellaModalOverlay" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <div class="modal-header-meta">
+                <span class="modal-icon">🏛️</span>
+                <h3 class="modal-title">Подать контракт на Umbrella-публикацию</h3>
+            </div>
+            <button type="button" class="btn-modal-close" id="btnCloseUmbrellaModal">&times;</button>
+        </div>
+
+        <form id="umbrellaSubmitForm" class="modal-form">
+            <div id="umbrellaAlertBox" class="umbrella-alert-box" style="display: none;"></div>
+
+            <div class="form-group">
+                <label for="inputContractTitle" class="form-label">Название смарт-контракта <span class="req">*</span></label>
+                <input type="text" id="inputContractTitle" name="title" class="form-input" 
+                       placeholder="Например: Автоматический эскроу лизинга оборудования" required minlength="5" maxlength="150">
+            </div>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="inputVersion" class="form-label">Версия релиза</label>
+                    <input type="text" id="inputVersion" name="version" class="form-input font-mono" value="v1.0.0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputRoyalty" class="form-label">Роялти (% комиссии от сделок) <span class="req">*</span></label>
+                    <input type="number" id="inputRoyalty" name="royalty_percent" class="form-input" 
+                           value="1.5" min="0.1" max="50.0" step="0.1" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputPassportCode" class="form-label">Регистрационный код Паспорта <span class="req">*</span></label>
+                <input type="text" id="inputPassportCode" name="passport_code" class="form-input font-mono" 
+                       placeholder="SC-2026-PKSC-..." required minlength="5" maxlength="60">
+            </div>
+
+            <div class="form-checkbox-row">
+                <input type="checkbox" id="checkAgreedTerms" name="agreed_terms" required>
+                <label for="checkAgreedTerms" class="checkbox-label">
+                    Я подтверждаю согласие с Условиями лицензионного договора комиссии SmartContractum и передачу кода в конвейер пред-аудита ИБ.
+                </label>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" id="btnCancelUmbrella">Отмена</button>
+                <button type="submit" class="btn-submit-umbrella-form" id="btnSubmitUmbrellaForm">
+                    <span id="umbrellaSpinner" class="umbrella-spinner" style="display: none;">⏳</span>
+                    <span>Отправить на публикацию</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/profile.js" defer></script>
+{% endblock %}

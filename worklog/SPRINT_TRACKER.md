@@ -53,23 +53,29 @@
 
 ---
 
-## 🎯 Спринт 5: Блок 5 — Маркетплейс Источников Данных & Оракулов (19.08.2026)
+## 🎯 Спринт 6: Блок 6 — Личный Кабинет & Umbrella-Кабинет Разработчика (19.08.2026)
 
 | ID Задачи | Название / Описание | Ответственный агент | Статус | Артефакты / Коммит |
 | :--- | :--- | :--- | :---: | :--- |
-| `TASK-034` | Pydantic схемы источников и валидации (`models/data_sources.py`) | `py_bot` | ✅ DONE | `backend/models/data_sources.py` |
-| `TASK-035` | REST API каталога и подачи заявок (`routers/data_sources.py`) | `py_bot` | ✅ DONE | `backend/routers/data_sources.py` |
-| `TASK-036` | Таблица источников и модальное окно (`data_sources/index.html`) | `ui_bot` | ✅ DONE | `frontend/templates/data_sources/index.html` |
-| `TASK-037` | CSS-стили таблицы, trust-бейджей и алерта (`data_sources.css`) | `ui_bot` / `design_bot` | ✅ DONE | `frontend/static/css/data_sources.css` |
-| `TASK-038` | JS-клиент AJAX-фильтрации и отправки заявки (`data_sources.js`) | `ui_bot` | ✅ DONE | `frontend/static/js/data_sources.js` |
-| `TASK-039` | In-Memory Pytest тесты фильтрации и XSS (32/32 tests total) | `qa_bot` | ✅ DONE | `tests/unit/test_data_sources_api.py` |
-| `TASK-040` | Релизный пайплайн через Staging в Main | `devops_bot` | ✅ DONE | `dev` -> `staging` -> `main` |
+| `TASK-041` | Pydantic схемы профиля, контрактов и роялти (`models/profile.py`) | `py_bot` | ✅ DONE | `backend/models/profile.py` |
+| `TASK-042` | REST API профиля, подачи заявок и роялти (`routers/profile.py`) | `py_bot` | ✅ DONE | `backend/routers/profile.py` |
+| `TASK-043` | Вкладки профиля, карточка и финансовый дашборд (`profile/index.html`) | `ui_bot` | ✅ DONE | `frontend/templates/profile/index.html` |
+| `TASK-044` | CSS-стили профиля, Umbrella-бейджей и таблиц (`profile.css`) | `ui_bot` / `design_bot` | ✅ DONE | `frontend/static/css/profile.css` |
+| `TASK-045` | JS-клиент переключения табов и модального окна (`profile.js`) | `ui_bot` | ✅ DONE | `frontend/static/js/profile.js` |
+| `TASK-046` | In-Memory Pytest автотесты профиля и роялти (38/38 tests total) | `qa_bot` | ✅ DONE | `tests/unit/test_profile_api.py` |
+| `TASK-047` | Релизный пайплайн через Staging в Main | `devops_bot` | ✅ DONE | `dev` -> `staging` -> `main` |
 
 ---
 
-## 🔮 Бэклог следующих модулей (SmartContractum Roadmap):
+## 🏁 Статус разработки платформы SmartContractum (100% Core MVP):
 
-| Блок | Название модуля | Ключевой функционал | Приоритет |
-| :-: | :--- | :--- | :-: |
-| **Блок 6** | **AI Архитектор Контрактов (Gemini Circuit Breaker)** | Генерация деревьев решений на естественном языке от задачи пользователя | ⚡ P1 (Next) |
-| **Блок 7** | **Криптографический Сейф & Эскроу (Safe & Escrow)** | Модель депонирования и транзакционного сплита средств | 🛡️ P2 |
+| Блок | Название модуля | Статус | Пройденные тесты |
+| :-: | :--- | :---: | :---: |
+| **Блок 0** | **Базовый каркас & Layout (Base Shell, Header, Footer)** | ✅ ЗАВЕРШЕН | 4/4 passed |
+| **Блок 1** | **Главная страница & Интерактивный Селектор задач** | ✅ ЗАВЕРШЕН | 5/5 passed |
+| **Блок 2** | **Раздел «Лента & Форум» (Профессиональная соцсеть)** | ✅ ЗАВЕРШЕН | 9/9 passed |
+| **Блок 3** | **Модуль «Паспорт Смарт-Контракта» (Генератор «Дерева решений»)** | ✅ ЗАВЕРШЕН | 4/4 passed |
+| **Блок 4** | **Low-Code Конструктор & 5-этапный пред-аудит ИБ** | ✅ ЗАВЕРШЕН | 3/3 passed |
+| **Блок 5** | **Маркетплейс Источников Данных & Оракулов (CBR Trust Badges)** | ✅ ЗАВЕРШЕН | 6/6 passed |
+| **Блок 6** | **Профиль Специалиста & Umbrella-Workspace Разработчика** | ✅ ЗАВЕРШЕН | 6/6 passed |
+| **Итог** | **Полный релизный цикл платформы SmartContractum v2.0** | 🏆 **100% GREEN** | **38/38 PASSED** |
