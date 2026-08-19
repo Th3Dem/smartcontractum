@@ -1,6 +1,6 @@
 /**
  * SmartContractum — Block 1 Hero Section & Interactive Router Controller
- * High-Performance Lightweight 3D Physics Engine & GPU-Optimized Canvas
+ * Reactive Stationary Constellation Engine & GPU 3D Spatial Physics
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -102,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Performance State & Visibility Controller
     let isHeroVisible = true;
+    let isMouseInsideHero = true;
     const heroBanner = document.getElementById('heroBanner') || document.querySelector('.hero-3d-banner');
 
     if ('IntersectionObserver' in window && heroBanner) {
@@ -114,6 +115,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('visibilitychange', () => {
         isHeroVisible = document.visibilityState === 'visible';
     });
+
+    if (heroBanner) {
+        heroBanner.addEventListener('mouseenter', () => { isMouseInsideHero = true; });
+        heroBanner.addEventListener('mouseleave', () => { isMouseInsideHero = false; });
+    }
 
     // 4. Lightweight 3D Spatial Hologram Physics & Mouse Tracking
     const cube = document.getElementById('crystal3dCube') || document.getElementById('cube3dObject');
@@ -145,10 +151,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const normX = (clientX / window.innerWidth - 0.5) * 2;
             const normY = (clientY / window.innerHeight - 0.5) * 2;
 
-            targetRotX = -18 - normY * 30;
-            targetRotY = 32 + normX * 42;
-            targetTransX = normX * 14;
-            targetTransY = normY * 10;
+            targetRotX = -18 - normY * 26;
+            targetRotY = 32 + normX * 36;
+            targetTransX = normX * 12;
+            targetTransY = normY * 8;
             pointerRafPending = false;
         });
     }
@@ -165,21 +171,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function render3DPhysics() {
         if (isHeroVisible) {
-            idleClock += 0.02;
-            const idleOffset = Math.sin(idleClock) * 3;
+            idleClock += 0.015;
+            const idleOffset = Math.sin(idleClock) * 2.5;
 
             // Smooth Lerp interpolation
-            currentRotX += (targetRotX - currentRotX) * 0.08;
-            currentRotY += (targetRotY - currentRotY) * 0.08;
-            currentTransX += (targetTransX - currentTransX) * 0.07;
-            currentTransY += (targetTransY - currentTransY) * 0.07;
+            currentRotX += (targetRotX - currentRotX) * 0.06;
+            currentRotY += (targetRotY - currentRotY) * 0.06;
+            currentTransX += (targetTransX - currentTransX) * 0.05;
+            currentTransY += (targetTransY - currentTransY) * 0.05;
 
             if (cube) {
                 cube.style.transform = `translate3d(${currentTransX.toFixed(1)}px, ${(currentTransY + idleOffset).toFixed(1)}px, 0) rotateX(${currentRotX.toFixed(1)}deg) rotateY(${currentRotY.toFixed(1)}deg)`;
             }
 
             if (matrix) {
-                matrix.style.transform = `translate(calc(-50% + ${(currentTransX * 0.3).toFixed(1)}px), calc(-50% + ${(currentTransY * 0.3).toFixed(1)}px))`;
+                matrix.style.transform = `translate(calc(-50% + ${(currentTransX * 0.25).toFixed(1)}px), calc(-50% + ${(currentTransY * 0.25).toFixed(1)}px))`;
             }
         }
 
@@ -190,15 +196,13 @@ document.addEventListener('DOMContentLoaded', () => {
         render3DPhysics();
     }
 
-    // 5. Ultra-Lightweight GPU Canvas Particle Engine (Zero shadowBlur overhead)
+    // 5. Reactive Stationary Constellation Engine (Motion only when mouse approaches)
     const canvas = document.getElementById('cosmicShardsCanvas');
     if (canvas) {
         const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
         let width = 0;
         let height = 0;
         let shards = [];
-        const isMobile = window.innerWidth < 768;
-        const SHARDS_COUNT = isMobile ? 16 : 28;
 
         const colorPalettes = [
             'rgba(56, 97, 251, ',   // CMC Blue
@@ -208,109 +212,111 @@ document.addEventListener('DOMContentLoaded', () => {
             'rgba(255, 255, 255, '  // White
         ];
 
-        function resizeCanvas() {
-            if (!heroBanner || !canvas) return;
-            const rect = heroBanner.getBoundingClientRect();
-            width = rect.width;
-            height = rect.height;
-            canvas.width = width;
-            canvas.height = height;
-        }
-
-        class FluidCosmicShard {
-            constructor() {
-                this.noiseOffset = Math.random() * 100;
-                this.noiseSpeed = Math.random() * 0.015 + 0.008;
-                this.swirlDir = Math.random() > 0.5 ? 1 : -1;
-                this.reset(true);
-            }
-
-            reset(initial = false) {
-                this.x = initial ? Math.random() * (width || 800) : (Math.random() > 0.5 ? 0 : width);
-                this.y = Math.random() * (height || 500);
-                this.vx = (Math.random() - 0.5) * 0.35;
-                this.vy = (Math.random() - 0.5) * 0.35;
-                this.baseSize = Math.random() * 3.5 + 2;
+        class ReactiveCosmicShard {
+            constructor(homeX, homeY) {
+                this.homeX = homeX;
+                this.homeY = homeY;
+                this.x = homeX;
+                this.y = homeY;
+                this.vx = 0;
+                this.vy = 0;
+                this.baseSize = Math.random() * 3.2 + 2;
                 this.colorPrefix = colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
-                this.baseAlpha = Math.random() * 0.35 + 0.2;
+                this.baseAlpha = Math.random() * 0.22 + 0.16;
+                this.currentAlpha = this.baseAlpha;
                 this.angle = Math.random() * 6.28;
-                this.angularVelocity = (Math.random() - 0.5) * 0.018;
+                this.angularVelocity = 0;
+                this.swirlDir = Math.random() > 0.5 ? 1 : -1;
                 this.type = Math.floor(Math.random() * 2);
             }
 
-            update(localMouseX, localMouseY) {
-                this.noiseOffset += this.noiseSpeed;
-                this.angle += this.angularVelocity;
-
-                // Organic fluid wave drift
-                const ambientWaveX = Math.cos(this.noiseOffset) * 0.12;
-                const ambientWaveY = Math.sin(this.noiseOffset) * 0.12;
-                this.vx += ambientWaveX;
-                this.vy += ambientWaveY;
-
-                // Smooth magnetic fluid trailing around mouse
-                const dx = localMouseX - this.x;
-                const dy = localMouseY - this.y;
-                const distSq = dx * dx + dy * dy;
-                const INFLUENCE_RADIUS = 260;
+            update(localMouseX, localMouseY, isMouseActive) {
+                const dxMouse = localMouseX - this.x;
+                const dyMouse = localMouseY - this.y;
+                const distSqMouse = dxMouse * dxMouse + dyMouse * dyMouse;
+                const INFLUENCE_RADIUS = 220;
                 const INFLUENCE_SQ = INFLUENCE_RADIUS * INFLUENCE_RADIUS;
 
-                if (distSq < INFLUENCE_SQ && distSq > 400) {
-                    const dist = Math.sqrt(distSq);
-                    // Soft quadratic easing factor: 0 at edge, peak in mid-range, gentle near center
-                    const normalized = 1 - (dist / INFLUENCE_RADIUS);
-                    const pullStrength = Math.sin(normalized * Math.PI) * 0.028;
+                const dxHome = this.homeX - this.x;
+                const dyHome = this.homeY - this.y;
+                const distHomeSq = dxHome * dxHome + dyHome * dyHome;
 
-                    // 1. Gentle radial attraction
-                    this.vx += (dx / dist) * pullStrength;
-                    this.vy += (dy / dist) * pullStrength;
+                const isNearMouse = isMouseActive && distSqMouse < INFLUENCE_SQ;
 
-                    // 2. Fluid orbital vortex / tangential swimming (prevents sharp clumping)
-                    const tangentX = -dy / dist;
-                    const tangentY = dx / dist;
-                    const swirlStrength = pullStrength * 0.65 * this.swirlDir;
-                    this.vx += tangentX * swirlStrength;
-                    this.vy += tangentY * swirlStrength;
+                if (isNearMouse) {
+                    const distMouse = Math.sqrt(distSqMouse);
+                    // Soft quadratic easing factor
+                    const proximity = 1 - (distMouse / INFLUENCE_RADIUS);
+                    const force = Math.sin(proximity * Math.PI) * 0.014;
+
+                    // 1. Ultra-gentle attraction
+                    this.vx += (dxMouse / distMouse) * force;
+                    this.vy += (dyMouse / distMouse) * force;
+
+                    // 2. Soft orbital floating swirl (prevents rigid clumping)
+                    const tangentX = -dyMouse / distMouse;
+                    const tangentY = dxMouse / distMouse;
+                    const swirlForce = force * 0.55 * this.swirlDir;
+                    this.vx += tangentX * swirlForce;
+                    this.vy += tangentY * swirlForce;
+
+                    this.angularVelocity += 0.0012 * this.swirlDir;
+                    this.currentAlpha += (Math.min(0.7, this.baseAlpha + 0.35) - this.currentAlpha) * 0.06;
+                } else {
+                    // Soft spring return to home station
+                    if (distHomeSq > 0.3) {
+                        const distHome = Math.sqrt(distHomeSq);
+                        const returnForce = Math.min(distHome * 0.012, 0.06);
+                        this.vx += (dxHome / distHome) * returnForce;
+                        this.vy += (dyHome / distHome) * returnForce;
+                    } else {
+                        // Completely motionless at home
+                        this.x = this.homeX;
+                        this.y = this.homeY;
+                        this.vx = 0;
+                        this.vy = 0;
+                    }
+
+                    this.currentAlpha += (this.baseAlpha - this.currentAlpha) * 0.04;
                 }
 
-                // Smooth Viscous Liquid Damping
-                this.vx *= 0.965;
-                this.vy *= 0.965;
+                // Viscous liquid damping
+                this.vx *= 0.92;
+                this.vy *= 0.92;
+                this.angularVelocity *= 0.93;
 
-                // Speed Cap (prevents jarring jerks or sharp snapping)
-                const currentSpeedSq = this.vx * this.vx + this.vy * this.vy;
-                const MAX_SPEED = 2.4;
-                if (currentSpeedSq > MAX_SPEED * MAX_SPEED) {
-                    const speed = Math.sqrt(currentSpeedSq);
+                // Speed cap for silk-smooth float
+                const speedSq = this.vx * this.vx + this.vy * this.vy;
+                const MAX_SPEED = 1.5;
+                if (speedSq > MAX_SPEED * MAX_SPEED) {
+                    const speed = Math.sqrt(speedSq);
                     this.vx = (this.vx / speed) * MAX_SPEED;
                     this.vy = (this.vy / speed) * MAX_SPEED;
                 }
 
+                if (Math.abs(this.vx) < 0.004) this.vx = 0;
+                if (Math.abs(this.vy) < 0.004) this.vy = 0;
+
                 this.x += this.vx;
                 this.y += this.vy;
-
-                // Wrap-around screen bounds
-                if (this.x < -20) this.x = width + 20;
-                else if (this.x > width + 20) this.x = -20;
-                if (this.y < -20) this.y = height + 20;
-                else if (this.y > height + 20) this.y = -20;
+                this.angle += this.angularVelocity;
             }
 
             draw() {
                 ctx.save();
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.angle);
-                ctx.fillStyle = this.colorPrefix + this.baseAlpha.toFixed(2) + ')';
+                ctx.fillStyle = this.colorPrefix + this.currentAlpha.toFixed(2) + ')';
 
                 ctx.beginPath();
                 if (this.type === 0) {
-                    // Smooth Diamond
+                    // Smooth Diamond Facet
                     ctx.moveTo(0, -this.baseSize);
                     ctx.lineTo(this.baseSize * 0.65, 0);
                     ctx.lineTo(0, this.baseSize);
                     ctx.lineTo(-this.baseSize * 0.65, 0);
                 } else {
-                    // Glowing Micro Star
+                    // Smooth Star Dot
                     ctx.arc(0, 0, this.baseSize * 0.45, 0, 6.28);
                 }
                 ctx.closePath();
@@ -319,17 +325,40 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        resizeCanvas();
+        function initShards() {
+            if (!heroBanner || !canvas) return;
+            const rect = heroBanner.getBoundingClientRect();
+            width = rect.width;
+            height = rect.height;
+            canvas.width = width;
+            canvas.height = height;
+
+            shards = [];
+            const isMobile = width < 768;
+            const cols = isMobile ? 4 : 7;
+            const rows = isMobile ? 4 : 5;
+
+            const stepX = width / (cols + 1);
+            const stepY = height / (rows + 1);
+
+            for (let c = 1; c <= cols; c++) {
+                for (let r = 1; r <= rows; r++) {
+                    const jitterX = (Math.random() - 0.5) * stepX * 0.75;
+                    const jitterY = (Math.random() - 0.5) * stepY * 0.75;
+                    const homeX = c * stepX + jitterX;
+                    const homeY = r * stepY + jitterY;
+                    shards.push(new ReactiveCosmicShard(homeX, homeY));
+                }
+            }
+        }
+
+        initShards();
 
         let resizeTimeout;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(resizeCanvas, 150);
+            resizeTimeout = setTimeout(initShards, 150);
         }, { passive: true });
-
-        for (let i = 0; i < SHARDS_COUNT; i++) {
-            shards.push(new FluidCosmicShard());
-        }
 
         function animateShards() {
             if (isHeroVisible && width > 0 && height > 0) {
@@ -345,7 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 for (let i = 0; i < shards.length; i++) {
-                    shards[i].update(localMouseX, localMouseY);
+                    shards[i].update(localMouseX, localMouseY, isMouseInsideHero);
                     shards[i].draw();
                 }
             }
