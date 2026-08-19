@@ -51,10 +51,12 @@ async def add_security_headers(request: Request, call_next: Any) -> Response:
 if STATIC_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
-# Include Base Shell Routers
-from routers.base import router as base_router  # noqa: E402
+# Include Routers
+from backend.routers.base import router as base_router  # noqa: E402
+from backend.routers.forum import router as forum_router  # noqa: E402
 
 app.include_router(base_router)
+app.include_router(forum_router)
 
 
 class HealthResponse(BaseModel):

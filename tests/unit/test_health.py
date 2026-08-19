@@ -1,13 +1,11 @@
-"""Unit and API Integration Tests for SmartContractum Backend."""
-
 import sys
 from pathlib import Path
 from starlette.testclient import TestClient
 
-backend_dir = Path(__file__).resolve().parent.parent.parent / "backend"
-sys.path.insert(0, str(backend_dir))
+project_root = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-from app import app  # noqa: E402
+from backend.app import app  # noqa: E402
 
 client = TestClient(app)
 

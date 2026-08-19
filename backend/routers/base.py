@@ -32,20 +32,6 @@ async def render_index(request: Request) -> Response:
     )
 
 
-@router.get("/feed", summary="Feed & Discussions")
-async def render_feed(request: Request) -> Response:
-    """Render Feed & Forum page placeholder."""
-    context: dict[str, Any] = {
-        "active_nav": "feed",
-        **DEFAULT_CONTEXT,
-    }
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context=context,
-    )
-
-
 @router.get("/passport", summary="Contract Passport")
 async def render_passport(request: Request) -> Response:
     """Render Contract Passport view placeholder."""

@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+
+{% block title %}Лента & Форум — SmartContractum | Профессиональная соцсеть ПКСК{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/forum.css">
+{% endblock %}
+
+{% block content %}
+<div class="forum-layout-grid">
+    <!-- ================================================================
+         2.1 ЛЕВАЯ БОКОВАЯ ПАНЕЛЬ (Категории рынка)
+    ================================================================= -->
+    <aside class="forum-sidebar-left">
+        <div class="sidebar-sticky-box">
+            <div class="sidebar-header">
+                <span class="sidebar-icon">📂</span>
+                <h3 class="sidebar-title">Категории рынка</h3>
+            </div>
+
+            <ul class="categories-list" id="categoriesList">
+                {% for cat in categories %}
+                <li class="category-item">
+                    <a href="/feed?category={{ cat.slug }}" 
+                       class="category-link {% if active_category == cat.slug %}active{% endif %}"
+                       data-slug="{{ cat.slug }}">
+                        <span class="category-icon">{{ cat.icon }}</span>
+                        <span class="category-name">{{ cat.name }}</span>
+                        <span class="category-count" id="count-{{ cat.slug }}">{{ cat.count_topics }}</span>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <div class="sidebar-footer-card">
+                <div class="info-icon">💡</div>
+                <div class="info-text">
+                    <strong>Umbrella-Шлюз:</strong> Публикуйте свои вопросы по Концепции ПКСК для передачи рабочей группе ЦБ РФ.
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ================================================================
+         2.2 ЦЕНТРАЛЬНАЯ ЛЕНТА (Обсуждения и карточки топиков)
+    ================================================================= -->
+    <section class="forum-main-feed">
+        <!-- Feed Top Action Bar -->
+        <div class="feed-top-bar">
+            <div class="feed-heading-group">
+                <h1 class="feed-title">Лента обсуждений</h1>
+                <p class="feed-subtitle">Профессиональная социальная сеть разработчиков и участников контура ПКСК</p>
+            </div>
+            <button class="btn-create-topic" id="btnOpenCreateModal" aria-label="Создать новую тему обсуждения">
+                <span class="btn-icon">✍️</span>
+                <span>Создать тему</span>
+            </button>
+        </div>
+
+        <!-- Active Filter Indicator -->
+        <div class="feed-filter-status" id="filterStatusBox">
+            <span class="filter-label">Фильтр:</span>
+            <span class="filter-badge" id="activeFilterBadge">
+                {% if active_tag %}
+                    Тег #{{ active_tag }}
+                {% elif active_category and active_category != 'all' %}
+                    Категория: {{ active_category }}
+                {% else %}
+                    Все обсуждения
+                {% endif %}
+            </span>
+            <button class="filter-reset-btn" id="btnResetFilter" style="{% if active_category == 'all' and not active_tag %}display: none;{% endif %}">
+                ✕ Сбросить
+            </button>
+        </div>
+
+        <!-- Topics List Container -->
+        <div class="topics-feed-container" id="topicsFeedContainer">
+            {% if topics %}
+                {% for topic in topics %}
+                <article class="topic-card" id="topic-card-{{ topic.id }}">
+                    <!-- Card Header -->
+                    <div class="topic-header">
+                        <div class="author-meta">
+                            <div class="author-avatar">{{ topic.author_avatar }}</div>
+                            <div class="author-details">
+                                <span class="author-name">{{ topic.author_name }}</span>
+                                <span class="author-role">{{ topic.author_role }}</span>
+                            </div>
+                        </div>
+                        <div class="topic-meta-right">
+                            <span class="topic-timestamp">{{ topic.created_at }}</span>
+                            {% if topic.is_official and topic.official_badge %}
+                            <span class="official-badge" title="Официальный статус топика">
+                                <span class="badge-dot"></span>
+                                {{ topic.official_badge }}
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Topic Title -->
+                    <h2 class="topic-title">
+                        <a href="#topic-{{ topic.id }}" class="topic-title-link" data-id="{{ topic.id }}">
+                            {{ topic.title }}
+                        </a>
+                    </h2>
+
+                    <!-- Topic Snippet -->
+                    <p class="topic-snippet">{{ topic.snippet }}</p>
+
+                    <!-- Topic Tags -->
+                    <div class="topic-tags-list">
+                        {% for tag in topic.tags %}
+                        <a href="/feed?tag={{ tag }}" class="topic-tag-pill" data-tag="{{ tag }}">#{{ tag }}</a>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Card Footer -->
+                    <div class="topic-card-footer">
+                        <div class="stats-group">
+                            <span class="stat-item" title="Ответов в теме">
+                                <span class="stat-icon">💬</span>
+                                <span class="stat-value">{{ topic.replies_count }} ответов</span>
+                            </span>
+                            <span class="stat-item" title="Просмотров темы">
+                                <span class="stat-icon">👁️</span>
+                                <span class="stat-value">{{ topic.views_count }}</span>
+                            </span>
+                        </div>
+                        <button class="btn-bookmark" title="Сохранить в закладки" data-id="{{ topic.id }}">
+                            <span class="bookmark-icon">🔖</span>
+                            <span>В закладки</span>
+                        </button>
+                    </div>
+                </article>
+                {% endfor %}
+            {% else %}
+                <div class="empty-feed-card">
+                    <span class="empty-icon">📭</span>
+                    <h3>Тем в этой категории пока нет</h3>
+                    <p>Будьте первым, кто создаст обсуждение по данному направлению!</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- ================================================================
+         2.3 ПРАВАЯ БОКОВАЯ ПАНЕЛЬ (Виджет Таймлайна ПКСК)
+    ================================================================= -->
+    <aside class="forum-sidebar-right">
+        <!-- Widget 1: Графический таймлайн регулятора -->
+        <div class="widget-box timeline-widget">
+            <div class="widget-header">
+                <span class="widget-icon">⏱️</span>
+                <h3 class="widget-title">Статус & Таймлайн ПКСК</h3>
+            </div>
+            <div class="timeline-stepper">
+                <!-- Step 1: Done -->
+                <div class="timeline-step step-completed">
+                    <div class="step-marker">
+                        <span class="marker-check">✓</span>
+                    </div>
+                    <div class="step-content">
+                        <span class="step-date">18.06.2026</span>
+                        <h4 class="step-title">Концепция опубликована</h4>
+                        <p class="step-desc">Банк России утвердил Концепцию ПКСК</p>
+                    </div>
+                </div>
+
+                <!-- Step 2: Active / Current -->
+                <div class="timeline-step step-active">
+                    <div class="step-marker">
+                        <span class="marker-pulse"></span>
+                    </div>
+                    <div class="step-content">
+                        <span class="step-date">До 30.09.2026</span>
+                        <div class="step-title-group">
+                            <h4 class="step-title">Сбор обратной связи</h4>
+                            <span class="active-tag">Текущий этап</span>
+                        </div>
+                        <p class="step-desc">Сбор вопросов, архитектурных предложений и пилотных сценариев от участников рынка</p>
+                    </div>
+                </div>
+
+                <!-- Step 3: Future -->
+                <div class="timeline-step step-future">
+                    <div class="step-marker">
+                        <span class="marker-dot"></span>
+                    </div>
+                    <div class="step-content">
+                        <span class="step-date">До 31.03.2027</span>
+                        <h4 class="step-title">НИР ЦБ РФ по ПКСК</h4>
+                        <p class="step-desc">Формирование целевой архитектуры и пилотирование вариантов платформы</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Widget 2: Популярные теги -->
+        <div class="widget-box tags-widget">
+            <div class="widget-header">
+                <span class="widget-icon">🏷️</span>
+                <h3 class="widget-title">Популярные теги</h3>
+            </div>
+            <div class="popular-tags-cloud" id="popularTagsCloud">
+                {% for tag_item, count in popular_tags %}
+                <a href="/feed?tag={{ tag_item }}" class="cloud-tag-pill" data-tag="{{ tag_item }}">
+                    <span class="tag-hash">#</span>{{ tag_item }}
+                    <span class="tag-count">({{ count }})</span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Widget 3: Umbrella CTA -->
+        <div class="widget-box cta-widget">
+            <h4 class="cta-title">Стать разработчиком ПКСК</h4>
+            <p class="cta-desc">Разрабатывайте смарт-контракты в Конструкторе и выводите их в контур Банка России под защитой лицензии платформы.</p>
+            <a href="/builder" class="btn-cta-widget">
+                <span>🌳 Открыть Конструктор</span>
+            </a>
+        </div>
+    </aside>
+</div>
+
+<!-- ====================================================================
+     2.4 МОДАЛЬНОЕ ОКНО СОЗДАНИЯ ТЕМЫ (Create Topic Modal)
+==================================================================== -->
+<div class="modal-overlay" id="createTopicModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card">
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <div class="modal-title-group">
+                <span class="modal-icon">✍️</span>
+                <h3 class="modal-title">Создать новое обсуждение</h3>
+            </div>
+            <button class="modal-close-btn" id="btnCloseCreateModal" aria-label="Закрыть модальное окно">✕</button>
+        </div>
+
+        <!-- Modal Form -->
+        <form class="modal-form" id="createTopicForm">
+            <!-- Form Alert Box -->
+            <div class="form-alert-box" id="formAlertBox" style="display: none;"></div>
+
+            <!-- Title Input -->
+            <div class="form-group">
+                <label for="topicTitleInput" class="form-label">
+                    Заголовок темы <span class="required-star">*</span>
+                    <span class="label-hint">(минимум 10 символов)</span>
+                </label>
+                <input type="text" id="topicTitleInput" name="title" class="form-input" 
+                       placeholder="Например: Архитектура оракулов для B2B казначейских расчетов" 
+                       minlength="10" maxlength="250" required>
+            </div>
+
+            <!-- Category Select & Author Row -->
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="topicCategorySelect" class="form-label">
+                        Категория рынка <span class="required-star">*</span>
+                    </label>
+                    <select id="topicCategorySelect" name="category_slug" class="form-select" required>
+                        <option value="safe-deals">🔒 Безопасные сделки</option>
+                        <option value="treasury-b2b">🏦 Казначейство & B2B</option>
+                        <option value="oracles">🌐 Источники данных (Оракулы)</option>
+                        <option value="infosec-audit">🛡️ ИБ, Аудит & Bug Bounty</option>
+                        <option value="agro-subsidies">🌾 АПК & Субсидии</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="topicTagsInput" class="form-label">
+                        Теги темы
+                        <span class="label-hint">(через запятую)</span>
+                    </label>
+                    <input type="text" id="topicTagsInput" name="tags" class="form-input" 
+                           placeholder="ПКСК_2026, Оракулы, ЭДО">
+                </div>
+            </div>
+
+            <!-- Body Input -->
+            <div class="form-group">
+                <label for="topicBodyInput" class="form-label">
+                    Текст сообщения / Описание проблемы <span class="required-star">*</span>
+                    <span class="label-hint">(минимум 30 символов, поддержка Markdown)</span>
+                </label>
+                <textarea id="topicBodyInput" name="body" class="form-textarea" rows="6" 
+                          placeholder="Опишите контекст, сценарий использования смарт-контракта или вопрос к регулятору..." 
+                          minlength="30" maxlength="15000" required></textarea>
+            </div>
+
+            <!-- Modal Footer / Actions -->
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" id="btnCancelModal">Отмена</button>
+                <button type="submit" class="btn-submit" id="btnSubmitTopic">
+                    <span class="spinner-icon" id="submitSpinner" style="display: none;">⏳</span>
+                    <span>Опубликовать в ленте</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/forum.js" defer></script>
+{% endblock %}
