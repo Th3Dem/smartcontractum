@@ -319,38 +319,69 @@
     pointer-events: auto;
 }
 
-/* Eyebrow Tag Pill / Mission Motto */
+/* Sleek Cyber-Minimalist Mission Motto */
 .hero-eyebrow-pill {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     padding: 6px 18px;
-    background: rgba(56, 97, 251, 0.12);
-    border: 1px solid rgba(56, 97, 251, 0.35);
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(56, 189, 248, 0.28);
     border-radius: var(--radius-full);
-    backdrop-filter: blur(8px);
-    box-shadow: 0 0 16px rgba(56, 97, 251, 0.2);
-    margin-bottom: 2px;
-    transition: all var(--transition-fast);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 14px rgba(56, 97, 251, 0.15);
+    margin-bottom: 4px;
+    transition: all var(--transition-smooth);
 }
 
 .hero-eyebrow-pill:hover {
-    border-color: rgba(56, 97, 251, 0.6);
-    box-shadow: 0 0 22px rgba(56, 97, 251, 0.4);
+    border-color: rgba(56, 189, 248, 0.6);
+    background: rgba(20, 30, 55, 0.85);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6), 0 0 22px rgba(56, 189, 248, 0.3);
     transform: translateY(-1px);
 }
 
-.eyebrow-sparkle {
-    font-size: 0.85rem;
+.eyebrow-pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #38bdf8;
+    box-shadow: 0 0 10px #38bdf8;
+    position: relative;
+    flex-shrink: 0;
 }
 
-.eyebrow-text {
-    font-size: 0.82rem;
+.eyebrow-pulse-dot::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1px solid rgba(56, 189, 248, 0.6);
+    animation: radarPing 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes radarPing {
+    0% { transform: scale(0.9); opacity: 0.9; }
+    70%, 100% { transform: scale(2.2); opacity: 0; }
+}
+
+.eyebrow-item {
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: #e2e8f0;
+    transition: color var(--transition-fast);
+}
+
+.hero-eyebrow-pill:hover .eyebrow-item {
+    color: #ffffff;
+}
+
+.eyebrow-sep {
+    color: rgba(56, 189, 248, 0.45);
+    font-size: 0.8rem;
     font-weight: 800;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: #6188ff;
-    text-shadow: 0 0 12px rgba(56, 97, 251, 0.6);
 }
 
 .hero-main-title {
