@@ -184,6 +184,43 @@
     50% { transform: scale(1.2) translateZ(0); opacity: 1; }
 }
 
+/* 3D Laser Axis Vectors inside Cube */
+.cube-axis {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    pointer-events: none;
+    transform-style: preserve-3d;
+}
+
+.cube-axis.axis-x {
+    width: 140px;
+    height: 1.5px;
+    margin-left: -70px;
+    margin-top: -0.75px;
+    background: linear-gradient(90deg, transparent, #3861fb, transparent);
+    box-shadow: 0 0 8px #3861fb;
+}
+
+.cube-axis.axis-y {
+    width: 1.5px;
+    height: 140px;
+    margin-left: -0.75px;
+    margin-top: -70px;
+    background: linear-gradient(180deg, transparent, #16c784, transparent);
+    box-shadow: 0 0 8px #16c784;
+}
+
+.cube-axis.axis-z {
+    width: 1.5px;
+    height: 140px;
+    margin-left: -0.75px;
+    margin-top: -70px;
+    background: linear-gradient(180deg, transparent, #6188ff, transparent);
+    transform: rotateX(90deg);
+    box-shadow: 0 0 8px #6188ff;
+}
+
 /* 6 High-End Glassmorphic Facets (200px size -> 100px translation) */
 .cube-facet {
     position: absolute;
