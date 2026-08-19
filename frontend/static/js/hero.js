@@ -220,21 +220,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.y = homeY;
                 this.vx = 0;
                 this.vy = 0;
-                this.baseSize = Math.random() * 3.2 + 2;
+                this.baseSize = Math.random() * 2.4 + 1.2;
                 this.colorPrefix = colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
-                this.baseAlpha = Math.random() * 0.22 + 0.16;
+                this.baseAlpha = Math.random() * 0.24 + 0.14;
                 this.currentAlpha = this.baseAlpha;
                 this.angle = Math.random() * 6.28;
                 this.angularVelocity = 0;
                 this.swirlDir = Math.random() > 0.5 ? 1 : -1;
-                this.type = Math.floor(Math.random() * 2);
+                this.type = Math.floor(Math.random() * 3); // Diamond, Star Circle, Cross Dot
             }
 
             update(localMouseX, localMouseY, isMouseActive) {
                 const dxMouse = localMouseX - this.x;
                 const dyMouse = localMouseY - this.y;
                 const distSqMouse = dxMouse * dxMouse + dyMouse * dyMouse;
-                const INFLUENCE_RADIUS = 220;
+                const INFLUENCE_RADIUS = 200;
                 const INFLUENCE_SQ = INFLUENCE_RADIUS * INFLUENCE_RADIUS;
 
                 const dxHome = this.homeX - this.x;
@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const distMouse = Math.sqrt(distSqMouse);
                     // Soft quadratic easing factor
                     const proximity = 1 - (distMouse / INFLUENCE_RADIUS);
-                    const force = Math.sin(proximity * Math.PI) * 0.014;
+                    const force = Math.sin(proximity * Math.PI) * 0.013;
 
                     // 1. Ultra-gentle attraction
                     this.vx += (dxMouse / distMouse) * force;
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     this.vy += tangentY * swirlForce;
 
                     this.angularVelocity += 0.0012 * this.swirlDir;
-                    this.currentAlpha += (Math.min(0.7, this.baseAlpha + 0.35) - this.currentAlpha) * 0.06;
+                    this.currentAlpha += (Math.min(0.7, this.baseAlpha + 0.38) - this.currentAlpha) * 0.06;
                 } else {
                     // Soft spring return to home station
                     if (distHomeSq > 0.3) {
@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Speed cap for silk-smooth float
                 const speedSq = this.vx * this.vx + this.vy * this.vy;
-                const MAX_SPEED = 1.5;
+                const MAX_SPEED = 1.4;
                 if (speedSq > MAX_SPEED * MAX_SPEED) {
                     const speed = Math.sqrt(speedSq);
                     this.vx = (this.vx / speed) * MAX_SPEED;
@@ -315,9 +315,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     ctx.lineTo(this.baseSize * 0.65, 0);
                     ctx.lineTo(0, this.baseSize);
                     ctx.lineTo(-this.baseSize * 0.65, 0);
-                } else {
+                } else if (this.type === 1) {
                     // Smooth Star Dot
-                    ctx.arc(0, 0, this.baseSize * 0.45, 0, 6.28);
+                    ctx.arc(0, 0, this.baseSize * 0.5, 0, 6.28);
+                } else {
+                    // Micro Cross / Plus
+                    ctx.rect(-this.baseSize * 0.6, -this.baseSize * 0.2, this.baseSize * 1.2, this.baseSize * 0.4);
+                    ctx.rect(-this.baseSize * 0.2, -this.baseSize * 0.6, this.baseSize * 0.4, this.baseSize * 1.2);
                 }
                 ctx.closePath();
                 ctx.fill();
@@ -335,16 +339,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             shards = [];
             const isMobile = width < 768;
-            const cols = isMobile ? 4 : 7;
-            const rows = isMobile ? 4 : 5;
+            const cols = isMobile ? 6 : 11;
+            const rows = isMobile ? 6 : 7;
 
             const stepX = width / (cols + 1);
             const stepY = height / (rows + 1);
 
             for (let c = 1; c <= cols; c++) {
                 for (let r = 1; r <= rows; r++) {
-                    const jitterX = (Math.random() - 0.5) * stepX * 0.75;
-                    const jitterY = (Math.random() - 0.5) * stepY * 0.75;
+                    const jitterX = (Math.random() - 0.5) * stepX * 0.8;
+                    const jitterY = (Math.random() - 0.5) * stepY * 0.8;
                     const homeX = c * stepX + jitterX;
                     const homeY = r * stepY + jitterY;
                     shards.push(new ReactiveCosmicShard(homeX, homeY));
