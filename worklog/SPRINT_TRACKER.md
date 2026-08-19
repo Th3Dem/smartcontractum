@@ -53,10 +53,23 @@
 
 ---
 
+## 🎯 Спринт 5: Блок 5 — Маркетплейс Источников Данных & Оракулов (19.08.2026)
+
+| ID Задачи | Название / Описание | Ответственный агент | Статус | Артефакты / Коммит |
+| :--- | :--- | :--- | :---: | :--- |
+| `TASK-034` | Pydantic схемы источников и валидации (`models/data_sources.py`) | `py_bot` | ✅ DONE | `backend/models/data_sources.py` |
+| `TASK-035` | REST API каталога и подачи заявок (`routers/data_sources.py`) | `py_bot` | ✅ DONE | `backend/routers/data_sources.py` |
+| `TASK-036` | Таблица источников и модальное окно (`data_sources/index.html`) | `ui_bot` | ✅ DONE | `frontend/templates/data_sources/index.html` |
+| `TASK-037` | CSS-стили таблицы, trust-бейджей и алерта (`data_sources.css`) | `ui_bot` / `design_bot` | ✅ DONE | `frontend/static/css/data_sources.css` |
+| `TASK-038` | JS-клиент AJAX-фильтрации и отправки заявки (`data_sources.js`) | `ui_bot` | ✅ DONE | `frontend/static/js/data_sources.js` |
+| `TASK-039` | In-Memory Pytest тесты фильтрации и XSS (32/32 tests total) | `qa_bot` | ✅ DONE | `tests/unit/test_data_sources_api.py` |
+| `TASK-040` | Релизный пайплайн через Staging в Main | `devops_bot` | ✅ DONE | `dev` -> `staging` -> `main` |
+
+---
+
 ## 🔮 Бэклог следующих модулей (SmartContractum Roadmap):
 
 | Блок | Название модуля | Ключевой функционал | Приоритет |
 | :-: | :--- | :--- | :-: |
-| **Блок 5** | **Реестр Доверенных Оракулов (Oracle Hub)** | Каталог поставщиков данных, симуляция оракульных ответов, подписи ГОСТ | ⚡ P1 (Next) |
-| **Блок 6** | **AI Архитектор Контрактов (Gemini Circuit Breaker)** | Генерация деревьев решений на естественном языке от задачи пользователя | ⚡ P1 |
+| **Блок 6** | **AI Архитектор Контрактов (Gemini Circuit Breaker)** | Генерация деревьев решений на естественном языке от задачи пользователя | ⚡ P1 (Next) |
 | **Блок 7** | **Криптографический Сейф & Эскроу (Safe & Escrow)** | Модель депонирования и транзакционного сплита средств | 🛡️ P2 |

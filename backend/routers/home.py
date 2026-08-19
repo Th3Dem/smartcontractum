@@ -43,36 +43,9 @@ async def render_home_page(request: Request) -> Response:
     )
 
 
-@router.get("/data-sources", summary="Data Sources Marketplace Alias")
-async def render_data_sources_alias(request: Request) -> Response:
-    """Route /data-sources alias to sources view."""
-    context: Dict[str, Any] = {
-        "active_nav": "sources",
-        "stats": STATS_DATA,
-        **DEFAULT_CONTEXT,
-    }
-    return templates.TemplateResponse(
-        request=request,
-        name="home/index.html",
-        context=context,
-    )
-
-
 @router.get("/forum", summary="Forum Community Alias")
 async def render_forum_alias(request: Request) -> Response:
     """Route /forum alias to forum index."""
-    try:
-        from backend.routers.forum import render_forum_page
+    from backend.routers.forum import render_forum_page
 
-        return await render_forum_page(request=request)
-    except Exception:
-        context: Dict[str, Any] = {
-            "active_nav": "feed",
-            "stats": STATS_DATA,
-            **DEFAULT_CONTEXT,
-        }
-        return templates.TemplateResponse(
-            request=request,
-            name="home/index.html",
-            context=context,
-        )
+    return await render_forum_page(request=request, category=None, tag=None)

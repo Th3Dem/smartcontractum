@@ -1,8 +1,7 @@
 """Base Shell & Layout Web Router for SmartContractum Platform."""
 
 from pathlib import Path
-from typing import Any
-from fastapi import APIRouter, Request, Response
+from fastapi import APIRouter
 from fastapi.templating import Jinja2Templates
 
 router = APIRouter(tags=["Base Shell"])
@@ -16,17 +15,3 @@ DEFAULT_CONTEXT = {
     "user_org": "ООО Интегратор (Umbrella-Dev)",
     "nir_phase": "Фаза НИР ЦБ РФ (до 31.03.2027)",
 }
-
-
-@router.get("/sources", summary="Trusted Oracle Sources")
-async def render_sources(request: Request) -> Response:
-    """Render Trusted Oracle Sources Registry."""
-    context: dict[str, Any] = {
-        "active_nav": "sources",
-        **DEFAULT_CONTEXT,
-    }
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context=context,
-    )

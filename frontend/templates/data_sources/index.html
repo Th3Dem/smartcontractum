@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}Источники Данных & Маркетплейс Оракулов — SmartContractum{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/data_sources.css">
+{% endblock %}
+
+{% block content %}
+<div class="sources-page-container">
+    <!-- Header Section -->
+    <div class="sources-header-box">
+        <div class="sources-tag-pill">
+            <span class="pulse-emerald"></span>
+            <span>Реестр Доверенных Поставщиков Данных ПКСК Банка России</span>
+        </div>
+        <h1 class="sources-main-title">Источники Данных & Маркетплейс Оракулов</h1>
+        <p class="sources-subtitle">
+            Каталог государственных, банковских и открытых API-источников для автоматического исполнения смарт-контрактов.
+        </p>
+    </div>
+
+    <!-- ================================================================
+         5.2 MULTI-ORACLE WARNING (Предотвращение единой точки отказа)
+    ================================================================= -->
+    <div class="multi-oracle-warning-box">
+        <div class="warning-icon">⚠️</div>
+        <div class="warning-content">
+            <h4 class="warning-title">Рекомендация ИБ (Стандарт АБР & ЦБ РФ):</h4>
+            <p class="warning-text">
+                Для крупномасштабных смарт-контрактов запрещено полагаться на единственный коммерческий источник. 
+                Используйте мульти-оракульную агрегацию для предотвращения сбоев, компрометации каналов и манипуляций котировками.
+            </p>
+        </div>
+    </div>
+
+    <!-- Toolbar & Filter Tabs -->
+    <div class="sources-toolbar">
+        <div class="filter-tabs-group" id="categoryFilterTabs">
+            <button type="button" class="filter-tab-btn active" data-category="all">
+                <span>Все источники</span>
+                <span class="tab-count" id="countAll">{{ total_sources }}</span>
+            </button>
+            <button type="button" class="filter-tab-btn" data-category="gis">
+                <span>Государственные ИС</span>
+                <span class="tab-count">2</span>
+            </button>
+            <button type="button" class="filter-tab-btn" data-category="commercial">
+                <span>Коммерческие ИС</span>
+                <span class="tab-count">1</span>
+            </button>
+            <button type="button" class="filter-tab-btn" data-category="open">
+                <span>Открытые источники</span>
+                <span class="tab-count">1</span>
+            </button>
+        </div>
+
+        <button type="button" class="btn-suggest-source" id="btnOpenSuggestModal">
+            <span>➕ Предложить источник</span>
+        </button>
+    </div>
+
+    <!-- ================================================================
+         5.1 ТАБЛИЦА ИСТОЧНИКОВ (CBR Categories Table)
+    ================================================================= -->
+    <div class="table-card-container">
+        <div class="table-responsive">
+            <table class="sources-table" id="sourcesTable">
+                <thead>
+                    <tr>
+                        <th style="width: 32%;">Источник / Система</th>
+                        <th style="width: 18%;">Категория ЦБ РФ</th>
+                        <th style="width: 18%;">Уровень доверия</th>
+                        <th style="width: 14%;">SLA / Доступность</th>
+                        <th style="width: 18%;">Модель монетизации</th>
+                    </tr>
+                </thead>
+                <tbody id="sourcesTableBody">
+                    {% for item in sources %}
+                    <tr class="source-row" data-category="{{ item.category_slug }}">
+                        <td class="col-source-info">
+                            <div class="source-name-row">
+                                <span class="source-name">{{ item.name }}</span>
+                                <span class="badge-status-dot online" title="Шлюз активен"></span>
+                            </div>
+                            <p class="source-description">{{ item.description }}</p>
+                        </td>
+                        <td class="col-cbr-cat">
+                            <span class="category-pill">{{ item.cbr_category }}</span>
+                        </td>
+                        <td class="col-trust">
+                            <span class="trust-badge {{ item.trust_badge_class }}">
+                                {% if item.trust_badge_class == 'trust-gis' %}🛡️ {{ item.trust_level }}
+                                {% elif item.trust_badge_class == 'trust-commercial' %}💎 {{ item.trust_level }}
+                                {% else %}🌐 {{ item.trust_level }}{% endif %}
+                            </span>
+                        </td>
+                        <td class="col-sla">
+                            <span class="sla-value">{{ item.sla_percent }}</span>
+                        </td>
+                        <td class="col-monetization">
+                            <span class="monetization-tag">{{ item.monetization_type }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ====================================================================
+     5.3 MODAL: SUGGEST NEW DATA SOURCE
+==================================================================== -->
+<div class="modal-overlay" id="suggestModalOverlay" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <div class="modal-header-meta">
+                <span class="modal-icon">🌐</span>
+                <h3 class="modal-title">Предложить источник данных</h3>
+            </div>
+            <button type="button" class="btn-modal-close" id="btnCloseSuggestModal">&times;</button>
+        </div>
+
+        <form id="suggestSourceForm" class="modal-form">
+            <div id="suggestAlertBox" class="suggest-alert-box" style="display: none;"></div>
+
+            <div class="form-group">
+                <label for="inputSourceName" class="form-label">Название ИС / Поставщика данных <span class="req">*</span></label>
+                <input type="text" id="inputSourceName" name="name" class="form-input" 
+                       placeholder="Например: АО ИнфоТранс Логистик API" required minlength="3" maxlength="120">
+            </div>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="selectCbrCategory" class="form-label">Категория по Концепции ЦБ <span class="req">*</span></label>
+                    <select id="selectCbrCategory" name="cbr_category" class="form-select" required>
+                        <option value="Государственная ИС">Государственная ИС</option>
+                        <option value="Коммерческая ИС" selected>Коммерческая ИС</option>
+                        <option value="Открытый источник">Открытый источник</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="selectApiType" class="form-label">Формат протокола</label>
+                    <select id="selectApiType" name="api_type" class="form-select">
+                        <option value="REST API" selected>REST API (JSON)</option>
+                        <option value="gRPC / Protobuf">gRPC / Protobuf</option>
+                        <option value="SOAP / XML (СМЭВ)">SOAP / XML (СМЭВ)</option>
+                        <option value="WebSocket Stream">WebSocket Stream</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputContactEmail" class="form-label">Контактный корпоративный Email <span class="req">*</span></label>
+                <input type="email" id="inputContactEmail" name="contact_email" class="form-input" 
+                       placeholder="integrations@provider.ru" required maxlength="120">
+            </div>
+
+            <div class="form-group">
+                <label for="inputDescription" class="form-label">Описание передаваемых событий и SLA <span class="req">*</span></label>
+                <textarea id="inputDescription" name="description" class="form-textarea" rows="3" 
+                          placeholder="Какие события верифицируются (накладные, статусы счетов, факторинг, котировки)..." 
+                          required minlength="10" maxlength="500"></textarea>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" id="btnCancelSuggest">Отмена</button>
+                <button type="submit" class="btn-submit-suggest" id="btnSubmitSuggest">
+                    <span id="suggestSpinner" class="suggest-spinner" style="display: none;">⏳</span>
+                    <span>Отправить заявку</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/data_sources.js" defer></script>
+{% endblock %}

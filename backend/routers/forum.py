@@ -299,19 +299,21 @@ async def render_forum_page(
 ) -> Response:
     """Render full 3-column Forum & Discussions HTML page."""
     _recalculate_category_counts()
-    active_cat = category or "all"
+    active_cat = category if isinstance(category, str) and category else "all"
 
     # Filter topics for initial SSR
     filtered_topics = list(TOPICS_DB)
     if active_cat != "all":
-        filtered_topics = [t for t in filtered_topics if t.category_slug == active_cat]
+        filtered_topics = [
+            t for t in filtered_topics if t.category_slug == active_cat
+        ]
 
-    if tag:
+    if tag and isinstance(tag, str):
         tag_clean = tag.strip().lstrip("#").lower()
         filtered_topics = [
             t
             for t in filtered_topics
-            if any(t_tag.lower() == tag_clean for t_tag in t.tags)
+            if any(tag_clean in x.lower() for x in t.tags)
         ]
 
     filtered_topics.sort(key=lambda t: t.id, reverse=True)
