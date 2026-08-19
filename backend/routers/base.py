@@ -18,20 +18,6 @@ DEFAULT_CONTEXT = {
 }
 
 
-@router.get("/passport", summary="Contract Passport")
-async def render_passport(request: Request) -> Response:
-    """Render Contract Passport view placeholder."""
-    context: dict[str, Any] = {
-        "active_nav": "passport",
-        **DEFAULT_CONTEXT,
-    }
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context=context,
-    )
-
-
 @router.get("/builder", summary="Visual Decision Tree Builder")
 async def render_builder(request: Request) -> Response:
     """Render Smart Contract Decision Tree Builder."""

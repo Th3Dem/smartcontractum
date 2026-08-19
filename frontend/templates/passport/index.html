@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Паспорт Смарт-Контракта — SmartContractum | Генератор «Дерева решений» ПКСК{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/passport.css">
+{% endblock %}
+
+{% block content %}
+<div class="passport-page-container">
+    <!-- Header Section -->
+    <div class="passport-header-box">
+        <div class="passport-tag-pill">
+            <span class="pulse-emerald"></span>
+            <span>Регуляторный стандарт Банка России (Фаза НИР 2026-2027)</span>
+        </div>
+        <h1 class="passport-title">Генератор Паспорта & «Дерева решений»</h1>
+        <p class="passport-subtitle">
+            Формируйте юридически и технически выверенную спецификацию смарт-контракта без раскрытия сырого исходного кода.
+        </p>
+    </div>
+
+    <!-- 2-Column Main Workspace -->
+    <div class="passport-workspace-grid">
+        <!-- ============================================================
+             3.1 WIZARD FORM (Левая колонка ввода)
+        ============================================================ -->
+        <section class="wizard-form-panel">
+            <div class="panel-header">
+                <div class="panel-icon-box">✍️</div>
+                <div>
+                    <h2 class="panel-title">Мастер параметров сценария</h2>
+                    <span class="panel-hint">Заполните ключевые условия сделки</span>
+                </div>
+            </div>
+
+            <form id="passportWizardForm" class="wizard-form">
+                <!-- Alert box -->
+                <div id="wizardAlertBox" class="wizard-alert-box" style="display: none;"></div>
+
+                <!-- 1. Название сценария -->
+                <div class="form-group">
+                    <label for="inputTitle" class="form-label">
+                        <span class="step-num">1</span>
+                        <span>Название бизнес-сценария <span class="req">*</span></span>
+                    </label>
+                    <input type="text" id="inputTitle" name="title" class="form-input" 
+                           value="{{ sample.title }}"
+                           placeholder="Например: Автоматическая оплата поставки зерна" required minlength="5" maxlength="200">
+                </div>
+
+                <!-- 2. Участники сделки -->
+                <div class="form-group">
+                    <label for="inputParties" class="form-label">
+                        <span class="step-num">2</span>
+                        <span>Участники сделки <span class="req">*</span></span>
+                    </label>
+                    <input type="text" id="inputParties" name="parties" class="form-input" 
+                           value="{{ sample.parties }}"
+                           placeholder="Покупатель, Поставщик, Банк-гарант" required minlength="5" maxlength="300">
+                </div>
+
+                <!-- 3. Триггер исполнения -->
+                <div class="form-group">
+                    <label for="inputTrigger" class="form-label">
+                        <span class="step-num">3</span>
+                        <span>Триггер исполнения (Success Condition) <span class="req">*</span></span>
+                    </label>
+                    <textarea id="inputTrigger" name="trigger_event" class="form-textarea" rows="2" 
+                              placeholder="Событие оракула, подтверждающее исполнение обязательств" required minlength="5" maxlength="300">{{ sample.trigger_event }}</textarea>
+                </div>
+
+                <!-- 4. Исключения и споры -->
+                <div class="form-group">
+                    <label for="inputExceptions" class="form-label">
+                        <span class="step-num">4</span>
+                        <span>Исключения и Спорные ситуации <span class="req">*</span></span>
+                    </label>
+                    <textarea id="inputExceptions" name="exception_flow" class="form-textarea" rows="2" 
+                              placeholder="Таймаут, расхождение по качеству, перевод в Арбитраж" required minlength="5" maxlength="300">{{ sample.exception_flow }}</textarea>
+                </div>
+
+                <!-- 5. Источник данных & Действие при успехе -->
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="selectDataSource" class="form-label">
+                            <span class="step-num">5</span>
+                            <span>Источники данных</span>
+                        </label>
+                        <select id="selectDataSource" name="data_source_type" class="form-select">
+                            <option value="ГИС (Государственная информационная система)" selected>ГИС (Гос. система)</option>
+                            <option value="Коммерческая ИС / ЭДО (Диадок, СБИС)">Коммерческая ИС / ЭДО</option>
+                            <option value="Открытый оракул котировок (ЦБ РФ / Мосбиржа)">Открытый оракул котировок</option>
+                            <option value="Банковский API / СБП">Банковский API / СБП</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputSuccessAction" class="form-label">
+                            <span class="step-num">6</span>
+                            <span>Действие при успехе</span>
+                        </label>
+                        <input type="text" id="inputSuccessAction" name="success_action" class="form-input" 
+                               value="{{ sample.success_action }}"
+                               placeholder="Мгновенный перевод средств">
+                    </div>
+                </div>
+
+                <!-- Form Submit Action Bar -->
+                <div class="form-actions-bar">
+                    <button type="submit" id="btnGeneratePassport" class="btn-generate-tree">
+                        <span id="genSpinner" class="gen-spinner" style="display: none;">⏳</span>
+                        <span>⚡ Сгенерировать «Дерево решений»</span>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ============================================================
+             3.2 DECISION TREE PREVIEW & EXPORT (Правая колонка)
+        ============================================================ -->
+        <section class="tree-preview-panel">
+            <div class="panel-header">
+                <div class="panel-icon-box cyan">🌳</div>
+                <div class="tree-header-meta">
+                    <h2 class="panel-title">Дерево решений ПКСК</h2>
+                    <span class="passport-id-badge" id="displayPassportCode">{{ sample_code }}</span>
+                </div>
+            </div>
+
+            <!-- Terminal Output Block -->
+            <div class="terminal-container">
+                <div class="terminal-topbar">
+                    <div class="terminal-dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <span class="terminal-title">DECISION_TREE_VIEWER // PKSC-SPEC</span>
+                    <button class="btn-copy-code" id="btnCopyTree" title="Скопировать в буфер">
+                        📋 Копировать
+                    </button>
+                </div>
+                <pre class="terminal-body"><code id="decisionTreeDisplay">{{ sample_tree }}</code></pre>
+            </div>
+
+            <!-- Action Buttons for Export & Next Step -->
+            <div class="preview-actions-bar">
+                <button type="button" class="btn-action-secondary" id="btnDownloadMarkdown">
+                    <span>📥 Скачать Паспорт (.md)</span>
+                </button>
+                <a href="/builder" class="btn-action-primary" id="btnSendToAudit">
+                    <span>🛡️ Отправить на пред-аудит ИБ →</span>
+                </a>
+            </div>
+
+            <!-- Compliance Footer Note -->
+            <div class="compliance-note">
+                <span class="note-icon">🔒</span>
+                <span>Спецификация формируется согласно методическим рекомендациям Банка России по защите коммерческой информации при публикации логики смарт-контрактов.</span>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/passport.js" defer></script>
+{% endblock %}

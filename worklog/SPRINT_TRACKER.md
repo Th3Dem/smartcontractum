@@ -24,17 +24,18 @@
 
 ---
 
-## 🎯 Спринт 2: Блок 2 — Раздел «Лента & Форум» (19.08.2026)
+## 🎯 Спринт 3: Блок 3 — Модуль «Паспорт Смарт-Контракта» (19.08.2026)
 
 | ID Задачи | Название / Описание | Ответственный агент | Статус | Артефакты / Коммит |
 | :--- | :--- | :--- | :---: | :--- |
-| `TASK-012` | Схемы данных и валидация Pydantic (`models/forum.py`) | `py_bot` | ✅ DONE | `backend/models/forum.py` |
-| `TASK-013` | REST API эндпоинты категорий и топиков (`routers/forum.py`) | `py_bot` | ✅ DONE | `backend/routers/forum.py` |
-| `TASK-014` | 3-колоночный Jinja2 шаблон форума (`templates/forum/index.html`) | `ui_bot` | ✅ DONE | `frontend/templates/forum/index.html` |
-| `TASK-015` | CSS-стили карточек, бейджей, таймлайна и модалки (`forum.css`) | `ui_bot` / `design_bot` | ✅ DONE | `frontend/static/css/forum.css` |
-| `TASK-016` | AJAX клиент фильтрации и отправки тем (`forum.js`) | `ui_bot` | ✅ DONE | `frontend/static/js/forum.js` |
-| `TASK-017` | Набор Pytest-тестов API, фильтрации и XSS-защиты (14/14 tests) | `qa_bot` | ✅ DONE | `tests/unit/test_forum_api.py` |
-| `TASK-018` | Релизный пайплайн через Staging в Main | `devops_bot` | ✅ DONE | `dev` -> `staging` -> `main` |
+| `TASK-019` | Pydantic схемы валидации паспорта (`models/passport.py`) | `py_bot` | ✅ DONE | `backend/models/passport.py` |
+| `TASK-020` | Движок генерации дерева решений (`services/passport_engine.py`) | `py_bot` | ✅ DONE | `backend/services/passport_engine.py` |
+| `TASK-021` | REST API генерации и SSR роут (`routers/passport.py`) | `py_bot` | ✅ DONE | `backend/routers/passport.py` |
+| `TASK-022` | Wizard интерфейс и терминал предпросмотра (`passport/index.html`) | `ui_bot` | ✅ DONE | `frontend/templates/passport/index.html` |
+| `TASK-023` | CSS-стили мастера ввода и терминала (`passport.css`) | `ui_bot` / `design_bot` | ✅ DONE | `frontend/static/css/passport.css` |
+| `TASK-024` | JS-контроллер AJAX генерации и экспорта `.md` (`passport.js`) | `ui_bot` | ✅ DONE | `frontend/static/js/passport.js` |
+| `TASK-025` | In-Memory Pytest автотесты генератора (23/23 tests total) | `qa_bot` | ✅ DONE | `tests/unit/test_passport_api.py` |
+| `TASK-026` | Релизный пайплайн через Staging в Main | `devops_bot` | ✅ DONE | `dev` -> `staging` -> `main` |
 
 ---
 
@@ -42,8 +43,7 @@
 
 | Блок | Название модуля | Ключевой функционал | Приоритет |
 | :-: | :--- | :--- | :-: |
-| **Блок 1** | **Конструктор смарт-контрактов («Дерево решений»)** | Визуальный конструктор, узлы условий, оракулы, валидация логики | 🔥 P0 (Next) |
-| **Блок 3** | **Паспорт Контракта (Contract Passport Engine)** | Формирование паспорта, хеширование, экспорт в Markdown/PDF, чеклист ЦБ | 🔥 P0 |
-| **Блок 4** | **Реестр Доверенных Оракулов (Oracle Hub)** | Каталог поставщиков данных, симуляция оракульных ответов, подписи ГОСТ | ⚡ P1 |
-| **Блок 5** | **AI Архитектор Контрактов (Gemini Circuit Breaker)** | Генерация деревьев решений на естественном языке от задачи пользователя | ⚡ P1 |
-| **Блок 6** | **Криптографический Сейф & Эскроу (Safe & Escrow)** | Модель депонирования и транзакционного сплита средств | 🛡️ P2 |
+| **Блок 4** | **Конструктор смарт-контрактов («Дерево решений»)** | Визуальный Low-code конструктор, узлы условий, 5-этапный пред-аудит | 🔥 P0 (Next) |
+| **Блок 5** | **Реестр Доверенных Оракулов (Oracle Hub)** | Каталог поставщиков данных, симуляция оракульных ответов, подписи ГОСТ | ⚡ P1 |
+| **Блок 6** | **AI Архитектор Контрактов (Gemini Circuit Breaker)** | Генерация деревьев решений на естественном языке от задачи пользователя | ⚡ P1 |
+| **Блок 7** | **Криптографический Сейф & Эскроу (Safe & Escrow)** | Модель депонирования и транзакционного сплита средств | 🛡️ P2 |
