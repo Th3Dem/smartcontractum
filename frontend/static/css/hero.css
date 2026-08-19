@@ -319,57 +319,34 @@
     pointer-events: auto;
 }
 
-/* Sleek Cyber-Minimalist Mission Motto */
+/* Sleek Cyber-Minimalist Mission Motto (Pure Typography, No Icons/Animations) */
 .hero-eyebrow-pill {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 6px 18px;
-    background: rgba(15, 23, 42, 0.75);
-    border: 1px solid rgba(56, 189, 248, 0.28);
+    justify-content: center;
+    gap: 12px;
+    padding: 6px 20px;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(56, 189, 248, 0.25);
     border-radius: var(--radius-full);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 14px rgba(56, 97, 251, 0.15);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     margin-bottom: 4px;
     transition: all var(--transition-smooth);
 }
 
 .hero-eyebrow-pill:hover {
-    border-color: rgba(56, 189, 248, 0.6);
+    border-color: rgba(56, 189, 248, 0.5);
     background: rgba(20, 30, 55, 0.85);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6), 0 0 22px rgba(56, 189, 248, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 16px rgba(56, 189, 248, 0.2);
     transform: translateY(-1px);
-}
-
-.eyebrow-pulse-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background-color: #38bdf8;
-    box-shadow: 0 0 10px #38bdf8;
-    position: relative;
-    flex-shrink: 0;
-}
-
-.eyebrow-pulse-dot::after {
-    content: "";
-    position: absolute;
-    inset: -3px;
-    border-radius: 50%;
-    border: 1px solid rgba(56, 189, 248, 0.6);
-    animation: radarPing 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-@keyframes radarPing {
-    0% { transform: scale(0.9); opacity: 0.9; }
-    70%, 100% { transform: scale(2.2); opacity: 0; }
 }
 
 .eyebrow-item {
     font-size: 0.76rem;
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.16em;
     color: #e2e8f0;
     transition: color var(--transition-fast);
 }
@@ -379,7 +356,7 @@
 }
 
 .eyebrow-sep {
-    color: rgba(56, 189, 248, 0.45);
+    color: rgba(56, 189, 248, 0.4);
     font-size: 0.8rem;
     font-weight: 800;
 }
