@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}SmartContractum — Мост к ПКСК Банка России | Главная{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <!-- Hero Header -->
+    <div class="hero-content">
+        <div class="hero-tag-pill">
+            <span class="pulse-dot"></span>
+            <span>Регуляторный шлюз к ПКСК Банка России</span>
+        </div>
+        <h1 class="hero-title">
+            Профессиональная экосистема <br>
+            <span class="gradient-text">Смарт-Контрактов ПКСК</span>
+        </h1>
+        <p class="hero-subtitle">
+            Проектируйте, верифицируйте и визуализируйте смарт-контракты в виде наглядных «деревьев решений». Выводите решения в контур Банка России под лицензионным Umbrella-контуром.
+        </p>
+
+        <div class="hero-cta-group">
+            <a href="/builder" class="btn-primary">
+                <span>🌳 Открыть Конструктор Контрактов</span>
+            </a>
+            <a href="/passport" class="btn-secondary">
+                <span>📑 Паспорт Контракта</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Navigation Cards Grid -->
+    <div class="cards-grid">
+        <div class="feature-card">
+            <div class="card-icon">🌳</div>
+            <h3 class="card-title">Конструктор «Дерево решений»</h3>
+            <p class="card-desc">Визуальное проектирование логики смарт-контрактов без погружения в сырой код.</p>
+            <a href="/builder" class="card-link">Перейти в конструктор →</a>
+        </div>
+
+        <div class="feature-card">
+            <div class="card-icon">📑</div>
+            <h3 class="card-title">Паспорт Контракта</h3>
+            <p class="card-desc">Формальная спецификация, валидация оракулов и аудит соответствия стандартам ЦБ РФ.</p>
+            <a href="/passport" class="card-link">Сформировать паспорт →</a>
+        </div>
+
+        <div class="feature-card">
+            <div class="card-icon">🌐</div>
+            <h3 class="card-title">Реестр Оракулов</h3>
+            <p class="card-desc">Проверенные поставщики внешних данных: курсы валют, биржи, логистика, ЭДО.</p>
+            <a href="/sources" class="card-link">Смотреть реестр →</a>
+        </div>
+
+        <div class="feature-card">
+            <div class="card-icon">📰</div>
+            <h3 class="card-title">Лента & Форум</h3>
+            <p class="card-desc">Обсуждения с экспертами рынка, разбор кейсов и база готовых шаблонов ПКСК.</p>
+            <a href="/feed" class="card-link">Читать ленту →</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
