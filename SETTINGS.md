@@ -6,7 +6,22 @@
 
 ---
 
-## 1. Технологический Enterprise-стек (Tech Stack)
+## 1. Регламент стабильности и работы агентов (Anti-Timeout Policy)
+
+1. **ТЕСТИРОВАНИЕ (In-Memory Testing Only):**  
+   - Все автотесты `qa_bot` выполняются исключительно через `TestClient` (`starlette.testclient` / `httpx`) в оперативной памяти.  
+   - **Прямые сетевые HTTP-запросы к localhost:8000 в тестах КАТЕГОРИЧЕСКИ ЗАПРЕЩЕНЫ.**
+
+2. **БАШ-КОМАНДЫ (Single Command Execution):**  
+   - Выполнять команды статического анализа и тестов строго по отдельности отдельными вызовами.  
+   - **Категорически запрещено объединять `pytest`, `flake8`, `mypy` в один bash-вызов через `&&`.**
+
+3. **РАБОТА С ФАЙЛАМИ (Terminal-Driven File Operations):**  
+   - Создание и модификацию файлов производить через терминал или проверенные файловые операции без зависаний.
+
+---
+
+## 2. Технологический Enterprise-стек (Tech Stack)
 
 ### 🖥️ Серверный уровень (Backend & Storage):
 - **Среда выполнения:** Python 3.12 (Strict MyPy Type Annotations, Asyncio).
@@ -38,25 +53,18 @@
 
 ---
 
-## 2. Релизный протокол и ветвление (Staging Gate Protocol)
+## 3. Релизный протокол и ветвление (Staging Gate Protocol)
 
 ### 🌿 Структура веток:
 ```
-feature/* ──► dev ──► staging ──► main (Production)
+feature/* -> dev -> staging -> main
 ```
 > ⛔ **КРИТИЧЕСКОЕ ПРАВИЛО:** Прямой коммит и прямой автоматический мердж в ветку `main` **КАТЕГОРИЧЕСКИ ЗАПРЕЩЕНЫ**.
 
 ### 🚦 Staging Gate Protocol (Правила допуска в Production):
 Мердж ветки `staging` в `main` и деплой на Production разрешены **ТОЛЬКО** при одновременном выполнении условий:
-
-1. **Автоматический прогон Unit & API тестов:**
-   - `pytest -v --cov=backend tests/unit` (100% критических путей пройдено, 0 ошибок).
-   - Статический анализ: `flake8 .`, `black --check .`, `mypy backend/`.
-2. **Сквозные E2E-тесты интерфейса:**
-   - Playwright сценарии (`tests/e2e`) успешно прошли в headless-браузерах Chromium, Firefox, WebKit.
-3. **Нагрузочные испытания (Load Testing):**
-   - Нагрузочный прогон `k6 run tests/load/load_test.js` подтверждает стабильность при пиковой нагрузке (p95 latency < 350ms, 0% drop rate).
-4. **AppSec / SAST сканирование:**
-   - Проверка безопасности контейнеров и зависимостей (Trivy / Bandit) без уязвимостей уровня High / Critical.
-5. **Ручной допуск (Gatekeeper Approval):**
-   - Финальная верификация и подпись релиза от `pm_bot` (Paula) и `devops_bot`.
+1. Автоматический прогон Unit & API тестов в памяти через `TestClient` (100% критических путей пройдено, 0 ошибок).
+2. Сквозные E2E-тесты интерфейса (Playwright сценарии).
+3. Нагрузочные испытания (k6 run, p95 latency < 350ms).
+4. AppSec / SAST сканирование (Trivy / Bandit).
+5. Ручной допуск (Gatekeeper Approval от `pm_bot`).
