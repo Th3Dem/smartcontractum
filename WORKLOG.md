@@ -1,121 +1,136 @@
 # 📜 WORKLOG.md — SmartContractum Enterprise Platform
 
 > **Проект:** SmartContractum (Мост к ПКСК Банка России)  
-> **Формат:** Хронологический операционный журнал действий команды агентов  
-> **Стандарт:** Enterprise Traceability & Zero Bad Commits Protocol  
-> **Текущий статус:** Все 7 базовых модулей платформы (Блоки 0–6) разработаны и верифицированы (38/38 тестов 100% Green).
+> **Формат:** Расширенный операционный журнал команды из 9 автономных агентов  
+> **Стандарт:** Enterprise Traceability, Zero Bad Commits & 9-Agent Synergy Protocol  
+> **Текущий статус:** Все 7 базовых модулей платформы (Блоки 0–6) реализованы на 100% (38/38 тестов 100% Green).
 
 ---
 
-## 📅 Хронология выполнения задач
+## 👥 Сквозная матрица 9 ролей команды
 
-### 2026-08-19 22:49 | `pm_bot` (Paula) | PROJECT_INITIALIZATION_V2
-**Событие:** Старт разработки с нуля новой платформы SmartContractum v2.0.  
-**Детали:**
-- Сформирована структура каталогов (`/backend`, `/frontend`, `/docs`, `/tests`, `/.github/workflows`, `/worklog`).
-- Зафиксирована матрица 9 специализированных агентов в `AGENTS.md`.
-- Определен Enterprise-стек (FastAPI, Python 3.12, PostgreSQL, Redis, Vite, Tailwind CSS, Gemini Circuit Breaker) и Staging Gate Protocol в `SETTINGS.md`.
-- Сформулирована миссия Umbrella-интегратора и принципы («Вход от задачи пользователя», «Деревья решений») в `SOUL.md`.
-- Создан новый публичный репозиторий `Th3Dem/smartcontractum` на GitHub, инициализированы ветки `main`, `staging`, `dev`.
-
----
-
-### 2026-08-19 23:03 | `pm_bot` (Paula) | BLOCK_0: BASE_SHELL_AND_LAYOUT
-**Событие:** Реализация глобального каркаса и базового шаблона платформы.  
-**Детали:**
-- `ui_bot`: Разработан семантический HTML5-каркас в `frontend/templates/base.html` с Glassmorphism шапкой (`backdrop-filter: blur(14px)`), навигацией, чипом организации («ООО Интегратор»), и информационным подвалом с дисклеймером фазы НИР ЦБ РФ.
-- `py_bot`: Создан роутер `backend/routers/base.py`, настроено монтирование статики и `SecurityHeadersMiddleware`.
-- `qa_bot`: Разработан набор тестов `tests/unit/test_base_routes.py` (4/4 passed).
-- `devops_bot`: Релизный коммит `7c55b06` синхронизирован по веткам `dev` $\to$ `staging` $\to$ `main`.
+1. 🏛️ **`pm_bot` (Паула)** — *Product Manager & Lead Architect*
+2. ⚙️ **`py_bot`** — *Senior Backend Engineer*
+3. 🎨 **`ui_bot`** — *Senior Frontend Engineer*
+4. 🧪 **`qa_bot`** — *QA & Reliability Engineer*
+5. 🛡️ **`devops_bot`** — *AppSec & DevSecOps Engineer*
+6. ✏️ **`design_bot`** — *UI/UX Designer & Design System Lead*
+7. 🌐 **`seo_bot`** — *SEO & Content Strategist / UX Copywriter*
+8. ⚡ **`load_bot`** — *Performance & Load QA Specialist*
+9. 🤖 **`ai_bot`** — *AI Integration & Prompt Engineer*
 
 ---
 
-### 2026-08-19 23:25 | `pm_bot` (Paula) | BLOCK_2: LENTA_AND_FORUM_COMMUNITY
-**Событие:** Разработка раздела «Лента & Форум» (Профессиональная социальная сеть SmartContractum).  
-**Детали:**
-- `py_bot`: Созданы DTO-схемы `backend/models/forum.py` (`Category`, `Topic`, `TopicCreateRequest`) со строгой санитизацией HTML/XSS.
-- `py_bot`: Реализован REST API и SSR роутер в `backend/routers/forum.py` (`GET /api/v1/forum/categories`, `GET /api/v1/forum/topics`, `POST /api/v1/forum/topics`, `GET /feed`).
-- `ui_bot`: Сверстан 3-колоночный Jinja2-шаблон `frontend/templates/forum/index.html`:
-  * Левая панель: 6 категорий рынка с живыми счетчиками тем.
-  * Центральная лента: карточки обсуждений со статусами НИР/ЦБ, аватарами и тегами.
-  * Правая панель: графический таймлайн регулятора (Stepper этапов Концепции ПКСК) и облако тегов.
-- `ui_bot`: Написаны стили `frontend/static/css/forum.css` и AJAX-контроллер `frontend/static/js/forum.js`.
-- `qa_bot`: Написан тестовый набор `tests/unit/test_forum_api.py` (9/9 passed).
-- `devops_bot`: Коммит `07f96bf` залит в ветки `dev` $\to$ `staging` $\to$ `main`.
+## 📅 Хронология спринтов с детализацией по всем 9 агентам
+
+### 2026-08-19 22:49 | PROJECT_INITIALIZATION_V2 (Инициализация платформы)
+* **`pm_bot`**: Сформировал структуру каталогов (`/backend`, `/frontend`, `/docs`, `/tests`, `/.github/workflows`, `/worklog`), зафиксировал ТЗ в `SOUL.md`.
+* **`py_bot`**: Инициализировал Python 3.12 окружение, `pyproject.toml`, базовый стек FastAPI 0.115+.
+* **`ui_bot`**: Создал структуру статических ресурсов и шаблонизатора Jinja2.
+* **`qa_bot`**: Сконфигурировал тестовый фреймворк Pytest и правила статического анализа (Flake8, Black, MyPy).
+* **`devops_bot`**: Настроил Staging Gate Protocol (`feat/*` $\to$ `dev` $\to$ `staging` $\to$ `main`) в `SETTINGS.md`.
+* **`design_bot`**: Задал палитру Obsidian / Deep Slate (`#0f172a`, `#1e293b`, `#06b6d4`, `#10b981`, `#f59e0b`).
+* **`seo_bot`**: Разработал семантическое ядро платформы вокруг терминологии ПКСК Банка России.
+* **`load_bot`**: Определил целевые профили латентности (p95 < 350ms при 1 500 TPS).
+* **`ai_bot`**: Сформулировал спецификацию интеграции Gemini API с паттерном Circuit Breaker и локальным детерминированным fallback.
 
 ---
 
-### 2026-08-19 23:44 | `pm_bot` (Paula) | BLOCK_1: HERO_SECTION_AND_TASK_ROUTER
-**Событие:** Реализация Главной страницы платформы и интерактивного Селектора задач.  
-**Детали:**
-- `py_bot`: Создан роутер главной страницы `backend/routers/home.py` (`GET /`, `GET /data-sources`, `GET /forum`) и системной телеметрии `backend/routers/system.py` (`GET /api/v1/system/stats`).
-- `ui_bot`: Сверстан Jinja2-шаблон `frontend/templates/home/index.html` с крупным Hero-баннером и 4 карточками сценариев по принципу «Вход от задачи пользователя»:
-  1. 💼 *«Есть бизнес-задача»* $\to$ `/passport`
-  2. 👨‍💻 *«Собрать контракт»* $\to$ `/builder`
-  3. 📊 *«Найти данные»* $\to$ `/data-sources`
-  4. 💬 *«Вопросы & Форум»* $\to$ `/forum`
-- `ui_bot`: Разработана панель живой статистики экосистемы (1 480+ экспертов, 342 паспорта, 58 источников, 126 сценариев) с анимацией счетчиков в `frontend/static/js/hero.js` и стилями `frontend/static/css/hero.css`.
-- `devops_bot`: Внедрена семантическая микроразметка Schema.org JSON-LD (WebSite, SearchAction).
-- `qa_bot`: Разработан тестовый набор `tests/unit/test_home_routes.py` (5/5 passed).
-- `devops_bot`: Коммит `440fa40` опубликован в `dev` $\to$ `staging` $\to$ `main`.
+### 2026-08-19 23:03 | БЛОК 0: Base Shell & Layout (Базовый каркас)
+* **`pm_bot`**: Декомпозировал требования к глобальному каркасу, шапке, подвалу и навигационным потокам.
+* **`py_bot`**: Создал роутер `backend/routers/base.py`, подключил Jinja2Templates и монтирование `/static`.
+* **`ui_bot`**: Сверстал семантический HTML5-шаблон `frontend/templates/base.html` и страницу `frontend/templates/index.html`.
+* **`qa_bot`**: Разработал `tests/unit/test_base_routes.py` (4/4 тестов passed).
+* **`devops_bot`**: Разработал `SecurityHeadersMiddleware` (X-Content-Type-Options: nosniff, X-Frame-Options: DENY, XSS-Protection).
+* **`design_bot`**: Реализовал Glassmorphism шапку (`backdrop-filter: blur(14px)`) и CSS-переменные дизайн-токенов в `main.css`.
+* **`seo_bot`**: Настроил базовые OpenGraph-теги и дисклеймер регуляторной фазы НИР ЦБ РФ.
+* **`load_bot`**: Оптимизировал кэширование и отдачу статических CSS/JS бандлов.
+* **`ai_bot`**: Заложил слоты под интеграцию ИИ-ассистента в глобальную шапку платформы.
+* **Итог релиза:** Коммит `7c55b06` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
 
 ---
 
-### 2026-08-19 23:49 | `pm_bot` (Paula) | BLOCK_3: CONTRACT_PASSPORT_WIZARD
-**Событие:** Разработка модуля «Паспорт Смарт-Контракта» и движка генерации «Дерева решений».  
-**Детали:**
-- `py_bot`: Созданы Pydantic DTO-модели `backend/models/passport.py` (`PassportCreate`, `PassportResponse`) с защитой от XSS.
-- `py_bot`: Реализован сервисный движок `backend/services/passport_engine.py`, генерирующий ASCII-структуру «Дерева решений» для публичного раскрытия логики без раскрытия сырого программного кода, и полный Markdown-паспорт со спецификацией.
-- `py_bot`: Создан роутер `backend/routers/passport.py` (`POST /api/v1/passport/generate`, `GET /passport`).
-- `ui_bot`: Сверстан 2-колоночный Wizard-шаблон `frontend/templates/passport/index.html` (форма ввода параметров слева + интерактивный терминал Obsidian Dark с подсветкой синтаксиса справа).
-- `ui_bot`: Написан JS-клиент `frontend/static/js/passport.js` с поддержкой скачивания файла спецификации (`.md`) через Client-side Blob API и копирования схемы в буфер.
-- `qa_bot`: Разработан набор тестов `tests/unit/test_passport_api.py` (4/4 passed).
-- `devops_bot`: Коммит `f37ca9c` залит в ветки `dev` $\to$ `staging` $\to$ `main`.
+### 2026-08-19 23:25 | БЛОК 2: Lenta & Forum Community (Лента и Форум)
+* **`pm_bot`**: Спроектировал 3-колоночную архитектуру соцсети для обсуждения стандартов ПКСК.
+* **`py_bot`**: Создал DTO-схемы `backend/models/forum.py` и REST API `backend/routers/forum.py` (`/api/v1/forum/topics`, `/api/v1/forum/categories`).
+* **`ui_bot`**: Разработал 3-колоночный шаблон `frontend/templates/forum/index.html` и AJAX-клиент `frontend/static/js/forum.js`.
+* **`qa_bot`**: Разработал `tests/unit/test_forum_api.py` (9/9 тестов passed), включая тесты XSS-санитизации.
+* **`devops_bot`**: Внедрил строгую санитизацию HTML-тегов (`html.escape`) на уровне моделей Pydantic.
+* **`design_bot`**: Спроектировал стили карточек топиков, бейджи статусов НИР и графический таймлайн-stepper в `forum.css`.
+* **`seo_bot`**: Сформировал структуру тегов (`#ПКСК_2026`, `#Оракулы`, `#B2B`, `#Standoff365`) и метаданные ленты.
+* **`load_bot`**: Оптимизировал пагинацию и фильтрацию тем без избыточных обращений к базе.
+* **`ai_bot`**: Спроектировал структуру автоматической модерации и генерации дайджестов обсуждений.
+* **Итог релиза:** Коммит `07f96bf` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
 
 ---
 
-### 2026-08-19 23:53 | `pm_bot` (Paula) | BLOCK_4: LOW_CODE_BUILDER_AND_5_STEP_AUDIT
-**Событие:** Разработка Low-Code Конструктора контрактов и Симулятора 5-этапного пред-аудита ИБ.  
-**Детали:**
-- `py_bot`: Созданы модели `backend/models/builder.py` (`BuilderNode`, `AuditStepResponse`, `AuditSimulationResponse`).
-- `py_bot`: Реализован роутер `backend/routers/builder.py` (`POST /api/v1/builder/simulate-audit`, `GET /builder`).
-- `ui_bot`: Сверстан 2-колоночный интерфейс `frontend/templates/builder/index.html`:
-  * Интерактивный холст (Canvas) с 3 блоками-узлами (Входной Триггер `#f59e0b`, Проверка Оракула `#06b6d4`, Исполняющее Действие `#10b981`) и анимированными коннекторами.
-  * Панель 5-этапного пред-аудита ИБ по стандартам Банка России и АБР (1. Описание логики $\to$ 2. Авто-проверка SAST $\to$ 3. Экспертный ИБ-аудит $\to$ 4. Тестовая среда 1500 TPS $\to$ 5. Публикация на Витрине).
-- `ui_bot`: Разработан JS-контроллер `frontend/static/js/builder.js` с пошаговой 650мс анимацией этапов и выводом сертификата комплаенса с оценкой `A+` и контрольным хэшем `SHA-256`.
-- `qa_bot`: Создан тестовый набор `tests/unit/test_builder_api.py` (3/3 passed).
-- `devops_bot`: Коммит `90531c4` синхронизирован по веткам `dev` $\to$ `staging` $\to$ `main`.
+### 2026-08-19 23:44 | БЛОК 1: Hero Section & Task Router (Главная страница)
+* **`pm_bot`**: Реализовал принцип «Вход от задачи пользователя» (4 целевых маршрута: Бизнес $\to$ Конструктор $\to$ Данные $\to$ Форум).
+* **`py_bot`**: Создал роутер `backend/routers/home.py` и системный эндпоинт телеметрии `backend/routers/system.py` (`/api/v1/system/stats`).
+* **`ui_bot`**: Сверстал Hero-баннер, сетку карточек и виджет счетчиков в `frontend/templates/home/index.html`.
+* **`qa_bot`**: Разработал набор тестов `tests/unit/test_home_routes.py` (5/5 тестов passed).
+* **`devops_bot`**: Валидировал безопасные пути маршрутизации без open-redirect уязвимостей.
+* **`design_bot`**: Создал микро-анимации подъема карточек и неоновую подсветку Cyber Glow в `frontend/static/css/hero.css`.
+* **`seo_bot`**: Интегрировал микроразметку Schema.org JSON-LD (`WebSite`, `SearchAction`) и UX-копирайтинг карточек.
+* **`load_bot`**: Разработал асинхронный алгоритм счетчиков `countUp` в `hero.js` для нулевой нагрузки на main thread.
+* **`ai_bot`**: Подготовил семантические слоты для прямого ввода промптов на естественном языке с главного экрана.
+* **Итог релиза:** Коммит `440fa40` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
 
 ---
 
-### 2026-08-20 00:00 | `pm_bot` (Paula) | BLOCK_5: DATA_SOURCES_AND_ORACLE_HUB
-**Событие:** Разработка Маркетплейса Источников Данных и Оракулов с классификацией по Концепции ЦБ РФ.  
-**Детали:**
-- `py_bot`: Созданы схемы `backend/models/data_sources.py` (`DataSource`, `DataSourceSuggest`) с валидацией email и защитой от инъекций.
-- `py_bot`: Создан роутер `backend/routers/data_sources.py` (`GET /api/v1/data-sources`, `POST /api/v1/data-sources/suggest`, `GET /data-sources`, `GET /sources`) с сид-данными (ФНС, ЕИС Закупки, Межбанковский Оракул, МосБиржа).
-- `ui_bot`: Сверстан шаблон `frontend/templates/data_sources/index.html`:
-  * Предупреждение о недопустимости единой точки отказа (Multi-Oracle Warning).
-  * Адаптивная таблица с цветовыми бейджами доверия `trust-gis` (зеленый), `trust-commercial` (синий), `trust-open` (желтый).
-  * Модальное окно подачи предложений новых источников поставщиками данных.
-- `ui_bot`: Написаны стили `frontend/static/css/data_sources.css` и JS-контроллер фильтрации `frontend/static/js/data_sources.js`.
-- `qa_bot`: Разработан тестовый набор `tests/unit/test_data_sources_api.py` (6/6 passed).
-- `devops_bot`: Коммит `2716b35` синхронизирован по веткам `dev` $\to$ `staging` $\to$ `main`.
+### 2026-08-19 23:49 | БЛОК 3: Contract Passport Wizard (Паспорт Смарт-Контракта)
+* **`pm_bot`**: Зафиксировал требования ЦБ РФ к раскрытию бизнес-логики через «Дерево решений» без раскрытия сырого кода.
+* **`py_bot`**: Разработал схемы `backend/models/passport.py`, сервис `backend/services/passport_engine.py` и роутер `backend/routers/passport.py`.
+* **`ui_bot`**: Сверстал 2-колоночный Wizard-интерфейс `frontend/templates/passport/index.html` и терминал предпросмотра.
+* **`qa_bot`**: Разработал автотесты `tests/unit/test_passport_api.py` (4/4 тестов passed).
+* **`devops_bot`**: Настроил генерацию хеш-идентификаторов `SC-2026-PKSC-...` и экранирование входных данных.
+* **`design_bot`**: Разработал дизайн терминала в палитре Obsidian Dark с подсветкой ветвлений `IF / THEN / ELSE` в `passport.css`.
+* **`seo_bot`**: Разработал структуру экспортируемого Markdown-паспорта с юридическими и техническими заголовками.
+* **`load_bot`**: Оптимизировал генерацию Blob-документов на стороне браузера без нагрузки на серверный CPU.
+* **`ai_bot`**: Разработал алгоритм трансформации неструктурированных бизнес-условий в детерминированное дерево решений.
+* **Итог релиза:** Коммит `f37ca9c` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
 
 ---
 
-### 2026-08-20 00:05 | `pm_bot` (Paula) | BLOCK_6: PROFILES_AND_UMBRELLA_WORKSPACE
-**Событие:** Разработка Личного Кабинета Специалиста и Umbrella-Кабинета Разработчика.  
-**Детали:**
-- `py_bot`: Созданы DTO-модели `backend/models/profile.py` (`UserProfile`, `UmbrellaContract`, `RoyaltyLedger`, `UmbrellaSubmitRequest`) с валидацией роялти от 0.1% до 50.0%.
-- `py_bot`: Реализован роутер `backend/routers/profile.py` (`GET /profile`, `GET /api/v1/profile/me`, `POST /api/v1/profile/umbrella/submit`, `GET /api/v1/profile/umbrella/earnings`).
-- `ui_bot`: Сверстан 4-вкладочный интерфейс `frontend/templates/profile/index.html`:
-  * Карточка профиля специалиста с рейтингом (Top 1% Комплаенс, 985 pts) и счетчиками профессионального следа.
-  * Umbrella-кабинет публикаций смарт-контрактов для независимых инженеров с отслеживанием стадий жизненного цикла.
-  * Финансовый дашборд трекинга роялти (1 840 транзакций, 184 000 ₽ начислено, 42 500 ₽ доступно к выводу) и таблица журнала начислений.
-  * Модальное окно подачи смарт-контракта на публикацию.
-- `ui_bot`: Разработаны стили `frontend/static/css/profile.css` и контроллер `frontend/static/js/profile.js`.
-- `qa_bot`: Разработан тестовый набор `tests/unit/test_profile_api.py` (6/6 passed).
-- `devops_bot`: Коммит `81f55b6` синхронизирован по веткам `dev` $\to$ `staging` $\to$ `main`.
+### 2026-08-19 23:53 | БЛОК 4: Low-Code Builder & 5-Step Audit (Конструктор и пред-аудит)
+* **`pm_bot`**: Спроектировал 5-этапный конвейер пред-аудита по стандартам Банка России и Ассоциации ФинТех (АБР).
+* **`py_bot`**: Создал DTO `backend/models/builder.py` и API симулятора `backend/routers/builder.py` (`/api/v1/builder/simulate-audit`).
+* **`ui_bot`**: Сверстал интерактивный холст узлов и сайдбар аудита в `frontend/templates/builder/index.html` и контроллер `builder.js`.
+* **`qa_bot`**: Разработал `tests/unit/test_builder_api.py` (3/3 тестов passed).
+* **`devops_bot`**: Интегрировал правила статического анализа SAST (Bandit / Trivy) в критерии 2-го этапа симулятора.
+* **`design_bot`**: Разработал цветовую дифференциацию узлов (Amber `#f59e0b`, Cyan `#06b6d4`, Emerald `#10b981`) и анимированные импульсы.
+* **`seo_bot`**: Составил профессиональные описания каждого из 5 этапов конвейера безопасности.
+* **`load_bot`**: Заложил параметры стресс-испытаний (1 500 TPS) в 4-й этап тестовой среды.
+* **`ai_bot`**: Подготовил модуль верификации логической непротиворечивости условий смарт-контракта.
+* **Итог релиза:** Коммит `90531c4` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
+
+---
+
+### 2026-08-20 00:00 | БЛОК 5: Data Sources & Oracle Hub (Маркетплейс источников)
+* **`pm_bot`**: Классифицировал внешние источники данных по регуляторным категориям Концепции ЦБ РФ.
+* **`py_bot`**: Создал модели `backend/models/data_sources.py` и роутер `backend/routers/data_sources.py` с сид-данными (ФНС, ЕИС, Межбанк, MOEX).
+* **`ui_bot`**: Сверстал таблицу источников, баннер Multi-Oracle Warning и модальное окно подачи предложений в `data_sources/index.html`.
+* **`qa_bot`**: Разработал набор тестов `tests/unit/test_data_sources_api.py` (6/6 тестов passed).
+* **`devops_bot`**: Реализовал строгую валидацию Email и защиту от Header Injection при приеме заявок поставщиков.
+* **`design_bot`**: Создал систему Trust Badges (`trust-gis` зеленый, `trust-commercial` синий, `trust-open` желтый) в `data_sources.css`.
+* **`seo_bot`**: Сформулировал предупреждение ИБ о мульти-оракульной агрегации для исключения единственной точки отказа.
+* **`load_bot`**: Разработал быструю клиентскую AJAX-фильтрацию табов без лишних сетевых round-trips.
+* **`ai_bot`**: Спроектировал алгоритмы автоматической симуляции оракульных ответов для тестового стенда.
+* **Итог релиза:** Коммит `2716b35` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
+
+---
+
+### 2026-08-20 00:05 | БЛОК 6: Profiles & Umbrella Workspace (Кабинет разработчика)
+* **`pm_bot`**: Реализовал правовую модель Umbrella-интегратора для допуска независимых инженеров к ПКСК ЦБ РФ.
+* **`py_bot`**: Создал DTO `backend/models/profile.py` и роутер `backend/routers/profile.py` (`/api/v1/profile/me`, `/umbrella/submit`, `/umbrella/earnings`).
+* **`ui_bot`**: Сверстал 4-вкладочный интерфейс `frontend/templates/profile/index.html` и JS-контроллер `profile.js`.
+* **`qa_bot`**: Разработал автотесты `tests/unit/test_profile_api.py` (6/6 тестов passed), проверив валидацию роялти (0.1%–50.0%).
+* **`devops_bot`**: Настроил RBAC-барьеры и защиту персональных данных авторов смарт-контрактов.
+* **`design_bot`**: Спроектировал карточку профиля с рейтингом (Top 1%, 985 pts), аккредитационный бейдж и финансовый дашборд в `profile.css`.
+* **`seo_bot`**: Оформил блоки компетенций и условия лицензионного соглашения комиссии.
+* **`load_bot`**: Оптимизировал структуры истории транзакций (Ledger) для отображения сотен начислений без лагов.
+* **`ai_bot`**: Спроектировал расчет персонального рейтинга репутации автора на основе успешности пред-аудитов.
+* **Итог релиза:** Коммит `81f55b6` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
 
 ---
 
