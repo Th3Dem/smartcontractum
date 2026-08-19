@@ -237,24 +237,21 @@
     box-shadow: 0 0 8px #6188ff;
 }
 
-/* 6 High-End Glassmorphic Facets with Cryptographic Cipher Data (200px size -> 100px translation) */
+/* 6 High-End Pure Glassmorphic Hologram Facets (200px size -> 100px translation) */
 .cube-facet {
     position: absolute;
     width: 200px;
     height: 200px;
-    background: rgba(13, 20, 36, 0.45);
-    border: 1.5px solid rgba(56, 97, 251, 0.48);
+    background: rgba(13, 20, 36, 0.4);
+    border: 1.5px solid rgba(56, 97, 251, 0.45);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    box-shadow: inset 0 0 24px rgba(56, 97, 251, 0.22), 0 0 20px rgba(56, 97, 251, 0.15);
+    box-shadow: inset 0 0 24px rgba(56, 97, 251, 0.2), 0 0 20px rgba(56, 97, 251, 0.12);
     border-radius: 16px;
     overflow: hidden;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
-    padding: 14px;
-    box-sizing: border-box;
 }
 
 .facet-mesh {
@@ -264,45 +261,7 @@
         linear-gradient(to right, rgba(56, 97, 251, 0.12) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(56, 97, 251, 0.12) 1px, transparent 1px);
     background-size: 25px 25px;
-    opacity: 0.5;
-}
-
-.facet-code-snippet {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    text-align: left;
-    pointer-events: none;
-}
-
-.code-line-hi {
-    color: #38bdf8;
-    font-weight: 700;
-    font-size: 0.72rem;
-    text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
-}
-
-.code-line-dim {
-    color: #808a9d;
-    font-size: 0.66rem;
-}
-
-.code-line-ok {
-    color: #16c784;
-    font-weight: 700;
-    font-size: 0.64rem;
-    letter-spacing: 0.06em;
-}
-
-.facet-center-glyph {
-    position: relative;
-    z-index: 2;
-    font-size: 1.8rem;
-    color: rgba(56, 189, 248, 0.7);
-    margin: auto;
+    opacity: 0.55;
 }
 
 .corner-dot {
