@@ -417,10 +417,16 @@
     font-weight: 500;
     color: #cbd5e1;
     line-height: 1.65;
-    max-width: 820px;
+    max-width: 860px;
     margin: 0 auto;
     text-align: center;
     text-shadow: 0 2px 16px rgba(0, 0, 0, 0.95);
+    text-wrap: balance;
+}
+
+.text-nowrap {
+    white-space: nowrap;
+    display: inline;
 }
 
 /* Scroll Cue Downward Indicator */

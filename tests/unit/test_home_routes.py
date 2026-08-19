@@ -27,7 +27,8 @@ def test_home_page_returns_200_and_html() -> None:
     assert "Здесь рождаются" in html
     assert "смарт-контракты" in html
     assert "Место, где бизнес-задачи встречаются" in html
-    assert "ПКСК Банка России" in html
+    assert "Банка&nbsp;России" in html
+    assert "ПКСК" in html
     assert "SmartContractum" in html
 
 
