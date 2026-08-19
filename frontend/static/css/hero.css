@@ -259,16 +259,16 @@
     position: absolute;
     width: 200px;
     height: 200px;
-    background: rgba(13, 20, 36, 0.4);
+    background: rgba(13, 20, 36, 0.72);
     border: 1.5px solid rgba(56, 97, 251, 0.45);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: inset 0 0 24px rgba(56, 97, 251, 0.2), 0 0 20px rgba(56, 97, 251, 0.12);
+    box-shadow: inset 0 0 18px rgba(56, 97, 251, 0.2);
     border-radius: 16px;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    backface-visibility: hidden;
+    will-change: transform;
 }
 
 .facet-mesh {

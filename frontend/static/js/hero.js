@@ -1,6 +1,6 @@
 /**
  * SmartContractum — Block 1 Hero Section & Interactive Router Controller
- * Dynamic Async Stats Fetcher, Real-Time 3D Hologram Physics & Particle Engine
+ * High-Performance Lightweight 3D Physics Engine & GPU-Optimized Canvas
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -100,8 +100,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. Global 3D Spatial Hologram Physics & Mouse Tracking
+    // 3. Performance State & Visibility Controller
+    let isHeroVisible = true;
+    const heroBanner = document.getElementById('heroBanner') || document.querySelector('.hero-3d-banner');
+
+    if ('IntersectionObserver' in window && heroBanner) {
+        const observer = new IntersectionObserver((entries) => {
+            isHeroVisible = entries[0].isIntersecting;
+        }, { threshold: 0.05 });
+        observer.observe(heroBanner);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+        isHeroVisible = document.visibilityState === 'visible';
+    });
+
+    // 4. Lightweight 3D Spatial Hologram Physics & Mouse Tracking
     const cube = document.getElementById('crystal3dCube') || document.getElementById('cube3dObject');
+    const matrix = document.getElementById('hero3dBgMatrix');
+
     let globalMouseX = window.innerWidth / 2;
     let globalMouseY = window.innerHeight / 2;
 
@@ -115,17 +132,25 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentTransY = 0;
     let idleClock = 0;
 
+    let pointerRafPending = false;
+
     function onPointerMove(clientX, clientY) {
-        globalMouseX = clientX;
-        globalMouseY = clientY;
+        if (pointerRafPending) return;
+        pointerRafPending = true;
 
-        const normX = (clientX / window.innerWidth - 0.5) * 2;   // -1.0 to 1.0
-        const normY = (clientY / window.innerHeight - 0.5) * 2;  // -1.0 to 1.0
+        requestAnimationFrame(() => {
+            globalMouseX = clientX;
+            globalMouseY = clientY;
 
-        targetRotX = -18 - normY * 38;
-        targetRotY = 32 + normX * 52;
-        targetTransX = normX * 18;
-        targetTransY = normY * 12;
+            const normX = (clientX / window.innerWidth - 0.5) * 2;
+            const normY = (clientY / window.innerHeight - 0.5) * 2;
+
+            targetRotX = -18 - normY * 30;
+            targetRotY = 32 + normX * 42;
+            targetTransX = normX * 14;
+            targetTransY = normY * 10;
+            pointerRafPending = false;
+        });
     }
 
     window.addEventListener('mousemove', (e) => {
@@ -138,10 +163,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, { passive: true });
 
-    if (cube) {
-        function render3DPhysics() {
-            idleClock += 0.025;
-            const idleOffset = Math.sin(idleClock) * 4;
+    function render3DPhysics() {
+        if (isHeroVisible) {
+            idleClock += 0.02;
+            const idleOffset = Math.sin(idleClock) * 3;
 
             // Smooth Lerp interpolation
             currentRotX += (targetRotX - currentRotX) * 0.08;
@@ -149,48 +174,50 @@ document.addEventListener('DOMContentLoaded', () => {
             currentTransX += (targetTransX - currentTransX) * 0.07;
             currentTransY += (targetTransY - currentTransY) * 0.07;
 
-            cube.style.transform = `translate3d(${currentTransX.toFixed(2)}px, ${(currentTransY + idleOffset).toFixed(2)}px, 0) rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg)`;
-
-            const matrix = document.getElementById('hero3dBgMatrix');
-            if (matrix) {
-                matrix.style.transform = `translate(calc(-50% + ${(currentTransX * 0.4).toFixed(1)}px), calc(-50% + ${(currentTransY * 0.4).toFixed(1)}px))`;
+            if (cube) {
+                cube.style.transform = `translate3d(${currentTransX.toFixed(1)}px, ${(currentTransY + idleOffset).toFixed(1)}px, 0) rotateX(${currentRotX.toFixed(1)}deg) rotateY(${currentRotY.toFixed(1)}deg)`;
             }
 
-            requestAnimationFrame(render3DPhysics);
+            if (matrix) {
+                matrix.style.transform = `translate(calc(-50% + ${(currentTransX * 0.3).toFixed(1)}px), calc(-50% + ${(currentTransY * 0.3).toFixed(1)}px))`;
+            }
         }
 
+        requestAnimationFrame(render3DPhysics);
+    }
+
+    if (cube || matrix) {
         render3DPhysics();
     }
 
-    // 4. Interactive Cosmic Shards & Celestial Quantum Particle Engine
+    // 5. Ultra-Lightweight GPU Canvas Particle Engine (Zero shadowBlur overhead)
     const canvas = document.getElementById('cosmicShardsCanvas');
     if (canvas) {
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
         let width = 0;
         let height = 0;
         let shards = [];
-        const SHARDS_COUNT = 55;
+        const isMobile = window.innerWidth < 768;
+        const SHARDS_COUNT = isMobile ? 16 : 28;
 
-        const colors = [
-            { r: 56, g: 97, b: 251 },   // CMC Royal Blue
-            { r: 97, g: 136, b: 255 },  // Electric Cyan
-            { r: 22, g: 199, b: 132 },  // Mint Green
-            { r: 246, g: 184, b: 63 },  // Warm Gold
-            { r: 255, g: 255, b: 255 }   // Pure White
+        const colorPalettes = [
+            'rgba(56, 97, 251, ',   // CMC Blue
+            'rgba(56, 189, 248, ',  // Electric Cyan
+            'rgba(22, 199, 132, ',  // Mint
+            'rgba(246, 184, 63, ',  // Gold
+            'rgba(255, 255, 255, '  // White
         ];
 
         function resizeCanvas() {
-            const heroBanner = document.getElementById('heroBanner') || document.querySelector('.hero-3d-banner');
             if (!heroBanner || !canvas) return;
             const rect = heroBanner.getBoundingClientRect();
             width = rect.width;
             height = rect.height;
-            canvas.width = width * window.devicePixelRatio;
-            canvas.height = height * window.devicePixelRatio;
-            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            canvas.width = width;
+            canvas.height = height;
         }
 
-        class CosmicShard {
+        class FastCosmicShard {
             constructor() {
                 this.reset(true);
             }
@@ -198,14 +225,14 @@ document.addEventListener('DOMContentLoaded', () => {
             reset(initial = false) {
                 this.x = initial ? Math.random() * (width || 800) : (Math.random() > 0.5 ? 0 : width);
                 this.y = Math.random() * (height || 500);
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 5 + 2;
-                this.color = colors[Math.floor(Math.random() * colors.length)];
-                this.alpha = Math.random() * 0.5 + 0.2;
-                this.angle = Math.random() * Math.PI * 2;
-                this.angularVelocity = (Math.random() - 0.5) * 0.03;
-                this.type = Math.floor(Math.random() * 3);
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.size = Math.random() * 4 + 2;
+                this.colorPrefix = colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
+                this.alpha = (Math.random() * 0.35 + 0.15).toFixed(2);
+                this.angle = Math.random() * 6.28;
+                this.angularVelocity = (Math.random() - 0.5) * 0.02;
+                this.type = Math.floor(Math.random() * 2); // Diamond or Circle
             }
 
             update(localMouseX, localMouseY) {
@@ -213,21 +240,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.y += this.vy;
                 this.angle += this.angularVelocity;
 
-                // Subtle cursor attraction
+                // Ultra-fast squared distance check (avoids expensive Math.sqrt)
                 const dx = localMouseX - this.x;
                 const dy = localMouseY - this.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < 180 && dist > 10) {
-                    const force = (180 - dist) / 180 * 0.08;
-                    this.vx += (dx / dist) * force;
-                    this.vy += (dy / dist) * force;
+                const distSq = dx * dx + dy * dy;
+
+                if (distSq < 28900 && distSq > 100) { // 170px radius
+                    const invDist = 1 / Math.sqrt(distSq);
+                    const force = (170 - (1 / invDist)) * 0.0004;
+                    this.vx += dx * force;
+                    this.vy += dy * force;
                 }
 
-                // Damping
-                this.vx *= 0.98;
-                this.vy *= 0.98;
+                this.vx *= 0.985;
+                this.vy *= 0.985;
 
-                if (this.x < -20 || this.x > width + 20 || this.y < -20 || this.y > height + 20) {
+                if (this.x < -15 || this.x > width + 15 || this.y < -15 || this.y > height + 15) {
                     this.reset(false);
                 }
             }
@@ -236,25 +264,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.save();
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.angle);
-                ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.alpha})`;
-                ctx.shadowColor = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, 0.5)`;
-                ctx.shadowBlur = 8;
+                ctx.fillStyle = this.colorPrefix + this.alpha + ')';
 
                 ctx.beginPath();
                 if (this.type === 0) {
-                    // Diamond
+                    // Optimized Fast Diamond
                     ctx.moveTo(0, -this.size);
-                    ctx.lineTo(this.size * 0.7, 0);
+                    ctx.lineTo(this.size * 0.65, 0);
                     ctx.lineTo(0, this.size);
-                    ctx.lineTo(-this.size * 0.7, 0);
-                } else if (this.type === 1) {
-                    // Triangle
-                    ctx.moveTo(0, -this.size);
-                    ctx.lineTo(this.size * 0.86, this.size * 0.5);
-                    ctx.lineTo(-this.size * 0.86, this.size * 0.5);
+                    ctx.lineTo(-this.size * 0.65, 0);
                 } else {
-                    // Micro Circle
-                    ctx.arc(0, 0, this.size * 0.5, 0, Math.PI * 2);
+                    // Fast Arc
+                    ctx.arc(0, 0, this.size * 0.45, 0, 6.28);
                 }
                 ctx.closePath();
                 ctx.fill();
@@ -263,28 +284,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         resizeCanvas();
-        window.addEventListener('resize', resizeCanvas, { passive: true });
+
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(resizeCanvas, 150);
+        }, { passive: true });
 
         for (let i = 0; i < SHARDS_COUNT; i++) {
-            shards.push(new CosmicShard());
+            shards.push(new FastCosmicShard());
         }
 
         function animateShards() {
-            ctx.clearRect(0, 0, width, height);
+            if (isHeroVisible && width > 0 && height > 0) {
+                ctx.clearRect(0, 0, width, height);
 
-            const heroBanner = document.getElementById('heroBanner');
-            let localMouseX = globalMouseX;
-            let localMouseY = globalMouseY;
-            if (heroBanner) {
-                const rect = heroBanner.getBoundingClientRect();
-                localMouseX = globalMouseX - rect.left;
-                localMouseY = globalMouseY - rect.top;
+                let localMouseX = globalMouseX;
+                let localMouseY = globalMouseY;
+
+                if (heroBanner) {
+                    const rect = heroBanner.getBoundingClientRect();
+                    localMouseX = globalMouseX - rect.left;
+                    localMouseY = globalMouseY - rect.top;
+                }
+
+                for (let i = 0; i < shards.length; i++) {
+                    shards[i].update(localMouseX, localMouseY);
+                    shards[i].draw();
+                }
             }
-
-            shards.forEach((shard) => {
-                shard.update(localMouseX, localMouseY);
-                shard.draw();
-            });
 
             requestAnimationFrame(animateShards);
         }
