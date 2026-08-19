@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="SmartContractum — Профессиональная экосистема и технологический мост к ПКСК Банка России.">
-    <meta name="keywords" content="ПКСК, Банк России, смарт-контракты, ЦФА, эскроу, оракулы, блокчейн, конструктор смарт-контрактов">
+    <meta name="keywords" content="ПКСК, Банк России, смарт-контракты, ЦФА, эскроу, оракулы, блокчейн, конструктор смарт-контрактов, роялти">
     <meta name="author" content="SmartContractum Umbrella-Dev">
 
     <!-- OpenGraph Metadata -->
@@ -74,16 +74,78 @@
                             <span class="nav-text">Источники Данных</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="/profile" class="nav-link {% if active_nav == 'profile' %}active{% endif %}">
+                            <span class="nav-icon">👤</span>
+                            <span class="nav-text">Кабинет & Роялти</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
 
-            <!-- User Bar (Чип организации / разработчика) -->
+            <!-- User Profile Dropdown & Login Bar -->
             <div class="header-user-bar">
-                <div class="user-chip" title="Статус подключения к контуру ПКСК">
-                    <span class="network-pulse" aria-hidden="true"></span>
-                    <div class="user-meta">
-                        <span class="user-org-name">{{ user_org|default("ООО Интегратор (Umbrella-Dev)") }}</span>
-                        <span class="user-role-label">Контур ПКСК Активен</span>
+                <div class="user-dropdown-wrapper" id="userDropdownWrapper">
+                    <button type="button" class="user-profile-btn" id="btnUserDropdown" aria-expanded="false" aria-label="Меню профиля">
+                        <div class="user-avatar-small">
+                            <span>АВ</span>
+                            <span class="avatar-online-dot"></span>
+                        </div>
+                        <div class="user-meta-text">
+                            <span class="user-name-title">Александр В.</span>
+                            <span class="user-org-sub">{{ user_org|default("ООО Интегратор") }}</span>
+                        </div>
+                        <span class="dropdown-chevron">▼</span>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div class="user-dropdown-menu" id="userDropdownMenu" style="display: none;">
+                        <div class="dropdown-header-box">
+                            <div class="dropdown-user-name">Александр Волков</div>
+                            <div class="dropdown-user-role">Senior Smart Contract Architect</div>
+                            <div class="dropdown-status-pill">
+                                <span class="pulse-emerald"></span>
+                                <span>Аккредитован ЦБ РФ</span>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-balance-box">
+                            <span class="balance-title">Баланс роялти:</span>
+                            <span class="balance-amount">42 500 ₽</span>
+                        </div>
+
+                        <ul class="dropdown-menu-list">
+                            <li>
+                                <a href="/profile" class="dropdown-menu-link">
+                                    <span class="drop-icon">👤</span>
+                                    <span>Личный профиль</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/profile" class="dropdown-menu-link">
+                                    <span class="drop-icon">💼</span>
+                                    <span>Umbrella-Контракты</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/profile" class="dropdown-menu-link">
+                                    <span class="drop-icon">💰</span>
+                                    <span>Роялти и выплаты</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/passport" class="dropdown-menu-link">
+                                    <span class="drop-icon">📑</span>
+                                    <span>Мои Паспорта</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="dropdown-footer-box">
+                            <button type="button" class="btn-dropdown-switch-user" id="btnOpenAuthModal">
+                                <span>🔄 Сменить профиль / Вход</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -120,10 +182,11 @@
                 <div class="footer-col">
                     <h4 class="footer-heading">Инструменты</h4>
                     <ul class="footer-links">
+                        <li><a href="/profile" class="footer-link">Личный кабинет & Роялти</a></li>
                         <li><a href="/builder" class="footer-link">Конструктор «Дерево решений»</a></li>
                         <li><a href="/passport" class="footer-link">Паспорт смарт-контракта</a></li>
                         <li><a href="/sources" class="footer-link">Реестр доверенных оракулов</a></li>
-                        <li><a href="/safe" class="footer-link">Криптографический Сейф</a></li>
+                        <li><a href="/feed" class="footer-link">Лента сообщества & Форум</a></li>
                     </ul>
                 </div>
 
@@ -136,9 +199,9 @@
                                 Концепция ПКСК ЦБ РФ (2026) ↗
                             </a>
                         </li>
-                        <li><a href="/docs" class="footer-link">База знаний и SDK</a></li>
-                        <li><a href="/compliance" class="footer-link">Стандарты аудита BI.ZONE / Standoff</a></li>
-                        <li><a href="/privacy" class="footer-link">Политика конфиденциальности</a></li>
+                        <li><a href="/profile" class="footer-link">Umbrella-лицензия комиссии</a></li>
+                        <li><a href="/feed" class="footer-link">Обсуждения стандартов АБР</a></li>
+                        <li><a href="/feed" class="footer-link">Политика безопасности и комплаенса</a></li>
                     </ul>
                 </div>
             </div>
@@ -154,6 +217,55 @@
             </div>
         </div>
     </footer>
+
+    <!-- ================================================================
+         GLOBAL MODAL: АВТОРИЗАЦИЯ & ВХОД В ЛИЧНЫЙ КАБИНЕТ
+    ================================================================= -->
+    <div class="modal-overlay" id="authModalOverlay" style="display: none;">
+        <div class="modal-dialog auth-modal-dialog">
+            <div class="modal-header">
+                <div class="modal-header-meta">
+                    <span class="modal-icon">🔐</span>
+                    <h3 class="modal-title">Вход в SmartContractum ID</h3>
+                </div>
+                <button type="button" class="btn-modal-close" id="btnCloseAuthModal">&times;</button>
+            </div>
+
+            <div class="auth-modal-body">
+                <p class="auth-subtext">Выберите способ безопасного входа в контур ПКСК Банка России:</p>
+                
+                <div class="auth-providers-list">
+                    <a href="/profile" class="auth-provider-btn esia-btn">
+                        <span class="provider-icon">🇷🇺</span>
+                        <div class="provider-meta">
+                            <span class="provider-title">Вход через Госуслуги (ЕСИА)</span>
+                            <span class="provider-hint">Для физлиц и квалифицированных инженеров</span>
+                        </div>
+                    </a>
+
+                    <a href="/profile" class="auth-provider-btn cert-btn">
+                        <span class="provider-icon">🛡️</span>
+                        <div class="provider-meta">
+                            <span class="provider-title">Квалифицированная ЭП (ГОСТ КЭП)</span>
+                            <span class="provider-hint">Для юридических лиц и операторов ПКСК</span>
+                        </div>
+                    </a>
+
+                    <a href="/profile" class="auth-provider-btn demo-btn">
+                        <span class="provider-icon">👨‍💻</span>
+                        <div class="provider-meta">
+                            <span class="provider-title">Демо-профиль: Александр Волков</span>
+                            <span class="provider-hint">Быстрый вход в Umbrella-кабинет разработчика</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" id="btnCancelAuth">Закрыть</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script src="/static/js/main.js" defer></script>

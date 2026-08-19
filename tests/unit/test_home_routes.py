@@ -25,8 +25,8 @@ def test_home_page_returns_200_and_html() -> None:
     assert "Официальный сбор обратной связи по Концепции ПКСК (до 30.09.2026)" in html
 
 
-def test_home_page_contains_all_four_task_routes() -> None:
-    """Verify all 4 core user scenario links exist in compiled HTML."""
+def test_home_page_contains_all_five_task_routes() -> None:
+    """Verify all core user scenario links (including Block 6 Profile) exist in compiled HTML."""
     response = client.get("/")
     assert response.status_code == 200
     html = response.text
@@ -50,6 +50,11 @@ def test_home_page_contains_all_four_task_routes() -> None:
     assert 'href="/forum"' in html
     assert "Вопросы" in html
     assert "Форум" in html
+
+    # Route 5: Личный Кабинет & Роялти -> Профиль (Block 6)
+    assert 'href="/profile"' in html
+    assert "Кабинет" in html
+    assert "Личный Кабинет & Umbrella-Dev" in html
 
 
 def test_home_page_contains_ecosystem_stats_counters() -> None:
@@ -79,7 +84,10 @@ def test_system_stats_api_endpoint() -> None:
         assert stats["data_sources_count"] > 0
         assert stats["verified_scenarios_count"] > 0
     else:
-        assert data.get("registered_experts", 0) > 0 or data.get("experts_count", 0) > 0
+        assert (
+            data.get("registered_experts", 0) > 0
+            or data.get("experts_count", 0) > 0
+        )
 
 
 def test_route_aliases_availability() -> None:
