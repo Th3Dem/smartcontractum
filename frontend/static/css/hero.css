@@ -553,6 +553,15 @@
     letter-spacing: -0.025em;
 }
 
+.hero-title-gradient-white {
+    background: linear-gradient(135deg, #ffffff 0%, #d8edff 28%, #38bdf8 68%, #6188ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    filter: drop-shadow(0 2px 16px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 24px rgba(56, 189, 248, 0.45));
+    letter-spacing: -0.025em;
+}
+
 .hero-description {
     font-size: 1.2rem;
     font-weight: 500;
