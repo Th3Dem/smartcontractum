@@ -760,19 +760,19 @@
 .pksc-connecting-line {
     position: absolute;
     top: 22px;
-    left: 12.5%;
-    right: 12.5%;
+    left: -12px;
+    right: -12px;
     height: 2px;
-    background: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.12) 3%, rgba(255, 255, 255, 0.12) 97%, transparent 100%);
     z-index: 1;
     border-radius: 2px;
     overflow: hidden;
 }
 
 .line-progress-fill {
-    width: 38%;
+    width: 44%;
     height: 100%;
-    background: linear-gradient(90deg, #10b981 0%, #38bdf8 60%, #f59e0b 100%);
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.2) 0%, #10b981 12%, #38bdf8 65%, #f59e0b 100%);
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
     border-radius: 2px;
     position: relative;
