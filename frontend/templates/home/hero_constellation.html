@@ -27,14 +27,9 @@
             <defs>
                 <!-- Neural Line Gradients -->
                 <linearGradient id="laserBeamGradCore" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.8"/>
-                    <stop offset="50%" stop-color="#6366f1" stop-opacity="0.6"/>
-                    <stop offset="100%" stop-color="#10b981" stop-opacity="0.8"/>
-                </linearGradient>
-
-                <linearGradient id="interNodeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.3"/>
-                    <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.3"/>
+                    <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.85"/>
+                    <stop offset="50%" stop-color="#6366f1" stop-opacity="0.65"/>
+                    <stop offset="100%" stop-color="#10b981" stop-opacity="0.85"/>
                 </linearGradient>
 
                 <!-- Glowing Filter -->
@@ -47,45 +42,22 @@
                 </filter>
             </defs>
 
-            <!-- Dynamic Lines will be inserted here by hero_constellation.js -->
-            <g id="svgInterNodeLines" class="svg-inter-lines"></g>
+            <!-- Dynamic Smooth Lines & Photons -->
             <g id="svgCoreLines" class="svg-core-lines"></g>
             <g id="svgPhotonsGroup" class="svg-photons-group"></g>
         </svg>
 
-        <!-- Rotating Orbit Rings Around Core -->
-        <div class="constellation-orbits-wrap" aria-hidden="true">
-            <div class="constellation-orbit-ring orbit-inner"></div>
-            <div class="constellation-orbit-ring orbit-middle"></div>
-            <div class="constellation-orbit-ring orbit-outer"></div>
-        </div>
-
-        <!-- 1.1 CENTRAL CORE NODE (SmartContractum Core) -->
-        <div class="constellation-core-node" id="constellationCore" tabindex="0" role="region" aria-label="Ядро Экосистемы SmartContractum">
+        <!-- 1.1 CENTRAL CORE NODE (Pure SmartContractum Text, Enlarged with Highlighted Glow Background) -->
+        <div class="constellation-core-node" id="constellationCore" tabindex="0" role="region" aria-label="SmartContractum">
             <div class="core-aura-pulse"></div>
             <div class="core-glass-body">
-                <div class="core-logo-badge">
-                    <svg class="core-logo-svg" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="18" cy="18" r="16" stroke="url(#coreGradientLogo)" stroke-width="2" stroke-dasharray="4 2"/>
-                        <path d="M12 18h12M18 12v12M14 14l8 8M22 14l-8 8" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round"/>
-                        <circle cx="18" cy="18" r="4" fill="#10b981"/>
-                        <defs>
-                            <linearGradient id="coreGradientLogo" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="#38bdf8"/>
-                                <stop offset="0.5" stop-color="#6366f1"/>
-                                <stop offset="1" stop-color="#10b981"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                </div>
                 <span class="core-brand-name">SmartContractum</span>
-                <span class="core-sub-badge">ПКСК Экосистема</span>
             </div>
         </div>
 
-        <!-- 1.2 SATELLITE NODES (6 Services and Entrances) -->
+        <!-- 1.2 SATELLITE NODES (6 Uniform-Size Equal Plaquettes Centered Symmetrically) -->
         <div class="constellation-satellites-container">
-            <!-- Left Orbital Column -->
+            <!-- Left Orbital Column (3 Cards) -->
             <div class="satellites-col satellites-col-left">
                 <!-- Node 1: Бизнес-задача -->
                 <a href="/passport" class="constellation-satellite-card node-amber" id="nodeCardPassport" data-node-id="1" data-accent="#f59e0b" data-analytics-event="hero_action_click" data-action-target="passport">
@@ -95,7 +67,7 @@
                     <div class="satellite-content">
                         <div class="satellite-header">
                             <h3 class="satellite-title">У меня есть бизнес-задача</h3>
-                            <span class="satellite-badge badge-amber">Паспорт решения</span>
+                            <span class="satellite-badge badge-amber">Паспорт</span>
                         </div>
                         <p class="satellite-desc">Нужен ли смарт-контракт, сценарий и паспорт решения.</p>
                     </div>
@@ -109,7 +81,7 @@
                     <div class="satellite-content">
                         <div class="satellite-header">
                             <h3 class="satellite-title">Ищу специалиста или услугу</h3>
-                            <span class="satellite-badge badge-violet">Подбор экспертов</span>
+                            <span class="satellite-badge badge-violet">Эксперты</span>
                         </div>
                         <p class="satellite-desc">Разработчики, эксперты, команды, аудиторы.</p>
                     </div>
@@ -123,14 +95,14 @@
                     <div class="satellite-content">
                         <div class="satellite-header">
                             <h3 class="satellite-title">Данные и оракулы</h3>
-                            <span class="satellite-badge badge-sky">Маркетплейс данных</span>
+                            <span class="satellite-badge badge-sky">Оракулы</span>
                         </div>
                         <p class="satellite-desc">Найти источник данных или предложить свои.</p>
                     </div>
                 </a>
             </div>
 
-            <!-- Right Orbital Column -->
+            <!-- Right Orbital Column (3 Cards) -->
             <div class="satellites-col satellites-col-right">
                 <!-- Node 2: Готовое решение -->
                 <a href="/solutions" class="constellation-satellite-card node-cyan" id="nodeCardSolutions" data-node-id="2" data-accent="#38bdf8" data-analytics-event="hero_action_click" data-action-target="solutions">
@@ -140,7 +112,7 @@
                     <div class="satellite-content">
                         <div class="satellite-header">
                             <h3 class="satellite-title">Ищу готовое решение</h3>
-                            <span class="satellite-badge badge-cyan">Каталог решений</span>
+                            <span class="satellite-badge badge-cyan">Каталог</span>
                         </div>
                         <p class="satellite-desc">Сценарии, типовые компоненты и готовые разработки.</p>
                     </div>
@@ -154,7 +126,7 @@
                     <div class="satellite-content">
                         <div class="satellite-header">
                             <h3 class="satellite-title">Я специалист и хочу участвовать</h3>
-                            <span class="satellite-badge badge-emerald">Вход для профи</span>
+                            <span class="satellite-badge badge-emerald">Профи</span>
                         </div>
                         <p class="satellite-desc">Проекты, рабочие группы, публикация разработок.</p>
                     </div>
@@ -168,7 +140,7 @@
                     <div class="satellite-content">
                         <div class="satellite-header">
                             <h3 class="satellite-title">Хочу разобраться в ПКСК</h3>
-                            <span class="satellite-badge badge-gold">База знаний</span>
+                            <span class="satellite-badge badge-gold">Знания</span>
                         </div>
                         <p class="satellite-desc">Знания, изменения, открытые вопросы и обучение.</p>
                     </div>

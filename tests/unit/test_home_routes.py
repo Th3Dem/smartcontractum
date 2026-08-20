@@ -184,7 +184,6 @@ def test_home_page_contains_constellation_graph_and_core() -> None:
     assert "constellationSvg" in html
     assert "constellationCore" in html
     assert "SmartContractum" in html
-    assert "ПКСК Экосистема" in html
 
     # Accessibility semantic list
     assert 'class="sr-only"' in html
