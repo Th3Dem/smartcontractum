@@ -1,5 +1,5 @@
 ﻿/**
- * SmartContractum — Circular Node Constellation with Slow Energy Waves
+ * SmartContractum — Volumetric 3D Waves & Node Constellation Controller
  * File: frontend/static/js/hero_constellation.js
  */
 
@@ -25,18 +25,18 @@ document.addEventListener('DOMContentLoaded', () => {
         ambientParticles.push({
             cardIndex: i % 6,
             progress: Math.random(),
-            speed: 0.002 + Math.random() * 0.002,
-            size: 2.2 + Math.random() * 1.5
+            speed: 0.0018 + Math.random() * 0.0015,
+            size: 2.2 + Math.random() * 1.2
         });
     }
 
-    // Active wave pulse streams (packets)
+    // Active wave pulse streams (volumetric packets)
     const wavePackets = [];
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
         wavePackets.push({
-            progress: i * 0.25,
-            speed: 0.004,
-            size: 4.5
+            progress: i * 0.2,
+            speed: 0.0042,
+            size: 4.8
         });
     }
 
@@ -72,20 +72,19 @@ document.addEventListener('DOMContentLoaded', () => {
             y: rect.top - containerRect.top + rect.height / 2
         };
 
-        // Determine closest edge point towards core center
         let anchorX = cardCenter.x;
         let anchorY = cardCenter.y;
 
-        if (cardCenter.x < coreCenter.x - 40) {
+        if (cardCenter.x < coreCenter.x - 60) {
             anchorX = rect.right - containerRect.left;
-        } else if (cardCenter.x > coreCenter.x + 40) {
+        } else if (cardCenter.x > coreCenter.x + 60) {
             anchorX = rect.left - containerRect.left;
         }
 
         if (cardCenter.y < coreCenter.y - 40) {
-            anchorY = rect.bottom - containerRect.top - 10;
+            anchorY = rect.bottom - containerRect.top - 12;
         } else if (cardCenter.y > coreCenter.y + 40) {
-            anchorY = rect.top - containerRect.top + 10;
+            anchorY = rect.top - containerRect.top + 12;
         }
 
         return { x: anchorX, y: anchorY, center: cardCenter };
@@ -100,10 +99,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let anchorX = coreCenter.x;
         let anchorY = coreCenter.y;
 
-        if (targetPos.x < coreCenter.x - 30) {
-            anchorX = coreRect.left - containerRect.left + 15;
-        } else if (targetPos.x > coreCenter.x + 30) {
-            anchorX = coreRect.right - containerRect.left - 15;
+        if (targetPos.x < coreCenter.x - 40) {
+            anchorX = coreRect.left - containerRect.left + 20;
+        } else if (targetPos.x > coreCenter.x + 40) {
+            anchorX = coreRect.right - containerRect.left - 20;
         }
 
         if (targetPos.y < coreCenter.y - 30) {
@@ -119,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.innerWidth <= 1080) return;
 
         ctx.clearRect(0, 0, width, height);
-        waveTime += 0.035;
+        waveTime += 0.032;
 
         const containerRect = container.getBoundingClientRect();
         const coreRect = core.getBoundingClientRect();
@@ -144,33 +143,33 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // 1. Draw Connection Lines and Slow Energy Waves
+        // 1. Draw Volumetric 3D Waves and Subtle Idle Wave Connections
         nodeDataList.forEach((node) => {
             const start = node.cardAnchor;
             const end = node.coreAnchor;
             const isHovered = node.isHovered;
             const anyHovered = (hoveredNodeId !== null) || isCoreHovered;
 
-            if (isHovered) {
-                // ACTIVE HOVER: Beautiful Slow Undulating Sine Plasma Wave to Center
-                const dx = end.x - start.x;
-                const dy = end.y - start.y;
-                const dist = Math.hypot(dx, dy);
-                const normalX = -dy / dist;
-                const normalY = dx / dist;
+            const dx = end.x - start.x;
+            const dy = end.y - start.y;
+            const dist = Math.hypot(dx, dy);
+            const normalX = -dy / dist;
+            const normalY = dx / dist;
+            const steps = 64;
 
-                // Main undulation wave
+            if (isHovered) {
+                // ==========================================================
+                // ACTIVE HOVER: Volumetric 3D Undulating Neon Plasma Wave
+                // ==========================================================
+
+                // Layer 1: Volumetric Deep Ambient Glow Underlay
                 ctx.beginPath();
-                const steps = 60;
                 for (let i = 0; i <= steps; i++) {
                     const t = i / steps;
                     const lx = start.x + dx * t;
                     const ly = start.y + dy * t;
-
-                    // Envelope: 0 at ends, max in middle
                     const envelope = Math.sin(t * Math.PI);
-                    // Slow undulating wave traveling from card (t=0) to center (t=1)
-                    const waveOffset = Math.sin(t * 8 - waveTime * 2.5) * (8 * envelope);
+                    const waveOffset = Math.sin(t * 8 - waveTime * 2.8) * (11 * envelope);
 
                     const px = lx + normalX * waveOffset;
                     const py = ly + normalY * waveOffset;
@@ -178,21 +177,43 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (i === 0) ctx.moveTo(px, py);
                     else ctx.lineTo(px, py);
                 }
-
                 ctx.strokeStyle = node.accent;
-                ctx.lineWidth = 3.0;
+                ctx.lineWidth = 8.0;
+                ctx.shadowColor = node.accent;
+                ctx.shadowBlur = 28;
+                ctx.globalAlpha = 0.35;
+                ctx.stroke();
+                ctx.globalAlpha = 1.0;
+
+                // Layer 2: Main Vibrant Saturated Wave Beam
+                ctx.beginPath();
+                for (let i = 0; i <= steps; i++) {
+                    const t = i / steps;
+                    const lx = start.x + dx * t;
+                    const ly = start.y + dy * t;
+                    const envelope = Math.sin(t * Math.PI);
+                    const waveOffset = Math.sin(t * 8 - waveTime * 2.8) * (11 * envelope);
+
+                    const px = lx + normalX * waveOffset;
+                    const py = ly + normalY * waveOffset;
+
+                    if (i === 0) ctx.moveTo(px, py);
+                    else ctx.lineTo(px, py);
+                }
+                ctx.strokeStyle = node.accent;
+                ctx.lineWidth = 3.6;
                 ctx.shadowColor = node.accent;
                 ctx.shadowBlur = 18;
                 ctx.stroke();
 
-                // Secondary harmonic subtle wave
+                // Layer 3: 3D Volumetric Specular White Core Filament
                 ctx.beginPath();
                 for (let i = 0; i <= steps; i++) {
                     const t = i / steps;
                     const lx = start.x + dx * t;
                     const ly = start.y + dy * t;
                     const envelope = Math.sin(t * Math.PI);
-                    const waveOffset = Math.sin(t * 12 + waveTime * 2) * (4 * envelope);
+                    const waveOffset = Math.sin(t * 8 - waveTime * 2.8) * (11 * envelope);
 
                     const px = lx + normalX * waveOffset;
                     const py = ly + normalY * waveOffset;
@@ -200,13 +221,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (i === 0) ctx.moveTo(px, py);
                     else ctx.lineTo(px, py);
                 }
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-                ctx.lineWidth = 1.4;
-                ctx.shadowBlur = 10;
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 1.6;
+                ctx.shadowColor = '#ffffff';
+                ctx.shadowBlur = 8;
                 ctx.stroke();
                 ctx.shadowBlur = 0;
 
-                // Draw Slow Luminous Wave Pulses (Energy Packets)
+                // Layer 4: Volumetric Traveling Energy Wave Packets
                 wavePackets.forEach((p) => {
                     p.progress += p.speed;
                     if (p.progress > 1) p.progress = 0;
@@ -215,29 +237,48 @@ document.addEventListener('DOMContentLoaded', () => {
                     const lx = start.x + dx * t;
                     const ly = start.y + dy * t;
                     const envelope = Math.sin(t * Math.PI);
-                    const waveOffset = Math.sin(t * 8 - waveTime * 2.5) * (8 * envelope);
+                    const waveOffset = Math.sin(t * 8 - waveTime * 2.8) * (11 * envelope);
 
                     const px = lx + normalX * waveOffset;
                     const py = ly + normalY * waveOffset;
 
+                    // Outer Halo
                     ctx.beginPath();
-                    ctx.arc(px, py, p.size * (1 + envelope * 0.4), 0, Math.PI * 2);
-                    ctx.fillStyle = '#ffffff';
+                    ctx.arc(px, py, p.size * (1 + envelope * 0.5), 0, Math.PI * 2);
+                    ctx.fillStyle = node.accent;
                     ctx.shadowColor = node.accent;
-                    ctx.shadowBlur = 16;
+                    ctx.shadowBlur = 20;
+                    ctx.fill();
+
+                    // Inner White Hot Core
+                    ctx.beginPath();
+                    ctx.arc(px, py, (p.size * 0.5) * (1 + envelope * 0.3), 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffffff';
                     ctx.fill();
                     ctx.shadowBlur = 0;
                 });
 
             } else {
-                // IDLE STATE: Sleek subtle clean bezier line
+                // ==========================================================
+                // IDLE STATE: Stylish, Faint, Subtle Undulating Sine Wave
+                // ==========================================================
                 ctx.beginPath();
-                ctx.moveTo(start.x, start.y);
-                const cpX = (start.x + end.x) / 2;
-                const cpY = (start.y + end.y) / 2;
-                ctx.quadraticCurveTo(cpX, cpY, end.x, end.y);
+                for (let i = 0; i <= steps; i++) {
+                    const t = i / steps;
+                    const lx = start.x + dx * t;
+                    const ly = start.y + dy * t;
+                    const envelope = Math.sin(t * Math.PI);
+                    // Gentle, subtle, slow sine undulation
+                    const idleWave = Math.sin(t * 6 + waveTime * 0.9) * (4 * envelope);
 
-                ctx.strokeStyle = anyHovered ? 'rgba(56, 189, 248, 0.08)' : 'rgba(56, 189, 248, 0.24)';
+                    const px = lx + normalX * idleWave;
+                    const py = ly + normalY * idleWave;
+
+                    if (i === 0) ctx.moveTo(px, py);
+                    else ctx.lineTo(px, py);
+                }
+
+                ctx.strokeStyle = anyHovered ? 'rgba(56, 189, 248, 0.05)' : 'rgba(56, 189, 248, 0.18)';
                 ctx.lineWidth = 1.6;
                 ctx.shadowBlur = 0;
                 ctx.stroke();
@@ -255,11 +296,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const start = node.cardAnchor;
                 const end = node.coreAnchor;
-                const t = p.progress;
+                const dx = end.x - start.x;
+                const dy = end.y - start.y;
+                const dist = Math.hypot(dx, dy);
+                const normalX = -dy / dist;
+                const normalY = dx / dist;
 
-                // Move from card (start) towards center (end)
-                const px = start.x + (end.x - start.x) * t;
-                const py = start.y + (end.y - start.y) * t;
+                const t = p.progress;
+                const envelope = Math.sin(t * Math.PI);
+                const idleWave = Math.sin(t * 6 + waveTime * 0.9) * (4 * envelope);
+
+                const lx = start.x + dx * t;
+                const ly = start.y + dy * t;
+                const px = lx + normalX * idleWave;
+                const py = ly + normalY * idleWave;
 
                 ctx.beginPath();
                 ctx.arc(px, py, p.size, 0, Math.PI * 2);
@@ -281,7 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card.addEventListener('mouseenter', () => {
             hoveredNodeId = id;
             wavePackets.forEach((p, idx) => {
-                p.progress = idx * 0.25;
+                p.progress = idx * 0.2;
             });
         });
 
