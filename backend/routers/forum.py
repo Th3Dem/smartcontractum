@@ -717,6 +717,11 @@ async def render_forum_page(
     active_stream = stream or category or "all"
     active_sort = sort if isinstance(sort, str) and sort in ["best", "new", "discussed"] else "best"
 
+    # Find active category name
+    matched_cat = next((c for c in CATEGORIES_DB if c.slug == active_stream), None)
+    active_category_name = matched_cat.name if matched_cat else "Все потоки"
+    active_category_icon = matched_cat.icon if matched_cat else "📁"
+
     filtered_topics = list(TOPICS_DB)
     if active_stream != "all":
         filtered_topics = [t for t in filtered_topics if t.category_slug == active_stream]
@@ -777,6 +782,8 @@ async def render_forum_page(
         "topics": filtered_topics,
         "active_stream": active_stream,
         "active_category": active_stream,
+        "active_category_name": active_category_name,
+        "active_category_icon": active_category_icon,
         "active_sort": active_sort,
         "active_tag": tag,
         "active_query": q or "",

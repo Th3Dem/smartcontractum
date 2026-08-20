@@ -3,7 +3,7 @@
 {% block title %}Моя лента / Хабр-ПКСК — SmartContractum | Сообщество разработчиков смарт-контрактов{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_social.css?v=7.0.0">
+<link rel="stylesheet" href="/static/css/forum_social.css?v=8.0.0">
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.add('light-theme-feed');
@@ -15,51 +15,63 @@
 <div class="habr-feed-wrapper">
 
     <!-- ================================================================
-         1. HABR TOP STREAMS SUB-NAVIGATION (Потоки)
-    ================================================================= -->
-    <nav class="habr-streams-nav" aria-label="Потоки публикаций">
-        <div class="habr-streams-container">
-            <a href="/feed?stream=all{% if active_query %}&q={{ active_query }}{% endif %}" class="habr-stream-tab {% if active_stream == 'all' %}is-active{% endif %}" data-stream="all">
-                <span class="stream-icon">🔥</span> Все потоки
-            </a>
-            <a href="/feed?stream=smart-contracts{% if active_query %}&q={{ active_query }}{% endif %}" class="habr-stream-tab {% if active_stream == 'smart-contracts' %}is-active{% endif %}" data-stream="smart-contracts">
-                <span class="stream-icon">💻</span> Разработка
-            </a>
-            <a href="/feed?stream=infosec-audit{% if active_query %}&q={{ active_query }}{% endif %}" class="habr-stream-tab {% if active_stream == 'infosec-audit' %}is-active{% endif %}" data-stream="infosec-audit">
-                <span class="stream-icon">🛡️</span> ИБ & Аудит
-            </a>
-            <a href="/feed?stream=oracles{% if active_query %}&q={{ active_query }}{% endif %}" class="habr-stream-tab {% if active_stream == 'oracles' %}is-active{% endif %}" data-stream="oracles">
-                <span class="stream-icon">🌐</span> Оракулы & Данные
-            </a>
-            <a href="/feed?stream=treasury-b2b{% if active_query %}&q={{ active_query }}{% endif %}" class="habr-stream-tab {% if active_stream == 'treasury-b2b' %}is-active{% endif %}" data-stream="treasury-b2b">
-                <span class="stream-icon">🏦</span> Казначейство & B2B
-            </a>
-            <a href="/feed?stream=safe-deals{% if active_query %}&q={{ active_query }}{% endif %}" class="habr-stream-tab {% if active_stream == 'safe-deals' %}is-active{% endif %}" data-stream="safe-deals">
-                <span class="stream-icon">🏛️</span> ЦБ РФ & Регламенты
-            </a>
-        </div>
-    </nav>
-
-    <!-- ================================================================
-         2. HABR MAIN 2-COLUMN GRID (Feed + Sidebar)
+         1. HABR MAIN 2-COLUMN GRID (Feed + Sidebar)
     ================================================================= -->
     <div class="habr-main-grid">
 
-        <!-- 2.1 MAIN CONTENT STREAM -->
+        <!-- 1.1 MAIN CONTENT STREAM -->
         <main class="habr-articles-stream">
 
-            <!-- Habr Sorting & Filter Bar with Search -->
+            <!-- Habr Categories Dropdown, Sorting & Filter Bar with Search -->
             <div class="habr-sorting-bar">
-                <div class="habr-sort-tabs">
-                    <a href="/feed?stream={{ active_stream }}&sort=best{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'best' %}is-active{% endif %}" data-sort="best">
-                        🔥 Лучшие
-                    </a>
-                    <a href="/feed?stream={{ active_stream }}&sort=new{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'new' %}is-active{% endif %}" data-sort="new">
-                        🕒 Новые
-                    </a>
-                    <a href="/feed?stream={{ active_stream }}&sort=discussed{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'discussed' %}is-active{% endif %}" data-sort="discussed">
-                        💬 Обсуждаемые
-                    </a>
+                <div class="habr-sort-left-group">
+                    
+                    <!-- Dropdown: КАТЕГОРИИ (Выпадающий список при наведении курсора) -->
+                    <div class="categories-dropdown-wrapper" id="categoriesDropdownWrap">
+                        <button type="button" class="btn-categories-dropdown {% if active_stream and active_stream != 'all' %}is-filtered{% endif %}" id="btnCategoriesDropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="cat-btn-icon">{{ active_category_icon }}</span>
+                            <span class="cat-btn-text">Категории</span>
+                            {% if active_stream and active_stream != 'all' %}
+                            <span class="cat-active-badge">{{ active_category_name }}</span>
+                            {% endif %}
+                            <span class="cat-dropdown-arrow">▾</span>
+                        </button>
+
+                        <div class="categories-dropdown-menu" id="categoriesDropdownMenu" role="menu">
+                            <div class="cat-menu-header">
+                                <span>Выберите категорию / поток:</span>
+                            </div>
+                            {% for cat in categories %}
+                            <a href="/feed?stream={{ cat.slug }}{% if active_query %}&q={{ active_query }}{% endif %}{% if active_sort %}&sort={{ active_sort }}{% endif %}" 
+                               class="cat-menu-item {% if active_stream == cat.slug %}is-active{% endif %}" role="menuitem">
+                                <span class="cat-menu-icon">{{ cat.icon }}</span>
+                                <div class="cat-menu-text-wrap">
+                                    <div class="cat-menu-top-line">
+                                        <span class="cat-menu-name">{{ cat.name }}</span>
+                                        <span class="cat-menu-count">{{ cat.count_topics }} тем</span>
+                                    </div>
+                                    <span class="cat-menu-subs">{{ cat.subscribers_count }} читателей</span>
+                                </div>
+                                {% if active_stream == cat.slug %}
+                                <span class="cat-menu-check">✓</span>
+                                {% endif %}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Sort Tabs -->
+                    <div class="habr-sort-tabs">
+                        <a href="/feed?stream={{ active_stream }}&sort=best{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'best' %}is-active{% endif %}" data-sort="best">
+                            🔥 Лучшие
+                        </a>
+                        <a href="/feed?stream={{ active_stream }}&sort=new{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'new' %}is-active{% endif %}" data-sort="new">
+                            🕒 Новые
+                        </a>
+                        <a href="/feed?stream={{ active_stream }}&sort=discussed{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'discussed' %}is-active{% endif %}" data-sort="discussed">
+                            💬 Обсуждаемые
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Right Actions: Search Box + Write Article Button -->
@@ -247,7 +259,7 @@
             </div>
         </main>
 
-        <!-- 2.2 HABR RIGHT SIDEBAR (Читают сейчас, Хабы, Компании) -->
+        <!-- 1.2 HABR RIGHT SIDEBAR (Читают сейчас, Хабы, Компании) -->
         <aside class="habr-sidebar-right">
 
             <!-- Sidebar Block 1: 🔥 ЧИТАЮТ СЕЙЧАС (Trending Articles) -->
@@ -347,7 +359,7 @@
 </div>
 
 <!-- ====================================================================
-     3. HABR MODAL: НАПИСАТЬ СТАТЬЮ / ПУБЛИКАЦИЮ
+     2. HABR MODAL: НАПИСАТЬ СТАТЬЮ / ПУБЛИКАЦИЮ
 ==================================================================== -->
 <div class="modal-overlay" id="habrWriteModal" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="modal-card habr-modal-card">
@@ -447,5 +459,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_social.js?v=7.0.0" defer></script>
+<script src="/static/js/forum_social.js?v=8.0.0" defer></script>
 {% endblock %}

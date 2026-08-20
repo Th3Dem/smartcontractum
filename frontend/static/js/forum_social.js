@@ -1,6 +1,6 @@
 /**
  * SmartContractum — Habr Feed Controller (https://habr.com/ru/feed/)
- * Real-time keyword search, stream filtering, upvotes, comment accordions & modal.
+ * Categories hover dropdown, real-time keyword search, stream filtering, upvotes, comment accordions & modal.
  * File: frontend/static/js/forum_social.js
  */
 
@@ -12,6 +12,10 @@
         const emptyState = document.getElementById("habrEmptyState");
         const searchInput = document.getElementById("habrSearchInput");
         const btnClearSearch = document.getElementById("btnClearSearch");
+
+        const catDropdownWrap = document.getElementById("categoriesDropdownWrap");
+        const btnCatDropdown = document.getElementById("btnCategoriesDropdown");
+        const catDropdownMenu = document.getElementById("categoriesDropdownMenu");
 
         const writeModal = document.getElementById("habrWriteModal");
         const btnOpenWrite = document.getElementById("btnOpenWriteModal");
@@ -32,6 +36,30 @@
             setTimeout(function () {
                 toast.style.display = "none";
             }, 3000);
+        }
+
+        // ==================================================================
+        // 0. CATEGORIES DROPDOWN TOUCH / CLICK TOGGLE
+        // ==================================================================
+        if (btnCatDropdown && catDropdownMenu) {
+            btnCatDropdown.addEventListener("click", function (e) {
+                e.stopPropagation();
+                const isOpen = catDropdownMenu.classList.contains("is-open");
+                if (isOpen) {
+                    catDropdownMenu.classList.remove("is-open");
+                    btnCatDropdown.setAttribute("aria-expanded", "false");
+                } else {
+                    catDropdownMenu.classList.add("is-open");
+                    btnCatDropdown.setAttribute("aria-expanded", "true");
+                }
+            });
+
+            document.addEventListener("click", function (e) {
+                if (catDropdownWrap && !catDropdownWrap.contains(e.target)) {
+                    catDropdownMenu.classList.remove("is-open");
+                    btnCatDropdown.setAttribute("aria-expanded", "false");
+                }
+            });
         }
 
         // ==================================================================

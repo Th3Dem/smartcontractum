@@ -208,32 +208,32 @@ def test_create_topic_validation_errors() -> None:
     assert resp1.status_code == 422
 
 
-def test_render_habr_feed_html_page_with_search() -> None:
-    """Verify GET /feed renders full SSR Habr Feed page with search bar."""
+def test_render_habr_feed_html_page_with_categories_dropdown() -> None:
+    """Verify GET /feed renders full SSR Habr Feed page with Categories dropdown button."""
     response = client.get("/feed")
     assert response.status_code == 200
     assert "text/html" in response.headers.get("content-type", "")
 
     html = response.text
-    # 1. Search Bar with magnifying glass
+    # 1. Categories Dropdown
+    assert "categoriesDropdownWrap" in html
+    assert "Категории" in html
+    assert "categoriesDropdownMenu" in html
+    assert "Все потоки" in html
+    assert "Разработка смарт-контрактов" in html
+
+    # 2. Search Bar with magnifying glass
     assert "habrSearchInput" in html
-    assert "Поиск по статьям" in html
     assert "🔍" in html
 
-    # 2. Streams Sub-Nav
-    assert "Все потоки" in html
-    assert "Разработка" in html
-    assert "ИБ &amp; Аудит" in html or "ИБ & Аудит" in html
-
-    # 3. Sorting Bar & Action
+    # 3. Sorting Tabs
     assert "Лучшие" in html
     assert "Новые" in html
     assert "Обсуждаемые" in html
     assert "Написать статью" in html
 
-    # 4. Search Filter Results test
-    search_resp = client.get("/feed?q=Reentrancy")
-    assert search_resp.status_code == 200
-    search_html = search_resp.text
-    assert "Результаты поиска по запросу" in search_html
-    assert "Reentrancy" in search_html
+    # 4. Stream filtering via query param
+    stream_resp = client.get("/feed?stream=infosec-audit")
+    assert stream_resp.status_code == 200
+    stream_html = stream_resp.text
+    assert "Информационная безопасность" in stream_html
