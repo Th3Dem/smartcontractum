@@ -177,15 +177,17 @@
     100% { transform: rotateX(82deg) rotateY(45deg) rotateZ(360deg); }
 }
 
-/* 3D Smart Contract Blockchain Cube (200px) */
+/* 3D Smart Contract Blockchain Cube (220px) */
 .crystal-3d-cube {
-    width: 200px;
-    height: 200px;
+    width: 220px;
+    height: 220px;
     position: relative;
     transform-style: preserve-3d;
+    transform-origin: 50% 50% 0;
     transform: rotateX(-18deg) rotateY(32deg);
     will-change: transform;
     overflow: visible;
+    z-index: 10;
 }
 
 /* Smart Contract State Execution Core (Glowing Nucleus) */
@@ -193,10 +195,10 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 64px;
-    height: 64px;
-    margin-top: -32px;
-    margin-left: -32px;
+    width: 68px;
+    height: 68px;
+    margin-top: -34px;
+    margin-left: -34px;
     border-radius: 50%;
     background: radial-gradient(circle, #3861fb 0%, #6188ff 45%, #16c784 75%, transparent 100%);
     filter: blur(6px);
@@ -212,7 +214,7 @@
     color: #ffffff;
     font-family: 'JetBrains Mono', 'Fira Code', monospace;
     font-weight: 800;
-    font-size: 1.15rem;
+    font-size: 1.25rem;
     text-shadow: 0 0 10px #38bdf8;
     pointer-events: none;
 }
@@ -232,9 +234,9 @@
 }
 
 .cube-axis.axis-x {
-    width: 140px;
+    width: 160px;
     height: 1.5px;
-    margin-left: -70px;
+    margin-left: -80px;
     margin-top: -0.75px;
     background: linear-gradient(90deg, transparent, #3861fb, transparent);
     box-shadow: 0 0 8px #3861fb;
@@ -242,71 +244,75 @@
 
 .cube-axis.axis-y {
     width: 1.5px;
-    height: 140px;
+    height: 160px;
     margin-left: -0.75px;
-    margin-top: -70px;
+    margin-top: -80px;
     background: linear-gradient(180deg, transparent, #16c784, transparent);
     box-shadow: 0 0 8px #16c784;
 }
 
 .cube-axis.axis-z {
     width: 1.5px;
-    height: 140px;
+    height: 160px;
     margin-left: -0.75px;
-    margin-top: -70px;
+    margin-top: -80px;
     background: linear-gradient(180deg, transparent, #6188ff, transparent);
     transform: rotateX(90deg);
     box-shadow: 0 0 8px #6188ff;
 }
 
-/* 6 High-End Pure Glassmorphic Hologram Facets (200px size -> 100px translation) */
+/* 6 High-End Pure Glassmorphic Hologram Facets (220px size -> 110px translation) */
 .cube-facet {
     position: absolute;
-    width: 200px;
-    height: 200px;
-    background: rgba(13, 20, 36, 0.72);
-    border: 1.5px solid rgba(56, 97, 251, 0.45);
-    box-shadow: inset 0 0 18px rgba(56, 97, 251, 0.2);
-    border-radius: 16px;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 220px;
+    background: rgba(11, 20, 38, 0.42);
+    border: 1.5px solid rgba(56, 189, 248, 0.65);
+    box-shadow: 0 0 14px rgba(56, 97, 251, 0.25), inset 0 0 16px rgba(56, 189, 248, 0.15);
+    border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    backface-visibility: visible;
+    backface-visibility: visible !important;
     transform-style: preserve-3d;
+    transform-origin: 50% 50% 0;
     will-change: transform;
 }
 
 .facet-mesh {
     position: absolute;
     inset: 0;
+    border-radius: inherit;
     background-image: 
-        linear-gradient(to right, rgba(56, 97, 251, 0.12) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(56, 97, 251, 0.12) 1px, transparent 1px);
-    background-size: 25px 25px;
-    opacity: 0.55;
+        linear-gradient(to right, rgba(56, 189, 248, 0.15) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.15) 1px, transparent 1px);
+    background-size: 27px 27px;
+    opacity: 0.65;
 }
 
 .corner-dot {
     position: absolute;
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background: #3861fb;
-    box-shadow: 0 0 6px #6188ff;
+    background: #38bdf8;
+    box-shadow: 0 0 8px #38bdf8;
 }
 
-.corner-dot.c-tl { top: 6px; left: 6px; }
-.corner-dot.c-tr { top: 6px; right: 6px; background: #16c784; box-shadow: 0 0 6px #16c784; }
-.corner-dot.c-bl { bottom: 6px; left: 6px; background: #6188ff; box-shadow: 0 0 6px #6188ff; }
-.corner-dot.c-br { bottom: 6px; right: 6px; }
+.corner-dot.c-tl { top: 8px; left: 8px; }
+.corner-dot.c-tr { top: 8px; right: 8px; background: #16c784; box-shadow: 0 0 8px #16c784; }
+.corner-dot.c-bl { bottom: 8px; left: 8px; background: #6188ff; box-shadow: 0 0 8px #6188ff; }
+.corner-dot.c-br { bottom: 8px; right: 8px; background: #38bdf8; box-shadow: 0 0 8px #38bdf8; }
 
-/* 3D Cube Faces Transformation (200px / 2 = 100px) */
-.facet-front  { transform: translateZ(100px); }
-.facet-back   { transform: rotateY(180deg) translateZ(100px); }
-.facet-right  { transform: rotateY(90deg) translateZ(100px); border-color: rgba(97, 136, 255, 0.48); }
-.facet-left   { transform: rotateY(-90deg) translateZ(100px); border-color: rgba(22, 199, 132, 0.48); }
-.facet-top    { transform: rotateX(90deg) translateZ(100px); background: rgba(20, 30, 52, 0.45); align-items: center; }
-.facet-bottom { transform: rotateX(-90deg) translateZ(100px); background: rgba(10, 16, 28, 0.6); align-items: center; }
+/* 3D Cube Faces Transformation (220px / 2 = 110px) */
+.facet-front  { transform: rotateY(0deg) translateZ(110px); }
+.facet-back   { transform: rotateY(180deg) translateZ(110px); }
+.facet-right  { transform: rotateY(90deg) translateZ(110px); border-color: rgba(97, 136, 255, 0.75); }
+.facet-left   { transform: rotateY(-90deg) translateZ(110px); border-color: rgba(22, 199, 132, 0.75); }
+.facet-top    { transform: rotateX(90deg) translateZ(110px); border-color: rgba(56, 189, 248, 0.65); background: rgba(16, 28, 54, 0.35); }
+.facet-bottom { transform: rotateX(-90deg) translateZ(110px); border-color: rgba(56, 97, 251, 0.65); background: rgba(8, 14, 26, 0.5); }
 
 /* Ambient Floor Shadow */
 .cube-ground-shadow {
@@ -355,7 +361,7 @@
     max-width: 940px;
     margin: 0 auto;
     width: 100%;
-    pointer-events: auto;
+    pointer-events: none;
 }
 
 /* Pure Typography Mission Motto (No background, no border, floating text) */
@@ -371,6 +377,7 @@
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     margin-bottom: 2px;
+    pointer-events: auto;
 }
 
 .eyebrow-item {
@@ -400,12 +407,13 @@
     letter-spacing: -0.04em;
     margin: 0;
     text-align: center;
+    pointer-events: none;
 }
 
 .hero-title-white {
     color: #ffffff;
     font-weight: 800;
-    text-shadow: 0 4px 36px rgba(0, 0, 0, 0.95), 0 2px 12px rgba(0, 0, 0, 0.9);
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.85);
 }
 
 .hero-title-cyan {
@@ -413,7 +421,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 800;
-    filter: drop-shadow(0 4px 28px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 32px rgba(56, 189, 248, 0.55));
+    filter: drop-shadow(0 2px 16px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 28px rgba(56, 189, 248, 0.5));
     letter-spacing: -0.025em;
 }
 
@@ -422,6 +430,7 @@
     font-weight: 500;
     color: #cbd5e1;
     line-height: 1.65;
+    pointer-events: none;
     max-width: 860px;
     margin: 0 auto;
     text-align: center;
