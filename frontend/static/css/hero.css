@@ -55,21 +55,23 @@
     pointer-events: none;
     user-select: none;
     opacity: 0.82;
+    overflow: visible;
 }
 
 .scene-3d {
-    width: 240px;
-    height: 240px;
+    width: 260px;
+    height: 260px;
     position: relative;
     transform-style: preserve-3d;
-    perspective: 1400px;
+    perspective: 1600px;
     display: flex;
     align-items: center;
     justify-content: center;
     animation: ambientFloat 8s ease-in-out infinite;
+    overflow: visible;
 }
 
-/* Ambient Radial Nebula Glow (Expanded) */
+/* Ambient Radial Nebula Glow (Deep Z-Layer Behind 3D Cube) */
 .ambient-glow-nebula {
     position: absolute;
     width: 750px;
@@ -78,6 +80,7 @@
     border-radius: 50%;
     filter: blur(48px);
     pointer-events: none;
+    transform: translateZ(-300px);
 }
 
 /* 5 Concentric Blockchain Atomic Orbital Rings (Ultra-Wide, Sweeping Past Text) */
@@ -86,6 +89,7 @@
     border-radius: 50%;
     pointer-events: none;
     transform-style: preserve-3d;
+    backface-visibility: visible;
 }
 
 .ring-ultra {
@@ -181,6 +185,7 @@
     transform-style: preserve-3d;
     transform: rotateX(-18deg) rotateY(32deg);
     will-change: transform;
+    overflow: visible;
 }
 
 /* Smart Contract State Execution Core (Glowing Nucleus) */
@@ -263,11 +268,11 @@
     border: 1.5px solid rgba(56, 97, 251, 0.45);
     box-shadow: inset 0 0 18px rgba(56, 97, 251, 0.2);
     border-radius: 16px;
-    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    backface-visibility: hidden;
+    backface-visibility: visible;
+    transform-style: preserve-3d;
     will-change: transform;
 }
 
