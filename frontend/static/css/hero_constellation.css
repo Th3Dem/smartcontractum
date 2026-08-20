@@ -1,6 +1,6 @@
-﻿/* ======================================================================
+/* ======================================================================
    SmartContractum — Circular Node Constellation Graph Stylesheet
-   Design System: Extra-Wide Volumetric 3D Cards + Funnel Waves
+   Design System: Snug Orbital Ring + Visible Wave Connectors
    File: frontend/static/css/hero_constellation.css
 ====================================================================== */
 
@@ -30,13 +30,13 @@
 }
 
 /* ----------------------------------------------------------------------
-   CONSTELLATION MAIN CONTAINER & CANVAS (EXTRA-WIDE 1480px)
+   CONSTELLATION MAIN CONTAINER & CANVAS (SNUG 1220px ORBIT)
 ----------------------------------------------------------------------- */
 .constellation-container {
     position: relative;
     width: 100%;
-    max-width: 1480px;
-    height: 620px;
+    max-width: 1220px;
+    height: 570px;
     margin: 10px auto;
     display: flex;
     align-items: center;
@@ -44,7 +44,7 @@
     overflow: visible;
 }
 
-/* Canvas for Volumetric Plasma Funnel Waves */
+/* Canvas for Visible Volumetric Plasma Funnel Waves */
 .constellation-wave-canvas {
     position: absolute;
     top: 0;
@@ -52,7 +52,7 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 1;
+    z-index: 2;
 }
 
 /* ----------------------------------------------------------------------
@@ -66,7 +66,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 5;
+    z-index: 6;
     cursor: pointer;
     user-select: none;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -80,16 +80,16 @@
 
 .core-aura-pulse {
     position: absolute;
-    width: 125%;
-    height: 145%;
+    width: 130%;
+    height: 150%;
     border-radius: 9999px;
-    background: radial-gradient(ellipse, rgba(56, 189, 248, 0.5) 0%, rgba(99, 102, 241, 0.25) 50%, transparent 75%);
+    background: radial-gradient(ellipse, rgba(56, 189, 248, 0.55) 0%, rgba(99, 102, 241, 0.28) 50%, transparent 75%);
     animation: coreAuraPulse 3.5s infinite ease-in-out;
 }
 
 @keyframes coreAuraPulse {
     0%, 100% { transform: scale(1); opacity: 0.85; }
-    50% { transform: scale(1.2); opacity: 1; filter: blur(3px); }
+    50% { transform: scale(1.22); opacity: 1; filter: blur(3px); }
 }
 
 .core-glass-body {
@@ -98,7 +98,7 @@
     background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(20, 35, 75, 0.99) 100%);
     border: 2px solid rgba(56, 189, 248, 0.75);
     border-radius: 9999px;
-    padding: 18px 46px;
+    padding: 16px 42px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 50px rgba(56, 189, 248, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4);
     display: flex;
     align-items: center;
@@ -109,7 +109,7 @@
 }
 
 .core-brand-name {
-    font-size: 1.65rem;
+    font-size: 1.55rem;
     font-weight: 900;
     letter-spacing: -0.3px;
     background: linear-gradient(90deg, #ffffff 0%, #38bdf8 60%, #10b981 100%);
@@ -120,7 +120,7 @@
 }
 
 /* ----------------------------------------------------------------------
-   1.2 CIRCULAR RADIAL RING OF EXTRA-WIDE 3D SATELLITE CARDS
+   1.2 CIRCULAR RADIAL RING (SNUG ORBIT AROUND SMARTCONTRACTUM)
 ----------------------------------------------------------------------- */
 .constellation-radial-ring {
     position: absolute;
@@ -128,20 +128,20 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 3;
+    z-index: 5;
     pointer-events: none;
 }
 
-/* Extra-Wide Volumetric 3D Cards */
+/* 3D Satellite Cards with Full Unclipped Text */
 .constellation-satellite-card {
     position: absolute;
-    width: 440px;
-    min-height: 126px;
+    width: 380px;
+    min-height: 114px;
     box-sizing: border-box;
     display: block;
     text-decoration: none;
     color: inherit;
-    z-index: 3;
+    z-index: 5;
     pointer-events: auto;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
     background: transparent;
@@ -152,66 +152,66 @@
     font-family: inherit;
 }
 
-/* EXACT CIRCULAR / RADIAL RING POSITIONS */
-/* Node 1: Top-Left */
+/* TIGHT HARMONIOUS ORBITAL POSITIONS AROUND THE CENTER */
+/* Node 1: Top-Left (Close to Node 2) */
 .node-pos-1 {
     top: 15px;
-    left: 10px;
+    left: calc(50% - 380px - 35px);
 }
 
-/* Node 2: Top-Right */
+/* Node 2: Top-Right (Close to Node 1, only 70px gap) */
 .node-pos-2 {
     top: 15px;
-    right: 10px;
+    left: calc(50% + 35px);
 }
 
-/* Node 3: Mid-Left */
+/* Node 3: Mid-Left (Flanking Center Left) */
 .node-pos-3 {
     top: 50%;
-    left: 0px;
+    left: 10px;
     transform: translateY(-50%);
 }
 .node-pos-3:hover {
     transform: translateY(-50%) translateY(-5px) scale(1.025) !important;
 }
 
-/* Node 4: Mid-Right */
+/* Node 4: Mid-Right (Flanking Center Right) */
 .node-pos-4 {
     top: 50%;
-    right: 0px;
+    right: 10px;
     transform: translateY(-50%);
 }
 .node-pos-4:hover {
     transform: translateY(-50%) translateY(-5px) scale(1.025) !important;
 }
 
-/* Node 5: Bottom-Left */
+/* Node 5: Bottom-Left (Close to Node 6) */
 .node-pos-5 {
     bottom: 15px;
-    left: 10px;
+    left: calc(50% - 380px - 35px);
 }
 
-/* Node 6: Bottom-Right */
+/* Node 6: Bottom-Right (Close to Node 5, only 70px gap) */
 .node-pos-6 {
     bottom: 15px;
-    right: 10px;
+    left: calc(50% + 35px);
 }
 
 /* Volumetric 3D Card Interior */
 .satellite-card-inner {
     width: 100%;
-    min-height: 126px;
-    background: linear-gradient(145deg, rgba(30, 41, 59, 0.88) 0%, rgba(15, 23, 42, 0.94) 100%);
+    min-height: 114px;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.90) 0%, rgba(15, 23, 42, 0.96) 100%);
     border: 1.5px solid rgba(255, 255, 255, 0.12);
-    border-radius: 18px;
-    padding: 16px 20px;
+    border-radius: 16px;
+    padding: 14px 16px;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.25), inset 0 -2px 6px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     box-sizing: border-box;
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -219,22 +219,22 @@
 .satellite-top-row {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .satellite-title-box {
     flex: 1;
 }
 
-/* Integrated Inside Icon Box with 3D Depth */
+/* Inside Icon Box with 3D Depth */
 .satellite-icon-inner {
-    width: 38px;
-    height: 38px;
-    border-radius: 11px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     flex-shrink: 0;
     background: linear-gradient(135deg, rgba(11, 20, 38, 0.98) 0%, rgba(20, 35, 70, 0.95) 100%);
     border: 1.5px solid rgba(255, 255, 255, 0.16);
@@ -255,21 +255,21 @@
 
 /* Typography: 100% Full Visibility Without Any Truncation */
 .satellite-title {
-    font-size: 1.06rem;
+    font-size: 1.02rem;
     font-weight: 800;
     color: #ffffff;
     margin: 0;
-    line-height: 1.3;
+    line-height: 1.25;
     white-space: normal;
     overflow: visible;
     text-overflow: clip;
 }
 
 .satellite-badge {
-    font-size: 0.70rem;
+    font-size: 0.68rem;
     font-weight: 700;
     padding: 3px 8px;
-    border-radius: 6px;
+    border-radius: 5px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     white-space: nowrap;
@@ -284,9 +284,9 @@
 .badge-gold { background: rgba(236, 72, 153, 0.18); border: 1px solid rgba(236, 72, 153, 0.5); color: #f472b6; }
 
 .satellite-desc {
-    font-size: 0.84rem;
+    font-size: 0.82rem;
     color: #94a3b8;
-    line-height: 1.45;
+    line-height: 1.42;
     margin: 0;
     white-space: normal;
     overflow: visible;
