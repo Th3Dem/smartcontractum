@@ -1,6 +1,6 @@
 /**
- * SmartContractum — Hero Constellation Interactive Graph v3.90
- * Dynamic Particle Streams with Detached Button Glass Shards & Laser Synapses
+ * SmartContractum — Hero Constellation Interactive Graph v4.0.0
+ * Ultra-Fluid Detached Button Glass Shards & Smooth Luminous Trails Engine
  * File: frontend/static/js/hero_constellation.js
  */
 
@@ -25,36 +25,51 @@
         let isCoreHovered = false;
 
         // Button Fragment Shards & Micro-Crystal Particle System
-        const SHARDS_PER_NODE = 10;
-        const totalParticles = cards.length * SHARDS_PER_NODE;
+        const SHARDS_PER_NODE = 9;
+        const TRAIL_MAX_LENGTH = 14;
         const particles = [];
 
-        function createFragmentParticle(cardIndex, index) {
-            const types = ['glass-shard', 'crystal-chip', 'facet-tile', 'luminous-trail', 'photon-core'];
-            const type = types[index % types.length];
+        const SHARD_TYPES = [
+            'triangle-shard',   // 1. Triangular glass splinter
+            'trapezoid-glass',  // 2. Asymmetric faceted trapezoid
+            'hex-crystal',      // 3. Hexagonal crystal prism
+            'rhombus-diamond',  // 4. Slender rhombus diamond
+            'curved-splinter',  // 5. Elongated glass needle / splinter
+            'rect-chip'         // 6. Micro rounded glass tile
+        ];
 
-            // Shard geometry
-            const shardWidth = 6 + Math.random() * 8; // 6px to 14px
-            const shardHeight = 4 + Math.random() * 6; // 4px to 10px
+        function createFragmentParticle(cardIndex, index) {
+            const type = SHARD_TYPES[index % SHARD_TYPES.length];
+
+            // Shard dimensions (varied from subtle 5px to prominent 16px)
+            const baseScale = 0.75 + Math.random() * 0.75;
+            const w = (6 + Math.random() * 10) * baseScale;
+            const h = (4 + Math.random() * 7) * baseScale;
 
             return {
                 cardIndex: cardIndex,
                 type: type,
                 progress: Math.random(), // 0.0 to 1.0 along the trajectory
-                speed: 0.0035 + Math.random() * 0.0038,
-                size: 2.5 + Math.random() * 3.5,
-                shardWidth: shardWidth,
-                shardHeight: shardHeight,
+                // Slower, much more fluid and hypnotic flight speed
+                speed: 0.0011 + Math.random() * 0.0015,
+                width: w,
+                height: h,
+                size: (w + h) / 2,
                 angle: Math.random() * Math.PI * 2,
-                rotSpeed: (Math.random() - 0.5) * 0.08,
-                curveVariance: (Math.random() - 0.5) * 120, // Wide natural arc
-                // Spawn origin on the button perimeter
-                spawnAngle: Math.random() * Math.PI * 2,
-                spawnOffsetX: (Math.random() - 0.5) * 0.88,
-                spawnOffsetY: (Math.random() - 0.5) * 0.82,
-                // Central landing offset
-                destOffsetX: (Math.random() - 0.5) * 50,
-                destOffsetY: (Math.random() - 0.5) * 24
+                // Gentle, smooth tumbling
+                rotSpeed: (Math.random() - 0.5) * 0.028,
+                curveVariance: (Math.random() - 0.5) * 110, // Wide natural arc
+                
+                // Spawn position along the facing edge of the button
+                spawnNormY: 0.1 + Math.random() * 0.8, // 10% to 90% along vertical edge
+                spawnDepth: Math.random() * 5,          // 0 to 5px inside edge
+
+                // Destination landing offset in core
+                destOffsetX: (Math.random() - 0.5) * 44,
+                destOffsetY: (Math.random() - 0.5) * 22,
+
+                // Multi-segment historical trail
+                trail: []
             };
         }
 
@@ -103,11 +118,19 @@
 
         function getCardBoundingData(card, containerRect) {
             const rect = card.getBoundingClientRect();
+            const left = rect.left - containerRect.left;
+            const top = rect.top - containerRect.top;
             return {
-                x: rect.left - containerRect.left + rect.width / 2,
-                y: rect.top - containerRect.top + rect.height / 2,
+                left: left,
+                top: top,
+                right: left + rect.width,
+                bottom: top + rect.height,
+                centerX: left + rect.width / 2,
+                centerY: top + rect.height / 2,
                 width: rect.width,
-                height: rect.height
+                height: rect.height,
+                // Determine if card is on the left or right side of the screen
+                isLeftSide: (left + rect.width / 2) < (containerRect.width / 2)
             };
         }
 
@@ -123,7 +146,7 @@
                 y: coreRect.top - containerRect.top + coreRect.height / 2
             };
 
-            // Collect card bounding boxes and accent colors
+            // Collect real-time card bounding boxes and accent colors
             const nodeData = [];
             cards.forEach(function (card) {
                 const id = card.getAttribute('data-node-id');
@@ -137,7 +160,7 @@
                 });
             });
 
-            // Update & Draw Button Fragment Shards & Energy Streams
+            // Update & Draw Each Fluid Fragment Shard
             particles.forEach(function (p) {
                 const node = nodeData[p.cardIndex];
                 if (!node) return;
@@ -145,174 +168,255 @@
                 const isHovered = node.isHovered;
                 const anyHovered = (hoveredNodeId !== null) || isCoreHovered;
 
-                // Gentle speed boost on hover
-                const currentSpeed = isHovered ? (p.speed * 1.5) : (anyHovered ? p.speed * 0.7 : p.speed);
+                // Smooth speed multiplier (calm glide by default, gentle boost on hover)
+                const currentSpeed = isHovered ? (p.speed * 1.45) : (anyHovered ? p.speed * 0.7 : p.speed);
                 p.progress += currentSpeed;
-                p.angle += isHovered ? (p.rotSpeed * 1.5) : p.rotSpeed;
+                p.angle += isHovered ? (p.rotSpeed * 1.35) : p.rotSpeed;
 
+                // Loop reset when reaching center core
                 if (p.progress >= 1) {
                     p.progress = 0;
-                    p.curveVariance = (Math.random() - 0.5) * 120;
-                    p.spawnOffsetX = (Math.random() - 0.5) * 0.88;
-                    p.spawnOffsetY = (Math.random() - 0.5) * 0.82;
-                    p.destOffsetX = (Math.random() - 0.5) * 50;
-                    p.destOffsetY = (Math.random() - 0.5) * 24;
+                    p.trail = [];
+                    p.curveVariance = (Math.random() - 0.5) * 110;
+                    p.spawnNormY = 0.1 + Math.random() * 0.8;
+                    p.spawnDepth = Math.random() * 5;
+                    p.destOffsetX = (Math.random() - 0.5) * 44;
+                    p.destOffsetY = (Math.random() - 0.5) * 22;
                 }
 
-                // Start position directly on the button's volumetric surface/border
-                const startX = node.bounds.x + p.spawnOffsetX * node.bounds.width;
-                const startY = node.bounds.y + p.spawnOffsetY * node.bounds.height;
+                // 1. Precise Edge Detachment:
+                // Left-side buttons: detach from the RIGHT edge facing the core.
+                // Right-side buttons: detach from the LEFT edge facing the core.
+                let startX, startY;
+                if (node.bounds.isLeftSide) {
+                    startX = node.bounds.right - p.spawnDepth;
+                    startY = node.bounds.top + p.spawnNormY * node.bounds.height;
+                } else {
+                    startX = node.bounds.left + p.spawnDepth;
+                    startY = node.bounds.top + p.spawnNormY * node.bounds.height;
+                }
 
-                // Destination point behind SmartContractum center core
+                // Center destination landing coordinates
                 const endX = coreCenter.x + p.destOffsetX;
                 const endY = coreCenter.y + p.destOffsetY;
 
                 const t = p.progress;
 
-                // Curved Trajectory with Normal Vector Displacement
+                // Curved Trajectory with Bezier Normal Vector
                 const midX = (startX + endX) / 2;
                 const midY = (startY + endY) / 2;
 
                 const dx = endX - startX;
                 const dy = endY - startY;
                 const dist = Math.hypot(dx, dy);
-                const normalX = -dy / dist;
-                const normalY = dx / dist;
+                const normalX = -dy / (dist || 1);
+                const normalY = dx / (dist || 1);
 
                 const cpX = midX + normalX * p.curveVariance;
                 const cpY = midY + normalY * p.curveVariance;
 
-                // Quadratic Bezier Position
+                // Smooth quadratic Bezier coordinates
                 const u = 1 - t;
                 const px = u * u * startX + 2 * u * t * cpX + t * t * endX;
                 const py = u * u * startY + 2 * u * t * cpY + t * t * endY;
 
-                // Previous position for comet tail
-                const tPrev = Math.max(0, t - 0.05);
-                const uPrev = 1 - tPrev;
-                const prevX = uPrev * uPrev * startX + 2 * uPrev * tPrev * cpX + tPrev * tPrev * endX;
-                const prevY = uPrev * uPrev * startY + 2 * uPrev * tPrev * cpY + tPrev * tPrev * endY;
+                // Smooth Opacity & Scale Dynamics
+                // - t < 0.15: Smooth peeling/detachment growth from edge (scale: 0.3 -> 1.0, alpha: 0 -> 1.0)
+                // - 0.15 <= t <= 0.68: Steady luminous flight
+                // - t > 0.68: Graceful dissolution and absorption into core
+                let alpha = 1.0;
+                let scale = 1.0;
 
-                // Smooth Detachment & Dissolution Opacity
-                let alpha = 1;
-                if (t < 0.14) {
-                    alpha = t / 0.14; // Smooth peeling off / detachment from button
+                if (t < 0.15) {
+                    const normT = t / 0.15;
+                    alpha = normT;
+                    scale = 0.35 + 0.65 * normT;
                 } else if (t > 0.68) {
-                    alpha = Math.max(0, (1 - t) / 0.32); // Fusing into center core
+                    const fadeT = (t - 0.68) / 0.32;
+                    alpha = Math.max(0, 1.0 - fadeT);
+                    scale = 1.0 - 0.45 * fadeT;
                 }
 
                 if (!isHovered && anyHovered) {
-                    alpha *= 0.22; // Dim unhovered streams
+                    alpha *= 0.25;
                 }
 
                 if (alpha <= 0.01) return;
 
+                // Record historical position for smooth tapered ribbon trail
+                p.trail.unshift({ x: px, y: py, alpha: alpha, scale: scale });
+                if (p.trail.length > TRAIL_MAX_LENGTH) {
+                    p.trail.pop();
+                }
+
+                // ==========================================================
+                // A. DRAW GLOWING TAPERED FADING TRAIL (Шлейф осколка)
+                // ==========================================================
+                if (p.trail.length >= 2) {
+                    for (let i = 0; i < p.trail.length - 1; i++) {
+                        const pt1 = p.trail[i];
+                        const pt2 = p.trail[i + 1];
+                        const trailRatio = 1 - (i / p.trail.length);
+                        const segmentAlpha = alpha * Math.pow(trailRatio, 1.8) * (isHovered ? 0.75 : 0.48);
+
+                        if (segmentAlpha <= 0.01) continue;
+
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.moveTo(pt1.x, pt1.y);
+                        ctx.lineTo(pt2.x, pt2.y);
+                        ctx.strokeStyle = hexToRgba(node.accent, segmentAlpha);
+                        ctx.lineWidth = Math.max(0.6, (p.size * 0.35 * trailRatio * (isHovered ? 1.4 : 1.0)));
+                        ctx.lineCap = 'round';
+                        if (isHovered) {
+                            ctx.shadowColor = node.accent;
+                            ctx.shadowBlur = 6;
+                        }
+                        ctx.stroke();
+                        ctx.restore();
+                    }
+                }
+
+                // ==========================================================
+                // B. DRAW DETACHED BUTTON GLASS SHARD (Разнообразные кусочки)
+                // ==========================================================
                 ctx.save();
                 ctx.globalAlpha = alpha;
+                ctx.translate(px, py);
+                ctx.rotate(p.angle);
+                ctx.scale(scale, scale);
 
-                // 1. BUTTON FRAGMENT: GLASS SHARD (Кусочек стеклянной кнопки с неоновой кромкой)
-                if (p.type === 'glass-shard') {
-                    ctx.translate(px, py);
-                    ctx.rotate(p.angle);
+                const sw = p.width * (isHovered ? 1.2 : 1.0);
+                const sh = p.height * (isHovered ? 1.2 : 1.0);
 
-                    const scale = isHovered ? 1.25 : 1.0;
-                    const sw = p.shardWidth * scale;
-                    const sh = p.shardHeight * scale;
-
-                    // Shard Dark Glass Body (Matching button card fill)
+                // 1. TRIANGLE SHARD (Треугольный скол)
+                if (p.type === 'triangle-shard') {
                     ctx.beginPath();
-                    ctx.roundRect(-sw / 2, -sh / 2, sw, sh, 2);
-                    ctx.fillStyle = hexToRgba('#0f172a', 0.85);
+                    ctx.moveTo(0, -sh * 0.9);
+                    ctx.lineTo(sw * 0.6, sh * 0.7);
+                    ctx.lineTo(-sw * 0.5, sh * 0.5);
+                    ctx.closePath();
+
+                    ctx.fillStyle = hexToRgba('#0f172a', 0.90);
                     ctx.fill();
 
-                    // Glowing Accent Border (Matching button's illuminated rim)
                     ctx.strokeStyle = isHovered ? '#ffffff' : node.accent;
-                    ctx.lineWidth = isHovered ? 1.6 : 1.1;
+                    ctx.lineWidth = isHovered ? 1.5 : 1.1;
                     ctx.shadowColor = node.accent;
-                    ctx.shadowBlur = isHovered ? 14 : 7;
+                    ctx.shadowBlur = isHovered ? 15 : 7;
                     ctx.stroke();
 
-                    // Specular Corner Glow
+                    // Specular Apex Gleam
                     ctx.beginPath();
-                    ctx.arc(-sw / 2 + 1.5, -sh / 2 + 1.5, 1, 0, Math.PI * 2);
+                    ctx.arc(0, -sh * 0.9, 1, 0, Math.PI * 2);
                     ctx.fillStyle = '#ffffff';
                     ctx.fill();
 
-                // 2. BUTTON FRAGMENT: CRYSTAL CHIP (Кристаллический осколок-ромб)
-                } else if (p.type === 'crystal-chip') {
-                    ctx.translate(px, py);
-                    ctx.rotate(p.angle);
-
-                    const cSize = (isHovered ? p.size * 1.3 : p.size) * 1.5;
-
+                // 2. TRAPEZOID GLASS (Трапециевидный граненый осколок)
+                } else if (p.type === 'trapezoid-glass') {
                     ctx.beginPath();
-                    ctx.moveTo(0, -cSize);
-                    ctx.lineTo(cSize * 0.85, 0);
-                    ctx.lineTo(0, cSize);
-                    ctx.lineTo(-cSize * 0.85, 0);
+                    ctx.moveTo(-sw * 0.4, -sh * 0.5);
+                    ctx.lineTo(sw * 0.5, -sh * 0.4);
+                    ctx.lineTo(sw * 0.35, sh * 0.5);
+                    ctx.lineTo(-sw * 0.5, sh * 0.4);
                     ctx.closePath();
 
-                    ctx.fillStyle = hexToRgba('#1e293b', 0.90);
+                    ctx.fillStyle = hexToRgba('#1e293b', 0.92);
                     ctx.fill();
 
                     ctx.strokeStyle = isHovered ? '#ffffff' : node.accent;
-                    ctx.lineWidth = 1.2;
+                    ctx.lineWidth = isHovered ? 1.4 : 1.0;
+                    ctx.shadowColor = node.accent;
+                    ctx.shadowBlur = isHovered ? 14 : 6;
+                    ctx.stroke();
+
+                    // Internal Glass Refraction line
+                    ctx.beginPath();
+                    ctx.moveTo(-sw * 0.2, -sh * 0.3);
+                    ctx.lineTo(sw * 0.2, sh * 0.3);
+                    ctx.strokeStyle = hexToRgba(node.accent, 0.45);
+                    ctx.lineWidth = 0.8;
+                    ctx.stroke();
+
+                // 3. HEX CRYSTAL (Шестигранная микро-призма)
+                } else if (p.type === 'hex-crystal') {
+                    const r = (sw + sh) / 4;
+                    ctx.beginPath();
+                    for (let a = 0; a < 6; a++) {
+                        const angle = (a * Math.PI) / 3;
+                        const hx = Math.cos(angle) * r;
+                        const hy = Math.sin(angle) * r * 0.8;
+                        if (a === 0) ctx.moveTo(hx, hy);
+                        else ctx.lineTo(hx, hy);
+                    }
+                    ctx.closePath();
+
+                    ctx.fillStyle = hexToRgba('#0b1426', 0.94);
+                    ctx.fill();
+
+                    ctx.strokeStyle = isHovered ? '#ffffff' : node.accent;
+                    ctx.lineWidth = isHovered ? 1.4 : 1.0;
                     ctx.shadowColor = node.accent;
                     ctx.shadowBlur = isHovered ? 14 : 7;
                     ctx.stroke();
 
-                // 3. BUTTON FRAGMENT: FACET TILE (Граненая микро-плитка)
-                } else if (p.type === 'facet-tile') {
-                    ctx.translate(px, py);
-                    ctx.rotate(p.angle);
-
-                    const tSize = isHovered ? p.size * 1.4 : p.size;
-
+                    // Center Core Glow Dot
                     ctx.beginPath();
-                    ctx.moveTo(-tSize, -tSize * 0.6);
-                    ctx.lineTo(tSize * 0.6, -tSize);
-                    ctx.lineTo(tSize, tSize * 0.6);
-                    ctx.lineTo(-tSize * 0.6, tSize);
+                    ctx.arc(0, 0, 1.2, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fill();
+
+                // 4. RHOMBUS DIAMOND (Ромбовидный осколок)
+                } else if (p.type === 'rhombus-diamond') {
+                    ctx.beginPath();
+                    ctx.moveTo(0, -sh);
+                    ctx.lineTo(sw * 0.6, 0);
+                    ctx.lineTo(0, sh);
+                    ctx.lineTo(-sw * 0.6, 0);
+                    ctx.closePath();
+
+                    ctx.fillStyle = hexToRgba('#0f172a', 0.88);
+                    ctx.fill();
+
+                    ctx.strokeStyle = isHovered ? '#ffffff' : node.accent;
+                    ctx.lineWidth = isHovered ? 1.4 : 1.0;
+                    ctx.shadowColor = node.accent;
+                    ctx.shadowBlur = isHovered ? 14 : 7;
+                    ctx.stroke();
+
+                // 5. CURVED SPLINTER (Продолговатый осколок-стрелка)
+                } else if (p.type === 'curved-splinter') {
+                    ctx.beginPath();
+                    ctx.moveTo(-sw * 0.7, 0);
+                    ctx.quadraticCurveTo(0, -sh * 0.6, sw * 0.7, 0);
+                    ctx.quadraticCurveTo(0, sh * 0.6, -sw * 0.7, 0);
                     ctx.closePath();
 
                     ctx.fillStyle = hexToRgba(node.accent, isHovered ? 0.35 : 0.20);
                     ctx.fill();
 
-                    ctx.strokeStyle = node.accent;
-                    ctx.lineWidth = 1.0;
+                    ctx.strokeStyle = isHovered ? '#ffffff' : node.accent;
+                    ctx.lineWidth = 1.1;
                     ctx.shadowColor = node.accent;
-                    ctx.shadowBlur = 8;
+                    ctx.shadowBlur = isHovered ? 14 : 8;
                     ctx.stroke();
 
-                // 4. LUMINOUS TAIL / STREAM (Световой шлейф за отделившимся осколком)
-                } else if (p.type === 'luminous-trail') {
-                    const grad = ctx.createLinearGradient(prevX, prevY, px, py);
-                    grad.addColorStop(0, hexToRgba(node.accent, 0));
-                    grad.addColorStop(1, isHovered ? '#ffffff' : node.accent);
-
-                    ctx.beginPath();
-                    ctx.moveTo(prevX, prevY);
-                    ctx.lineTo(px, py);
-                    ctx.strokeStyle = grad;
-                    ctx.lineWidth = isHovered ? (p.size * 1.1) : (p.size * 0.75);
-                    ctx.shadowColor = node.accent;
-                    ctx.shadowBlur = isHovered ? 16 : 8;
-                    ctx.lineCap = 'round';
-                    ctx.stroke();
-
-                // 5. PHOTON SPARK (Яркая энергетическая искра)
+                // 6. RECT CHIP (Скругленный стеклянный микро-чип кнопки)
                 } else {
-                    const dotRadius = isHovered ? (p.size * 1.1) : (p.size * 0.85);
-
                     ctx.beginPath();
-                    ctx.arc(px, py, dotRadius, 0, Math.PI * 2);
-                    ctx.fillStyle = node.accent;
-                    ctx.shadowColor = node.accent;
-                    ctx.shadowBlur = isHovered ? 16 : 9;
+                    ctx.roundRect(-sw / 2, -sh / 2, sw, sh, 1.5);
+                    ctx.fillStyle = hexToRgba('#1e293b', 0.90);
                     ctx.fill();
 
+                    ctx.strokeStyle = isHovered ? '#ffffff' : node.accent;
+                    ctx.lineWidth = isHovered ? 1.5 : 1.1;
+                    ctx.shadowColor = node.accent;
+                    ctx.shadowBlur = isHovered ? 14 : 7;
+                    ctx.stroke();
+
+                    // Specular Corner Highlight
                     ctx.beginPath();
-                    ctx.arc(px, py, dotRadius * 0.45, 0, Math.PI * 2);
+                    ctx.arc(-sw / 2 + 1.2, -sh / 2 + 1.2, 0.9, 0, Math.PI * 2);
                     ctx.fillStyle = '#ffffff';
                     ctx.fill();
                 }
