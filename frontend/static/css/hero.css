@@ -678,6 +678,7 @@
 
 
 
+
 /* ----------------------------------------------------------------------
    1.1.5 ЛЕГКАЯ СОВРЕМЕННАЯ ДОРОЖНАЯ КАРТА ПКСК БАНКА РОССИИ
 ----------------------------------------------------------------------- */
@@ -698,7 +699,7 @@
     flex-wrap: wrap;
     padding-bottom: 14px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .timeline-header-left {
@@ -755,13 +756,14 @@
     padding-top: 4px;
 }
 
+/* Connecting line passing BEHIND the node discs */
 .pksc-connecting-line {
     position: absolute;
     top: 22px;
-    left: 40px;
-    right: 40px;
+    left: 12.5%;
+    right: 12.5%;
     height: 2px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.1);
     z-index: 1;
     border-radius: 2px;
     overflow: hidden;
@@ -802,75 +804,70 @@
 .pksc-step-card {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 14px;
     transition: transform 0.25s ease;
 }
 
+/* Node anchor centered, disc layered on top of line with solid backing */
 .step-node-anchor {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 6px;
+    justify-content: center;
+    height: 38px;
+    position: relative;
+    z-index: 3;
 }
 
 .step-node-disc {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
-    background: rgba(11, 20, 38, 0.95);
-    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    background: #0b1426;
+    border: 1.5px solid rgba(255, 255, 255, 0.18);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 0 6px #0b1426, 0 4px 14px rgba(0, 0, 0, 0.7);
     transition: all 0.25s ease;
+    position: relative;
+    z-index: 3;
 }
 
 .node-svg-icon {
     width: 18px;
     height: 18px;
     display: block;
+    margin: auto;
 }
 
 .step-status-completed .step-node-disc {
-    background: rgba(16, 185, 129, 0.15);
+    background: #0b1426;
     border-color: #10b981;
-    box-shadow: 0 0 14px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 0 0 6px #0b1426, 0 0 14px rgba(16, 185, 129, 0.4);
 }
 
 .step-status-active .step-node-disc {
-    background: rgba(245, 158, 11, 0.18);
+    background: #0b1426;
     border-color: #f59e0b;
-    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2), 0 0 18px rgba(56, 189, 248, 0.5);
+    box-shadow: 0 0 0 6px #0b1426, 0 0 18px rgba(56, 189, 248, 0.5);
     animation: activeHalo 2.5s infinite;
 }
 
 @keyframes activeHalo {
-    0%, 100% { box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18), 0 0 14px rgba(56, 189, 248, 0.35); }
-    50% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.3), 0 0 20px rgba(56, 189, 248, 0.6); }
+    0%, 100% { box-shadow: 0 0 0 6px #0b1426, 0 0 14px rgba(56, 189, 248, 0.35); }
+    50% { box-shadow: 0 0 0 6px #0b1426, 0 0 22px rgba(56, 189, 248, 0.65), 0 0 0 8px rgba(245, 158, 11, 0.25); }
 }
 
 .step-status-planned .step-node-disc {
     border-color: #38bdf8;
-    background: rgba(56, 189, 248, 0.08);
+    background: #0b1426;
+    box-shadow: 0 0 0 6px #0b1426, 0 4px 14px rgba(0, 0, 0, 0.7);
 }
 
 .step-status-future .step-node-disc {
-    border-color: rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.04);
-}
-
-.node-step-number {
-    font-family: var(--font-mono, 'JetBrains Mono', monospace);
-    font-size: 0.74rem;
-    font-weight: 700;
-    color: #64748b;
-    letter-spacing: 0.04em;
-}
-
-.node-step-number.active-number {
-    color: #fbbf24;
-    text-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+    border-color: rgba(255, 255, 255, 0.15);
+    background: #0b1426;
+    box-shadow: 0 0 0 6px #0b1426, 0 4px 14px rgba(0, 0, 0, 0.7);
 }
 
 .step-card-body {
@@ -902,6 +899,25 @@
     align-items: center;
     justify-content: space-between;
     gap: 6px;
+}
+
+.step-card-num {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #64748b;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+}
+
+.step-status-active .step-card-num {
+    color: #fbbf24;
+    background: rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.35);
+    text-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
 }
 
 .step-card-date {

@@ -3,7 +3,7 @@
 {% block title %}SmartContractum — Здесь рождаются российские смарт-контракты | ПКСК Банка России{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/hero.css?v=3.24.0">
+<link rel="stylesheet" href="/static/css/hero.css?v=3.25.0">
 {% endblock %}
 
 {% block content %}
@@ -156,7 +156,7 @@
          1.2 СЕЛЕКТОР ЗАДАЧ ("Что вы хотите сделать?" / 6-Card Action Grid)
     ================================================================= -->
     <section class="task-router-section" id="taskRouterSection">
-                <!-- ================================================================
+                        <!-- ================================================================
              ГОРИЗОНТАЛЬНАЯ ДОРОЖНАЯ КАРТА ПКСК БАНКА РОССИИ (Легкий современный пайплайн)
         ================================================================= -->
         <div class="pksc-horizontal-timeline-container" id="pkscTimeline">
@@ -174,7 +174,7 @@
 
             <!-- Sleek Horizontal Track & Steps -->
             <div class="pksc-timeline-track-wrapper">
-                <!-- Connecting Gradient Progress Line -->
+                <!-- Connecting Gradient Progress Line Passing Behind Icons -->
                 <div class="pksc-connecting-line" aria-hidden="true">
                     <div class="line-progress-fill">
                         <span class="bar-laser-glow"></span>
@@ -187,13 +187,13 @@
                         <div class="step-node-anchor">
                             <div class="step-node-disc">
                                 <svg class="node-svg-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M16.667 5L7.5 14.167 3.333 10" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M16 5.5L7.75 13.75L4 10" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </div>
-                            <span class="node-step-number">01</span>
                         </div>
                         <div class="step-card-body">
                             <div class="step-card-meta">
+                                <span class="step-card-num">01</span>
                                 <span class="step-card-date">18 июня 2026</span>
                                 <span class="step-pill-badge pill-completed">Завершено</span>
                             </div>
@@ -207,13 +207,13 @@
                         <div class="step-node-anchor">
                             <div class="step-node-disc active-node-pulse">
                                 <svg class="node-svg-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M10.833 1.667L2.5 11.667h6.667L8.333 18.333l9.167-10h-6.667l1.667-6.666z" stroke="#f59e0b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M11 2L3 11.5H9.5L9 18L17 8.5H10.5L11 2Z" stroke="#f59e0b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                             </div>
-                            <span class="node-step-number active-number">02</span>
                         </div>
                         <div class="step-card-body active-body-highlight">
                             <div class="step-card-meta">
+                                <span class="step-card-num">02</span>
                                 <span class="step-card-date active-date">До 30 сентября 2026</span>
                                 <span class="step-pill-badge pill-active">Текущий этап</span>
                             </div>
@@ -227,14 +227,15 @@
                         <div class="step-node-anchor">
                             <div class="step-node-disc">
                                 <svg class="node-svg-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="3.333" y="3.333" width="13.333" height="13.333" rx="2" stroke="#38bdf8" stroke-width="1.8"/>
-                                    <path d="M7.5 1.667v1.666M12.5 1.667v1.666M7.5 16.667v1.666M12.5 16.667v1.666M1.667 7.5h1.666M1.667 12.5h1.666M16.667 7.5h1.666M16.667 12.5h1.666" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round"/>
+                                    <rect x="4" y="4" width="12" height="12" rx="2" stroke="#38bdf8" stroke-width="1.8"/>
+                                    <path d="M7.5 2V4M12.5 2V4M7.5 16V18M12.5 16V18M2 7.5H4M2 12.5H4M16 7.5H18M16 12.5H18" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round"/>
+                                    <circle cx="10" cy="10" r="1.5" fill="#38bdf8"/>
                                 </svg>
                             </div>
-                            <span class="node-step-number">03</span>
                         </div>
                         <div class="step-card-body">
                             <div class="step-card-meta">
+                                <span class="step-card-num">03</span>
                                 <span class="step-card-date">IV кв. 2026 – I кв. 2027</span>
                                 <span class="step-pill-badge pill-planned">Проектирование</span>
                             </div>
@@ -248,14 +249,14 @@
                         <div class="step-node-anchor">
                             <div class="step-node-disc">
                                 <svg class="node-svg-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12.5 2.5a7.5 7.5 0 0 1 5 5c0 4.167-5 10-5 10s-5-5.833-5-10a7.5 7.5 0 0 1 5-5z" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <circle cx="12.5" cy="7.5" r="2.5" stroke="#94a3b8" stroke-width="1.8"/>
+                                    <path d="M10 2.5C6.96 2.5 4.5 4.96 4.5 8C4.5 12.125 10 17.5 10 17.5C10 17.5 15.5 12.125 15.5 8C15.5 4.96 13.04 2.5 10 2.5Z" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="10" cy="8" r="2.2" stroke="#94a3b8" stroke-width="1.8"/>
                                 </svg>
                             </div>
-                            <span class="node-step-number">04</span>
                         </div>
                         <div class="step-card-body">
                             <div class="step-card-meta">
+                                <span class="step-card-num">04</span>
                                 <span class="step-card-date">С 31 марта 2027</span>
                                 <span class="step-pill-badge pill-future">Пилотный контур</span>
                             </div>
@@ -530,5 +531,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/hero.js?v=3.24.0" defer></script>
+<script src="/static/js/hero.js?v=3.25.0" defer></script>
 {% endblock %}
