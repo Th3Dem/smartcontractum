@@ -1010,10 +1010,12 @@
 .section-heading-box {
     text-align: center;
     scroll-margin-top: 90px;
+    margin-top: 36px;
+    margin-bottom: 8px;
 }
 
 .section-title {
-    font-size: 2.0rem;
+    font-size: 2.1rem;
     font-weight: 800;
     color: #ffffff;
     letter-spacing: -0.5px;
@@ -1021,8 +1023,10 @@
 }
 
 .section-subtitle {
-    font-size: 1.0rem;
+    font-size: 1.05rem;
     color: #94a3b8;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .constellation-graph-container {
