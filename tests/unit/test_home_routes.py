@@ -172,6 +172,6 @@ def test_home_page_contains_horizontal_pksc_timeline() -> None:
     assert "pkscTimeline" in html
     assert "Дорожная карта создания ПКСК Банка России" in html
     assert "Публикация Концепции" in html
-    assert "Сбор пилотов & оракулов" in html
+    assert "Сбор обратной связи" in html
     assert "НИР & Целевая модель" in html
     assert "Проектирование пилота" in html
