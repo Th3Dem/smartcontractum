@@ -631,7 +631,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initialize Constellation Graph
-    initConstellationGraph();
 
     // Initialize stats
     updateSystemStats();
