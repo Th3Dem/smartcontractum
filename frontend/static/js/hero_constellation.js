@@ -1,6 +1,6 @@
 /**
- * SmartContractum — Hero Constellation Interactive Graph v4.1.0
- * Micro-Particle Energy Streams & Laser Synapses
+ * SmartContractum — Hero Constellation Interactive Graph v4.2.0
+ * Multi-Tier Particle Stream: Luminous Fading Trails & Corner Micro-Dots Swarm
  * File: frontend/static/js/hero_constellation.js
  */
 
@@ -24,39 +24,93 @@
         let hoveredNodeId = null;
         let isCoreHovered = false;
 
-        // Micro-particle system (streaks, rotating diamonds, quantum rings, cyber dust, photon sparks)
-        const PARTICLES_PER_NODE = 10;
-        const totalParticles = cards.length * PARTICLES_PER_NODE;
-        const particles = [];
+        // Configuration
+        const MAIN_PARTICLES_PER_NODE = 9;
+        const MICRO_DOTS_PER_NODE = 22; // Rich swarm of fine corner/border sparkles
+        const TRAIL_LENGTH = 10;
 
-        function createParticle(cardIndex) {
-            const types = ['streak', 'diamond', 'ring', 'dust', 'spark'];
+        const mainParticles = [];
+        const microDots = [];
+
+        // 1. Main Particles with Dedicated Fading Trails
+        function createMainParticle(cardIndex) {
+            const types = ['streak', 'diamond', 'ring', 'spark'];
             const type = types[Math.floor(Math.random() * types.length)];
 
             return {
                 cardIndex: cardIndex,
                 type: type,
-                progress: Math.random(), // 0.0 to 1.0 along the trajectory
-                // Calibrated slightly slower speed (smooth and energetic)
-                speed: 0.0024 + Math.random() * 0.0026,
-                size: 2.2 + Math.random() * 3.6,
+                progress: Math.random(),
+                speed: 0.0022 + Math.random() * 0.0024,
+                size: 2.4 + Math.random() * 3.4,
                 angle: Math.random() * Math.PI * 2,
-                rotSpeed: (Math.random() - 0.5) * 0.06,
+                rotSpeed: (Math.random() - 0.5) * 0.05,
                 curveVariance: (Math.random() - 0.5) * 110,
-                // Distributed across the button card volume
-                spawnOffsetX: (Math.random() - 0.5) * 0.85,
-                spawnOffsetY: (Math.random() - 0.5) * 0.80,
-                // Central landing offset behind SmartContractum core
+                spawnOffsetX: (Math.random() - 0.5) * 0.84,
+                spawnOffsetY: (Math.random() - 0.5) * 0.78,
+                destOffsetX: (Math.random() - 0.5) * 55,
+                destOffsetY: (Math.random() - 0.5) * 28,
+                trail: [] // History of recent positions
+            };
+        }
+
+        // 2. Fine Micro-Dots Streaming from all 4 Corners and Frame Edges
+        function createMicroDot(cardIndex) {
+            // Spawn location from corners or border perimeter
+            const corner = Math.floor(Math.random() * 5);
+            let offX, offY;
+
+            if (corner === 0) {
+                // Top-Left corner
+                offX = -0.45 + Math.random() * 0.12;
+                offY = -0.42 + Math.random() * 0.12;
+            } else if (corner === 1) {
+                // Top-Right corner
+                offX = 0.45 - Math.random() * 0.12;
+                offY = -0.42 + Math.random() * 0.12;
+            } else if (corner === 2) {
+                // Bottom-Left corner
+                offX = -0.45 + Math.random() * 0.12;
+                offY = 0.42 - Math.random() * 0.12;
+            } else if (corner === 3) {
+                // Bottom-Right corner
+                offX = 0.45 - Math.random() * 0.12;
+                offY = 0.42 - Math.random() * 0.12;
+            } else {
+                // Frame perimeter edge
+                const side = Math.floor(Math.random() * 4);
+                if (side === 0) { offX = (Math.random() - 0.5) * 0.9; offY = -0.45; }
+                else if (side === 1) { offX = 0.45; offY = (Math.random() - 0.5) * 0.85; }
+                else if (side === 2) { offX = (Math.random() - 0.5) * 0.9; offY = 0.45; }
+                else { offX = -0.45; offY = (Math.random() - 0.5) * 0.85; }
+            }
+
+            return {
+                cardIndex: cardIndex,
+                progress: Math.random(),
+                speed: 0.0018 + Math.random() * 0.0028,
+                size: 1.0 + Math.random() * 1.6, // Fine micro-dot
+                pulsePhase: Math.random() * Math.PI * 2,
+                curveVariance: (Math.random() - 0.5) * 90,
+                spawnOffsetX: offX,
+                spawnOffsetY: offY,
                 destOffsetX: (Math.random() - 0.5) * 60,
-                destOffsetY: (Math.random() - 0.5) * 30
+                destOffsetY: (Math.random() - 0.5) * 30,
+                prevX: 0,
+                prevY: 0
             };
         }
 
         function initParticles() {
-            particles.length = 0;
+            mainParticles.length = 0;
+            microDots.length = 0;
+
             cards.forEach(function (_, cardIndex) {
-                for (let i = 0; i < PARTICLES_PER_NODE; i++) {
-                    particles.push(createParticle(cardIndex));
+                for (let i = 0; i < MAIN_PARTICLES_PER_NODE; i++) {
+                    mainParticles.push(createMainParticle(cardIndex));
+                }
+                for (let j = 0; j < MICRO_DOTS_PER_NODE; j++) {
+                    microDots.push(createMicroDot(cardIndex));
                 }
             });
         }
@@ -75,7 +129,7 @@
 
             ctx.scale(dpr, dpr);
 
-            if (particles.length === 0) {
+            if (mainParticles.length === 0) {
                 initParticles();
             }
 
@@ -131,72 +185,65 @@
                 });
             });
 
-            // Update & Draw Micro-Particle Streams
-            particles.forEach(function (p) {
+            // ==============================================================
+            // 1. RENDER MICRO-DOTS SWARM (Летят из всех 4 углов и рамки)
+            // ==============================================================
+            microDots.forEach(function (p) {
                 const node = nodeData[p.cardIndex];
                 if (!node) return;
 
                 const isHovered = node.isHovered;
                 const anyHovered = (hoveredNodeId !== null) || isCoreHovered;
 
-                // Speed boost on hover
-                const currentSpeed = isHovered ? (p.speed * 1.6) : (anyHovered ? p.speed * 0.75 : p.speed);
+                const currentSpeed = isHovered ? (p.speed * 1.5) : (anyHovered ? p.speed * 0.75 : p.speed);
                 p.progress += currentSpeed;
-                p.angle += p.rotSpeed;
 
                 if (p.progress >= 1) {
                     p.progress = 0;
-                    p.curveVariance = (Math.random() - 0.5) * 110;
-                    p.spawnOffsetX = (Math.random() - 0.5) * 0.85;
-                    p.spawnOffsetY = (Math.random() - 0.5) * 0.80;
+                    p.curveVariance = (Math.random() - 0.5) * 90;
                     p.destOffsetX = (Math.random() - 0.5) * 60;
                     p.destOffsetY = (Math.random() - 0.5) * 30;
                 }
 
-                // Start position distributed across the FULL volume of the button
                 const startX = node.bounds.x + p.spawnOffsetX * node.bounds.width;
                 const startY = node.bounds.y + p.spawnOffsetY * node.bounds.height;
-
-                // Destination point behind SmartContractum center pill
                 const endX = coreCenter.x + p.destOffsetX;
                 const endY = coreCenter.y + p.destOffsetY;
 
                 const t = p.progress;
-
-                // Wide Curved Trajectory with Bezier Control Point
                 const midX = (startX + endX) / 2;
                 const midY = (startY + endY) / 2;
-
                 const dx = endX - startX;
                 const dy = endY - startY;
                 const dist = Math.hypot(dx, dy);
-                const normalX = -dy / dist;
-                const normalY = dx / dist;
+                const normalX = -dy / (dist || 1);
+                const normalY = dx / (dist || 1);
 
                 const cpX = midX + normalX * p.curveVariance;
                 const cpY = midY + normalY * p.curveVariance;
 
-                // Quadratic Bezier Interpolation
                 const u = 1 - t;
                 const px = u * u * startX + 2 * u * t * cpX + t * t * endX;
                 const py = u * u * startY + 2 * u * t * cpY + t * t * endY;
 
-                // Previous position for smooth comet tail direction
-                const tPrev = Math.max(0, t - 0.045);
+                // Previous position for fine micro-tail
+                const tPrev = Math.max(0, t - 0.035);
                 const uPrev = 1 - tPrev;
                 const prevX = uPrev * uPrev * startX + 2 * uPrev * tPrev * cpX + tPrev * tPrev * endX;
                 const prevY = uPrev * uPrev * startY + 2 * uPrev * tPrev * cpY + tPrev * tPrev * endY;
 
-                // Smooth Opacity Fade: Emerge from behind button, stay bright in flight, dissolve behind core
                 let alpha = 1;
-                if (t < 0.18) {
-                    alpha = t / 0.18; // Smooth emergence
-                } else if (t > 0.65) {
-                    alpha = Math.max(0, (1 - t) / 0.35); // Smooth dissolution
+                if (t < 0.15) {
+                    alpha = t / 0.15;
+                } else if (t > 0.70) {
+                    alpha = Math.max(0, (1 - t) / 0.30);
                 }
 
+                // Shimmering twinkle
+                alpha *= (0.65 + 0.35 * Math.sin(p.pulsePhase + t * 18));
+
                 if (!isHovered && anyHovered) {
-                    alpha *= 0.25; // Dim non-hovered streams
+                    alpha *= 0.25;
                 }
 
                 if (alpha <= 0.01) return;
@@ -204,33 +251,144 @@
                 ctx.save();
                 ctx.globalAlpha = alpha;
 
+                // Micro spark line/trail
+                ctx.beginPath();
+                ctx.moveTo(prevX, prevY);
+                ctx.lineTo(px, py);
+                ctx.strokeStyle = hexToRgba(node.accent, isHovered ? 0.9 : 0.65);
+                ctx.lineWidth = isHovered ? (p.size * 1.2) : p.size;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+
+                // Micro dot head
+                ctx.beginPath();
+                ctx.arc(px, py, p.size * 0.8, 0, Math.PI * 2);
+                ctx.fillStyle = isHovered ? '#ffffff' : node.accent;
+                ctx.fill();
+
+                ctx.restore();
+            });
+
+            // ==============================================================
+            // 2. RENDER MAIN PARTICLES WITH FADING TRAILS (Шлейф за каждым)
+            // ==============================================================
+            mainParticles.forEach(function (p) {
+                const node = nodeData[p.cardIndex];
+                if (!node) return;
+
+                const isHovered = node.isHovered;
+                const anyHovered = (hoveredNodeId !== null) || isCoreHovered;
+
+                const currentSpeed = isHovered ? (p.speed * 1.55) : (anyHovered ? p.speed * 0.75 : p.speed);
+                p.progress += currentSpeed;
+                p.angle += p.rotSpeed;
+
+                if (p.progress >= 1) {
+                    p.progress = 0;
+                    p.trail = [];
+                    p.curveVariance = (Math.random() - 0.5) * 110;
+                    p.spawnOffsetX = (Math.random() - 0.5) * 0.84;
+                    p.spawnOffsetY = (Math.random() - 0.5) * 0.78;
+                    p.destOffsetX = (Math.random() - 0.5) * 55;
+                    p.destOffsetY = (Math.random() - 0.5) * 28;
+                }
+
+                const startX = node.bounds.x + p.spawnOffsetX * node.bounds.width;
+                const startY = node.bounds.y + p.spawnOffsetY * node.bounds.height;
+                const endX = coreCenter.x + p.destOffsetX;
+                const endY = coreCenter.y + p.destOffsetY;
+
+                const t = p.progress;
+                const midX = (startX + endX) / 2;
+                const midY = (startY + endY) / 2;
+                const dx = endX - startX;
+                const dy = endY - startY;
+                const dist = Math.hypot(dx, dy);
+                const normalX = -dy / (dist || 1);
+                const normalY = dx / (dist || 1);
+
+                const cpX = midX + normalX * p.curveVariance;
+                const cpY = midY + normalY * p.curveVariance;
+
+                const u = 1 - t;
+                const px = u * u * startX + 2 * u * t * cpX + t * t * endX;
+                const py = u * u * startY + 2 * u * t * cpY + t * t * endY;
+
+                let alpha = 1;
+                if (t < 0.16) {
+                    alpha = t / 0.16;
+                } else if (t > 0.66) {
+                    alpha = Math.max(0, (1 - t) / 0.34);
+                }
+
+                if (!isHovered && anyHovered) {
+                    alpha *= 0.25;
+                }
+
+                if (alpha <= 0.01) return;
+
+                // Push position to fading trail buffer
+                p.trail.unshift({ x: px, y: py, alpha: alpha });
+                if (p.trail.length > TRAIL_LENGTH) {
+                    p.trail.pop();
+                }
+
+                // --- 2.1 DRAW LUMINOUS FADING TRAIL (Шлейф) ---
+                if (p.trail.length >= 2) {
+                    for (let i = 0; i < p.trail.length - 1; i++) {
+                        const pt1 = p.trail[i];
+                        const pt2 = p.trail[i + 1];
+                        const trailRatio = 1 - (i / p.trail.length);
+                        const segmentAlpha = alpha * Math.pow(trailRatio, 1.6) * (isHovered ? 0.8 : 0.55);
+
+                        if (segmentAlpha <= 0.01) continue;
+
+                        ctx.save();
+                        ctx.beginPath();
+                        ctx.moveTo(pt1.x, pt1.y);
+                        ctx.lineTo(pt2.x, pt2.y);
+                        ctx.strokeStyle = hexToRgba(node.accent, segmentAlpha);
+                        ctx.lineWidth = Math.max(0.6, p.size * 0.45 * trailRatio * (isHovered ? 1.3 : 1.0));
+                        ctx.lineCap = 'round';
+                        if (isHovered) {
+                            ctx.shadowColor = node.accent;
+                            ctx.shadowBlur = 8;
+                        }
+                        ctx.stroke();
+                        ctx.restore();
+                    }
+                }
+
+                // --- 2.2 DRAW MAIN PARTICLE HEAD ---
+                ctx.save();
+                ctx.globalAlpha = alpha;
+
                 if (p.type === 'streak') {
-                    // 1. Luminous Comet / Streak with Flowing Trail
-                    const grad = ctx.createLinearGradient(prevX, prevY, px, py);
+                    const ptPrev = p.trail[1] || { x: px, y: py };
+                    const grad = ctx.createLinearGradient(ptPrev.x, ptPrev.y, px, py);
                     grad.addColorStop(0, hexToRgba(node.accent, 0));
                     grad.addColorStop(1, isHovered ? '#ffffff' : node.accent);
 
                     ctx.beginPath();
-                    ctx.moveTo(prevX, prevY);
+                    ctx.moveTo(ptPrev.x, ptPrev.y);
                     ctx.lineTo(px, py);
                     ctx.strokeStyle = grad;
-                    ctx.lineWidth = isHovered ? (p.size * 1.2) : (p.size * 0.85);
+                    ctx.lineWidth = isHovered ? (p.size * 1.3) : (p.size * 0.95);
                     ctx.shadowColor = node.accent;
                     ctx.shadowBlur = isHovered ? 16 : 8;
                     ctx.lineCap = 'round';
                     ctx.stroke();
 
                 } else if (p.type === 'diamond') {
-                    // 2. Rotating Data Diamond
                     ctx.translate(px, py);
                     ctx.rotate(p.angle);
                     const dSize = isHovered ? (p.size * 1.3) : p.size;
 
                     ctx.beginPath();
                     ctx.moveTo(0, -dSize);
-                    ctx.lineTo(dSize, 0);
+                    ctx.lineTo(dSize * 0.9, 0);
                     ctx.lineTo(0, dSize);
-                    ctx.lineTo(-dSize, 0);
+                    ctx.lineTo(-dSize * 0.9, 0);
                     ctx.closePath();
 
                     ctx.fillStyle = isHovered ? '#ffffff' : node.accent;
@@ -239,8 +397,7 @@
                     ctx.fill();
 
                 } else if (p.type === 'ring') {
-                    // 3. Quantum Energy Ring
-                    const rSize = (p.size * (1 + (1 - alpha) * 0.7));
+                    const rSize = (p.size * (1 + (1 - alpha) * 0.65));
                     ctx.beginPath();
                     ctx.arc(px, py, rSize, 0, Math.PI * 2);
                     ctx.strokeStyle = node.accent;
@@ -249,20 +406,10 @@
                     ctx.shadowBlur = 10;
                     ctx.stroke();
 
-                } else if (p.type === 'dust') {
-                    // 4. Soft Cyber Dust Mote
-                    ctx.beginPath();
-                    ctx.arc(px, py, p.size * 0.75, 0, Math.PI * 2);
-                    ctx.fillStyle = hexToRgba(node.accent, 0.7);
-                    ctx.shadowColor = node.accent;
-                    ctx.shadowBlur = 6;
-                    ctx.fill();
-
                 } else {
-                    // 5. Glowing Photon Spark
+                    // Photon Spark
                     const dotRadius = isHovered ? (p.size * 1.2) : p.size;
 
-                    // Outer Halo
                     ctx.beginPath();
                     ctx.arc(px, py, dotRadius, 0, Math.PI * 2);
                     ctx.fillStyle = node.accent;
@@ -270,7 +417,6 @@
                     ctx.shadowBlur = isHovered ? 18 : 10;
                     ctx.fill();
 
-                    // Hot White Core
                     ctx.beginPath();
                     ctx.arc(px, py, dotRadius * 0.45, 0, Math.PI * 2);
                     ctx.fillStyle = '#ffffff';
