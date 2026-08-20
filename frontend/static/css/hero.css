@@ -554,11 +554,11 @@
 }
 
 .hero-title-tricolor-ru {
-    background: linear-gradient(90deg, #ffffff 0%, #f1f5f9 22%, #38bdf8 34%, #2563eb 52%, #1d4ed8 64%, #ef4444 76%, #dc2626 100%);
+    background: linear-gradient(90deg, #ffffff 0%, #edf4ff 22%, #38bdf8 34%, #2563eb 50%, #1e4cb8 64%, #c94b63 76%, #9f243b 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 800;
-    filter: drop-shadow(0 2px 16px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 20px rgba(56, 189, 248, 0.35)) drop-shadow(0 0 20px rgba(239, 68, 68, 0.3));
+    filter: drop-shadow(0 2px 16px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 18px rgba(56, 189, 248, 0.3)) drop-shadow(0 0 14px rgba(180, 40, 65, 0.18));
     letter-spacing: -0.025em;
 }
 
