@@ -1,7 +1,7 @@
 # ⚙️ Инженерный регламент и параметры: qa_bot
 
-> **Проект:** SmartContractum Enterprise Platform  
-> **Роль:** QA & Reliability Engineer  
+> **Статус:** QA & Reliability Engineer  
+> **Локация:** `/_core_agents/qa_bot/`  
 > **Стандарт:** Zero Bad Commits & 100% In-Memory Test Isolation  
 
 ---
@@ -18,7 +18,7 @@
    # Шаг 1: Тесты
    pytest tests/unit
 
-# Шаг 2: Линтер
+   # Шаг 2: Линтер
    flake8 backend/
    ```
 
@@ -34,12 +34,3 @@
    | Профиль участника | `tests/unit/test_profile_api.py` | 6/6 PASSED |
    | Health-мониторинг | `tests/unit/test_health.py` | 1/1 PASSED |
    | **ИТОГО** | **Полный контур** | **40/40 PASSED (100% Green)** |
-
----
-
-## 2. Регламент логирования в WORKLOG.md
-
-В каждой записи `WORKLOG.md` раздел `qa_bot` обязан содержать:
-* Точное количество пройденных тестов (например: `40/40 тестов 100% PASSED`).
-* Время выполнения тестового пакета (например: `0.77s`).
-* Статус готовности к релизу.

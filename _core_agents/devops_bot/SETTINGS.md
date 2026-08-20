@@ -1,7 +1,7 @@
 # ⚙️ Инженерный регламент и параметры: devops_bot
 
-> **Проект:** SmartContractum Enterprise Platform  
-> **Роль:** AppSec & DevSecOps Engineer  
+> **Статус:** AppSec & DevSecOps Engineer  
+> **Локация:** `/_core_agents/devops_bot/`  
 > **Стандарт:** Enterprise Security, Zero Secret Leaks & Automated Git Flow  
 
 ---
@@ -38,12 +38,3 @@ response.headers["X-XSS-Protection"] = "1; mode=block"
 response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
 response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
 ```
-
----
-
-## 3. Регламент логирования в WORKLOG.md
-
-В каждой записи `WORKLOG.md` раздел `devops_bot` обязан содержать:
-* Статус синхронизации веток `dev -> staging -> main`.
-* Проверку безопасности конфигурации и отсутствие уязвимостей.
-* Хэш финального коммита.

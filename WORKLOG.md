@@ -690,7 +690,21 @@
 * **`seo_bot`**: Сформировал спецификацию семантической разметки Schema.org JSON-LD и правила UX-копирайтинга в `agents/seo_bot/`.
 * **`load_bot`**: Зафиксировал Performance Budget (p95 < 350ms, 60 FPS, 0% CPU idle) в `agents/load_bot/`.
 * **`ai_bot`**: Зафиксировал архитектуру Circuit Breaker, интеграцию Google Gemini REST API и детерминированный fallback в `agents/ai_bot/`.
-* **Итог релиза:** Коммит `e5d2a19` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
+* **Итог релиза:** Коммит `72b079d` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
+
+---
+
+### 2026-08-20 11:00 | ARCHITECTURE_CORE_AGENTS_ESTABLISHED: Two-Tier Agent Architecture (_core_agents/ & agents/)
+* **`pm_bot`**: Утвердила и реализовала двухуровневую архитектуру экосистемы: Паула зафиксирована как Лидер Ядра в `/_core_agents/pm_bot/` (Chief Orchestrator & Lead Architect), инженерные роли вынесены в `/_core_agents/` (`pm_bot`, `py_bot`, `qa_bot`, `devops_bot`), а прикладные — в `/agents/` (`ui_bot`, `seo_bot`, `ai_bot`, `load_qa_bot`, `design_bot`). Создана директория `_archive/`.
+* **`py_bot`**: Зафиксировал конфигурацию серверного ядра в `/_core_agents/py_bot/` с акцентом на FastAPI, транзакции PostgreSQL и схемы Pydantic v2.
+* **`ui_bot`**: Сконфигурировал проектный модуль `agents/ui_bot/` для разработки интерфейсов, CSS 3D и визуального Конструктора.
+* **`qa_bot`**: Прогнал полный тестовый контур `pytest tests/unit` — **40/40 тестов 100% PASSED** (0.58s), зафиксировал регламент в `/_core_agents/qa_bot/`.
+* **`devops_bot`**: Выполнил синхронизацию Git-репозитория по цепочке `dev` $\to$ `staging` $\to$ `main`, зафиксировал стандарты AppSec в `/_core_agents/devops_bot/`.
+* **`design_bot`**: Зафиксировал токены дизайн-системы и визуализацию деревьев решений в `agents/design_bot/`.
+* **`seo_bot`**: Зафиксировал спецификацию семантики ПКСК и микроразметки JSON-LD в `agents/seo_bot/`.
+* **`load_bot`**: Реорганизован в специализированный проектный модуль `agents/load_qa_bot/` с фокусом на стресс-тесты k6 и 60 FPS GPU.
+* **`ai_bot`**: Зафиксировал интеграцию Gemini REST API и Circuit Breaker в `agents/ai_bot/`.
+* **Итог релиза:** Коммит зафиксирован и синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
 
 ---
 
