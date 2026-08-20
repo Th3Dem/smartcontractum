@@ -553,6 +553,16 @@
     letter-spacing: -0.025em;
 }
 
+
+.hero-title-interline-flow {
+    background: linear-gradient(90deg, #9f243b 0%, #ba3b61 10%, #9061f9 26%, #4f46e5 44%, #38bdf8 68%, #6188ff 84%, #16c784 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    filter: drop-shadow(0 2px 16px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 24px rgba(56, 189, 248, 0.45));
+    letter-spacing: -0.025em;
+}
+
 .hero-title-tricolor-ru {
     background: linear-gradient(90deg, #ffffff 0%, #edf4ff 22%, #38bdf8 34%, #2563eb 50%, #1e4cb8 64%, #c94b63 76%, #9f243b 100%);
     -webkit-background-clip: text;
