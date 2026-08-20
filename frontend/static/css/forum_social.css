@@ -1970,3 +1970,75 @@ body.light-theme-feed {
     box-sizing: border-box !important;
     padding: 7px 28px 7px 32px !important;
 }
+
+/* ----------------------------------------------------------------------
+   CATEGORIES DROPDOWN LAYOUT FIX (Right Meta & Checkmark)
+----------------------------------------------------------------------- */
+.cat-menu-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    transition: all 0.15s ease !important;
+}
+
+.cat-menu-text-wrap {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+}
+
+.cat-menu-name {
+    font-size: 0.86rem !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.cat-menu-subs {
+    font-size: 0.72rem !important;
+    color: #64748b !important;
+}
+
+.cat-menu-meta-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+    margin-left: auto !important;
+}
+
+.cat-menu-count {
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    color: #64748b !important;
+    background: #f1f5f9 !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+    white-space: nowrap !important;
+}
+
+.cat-menu-item.is-active .cat-menu-count {
+    background: #e0f2fe !important;
+    color: #0369a1 !important;
+    border-color: #bae6fd !important;
+}
+
+.cat-menu-check {
+    width: 14px !important;
+    height: 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.85rem !important;
+    font-weight: 800 !important;
+    color: #0284c7 !important;
+    line-height: 1 !important;
+}

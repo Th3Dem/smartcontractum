@@ -3,7 +3,7 @@
 {% block title %}{{ page_title or 'База знаний и лента статей Habr 2.0 — SmartContractum' }}{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_social.css?v=2.2.1">
+<link rel="stylesheet" href="/static/css/forum_social.css?v=2.2.2">
 <!-- Schema.org JSON-LD Collection Markup -->
 <script type="application/ld+json">
 {
@@ -90,13 +90,15 @@
                                 <div class="cat-menu-text-wrap">
                                     <div class="cat-menu-top-line">
                                         <span class="cat-menu-name">Все потоки</span>
-                                        <span class="cat-menu-count">5 тем</span>
                                     </div>
                                     <span class="cat-menu-subs">18.4k читателей</span>
                                 </div>
-                                {% if active_stream == 'all' or not active_stream %}
+                                <div class="cat-menu-meta-right">
+                                    <span class="cat-menu-count">5 тем</span>
+                                    {% if active_stream == 'all' or not active_stream %}
                                 <span class="cat-menu-check">✓</span>
                                 {% endif %}
+                                </div>
                             </a>
 
                             <!-- 2. Разработка смарт-контрактов -->
@@ -110,13 +112,15 @@
                                 <div class="cat-menu-text-wrap">
                                     <div class="cat-menu-top-line">
                                         <span class="cat-menu-name">Разработка смарт-контрактов</span>
-                                        <span class="cat-menu-count">2 темы</span>
                                     </div>
                                     <span class="cat-menu-subs">12.1k читателей</span>
                                 </div>
-                                {% if active_stream == 'smart-contracts' %}
+                                <div class="cat-menu-meta-right">
+                                    <span class="cat-menu-count">2 темы</span>
+                                    {% if active_stream == 'smart-contracts' %}
                                 <span class="cat-menu-check">✓</span>
                                 {% endif %}
+                                </div>
                             </a>
 
                             <!-- 3. Информационная безопасность -->
@@ -130,13 +134,15 @@
                                 <div class="cat-menu-text-wrap">
                                     <div class="cat-menu-top-line">
                                         <span class="cat-menu-name">Информационная безопасность</span>
-                                        <span class="cat-menu-count">1 тема</span>
                                     </div>
                                     <span class="cat-menu-subs">9.8k читателей</span>
                                 </div>
-                                {% if active_stream == 'infosec-audit' %}
+                                <div class="cat-menu-meta-right">
+                                    <span class="cat-menu-count">1 тема</span>
+                                    {% if active_stream == 'infosec-audit' %}
                                 <span class="cat-menu-check">✓</span>
                                 {% endif %}
+                                </div>
                             </a>
 
                             <!-- 4. Оракулы & Данные -->
@@ -150,13 +156,15 @@
                                 <div class="cat-menu-text-wrap">
                                     <div class="cat-menu-top-line">
                                         <span class="cat-menu-name">Оракулы & Данные</span>
-                                        <span class="cat-menu-count">1 тема</span>
                                     </div>
                                     <span class="cat-menu-subs">6.5k читателей</span>
                                 </div>
-                                {% if active_stream == 'oracles' %}
+                                <div class="cat-menu-meta-right">
+                                    <span class="cat-menu-count">1 тема</span>
+                                    {% if active_stream == 'oracles' %}
                                 <span class="cat-menu-check">✓</span>
                                 {% endif %}
+                                </div>
                             </a>
 
                             <!-- 5. Регуляторика & ЦБ РФ -->
@@ -170,13 +178,15 @@
                                 <div class="cat-menu-text-wrap">
                                     <div class="cat-menu-top-line">
                                         <span class="cat-menu-name">Регуляторика & ЦБ РФ</span>
-                                        <span class="cat-menu-count">1 тема</span>
                                     </div>
                                     <span class="cat-menu-subs">8.9k читателей</span>
                                 </div>
-                                {% if active_stream == 'safe-deals' %}
+                                <div class="cat-menu-meta-right">
+                                    <span class="cat-menu-count">1 тема</span>
+                                    {% if active_stream == 'safe-deals' %}
                                 <span class="cat-menu-check">✓</span>
                                 {% endif %}
+                                </div>
                             </a>
 
                             <!-- 6. Казначейство & B2B -->
@@ -190,13 +200,15 @@
                                 <div class="cat-menu-text-wrap">
                                     <div class="cat-menu-top-line">
                                         <span class="cat-menu-name">Казначейство & B2B</span>
-                                        <span class="cat-menu-count">1 тема</span>
                                     </div>
                                     <span class="cat-menu-subs">5.2k читателей</span>
                                 </div>
-                                {% if active_stream == 'treasury-b2b' %}
+                                <div class="cat-menu-meta-right">
+                                    <span class="cat-menu-count">1 тема</span>
+                                    {% if active_stream == 'treasury-b2b' %}
                                 <span class="cat-menu-check">✓</span>
                                 {% endif %}
+                                </div>
                             </a>
                         </div>
                     </div>
