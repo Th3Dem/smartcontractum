@@ -1142,6 +1142,22 @@
 * **seo_bot**: Сохранил семантическую разметку H2/H3, валидные ссылки и доступность a11y.
 * **Итог релиза:** Развернуто интерактивное Созвездие SmartContractum.
 
+
+---
+
+### 2026-08-20 19:17 | HERO_CONSTELLATION_MODULAR_RELOAD: Full Production Node Constellation Architecture
+* **pm_bot (Paula)**: Полностью декомпозировала и скоординировала разработку интерактивного созвездия услуг SmartContractum:
+  1. Выделен модульный Jinja2-шаблон rontend/templates/home/hero_constellation.html с семантической структурой и <ul class="sr-only"> для доступности скринридерами (A11y/ARIA).
+  2. Разработана специализированная CSS-система rontend/static/css/hero_constellation.css с Glassmorphism-панелями (
+gba(30, 41, 59, 0.7)), анимациями орбит (orbitSpin) и неоновыми ховер-акцентами.
+  3. Создан Vanilla JS контроллер rontend/static/js/hero_constellation.js с динамическим расчетом SVG-линий, анимацией фотонов данных, межкарточными связями и интеграцией модального окна специалистов.
+* **designer_bot & ui_bot**: Спроектировали дизайн ядра Core [SC], 6 сателлитов и радиальную графовую сетку.
+* **py_bot**: Верифицировал доступность всех 6 целевых эндпоинтов платформы (/passport, /solutions, /marketplace/services, /profile/join, /data-sources, /knowledge).
+* **seo_bot**: Внедрил скрытую доступную разметку для скринридеров и семантические заголовки H2/H3.
+* **qa_bot**: Обновил тестовый контур в 	ests/unit/test_home_routes.py через Starlette TestClient — **42/42 тестов 100% PASSED** (0.68s).
+* **devops_bot**: Синхронизировал ветки dev -> staging -> main, поднял версии ассетов до ?v=3.32.0 и hero_constellation.css/js?v=1.0.0.
+* **Итог релиза:** Проведена полная визуальная и технологическая перезагрузка Hero-селектора в интерактивное созвездие услуг.
+
 ## 📊 Итоговая матрица качества и покрытия тестами:
 
 | Модуль | Файл тестов | Пройдено | Статус |

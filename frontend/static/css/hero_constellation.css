@@ -1,0 +1,415 @@
+﻿/* ======================================================================
+   SmartContractum — Interactive Node Constellation Graph Stylesheet
+   Design System: Glassmorphism + Orbit Rings + Neon SVG Connections
+   File: frontend/static/css/hero_constellation.css
+====================================================================== */
+
+.constellation-section {
+    position: relative;
+    width: 100%;
+    margin-top: 0;
+    padding-top: 10px;
+    scroll-margin-top: 70px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 2;
+}
+
+/* Accessibility screen-reader only utility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* ----------------------------------------------------------------------
+   CONSTELLATION MAIN CONTAINER & SVG NEURAL NETWORK
+----------------------------------------------------------------------- */
+.constellation-container {
+    position: relative;
+    width: 100%;
+    min-height: 580px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px 0;
+    padding: 10px 0;
+    overflow: visible;
+}
+
+/* SVG Neural Line Canvas */
+.constellation-neural-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: visible;
+}
+
+.neural-line {
+    fill: none;
+    stroke: rgba(56, 189, 248, 0.22);
+    stroke-width: 1.5;
+    transition: stroke 0.3s ease, stroke-width 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+}
+
+.inter-line {
+    fill: none;
+    stroke: rgba(99, 102, 241, 0.18);
+    stroke-width: 1.2;
+    stroke-dasharray: 4 4;
+    transition: opacity 0.3s ease, stroke 0.3s ease;
+}
+
+.neural-line.is-active {
+    stroke-width: 2.8;
+    filter: drop-shadow(0 0 8px var(--active-accent, #38bdf8));
+    opacity: 1 !important;
+}
+
+.neural-line.is-dimmed,
+.inter-line.is-dimmed {
+    opacity: 0.15;
+}
+
+/* Animated Photons / Data Energy Impulses */
+.photon-particle {
+    fill: #38bdf8;
+    filter: drop-shadow(0 0 6px #38bdf8);
+    transition: opacity 0.3s ease;
+}
+
+.photon-particle.is-dimmed {
+    opacity: 0.15;
+}
+
+/* ----------------------------------------------------------------------
+   ROTATING CONCENTRIC ORBIT RINGS
+----------------------------------------------------------------------- */
+.constellation-orbits-wrap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.constellation-orbit-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.orbit-inner {
+    width: 240px;
+    height: 240px;
+    border: 1px dashed rgba(56, 189, 248, 0.24);
+    animation: orbitSpin 50s linear infinite;
+}
+
+.orbit-middle {
+    width: 370px;
+    height: 370px;
+    border: 1px dashed rgba(99, 102, 241, 0.16);
+    animation: orbitSpinRev 75s linear infinite;
+}
+
+.orbit-outer {
+    width: 500px;
+    height: 500px;
+    border: 1px dashed rgba(16, 185, 129, 0.12);
+    animation: orbitSpin 100s linear infinite;
+}
+
+@keyframes orbitSpin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes orbitSpinRev {
+    from { transform: translate(-50%, -50%) rotate(360deg); }
+    to { transform: translate(-50%, -50%) rotate(0deg); }
+}
+
+/* ----------------------------------------------------------------------
+   1.1 CENTRAL CORE NODE (SmartContractum Core)
+----------------------------------------------------------------------- */
+.constellation-core-node {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 170px;
+    height: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    outline: none;
+}
+
+.constellation-core-node:hover,
+.constellation-core-node:focus-visible {
+    transform: translate(-50%, -50%) scale(1.06);
+}
+
+.core-aura-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.35) 0%, rgba(99, 102, 241, 0.18) 50%, transparent 70%);
+    animation: corePulse 3s infinite ease-in-out;
+}
+
+@keyframes corePulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.22); opacity: 1; }
+}
+
+.core-glass-body {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(11, 20, 38, 0.98) 100%);
+    border: 2px solid rgba(56, 189, 248, 0.5);
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.35), inset 0 0 15px rgba(56, 189, 248, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.core-logo-badge {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.core-logo-svg {
+    width: 34px;
+    height: 34px;
+    filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.6));
+}
+
+.core-brand-name {
+    font-size: 0.84rem;
+    font-weight: 900;
+    letter-spacing: -0.2px;
+    background: linear-gradient(90deg, #ffffff 0%, #38bdf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.core-sub-badge {
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.12);
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* ----------------------------------------------------------------------
+   1.2 SATELLITE NODES & GLASSMORPHISM CARDS
+----------------------------------------------------------------------- */
+.constellation-satellites-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+    z-index: 3;
+    gap: 240px;
+}
+
+.satellites-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+    max-width: 440px;
+}
+
+.constellation-satellite-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    z-index: 3;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    background: transparent;
+    border: none;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.satellite-btn {
+    width: 100%;
+}
+
+.satellite-icon-box {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    flex-shrink: 0;
+    background: rgba(11, 20, 38, 0.95);
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    transition: all 0.25s ease;
+}
+
+.satellite-icon {
+    line-height: 1;
+}
+
+.glow-amber { border-color: rgba(245, 158, 11, 0.4); box-shadow: 0 0 14px rgba(245, 158, 11, 0.25); }
+.glow-cyan { border-color: rgba(56, 189, 248, 0.4); box-shadow: 0 0 14px rgba(56, 189, 248, 0.25); }
+.glow-violet { border-color: rgba(139, 92, 246, 0.4); box-shadow: 0 0 14px rgba(139, 92, 246, 0.25); }
+.glow-emerald { border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 0 14px rgba(16, 185, 129, 0.25); }
+.glow-sky { border-color: rgba(2, 132, 199, 0.4); box-shadow: 0 0 14px rgba(2, 132, 199, 0.25); }
+.glow-gold { border-color: rgba(236, 72, 153, 0.4); box-shadow: 0 0 14px rgba(236, 72, 153, 0.25); }
+
+.satellite-content {
+    flex: 1;
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 14px 16px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.satellite-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.satellite-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.satellite-badge {
+    font-size: 0.64rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.badge-amber { background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; }
+.badge-cyan { background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; }
+.badge-violet { background: rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.4); color: #a78bfa; }
+.badge-emerald { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; }
+.badge-sky { background: rgba(2, 132, 199, 0.15); border: 1px solid rgba(2, 132, 199, 0.4); color: #7dd3fc; }
+.badge-gold { background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.4); color: #f472b6; }
+
+.satellite-desc {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    line-height: 1.42;
+    margin: 0;
+}
+
+/* Hover States */
+.constellation-satellite-card:hover {
+    transform: translateY(-3px) scale(1.02);
+}
+
+.constellation-satellite-card:hover .satellite-content {
+    background: rgba(30, 41, 59, 0.88);
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.2);
+}
+
+.constellation-satellite-card:hover .satellite-icon-box {
+    transform: scale(1.08);
+}
+
+/* ----------------------------------------------------------------------
+   1.4 MOBILE & TABLET HYBRID RESPONSIVE FALLBACK
+----------------------------------------------------------------------- */
+@media (max-width: 1080px) {
+    .constellation-container {
+        min-height: auto;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .constellation-core-node {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin: 0 auto 10px auto;
+    }
+
+    .constellation-core-node:hover,
+    .constellation-core-node:focus-visible {
+        transform: scale(1.06);
+    }
+
+    .constellation-orbits-wrap {
+        display: none;
+    }
+
+    .constellation-neural-svg {
+        display: none;
+    }
+
+    .constellation-satellites-container {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .satellites-col {
+        max-width: 100%;
+    }
+}

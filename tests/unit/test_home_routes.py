@@ -1,4 +1,4 @@
-"""QA & Reliability Test Suite for Block 1: Hero Section & 6-Action Task Router."""
+﻿"""QA & Reliability Test Suite for Block 1: Hero Section & Constellation Task Router."""
 
 import sys
 from pathlib import Path
@@ -38,7 +38,7 @@ def test_home_page_contains_all_six_action_routes() -> None:
     # Card 1: У меня есть бизнес-задача -> Паспорт
     assert 'href="/passport"' in html
     assert "У меня есть бизнес-задача" in html
-    assert "Поможем понять, нужен ли смарт-контракт" in html
+    assert "Нужен ли смарт-контракт, сценарий и паспорт решения" in html
 
     # Card 2: Ищу готовое решение -> Каталог решений
     assert 'href="/solutions"' in html
@@ -48,7 +48,7 @@ def test_home_page_contains_all_six_action_routes() -> None:
     # Card 3: Ищу специалиста или услугу -> Модальный подбор
     assert "btnSpecialistModalTrigger" in html
     assert "Ищу специалиста или услугу" in html
-    assert "Разработчики, эксперты, команды, аудиторы и интеграторы" in html
+    assert "Разработчики, эксперты, команды, аудиторы" in html
 
     # Card 4: Я специалист и хочу участвовать -> Кабинет специалиста
     assert 'href="/profile/join"' in html
@@ -58,7 +58,7 @@ def test_home_page_contains_all_six_action_routes() -> None:
     # Card 5: Данные и оракулы -> Маркетплейс Оракулов
     assert 'href="/data-sources"' in html
     assert "Данные и оракулы" in html
-    assert "Найти источник данных или предложить свои данные рынку" in html
+    assert "Найти источник данных или предложить свои" in html
 
     # Card 6: Хочу разобраться в ПКСК -> База знаний & Форум
     assert 'href="/knowledge"' in html
@@ -179,9 +179,20 @@ def test_home_page_contains_constellation_graph_and_core() -> None:
     assert response.status_code == 200
     html = response.text
 
-    assert "constellationGraphSection" in html
-    assert "constellationCanvas" in html
+    # Core & Container elements
+    assert "constellationContainer" in html
+    assert "constellationSvg" in html
     assert "constellationCore" in html
     assert "SmartContractum" in html
     assert "ПКСК Экосистема" in html
-    assert "constellation-satellites-grid" in html
+
+    # Accessibility semantic list
+    assert 'class="sr-only"' in html
+
+    # 6 Satellite Node elements
+    assert "nodeCardPassport" in html
+    assert "nodeCardSolutions" in html
+    assert "btnSpecialistModalTrigger" in html
+    assert "nodeCardProfile" in html
+    assert "nodeCardSources" in html
+    assert "nodeCardKnowledge" in html
