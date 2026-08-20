@@ -1,7 +1,7 @@
 /* ======================================================================
    SmartContractum — Habr Feed Light Theme (https://habr.com/ru/feed/)
    Clean White Background (#FFFFFF), Slate Typography (#0F172A / #334155),
-   Categories Hover Dropdown, Live Search & Article Stream
+   Categories Hover Dropdown (with seamless hitbox bridge), Live Search & Article Stream
    File: frontend/static/css/forum_social.css
 ====================================================================== */
 
@@ -62,7 +62,7 @@ body.light-theme-feed {
 }
 
 /* ----------------------------------------------------------------------
-   3.1. CATEGORIES DROPDOWN (Hover Trigger)
+   3.1. CATEGORIES DROPDOWN (Seamless Hover & Contour Retention)
 ----------------------------------------------------------------------- */
 .categories-dropdown-wrapper {
     position: relative;
@@ -87,6 +87,7 @@ body.light-theme-feed {
 }
 
 .btn-categories-dropdown:hover,
+.btn-categories-dropdown.is-open,
 .categories-dropdown-wrapper:hover .btn-categories-dropdown,
 .categories-dropdown-wrapper:focus-within .btn-categories-dropdown {
     border-color: #0284c7;
@@ -128,16 +129,18 @@ body.light-theme-feed {
 }
 
 .categories-dropdown-wrapper:hover .cat-dropdown-arrow,
+.btn-categories-dropdown.is-open .cat-dropdown-arrow,
 .categories-dropdown-wrapper:focus-within .cat-dropdown-arrow {
     transform: rotate(180deg);
     color: #0284c7;
 }
 
-/* Dropdown Menu Container (Hover Reveal) */
+/* Dropdown Menu Container (Hover Reveal + Seamless Bridge) */
 .categories-dropdown-menu {
     position: absolute;
-    top: calc(100% + 6px);
+    top: 100%;
     left: 0;
+    margin-top: 4px;
     width: 320px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
@@ -147,15 +150,26 @@ body.light-theme-feed {
     z-index: 500;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-6px);
+    transform: translateY(-4px);
     pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    transition: opacity 0.18s cubic-bezier(0.4, 0, 0.2, 1), transform 0.18s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.18s ease;
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-/* Open on hover on wrapper OR focus */
+/* Seamless bridge between button and dropdown hitbox */
+.categories-dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    height: 12px;
+    background: transparent;
+}
+
+/* Reveal when wrapper is hovered, focused, or has .is-open */
 .categories-dropdown-wrapper:hover .categories-dropdown-menu,
 .categories-dropdown-wrapper:focus-within .categories-dropdown-menu,
 .categories-dropdown-menu.is-open {

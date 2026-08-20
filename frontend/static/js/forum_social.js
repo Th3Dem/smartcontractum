@@ -1,6 +1,6 @@
 /**
  * SmartContractum — Habr Feed Controller (https://habr.com/ru/feed/)
- * Categories hover dropdown, real-time keyword search, stream filtering, upvotes, comment accordions & modal.
+ * Categories hover dropdown (persistent contour tracking), real-time keyword search, upvotes, comments & modal.
  * File: frontend/static/js/forum_social.js
  */
 
@@ -39,28 +39,68 @@
         }
 
         // ==================================================================
-        // 0. CATEGORIES DROPDOWN TOUCH / CLICK TOGGLE
+        // 0. CATEGORIES DROPDOWN HOVER & PERSISTENT CONTOUR TRACKING
         // ==================================================================
-        if (btnCatDropdown && catDropdownMenu) {
-            btnCatDropdown.addEventListener("click", function (e) {
-                e.stopPropagation();
-                const isOpen = catDropdownMenu.classList.contains("is-open");
-                if (isOpen) {
+        let catCloseTimer = null;
+
+        function showCatMenu() {
+            clearTimeout(catCloseTimer);
+            if (catDropdownMenu) {
+                catDropdownMenu.classList.add("is-open");
+            }
+            if (btnCatDropdown) {
+                btnCatDropdown.classList.add("is-open");
+                btnCatDropdown.setAttribute("aria-expanded", "true");
+            }
+        }
+
+        function hideCatMenu(delay = 140) {
+            clearTimeout(catCloseTimer);
+            catCloseTimer = setTimeout(function () {
+                if (catDropdownMenu) {
                     catDropdownMenu.classList.remove("is-open");
-                    btnCatDropdown.setAttribute("aria-expanded", "false");
-                } else {
-                    catDropdownMenu.classList.add("is-open");
-                    btnCatDropdown.setAttribute("aria-expanded", "true");
                 }
+                if (btnCatDropdown) {
+                    btnCatDropdown.classList.remove("is-open");
+                    btnCatDropdown.setAttribute("aria-expanded", "false");
+                }
+            }, delay);
+        }
+
+        if (catDropdownWrap) {
+            // When mouse enters button or any area of the wrapper, keep open
+            catDropdownWrap.addEventListener("mouseenter", function () {
+                showCatMenu();
             });
 
-            document.addEventListener("click", function (e) {
-                if (catDropdownWrap && !catDropdownWrap.contains(e.target)) {
-                    catDropdownMenu.classList.remove("is-open");
-                    btnCatDropdown.setAttribute("aria-expanded", "false");
+            // When moving inside the wrapper/menu, cancel any scheduled close
+            catDropdownWrap.addEventListener("mousemove", function () {
+                showCatMenu();
+            });
+
+            // When mouse leaves the entire contour of button + dropdown, schedule hide
+            catDropdownWrap.addEventListener("mouseleave", function () {
+                hideCatMenu(160);
+            });
+        }
+
+        if (btnCatDropdown) {
+            btnCatDropdown.addEventListener("click", function (e) {
+                e.stopPropagation();
+                if (catDropdownMenu && catDropdownMenu.classList.contains("is-open")) {
+                    hideCatMenu(0);
+                } else {
+                    showCatMenu();
                 }
             });
         }
+
+        // Click outside closes menu immediately
+        document.addEventListener("click", function (e) {
+            if (catDropdownWrap && !catDropdownWrap.contains(e.target)) {
+                hideCatMenu(0);
+            }
+        });
 
         // ==================================================================
         // 1. LIVE REAL-TIME KEYWORD SEARCH ENGINE
