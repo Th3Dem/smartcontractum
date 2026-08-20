@@ -1,6 +1,6 @@
 /* ======================================================================
    SmartContractum — Centered Node Constellation Graph Stylesheet
-   Design System: Bold 1.15rem Titles + Tight Line-Height + 3D Volumetric Glass
+   Design System: Jitter-Free Rock-Solid Hitboxes + Smooth 3D Glass
    File: frontend/static/css/hero_constellation.css
 ====================================================================== */
 
@@ -69,13 +69,13 @@
     z-index: 6;
     cursor: pointer;
     user-select: none;
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     outline: none;
 }
 
 .constellation-core-node:hover,
 .constellation-core-node:focus-visible {
-    transform: translate(-50%, -50%) scale(1.08);
+    transform: translate(-50%, -50%) scale(1.05);
 }
 
 .core-aura-pulse {
@@ -120,7 +120,7 @@
 }
 
 /* ----------------------------------------------------------------------
-   1.2 CIRCULAR RADIAL RING (CENTERED CONTENT & ENLARGED TITLES)
+   1.2 CIRCULAR RADIAL RING (ROCK-SOLID JITTER-FREE HITBOXES)
 ----------------------------------------------------------------------- */
 .constellation-radial-ring {
     position: absolute;
@@ -132,11 +132,13 @@
     pointer-events: none;
 }
 
-/* Expanded 3D Cards */
+/* 
+   IMPORTANT: The outer button hitbox stays 100% IMMOBILE on hover.
+   This prevents any edge flickering/jittering when the mouse hovers the boundary.
+*/
 .constellation-satellite-card {
-    position: absolute;
+    position: absolute !important;
     width: 450px !important;
-    min-height: 134px !important;
     height: 134px !important;
     box-sizing: border-box !important;
     display: block !important;
@@ -144,60 +146,64 @@
     color: inherit !important;
     z-index: 4 !important;
     pointer-events: auto !important;
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease !important;
     background: transparent !important;
     border: none !important;
     padding: 0 !important;
     cursor: pointer !important;
     font-family: inherit !important;
+    transform: none !important; /* No outer transform to eliminate jitter */
 }
 
-/* TIGHT HARMONIOUS ORBITAL POSITIONS */
+/* EXACT JITTER-FREE PIXEL-PERFECT POSITIONS (Calculated without translateY(-50%)) */
 /* Node 1: Top-Left */
 .node-pos-1 {
     top: 15px !important;
     left: calc(50% - 450px - 20px) !important;
+    right: auto !important;
+    bottom: auto !important;
 }
 
-/* Node 2: Top-Right (40px gap from Node 1) */
+/* Node 2: Top-Right */
 .node-pos-2 {
     top: 15px !important;
     left: calc(50% + 20px) !important;
+    right: auto !important;
+    bottom: auto !important;
 }
 
-/* Node 3: Mid-Left */
+/* Node 3: Mid-Left (Fixed center: top = 50% - 67px) */
 .node-pos-3 {
-    top: 50% !important;
+    top: calc(50% - 67px) !important;
     left: 0px !important;
-    transform: translateY(-50%) !important;
-}
-.node-pos-3:hover {
-    transform: translateY(-50%) translateY(-5px) scale(1.025) !important;
+    right: auto !important;
+    bottom: auto !important;
 }
 
-/* Node 4: Mid-Right */
+/* Node 4: Mid-Right (Fixed center: top = 50% - 67px) */
 .node-pos-4 {
-    top: 50% !important;
+    top: calc(50% - 67px) !important;
     right: 0px !important;
-    transform: translateY(-50%) !important;
-}
-.node-pos-4:hover {
-    transform: translateY(-50%) translateY(-5px) scale(1.025) !important;
+    left: auto !important;
+    bottom: auto !important;
 }
 
 /* Node 5: Bottom-Left */
 .node-pos-5 {
     bottom: 15px !important;
     left: calc(50% - 450px - 20px) !important;
+    top: auto !important;
+    right: auto !important;
 }
 
-/* Node 6: Bottom-Right (40px gap from Node 5) */
+/* Node 6: Bottom-Right */
 .node-pos-6 {
     bottom: 15px !important;
     left: calc(50% + 20px) !important;
+    top: auto !important;
+    right: auto !important;
 }
 
-/* Volumetric 3D Card Interior */
+/* Volumetric 3D Card Interior (Smooth inner visual response without hitbox shifting) */
 .satellite-card-inner {
     width: 100% !important;
     height: 100% !important;
@@ -216,7 +222,7 @@
     text-align: center !important;
     gap: 2px !important;
     box-sizing: border-box !important;
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease, transform 0.25s ease !important;
 }
 
 /* 1. Top Centered Row: Icon (Left) + Title (Right of Icon), All Centered */
@@ -240,7 +246,7 @@
     background: linear-gradient(135deg, rgba(11, 20, 38, 0.98) 0%, rgba(20, 35, 70, 0.95) 100%) !important;
     border: 1.5px solid rgba(255, 255, 255, 0.16) !important;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
-    transition: all 0.3s ease !important;
+    transition: transform 0.25s ease !important;
     line-height: 1 !important;
 }
 
@@ -251,7 +257,7 @@
 .glow-sky { border-color: rgba(2, 132, 199, 0.55) !important; box-shadow: 0 0 12px rgba(2, 132, 199, 0.4) !important; }
 .glow-gold { border-color: rgba(236, 72, 153, 0.55) !important; box-shadow: 0 0 12px rgba(236, 72, 153, 0.4) !important; }
 
-/* Centered Title (Significantly Enlarged to 1.15rem, Bold 900) */
+/* Centered Title (Significantly Enlarged to 1.14rem, Bold 900) */
 .satellite-title {
     font-size: 1.14rem !important;
     font-weight: 900 !important;
@@ -302,19 +308,19 @@
 .badge-sky { background: rgba(2, 132, 199, 0.18) !important; border: 1px solid rgba(2, 132, 199, 0.5) !important; color: #7dd3fc !important; }
 .badge-gold { background: rgba(236, 72, 153, 0.18) !important; border: 1px solid rgba(236, 72, 153, 0.5) !important; color: #f472b6 !important; }
 
-/* 3D Hover Lift States */
-.constellation-satellite-card:hover {
-    transform: translateY(-5px) scale(1.025) !important;
-}
-
+/* 
+   SMOOTH, JITTER-FREE HOVER EFFECT:
+   Only the inner card lights up and lifts gently by 2px (never moves the hitbox).
+*/
 .constellation-satellite-card:hover .satellite-card-inner {
-    background: linear-gradient(145deg, rgba(30, 41, 59, 0.96) 0%, rgba(20, 35, 75, 0.98) 100%) !important;
-    border-color: rgba(56, 189, 248, 0.65) !important;
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.75), 0 0 28px rgba(56, 189, 248, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.4) !important;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.98) 0%, rgba(20, 35, 75, 0.99) 100%) !important;
+    border-color: rgba(56, 189, 248, 0.70) !important;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.4) !important;
+    transform: translateY(-2px) !important;
 }
 
 .constellation-satellite-card:hover .satellite-icon-inline {
-    transform: scale(1.14) !important;
+    transform: scale(1.08) !important;
 }
 
 /* ----------------------------------------------------------------------
