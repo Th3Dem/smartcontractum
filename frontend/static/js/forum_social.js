@@ -1,5 +1,6 @@
 /**
  * SmartContractum — Habr Feed Controller (https://habr.com/ru/feed/)
+ * Real-time keyword search, stream filtering, upvotes, comment accordions & modal.
  * File: frontend/static/js/forum_social.js
  */
 
@@ -9,6 +10,9 @@
     document.addEventListener("DOMContentLoaded", function () {
         const articlesList = document.getElementById("habrArticlesList");
         const emptyState = document.getElementById("habrEmptyState");
+        const searchInput = document.getElementById("habrSearchInput");
+        const btnClearSearch = document.getElementById("btnClearSearch");
+
         const writeModal = document.getElementById("habrWriteModal");
         const btnOpenWrite = document.getElementById("btnOpenWriteModal");
         const btnCloseWrite = document.getElementById("btnCloseWriteModal");
@@ -31,11 +35,105 @@
         }
 
         // ==================================================================
-        // 1. ARTICLE INTERACTIONS (Read More, Upvote, Bookmark, Share, Code)
+        // 1. LIVE REAL-TIME KEYWORD SEARCH ENGINE
+        // ==================================================================
+        let searchTimeout = null;
+
+        function performLiveSearch(query) {
+            const q = query.trim().toLowerCase();
+            const allCards = document.querySelectorAll(".habr-article-card");
+            let visibleCount = 0;
+
+            allCards.forEach(function (card) {
+                if (!q) {
+                    card.style.display = "flex";
+                    visibleCount++;
+                    return;
+                }
+
+                const titleEl = card.querySelector(".habr-article-title");
+                const snippetEl = card.querySelector(".habr-lead-snippet");
+                const hubsEl = card.querySelector(".habr-hubs-line");
+                const authorEl = card.querySelector(".habr-author-name");
+                const codeEl = card.querySelector(".code-content");
+
+                const titleText = titleEl ? titleEl.textContent.toLowerCase() : "";
+                const snippetText = snippetEl ? snippetEl.textContent.toLowerCase() : "";
+                const hubsText = hubsEl ? hubsEl.textContent.toLowerCase() : "";
+                const authorText = authorEl ? authorEl.textContent.toLowerCase() : "";
+                const codeText = codeEl ? codeEl.textContent.toLowerCase() : "";
+
+                const matches = titleText.includes(q) ||
+                                snippetText.includes(q) ||
+                                hubsText.includes(q) ||
+                                authorText.includes(q) ||
+                                codeText.includes(q);
+
+                if (matches) {
+                    card.style.display = "flex";
+                    visibleCount++;
+                } else {
+                    card.style.display = "none";
+                }
+            });
+
+            if (emptyState) {
+                emptyState.style.display = visibleCount === 0 ? "flex" : "none";
+            }
+
+            if (btnClearSearch) {
+                btnClearSearch.style.display = q.length > 0 ? "block" : "none";
+            }
+        }
+
+        if (searchInput) {
+            // Live typing with debounce
+            searchInput.addEventListener("input", function () {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(function () {
+                    performLiveSearch(searchInput.value);
+                }, 100);
+            });
+
+            // Enter key triggers full backend query or search confirmation
+            searchInput.addEventListener("keydown", function (e) {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    const query = searchInput.value.trim();
+                    const url = new URL(window.location.href);
+                    if (query) {
+                        url.searchParams.set("q", query);
+                    } else {
+                        url.searchParams.delete("q");
+                    }
+                    window.location.href = url.toString();
+                }
+            });
+        }
+
+        if (btnClearSearch) {
+            btnClearSearch.addEventListener("click", function () {
+                if (searchInput) {
+                    searchInput.value = "";
+                    performLiveSearch("");
+                    searchInput.focus();
+
+                    // If URL had query param, clean it up
+                    const url = new URL(window.location.href);
+                    if (url.searchParams.has("q")) {
+                        url.searchParams.delete("q");
+                        window.history.replaceState({}, "", url.toString());
+                    }
+                }
+            });
+        }
+
+        // ==================================================================
+        // 2. ARTICLE INTERACTIONS (Read More, Upvote, Bookmark, Share, Code)
         // ==================================================================
         if (articlesList) {
             articlesList.addEventListener("click", async function (e) {
-                // 1.1 Read More Toggle
+                // 2.1 Read More Toggle
                 const btnReadMore = e.target.closest(".btn-habr-readmore");
                 if (btnReadMore) {
                     const postId = btnReadMore.getAttribute("data-post-id");
@@ -60,7 +158,7 @@
                     return;
                 }
 
-                // 1.2 Upvote Rating Arrow
+                // 2.2 Upvote Rating Arrow
                 const btnUpvote = e.target.closest(".btn-score-up");
                 if (btnUpvote) {
                     const postId = btnUpvote.getAttribute("data-post-id");
@@ -91,7 +189,7 @@
                     return;
                 }
 
-                // 1.3 Comments Accordion Toggle
+                // 2.3 Comments Accordion Toggle
                 const btnComments = e.target.closest(".btn-comments-toggle");
                 if (btnComments) {
                     const postId = btnComments.getAttribute("data-post-id");
@@ -108,7 +206,7 @@
                     return;
                 }
 
-                // 1.4 Bookmark Toggle
+                // 2.4 Bookmark Toggle
                 const btnBookmark = e.target.closest(".btn-bookmark");
                 if (btnBookmark) {
                     const postId = btnBookmark.getAttribute("data-post-id");
@@ -134,7 +232,7 @@
                     return;
                 }
 
-                // 1.5 Share Button
+                // 2.5 Share Button
                 const btnShare = e.target.closest(".btn-share");
                 if (btnShare) {
                     const postId = btnShare.getAttribute("data-post-id");
@@ -149,7 +247,7 @@
                     return;
                 }
 
-                // 1.6 Copy Code
+                // 2.6 Copy Code
                 const btnCopy = e.target.closest(".btn-copy-code");
                 if (btnCopy) {
                     const codeBlock = btnCopy.closest(".habr-code-block");
@@ -168,7 +266,7 @@
         }
 
         // ==================================================================
-        // 2. COMMENT SUBMISSION (Instant Append)
+        // 3. COMMENT SUBMISSION (Instant Append)
         // ==================================================================
         document.addEventListener("submit", async function (e) {
             const commentForm = e.target.closest(".habr-comment-form");
@@ -226,7 +324,7 @@
         });
 
         // ==================================================================
-        // 3. WRITE ARTICLE MODAL
+        // 4. WRITE ARTICLE MODAL
         // ==================================================================
         function openWriteModal() {
             if (!writeModal) return;

@@ -48,7 +48,7 @@ class Topic(BaseModel):
     author_avatar: str = "SC"
     is_official: bool = False
     official_badge: Optional[str] = None
-    post_type: str = "article"  # 'article', 'bug', 'code', 'data', 'job', 'cbr'
+    post_type: str = "article"
     post_type_label: str = "Статья"
     post_type_class: str = "badge-type-article"
     hubs: List[str] = Field(default_factory=list)
@@ -120,7 +120,6 @@ class TopicCreateRequest(BaseModel):
     @field_validator("title", "body", "author_name", "author_role")
     @classmethod
     def sanitize_strings(cls, v: str) -> str:
-        """Sanitize text strings against XSS."""
         if not v:
             return v
         return html.escape(v.strip())
@@ -128,7 +127,6 @@ class TopicCreateRequest(BaseModel):
     @field_validator("tags", "hubs")
     @classmethod
     def sanitize_lists(cls, items: List[str]) -> List[str]:
-        """Normalize tag and hub strings."""
         cleaned: List[str] = []
         for item in items:
             s = html.escape(item.strip().lstrip("#"))
@@ -139,8 +137,6 @@ class TopicCreateRequest(BaseModel):
 
 
 class CommentCreateRequest(BaseModel):
-    """Schema for adding a comment."""
-
     body: str = Field(
         ...,
         min_length=3,
@@ -173,6 +169,7 @@ class TopicListResponse(BaseModel):
     category_slug: Optional[str] = None
     post_type: Optional[str] = None
     tag: Optional[str] = None
+    q: Optional[str] = None
     sort: Optional[str] = "best"
     items: List[Topic]
 
@@ -204,7 +201,6 @@ class CommentResponse(BaseModel):
 
 
 def generate_snippet(body_text: str, max_chars: int = 250) -> str:
-    """Generate a clean snippet from article body."""
     plain = re.sub(r"<[^>]+>", "", body_text)
     plain = re.sub(r"\s+", " ", plain).strip()
     if len(plain) > max_chars:

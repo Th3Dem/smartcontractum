@@ -457,6 +457,7 @@ async def get_forum_topics(
     category_slug: Optional[str] = Query(None),
     post_type: Optional[str] = Query(None),
     tag: Optional[str] = Query(None),
+    q: Optional[str] = Query(None, description="Keyword search query"),
     sort: Optional[str] = Query("best", description="Sorting: 'best', 'new', 'discussed'"),
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
@@ -473,6 +474,23 @@ async def get_forum_topics(
         tag_clean = tag.strip().lstrip("#").lower()
         filtered = [
             t for t in filtered if any(t_tag.lower() == tag_clean for t_tag in t.tags)
+        ]
+
+    # Keyword search across title, body, snippet, hubs, tags, author
+    if q and q.strip():
+        q_clean = q.strip().lower()
+        filtered = [
+            t for t in filtered
+            if (
+                q_clean in t.title.lower()
+                or q_clean in t.body.lower()
+                or q_clean in t.snippet.lower()
+                or any(q_clean in h.lower() for h in t.hubs)
+                or any(q_clean in tg.lower() for tg in t.tags)
+                or q_clean in t.author_name.lower()
+                or (t.author_org and q_clean in t.author_org.lower())
+                or (t.code_snippet and q_clean in t.code_snippet.lower())
+            )
         ]
 
     # Sorting
@@ -494,6 +512,7 @@ async def get_forum_topics(
         category_slug=category_slug,
         post_type=post_type,
         tag=tag,
+        q=q,
         sort=sort,
         items=paginated_items,
     )
@@ -689,13 +708,12 @@ async def add_post_comment(
 async def render_forum_page(
     request: Request,
     stream: Optional[str] = Query(None, description="Active stream/category slug"),
-    category: Optional[str] = Query(None, description="Alias for stream/category slug"),
+    category: Optional[str] = Query(None, description="Alias for category slug"),
     sort: Optional[str] = Query("best", description="Sort: best, new, discussed"),
     tag: Optional[str] = Query(None, description="Active tag filter"),
+    q: Optional[str] = Query(None, description="Keyword search query"),
 ) -> Response:
     _recalculate_category_counts()
-    
-    # Support both 'stream' and 'category' parameters
     active_stream = stream or category or "all"
     active_sort = sort if isinstance(sort, str) and sort in ["best", "new", "discussed"] else "best"
 
@@ -707,6 +725,23 @@ async def render_forum_page(
         tag_clean = tag.strip().lstrip("#").lower()
         filtered_topics = [
             t for t in filtered_topics if any(tag_clean in x.lower() for x in t.tags)
+        ]
+
+    # Keyword search filtering
+    if q and isinstance(q, str) and q.strip():
+        q_clean = q.strip().lower()
+        filtered_topics = [
+            t for t in filtered_topics
+            if (
+                q_clean in t.title.lower()
+                or q_clean in t.body.lower()
+                or q_clean in t.snippet.lower()
+                or any(q_clean in h.lower() for h in t.hubs)
+                or any(q_clean in tg.lower() for tg in t.tags)
+                or q_clean in t.author_name.lower()
+                or (t.author_org and q_clean in t.author_org.lower())
+                or (t.code_snippet and q_clean in t.code_snippet.lower())
+            )
         ]
 
     if active_sort == "new":
@@ -744,6 +779,7 @@ async def render_forum_page(
         "active_category": active_stream,
         "active_sort": active_sort,
         "active_tag": tag,
+        "active_query": q or "",
         "trending_articles": trending_articles,
         "popular_hubs": popular_hubs,
         "top_companies": top_companies,

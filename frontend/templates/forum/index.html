@@ -3,7 +3,7 @@
 {% block title %}Моя лента / Хабр-ПКСК — SmartContractum | Сообщество разработчиков смарт-контрактов{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_social.css?v=5.0.0">
+<link rel="stylesheet" href="/static/css/forum_social.css?v=5.1.0">
 {% endblock %}
 
 {% block content %}
@@ -14,22 +14,22 @@
     ================================================================= -->
     <nav class="habr-streams-nav" aria-label="Потоки публикаций">
         <div class="habr-streams-container">
-            <a href="/feed?stream=all" class="habr-stream-tab {% if active_stream == 'all' %}is-active{% endif %}" data-stream="all">
+            <a href="/feed?stream=all{% if active_query %}&q={{ active_query }}{% endif %}" class="habr-stream-tab {% if active_stream == 'all' %}is-active{% endif %}" data-stream="all">
                 <span class="stream-icon">🔥</span> Все потоки
             </a>
-            <a href="/feed?stream=smart-contracts" class="habr-stream-tab {% if active_stream == 'smart-contracts' %}is-active{% endif %}" data-stream="smart-contracts">
+            <a href="/feed?stream=smart-contracts{% if active_query %}&q={{ active_query }}{% endif %}" class="habr-stream-tab {% if active_stream == 'smart-contracts' %}is-active{% endif %}" data-stream="smart-contracts">
                 <span class="stream-icon">💻</span> Разработка
             </a>
-            <a href="/feed?stream=infosec-audit" class="habr-stream-tab {% if active_stream == 'infosec-audit' %}is-active{% endif %}" data-stream="infosec-audit">
+            <a href="/feed?stream=infosec-audit{% if active_query %}&q={{ active_query }}{% endif %}" class="habr-stream-tab {% if active_stream == 'infosec-audit' %}is-active{% endif %}" data-stream="infosec-audit">
                 <span class="stream-icon">🛡️</span> ИБ & Аудит
             </a>
-            <a href="/feed?stream=oracles" class="habr-stream-tab {% if active_stream == 'oracles' %}is-active{% endif %}" data-stream="oracles">
+            <a href="/feed?stream=oracles{% if active_query %}&q={{ active_query }}{% endif %}" class="habr-stream-tab {% if active_stream == 'oracles' %}is-active{% endif %}" data-stream="oracles">
                 <span class="stream-icon">🌐</span> Оракулы & Данные
             </a>
-            <a href="/feed?stream=treasury-b2b" class="habr-stream-tab {% if active_stream == 'treasury-b2b' %}is-active{% endif %}" data-stream="treasury-b2b">
+            <a href="/feed?stream=treasury-b2b{% if active_query %}&q={{ active_query }}{% endif %}" class="habr-stream-tab {% if active_stream == 'treasury-b2b' %}is-active{% endif %}" data-stream="treasury-b2b">
                 <span class="stream-icon">🏦</span> Казначейство & B2B
             </a>
-            <a href="/feed?stream=safe-deals" class="habr-stream-tab {% if active_stream == 'safe-deals' %}is-active{% endif %}" data-stream="safe-deals">
+            <a href="/feed?stream=safe-deals{% if active_query %}&q={{ active_query }}{% endif %}" class="habr-stream-tab {% if active_stream == 'safe-deals' %}is-active{% endif %}" data-stream="safe-deals">
                 <span class="stream-icon">🏛️</span> ЦБ РФ & Регламенты
             </a>
         </div>
@@ -43,28 +43,47 @@
         <!-- 2.1 MAIN CONTENT STREAM -->
         <main class="habr-articles-stream">
 
-            <!-- Habr Sorting & Filter Bar -->
+            <!-- Habr Sorting & Filter Bar with Search -->
             <div class="habr-sorting-bar">
                 <div class="habr-sort-tabs">
-                    <a href="/feed?stream={{ active_stream }}&sort=best" class="sort-tab-btn {% if active_sort == 'best' %}is-active{% endif %}" data-sort="best">
+                    <a href="/feed?stream={{ active_stream }}&sort=best{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'best' %}is-active{% endif %}" data-sort="best">
                         🔥 Лучшие
                     </a>
-                    <a href="/feed?stream={{ active_stream }}&sort=new" class="sort-tab-btn {% if active_sort == 'new' %}is-active{% endif %}" data-sort="new">
+                    <a href="/feed?stream={{ active_stream }}&sort=new{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'new' %}is-active{% endif %}" data-sort="new">
                         🕒 Новые
                     </a>
-                    <a href="/feed?stream={{ active_stream }}&sort=discussed" class="sort-tab-btn {% if active_sort == 'discussed' %}is-active{% endif %}" data-sort="discussed">
+                    <a href="/feed?stream={{ active_stream }}&sort=discussed{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'discussed' %}is-active{% endif %}" data-sort="discussed">
                         💬 Обсуждаемые
                     </a>
                 </div>
 
-                <!-- Create Publication Button -->
-                <button type="button" class="btn-habr-write" id="btnOpenWriteModal">
-                    <span class="btn-icon">✍️</span>
-                    <span>Написать статью</span>
-                </button>
+                <!-- Right Actions: Search Box + Write Article Button -->
+                <div class="habr-actions-right">
+                    <div class="habr-search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="habr-search-input" id="habrSearchInput" 
+                               placeholder="Поиск по статьям, коду..." 
+                               value="{{ active_query }}"
+                               aria-label="Поиск по статьям и коду">
+                        <button type="button" class="btn-clear-search" id="btnClearSearch" title="Очистить поиск" style="{% if not active_query %}display: none;{% endif %}">✕</button>
+                    </div>
+
+                    <button type="button" class="btn-habr-write" id="btnOpenWriteModal">
+                        <span class="btn-icon">✍️</span>
+                        <span>Написать статью</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Habr Tag Filter Notice (if filtered) -->
+            <!-- Active Search Query Banner (if filtered) -->
+            {% if active_query %}
+            <div class="habr-active-tag-banner">
+                <span>Результаты поиска по запросу: <strong>«{{ active_query }}»</strong></span>
+                <a href="/feed?stream={{ active_stream }}" class="btn-clear-tag">✕ Сбросить поиск</a>
+            </div>
+            {% endif %}
+
+            <!-- Habr Tag Filter Notice (if tag filtered) -->
             {% if active_tag %}
             <div class="habr-active-tag-banner">
                 <span>Фильтр по тегу: <strong>#{{ active_tag }}</strong></span>
@@ -215,10 +234,10 @@
             </div>
 
             <!-- Empty State -->
-            <div class="habr-empty-state" id="habrEmptyState" style="display: none;">
+            <div class="habr-empty-state" id="habrEmptyState" style="{% if topics %}display: none;{% else %}display: flex;{% endif %}">
                 <div class="empty-icon">🔍</div>
-                <h3 class="empty-title">Публикаций по выбранному фильтру не найдено</h3>
-                <p class="empty-desc">Попробуйте выбрать другой поток или сбросить активные теги.</p>
+                <h3 class="empty-title">Публикаций по запросу не найдено</h3>
+                <p class="empty-desc">Попробуйте изменить поисковые слова или сбросить фильтры.</p>
                 <a href="/feed" class="btn-habr-reset">Сбросить все фильтры</a>
             </div>
         </main>
@@ -423,5 +442,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_social.js?v=5.0.0" defer></script>
+<script src="/static/js/forum_social.js?v=5.1.0" defer></script>
 {% endblock %}

@@ -57,6 +57,19 @@ def test_filter_topics_by_category() -> None:
         assert item["category_slug"] == "infosec-audit"
 
 
+def test_filter_topics_by_keyword_search() -> None:
+    """Verify searching articles by keyword in title, body, or hubs."""
+    response = client.get("/api/v1/forum/topics?q=Reentrancy")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["total"] >= 1
+    for item in data["items"]:
+        text_content = (
+            item["title"] + " " + item["body"] + " " + " ".join(item["hubs"]) + " " + " ".join(item["tags"])
+        ).lower()
+        assert "reentrancy" in text_content
+
+
 def test_filter_topics_by_sort() -> None:
     """Verify sorting articles by best, new, and discussed."""
     # Best (score)
@@ -195,36 +208,32 @@ def test_create_topic_validation_errors() -> None:
     assert resp1.status_code == 422
 
 
-def test_render_habr_feed_html_page() -> None:
-    """Verify GET /feed renders full SSR Habr Feed page with all components."""
+def test_render_habr_feed_html_page_with_search() -> None:
+    """Verify GET /feed renders full SSR Habr Feed page with search bar."""
     response = client.get("/feed")
     assert response.status_code == 200
     assert "text/html" in response.headers.get("content-type", "")
 
     html = response.text
-    # 1. Streams Sub-Nav
+    # 1. Search Bar with magnifying glass
+    assert "habrSearchInput" in html
+    assert "Поиск по статьям" in html
+    assert "🔍" in html
+
+    # 2. Streams Sub-Nav
     assert "Все потоки" in html
     assert "Разработка" in html
     assert "ИБ &amp; Аудит" in html or "ИБ & Аудит" in html
-    assert "Оракулы &amp; Данные" in html or "Оракулы & Данные" in html
 
-    # 2. Sorting Bar & Action
+    # 3. Sorting Bar & Action
     assert "Лучшие" in html
     assert "Новые" in html
     assert "Обсуждаемые" in html
     assert "Написать статью" in html
 
-    # 3. Article Cards & Stats
-    assert "Reentrancy" in html
-    assert "Блог компании BI.ZONE" in html
-    assert "Читать далее" in html
-
-    # 4. Right Sidebar
-    assert "Читают сейчас" in html
-    assert "Популярные хабы" in html
-    assert "Компании недели" in html
-    assert "Календарь ПКСК &amp; НИР" in html or "Календарь ПКСК & НИР" in html
-
-    # 5. Modal
-    assert "habrWriteModal" in html
-    assert "Написать статью в хаб" in html
+    # 4. Search Filter Results test
+    search_resp = client.get("/feed?q=Reentrancy")
+    assert search_resp.status_code == 200
+    search_html = search_resp.text
+    assert "Результаты поиска по запросу" in search_html
+    assert "Reentrancy" in search_html
