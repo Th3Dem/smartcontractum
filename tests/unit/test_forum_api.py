@@ -326,11 +326,22 @@ def test_article_draft_api_crud_flow() -> None:
     assert del_again.status_code == 200
     assert client.get("/api/v1/forum/drafts").json()["has_draft"] is False
 
-    
+
 # Feed 2.0 Tests
 def test_feed_2_0_period_and_my_feed() -> None:
     resp = client.get("/feed?sort=best")
     assert resp.status_code == 200
+
+    # Test all supported period options
+    valid_periods = ["today", "day", "yesterday", "week", "month", "year", "all"]
+    for period in valid_periods:
+        period_resp = client.get(f"/feed?sort=best&period={period}")
+        assert period_resp.status_code == 200
+        assert "text/html" in period_resp.headers.get("content-type", "")
+
+    # Test invalid period falls back to all safely
+    invalid_resp = client.get("/feed?sort=best&period=invalid_custom_period")
+    assert invalid_resp.status_code == 200
 
     my_feed_resp = client.get("/feed?stream=my_feed")
     assert my_feed_resp.status_code == 200

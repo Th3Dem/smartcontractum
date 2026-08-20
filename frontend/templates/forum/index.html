@@ -3,7 +3,7 @@
 {% block title %}{{ page_title or 'База знаний и лента статей Habr 2.0 — SmartContractum' }}{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_social.css?v=2.0.0">
+<link rel="stylesheet" href="/static/css/forum_social.css?v=2.1.0">
 <!-- Schema.org JSON-LD Collection Markup -->
 <script type="application/ld+json">
 {
@@ -231,9 +231,11 @@
                             <!-- Period Selector Trigger -->
                             <button type="button" class="btn-period-select" id="btnPeriodDropdown" aria-haspopup="true" aria-expanded="false" title="Выбрать период для лучших статей">
                                 <span class="current-period-text">
-                                    {% if active_period == 'day' %}Сутки
-                                    {% elif active_period == 'week' %}Неделя
-                                    {% elif active_period == 'month' %}Месяц
+                                    {% if active_period == 'today' or active_period == 'day' %}За сегодня
+                                    {% elif active_period == 'yesterday' %}За вчера
+                                    {% elif active_period == 'week' %}За неделю
+                                    {% elif active_period == 'month' %}За месяц
+                                    {% elif active_period == 'year' %}За год
                                     {% else %}Все время{% endif %}
                                 </span>
                                 <svg class="period-arrow-svg" viewBox="0 0 16 16" fill="currentColor" width="10" height="10">
@@ -243,10 +245,20 @@
 
                             <!-- Period Dropdown Menu -->
                             <div class="period-dropdown-menu" id="periodDropdownMenu" role="menu">
-                                <a href="/feed?stream={{ active_stream }}&sort=best&period=day{% if active_query %}&q={{ active_query }}{% endif %}" 
-                                   class="period-menu-item {% if active_period == 'day' %}is-active{% endif %}" role="menuitem">
-                                    <span>За сутки</span>
-                                    {% if active_period == 'day' %}<span class="menu-check">✓</span>{% endif %}
+                                <a href="/feed?stream={{ active_stream }}&sort=best&period=all{% if active_query %}&q={{ active_query }}{% endif %}" 
+                                   class="period-menu-item {% if active_period == 'all' or not active_period %}is-active{% endif %}" role="menuitem">
+                                    <span>Все время</span>
+                                    {% if active_period == 'all' or not active_period %}<span class="menu-check">✓</span>{% endif %}
+                                </a>
+                                <a href="/feed?stream={{ active_stream }}&sort=best&period=today{% if active_query %}&q={{ active_query }}{% endif %}" 
+                                   class="period-menu-item {% if active_period == 'today' or active_period == 'day' %}is-active{% endif %}" role="menuitem">
+                                    <span>За сегодня</span>
+                                    {% if active_period == 'today' or active_period == 'day' %}<span class="menu-check">✓</span>{% endif %}
+                                </a>
+                                <a href="/feed?stream={{ active_stream }}&sort=best&period=yesterday{% if active_query %}&q={{ active_query }}{% endif %}" 
+                                   class="period-menu-item {% if active_period == 'yesterday' %}is-active{% endif %}" role="menuitem">
+                                    <span>За вчера</span>
+                                    {% if active_period == 'yesterday' %}<span class="menu-check">✓</span>{% endif %}
                                 </a>
                                 <a href="/feed?stream={{ active_stream }}&sort=best&period=week{% if active_query %}&q={{ active_query }}{% endif %}" 
                                    class="period-menu-item {% if active_period == 'week' %}is-active{% endif %}" role="menuitem">
@@ -258,10 +270,10 @@
                                     <span>За месяц</span>
                                     {% if active_period == 'month' %}<span class="menu-check">✓</span>{% endif %}
                                 </a>
-                                <a href="/feed?stream={{ active_stream }}&sort=best&period=all{% if active_query %}&q={{ active_query }}{% endif %}" 
-                                   class="period-menu-item {% if active_period == 'all' or not active_period %}is-active{% endif %}" role="menuitem">
-                                    <span>За все время</span>
-                                    {% if active_period == 'all' or not active_period %}<span class="menu-check">✓</span>{% endif %}
+                                <a href="/feed?stream={{ active_stream }}&sort=best&period=year{% if active_query %}&q={{ active_query }}{% endif %}" 
+                                   class="period-menu-item {% if active_period == 'year' %}is-active{% endif %}" role="menuitem">
+                                    <span>За год</span>
+                                    {% if active_period == 'year' %}<span class="menu-check">✓</span>{% endif %}
                                 </a>
                             </div>
                         </div>
@@ -294,8 +306,17 @@
                     </div>
                 </div>
 
-                <!-- Right Actions: Search Box + Write Article Button -->
+                <!-- Right Actions: Write Article Button (Left) + Search Box (Right) -->
                 <div class="habr-actions-right">
+                    <a href="/feed/create" class="btn-habr-write" id="btnOpenWriteModal">
+                        <span class="btn-icon-wrap" aria-hidden="true">
+                            <svg class="write-btn-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                            </svg>
+                        </span>
+                        <span>Написать статью</span>
+                    </a>
+
                     <div class="habr-search-box">
                         <span class="search-icon" aria-hidden="true">
                             <svg class="search-svg" viewBox="0 0 20 20" fill="currentColor">
@@ -308,15 +329,6 @@
                                aria-label="Поиск по статьям и коду">
                         <button type="button" class="btn-clear-search" id="btnClearSearch" title="Очистить поиск" style="{% if not active_query %}display: none;{% endif %}">✕</button>
                     </div>
-
-                    <a href="/feed/create" class="btn-habr-write" id="btnOpenWriteModal">
-                        <span class="btn-icon-wrap" aria-hidden="true">
-                            <svg class="write-btn-svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                            </svg>
-                        </span>
-                        <span>Написать статью</span>
-                    </a>
                 </div>
             </div>
 
@@ -853,5 +865,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_social.js?v=2.0.0" defer></script>
+<script src="/static/js/forum_social.js?v=2.1.0" defer></script>
 {% endblock %}

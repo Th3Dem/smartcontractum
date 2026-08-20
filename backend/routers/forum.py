@@ -746,14 +746,22 @@ async def render_forum_page(
     stream: Optional[str] = Query(None, description="Active stream/category slug"),
     category: Optional[str] = Query(None, description="Alias for category slug"),
     sort: Optional[str] = Query("best", description="Sort: best, new, discussed, my_feed"),
-    period: Optional[str] = Query("all", description="Period for best: day, week, month, all"),
+    period: Optional[str] = Query(
+        "all",
+        description="Period for best: today, day, yesterday, week, month, year, all",
+    ),
     tag: Optional[str] = Query(None, description="Active tag filter"),
     q: Optional[str] = Query(None, description="Keyword search query"),
 ) -> Response:
     _recalculate_category_counts()
     active_stream = stream or category or "all"
     active_sort = sort if isinstance(sort, str) and sort in ["best", "new", "discussed", "my_feed"] else "best"
-    active_period = period if isinstance(period, str) and period in ["day", "week", "month", "all"] else "all"
+    active_period = (
+        period
+        if isinstance(period, str)
+        and period in ["today", "day", "yesterday", "week", "month", "year", "all"]
+        else "all"
+    )
 
     # Find active category name
     matched_cat = next((c for c in CATEGORIES_DB if c.slug == active_stream), None)
