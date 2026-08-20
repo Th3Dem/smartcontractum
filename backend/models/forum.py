@@ -20,6 +20,7 @@ class Comment(BaseModel):
 
     id: int
     post_id: int
+    parent_comment_id: Optional[int] = None
     author_name: str
     author_username: str = "developer"
     author_role: str = "Разработчик"
@@ -30,6 +31,7 @@ class Comment(BaseModel):
     created_at: str
     score: int = 0
     is_upvoted: bool = False
+    replies: List["Comment"] = Field(default_factory=list)
 
 
 class Topic(BaseModel):
@@ -64,6 +66,8 @@ class Topic(BaseModel):
     is_downvoted: bool = False
     is_bookmarked: bool = False
     bookmarks_count: int = 12
+    shares_count: int = 4
+    unread_comments_count: int = 0
     replies_count: int = 0
     comments: List[Comment] = Field(default_factory=list)
     tags: List[str] = Field(default_factory=list)
@@ -142,6 +146,7 @@ class CommentCreateRequest(BaseModel):
         min_length=3,
         max_length=3000,
     )
+    parent_comment_id: Optional[int] = None
     author_name: str = Field(
         default="ООО Интегратор (Umbrella-Dev)",
     )
@@ -155,6 +160,19 @@ class CommentCreateRequest(BaseModel):
         if not v:
             return v
         return html.escape(v.strip())
+
+
+class ShareResponse(BaseModel):
+    post_id: int
+    shares_count: int
+    message: str = "success"
+
+
+class HubSubscriptionResponse(BaseModel):
+    slug: str
+    is_subscribed: bool
+    subscribers_count: str
+    message: str = "success"
 
 
 class CategoryListResponse(BaseModel):

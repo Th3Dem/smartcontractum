@@ -626,6 +626,39 @@ async def toggle_post_upvote(post_id: int) -> UpvoteResponse:
         message="Рейтинг обновлен",
     )
 
+@router.post(
+    "/api/v1/forum/posts/{post_id}/downvote",
+    response_model=UpvoteResponse,
+    summary="Toggle downvote / rating on a post",
+)
+async def toggle_post_downvote(post_id: int) -> UpvoteResponse:
+    post = next((t for t in TOPICS_DB if t.id == post_id), None)
+    if not post:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Пост #{post_id} не найден",
+        )
+
+    if post.is_downvoted:
+        post.is_downvoted = False
+        post.score += 1
+    else:
+        if post.is_upvoted:
+            post.is_upvoted = False
+            post.score -= 1
+        post.is_downvoted = True
+        post.score -= 1
+
+    post.score_formatted = f"+{post.score}" if post.score > 0 else str(post.score)
+
+    return UpvoteResponse(
+        post_id=post.id,
+        score=post.score,
+        score_formatted=post.score_formatted,
+        is_upvoted=post.is_upvoted,
+        message="Рейтинг обновлен",
+    )
+
 
 @router.post(
     "/api/v1/forum/posts/{post_id}/bookmark",
@@ -712,13 +745,15 @@ async def render_forum_page(
     request: Request,
     stream: Optional[str] = Query(None, description="Active stream/category slug"),
     category: Optional[str] = Query(None, description="Alias for category slug"),
-    sort: Optional[str] = Query("best", description="Sort: best, new, discussed"),
+    sort: Optional[str] = Query("best", description="Sort: best, new, discussed, my_feed"),
+    period: Optional[str] = Query("all", description="Period for best: day, week, month, all"),
     tag: Optional[str] = Query(None, description="Active tag filter"),
     q: Optional[str] = Query(None, description="Keyword search query"),
 ) -> Response:
     _recalculate_category_counts()
     active_stream = stream or category or "all"
-    active_sort = sort if isinstance(sort, str) and sort in ["best", "new", "discussed"] else "best"
+    active_sort = sort if isinstance(sort, str) and sort in ["best", "new", "discussed", "my_feed"] else "best"
+    active_period = period if isinstance(period, str) and period in ["day", "week", "month", "all"] else "all"
 
     # Find active category name
     matched_cat = next((c for c in CATEGORIES_DB if c.slug == active_stream), None)
@@ -726,8 +761,11 @@ async def render_forum_page(
     active_category_icon = matched_cat.icon if matched_cat else "📁"
 
     filtered_topics = list(TOPICS_DB)
-    if active_stream != "all":
+    if active_stream != "all" and active_stream != "my_feed":
         filtered_topics = [t for t in filtered_topics if t.category_slug == active_stream]
+    elif active_stream == "my_feed" or active_sort == "my_feed":
+        # My Feed: Filter by subscribed hubs/tags
+        filtered_topics = [t for t in filtered_topics if any(h in ["smart-contracts", "safe-deals", "infosec-audit"] for h in t.hubs) or t.category_slug in ["smart-contracts", "safe-deals"]]
 
     if tag and isinstance(tag, str):
         tag_clean = tag.strip().lstrip("#").lower()
@@ -759,24 +797,47 @@ async def render_forum_page(
     else:
         filtered_topics.sort(key=lambda t: t.score, reverse=True)
 
-    # Trending Now widget (Top 5 read)
-    trending_articles = sorted(TOPICS_DB, key=lambda t: t.views_count, reverse=True)[:5]
-
-    # Popular Hubs
-    popular_hubs = [
-        {"name": "Разработка смарт-контрактов", "slug": "smart-contracts", "subs": "12.1k", "rating": "840"},
-        {"name": "Информационная безопасность", "slug": "infosec-audit", "subs": "9.8k", "rating": "720"},
-        {"name": "Регуляторика & ЦБ РФ", "slug": "safe-deals", "subs": "8.9k", "rating": "650"},
-        {"name": "Оракулы & Данные", "slug": "oracles", "subs": "6.5k", "rating": "490"},
-        {"name": "Казначейство & B2B", "slug": "treasury-b2b", "subs": "5.2k", "rating": "380"},
+    # Trending Now widget with Live Reader metrics
+    read_now_trending = [
+        {"title": "Архитектура детерминированного исполнения ПКСК 2026", "id": 1, "readers": 342, "tag": "Solidity"},
+        {"title": "Аудит безопасности пулов ликвидности цифрового рубля", "id": 2, "readers": 218, "tag": "АудитИБ"},
+        {"title": "Интеграция оракулов ГИС «Зерно» в смарт-контракты", "id": 4, "readers": 145, "tag": "Оракулы"},
     ]
 
-    # Top Authors / Companies
+    # Popular Hubs with live subscription state
+    popular_hubs = [
+        {"name": "Разработка смарт-контрактов", "slug": "smart-contracts", "subs": "12.1k", "rating": "840", "is_subscribed": True},
+        {"name": "Информационная безопасность", "slug": "infosec-audit", "subs": "9.8k", "rating": "720", "is_subscribed": False},
+        {"name": "Регуляторика & ЦБ РФ", "slug": "safe-deals", "subs": "8.9k", "rating": "650", "is_subscribed": True},
+        {"name": "Оракулы & Данные", "slug": "oracles", "subs": "6.5k", "rating": "490", "is_subscribed": False},
+        {"name": "Казначейство & B2B", "slug": "treasury-b2b", "subs": "5.2k", "rating": "380", "is_subscribed": False},
+    ]
+
+    # Top Authors / Companies of the Week
     top_companies = [
-        {"name": "BI.ZONE AppSec", "logo": "🛡️", "posts": "24 публикации", "rating": "+1,420"},
-        {"name": "Банк России (НИР)", "logo": "🏛️", "posts": "18 публикаций", "rating": "+2,890"},
-        {"name": "ФинтехИнтегратор", "logo": "⚡", "posts": "31 публикация", "rating": "+940"},
-        {"name": "ГИС «Зерно» Партнер", "logo": "🌾", "posts": "12 публикаций", "rating": "+630"},
+        {"name": "BI.ZONE AppSec", "logo": "🛡️", "posts": "24 публикации", "rating": "+1,420", "is_subscribed": False},
+        {"name": "Банк России (НИР)", "logo": "🏛️", "posts": "18 публикаций", "rating": "+2,890", "is_subscribed": True},
+        {"name": "ФинтехИнтегратор", "logo": "⚡", "posts": "31 публикация", "rating": "+940", "is_subscribed": False},
+        {"name": "ГИС «Зерно» Партнер", "logo": "🌾", "posts": "12 публикаций", "rating": "+630", "is_subscribed": False},
+    ]
+
+    # Upcoming PKSC Community Meetups & AMAs
+    upcoming_events = [
+        {"day": "28", "month": "АВГ", "title": "Хакатон ПКСК: Оптимизация газа в EVM", "type": "Онлайн / AMA", "badge": "Live"},
+        {"day": "04", "month": "СЕН", "title": "Круглый стол ЦБ РФ: Стандарты оракулов", "type": "Москва / Offline", "badge": "Официально"},
+        {"day": "12", "month": "СЕН", "title": "AppSec Meetup: Аудит реентерабельности", "type": "Онлайн", "badge": "Вебинар"},
+    ]
+
+    # Popular Tags Cloud
+    popular_tags = [
+        {"name": "Solidity", "count": 28},
+        {"name": "ПКСК_2026", "count": 24},
+        {"name": "ЦБ_РФ", "count": 19},
+        {"name": "АудитИБ", "count": 15},
+        {"name": "Оракулы", "count": 12},
+        {"name": "ЦифровойРубль", "count": 10},
+        {"name": "B2B", "count": 8},
+        {"name": "GasOptimization", "count": 7},
     ]
 
     context: dict[str, Any] = {
@@ -788,11 +849,15 @@ async def render_forum_page(
         "active_category_name": active_category_name,
         "active_category_icon": active_category_icon,
         "active_sort": active_sort,
+        "active_period": active_period,
         "active_tag": tag,
         "active_query": q or "",
-        "trending_articles": trending_articles,
+        "read_now_trending": read_now_trending,
+        "trending_articles": read_now_trending,
         "popular_hubs": popular_hubs,
         "top_companies": top_companies,
+        "upcoming_events": upcoming_events,
+        "popular_tags": popular_tags,
         "user_name": "developer",
         "user_avatar": "SC",
     }
@@ -801,6 +866,28 @@ async def render_forum_page(
         name="forum/index.html",
         context=context,
     )
+
+
+@router.post("/api/v1/forum/topics/{topic_id}/share", summary="Increment share counter")
+async def share_topic(topic_id: int) -> Dict[str, Any]:
+    """Track article share action."""
+    topic = next((t for t in TOPICS_DB if t.id == topic_id), None)
+    if not topic:
+        raise HTTPException(status_code=404, detail="Topic not found")
+    topic.shares_count += 1
+    return {"post_id": topic.id, "shares_count": topic.shares_count, "message": "success"}
+
+
+@router.post("/api/v1/forum/hubs/{slug}/subscribe", summary="Subscribe to hub")
+async def subscribe_to_hub(slug: str) -> Dict[str, Any]:
+    """Toggle hub subscription."""
+    return {"slug": slug, "is_subscribed": True, "message": "Подписка оформлена"}
+
+
+@router.post("/api/v1/forum/hubs/{slug}/unsubscribe", summary="Unsubscribe from hub")
+async def unsubscribe_from_hub(slug: str) -> Dict[str, Any]:
+    """Toggle hub unsubscription."""
+    return {"slug": slug, "is_subscribed": False, "message": "Вы отписались от хаба"}
 
 
 @router.get("/feed/create", summary="Habr-Style Article Creation & Editor Page")

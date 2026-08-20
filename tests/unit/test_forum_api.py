@@ -325,3 +325,26 @@ def test_article_draft_api_crud_flow() -> None:
     del_again = client.delete("/api/v1/forum/drafts")
     assert del_again.status_code == 200
     assert client.get("/api/v1/forum/drafts").json()["has_draft"] is False
+
+    
+# Feed 2.0 Tests
+def test_feed_2_0_period_and_my_feed() -> None:
+    resp = client.get("/feed?sort=best")
+    assert resp.status_code == 200
+
+    my_feed_resp = client.get("/feed?stream=my_feed")
+    assert my_feed_resp.status_code == 200
+
+
+def test_share_and_hub_subscription_apis() -> None:
+    share_resp = client.post("/api/v1/forum/topics/1/share")
+    assert share_resp.status_code == 200
+    assert share_resp.json()['shares_count'] >= 1
+
+    sub_resp = client.post("/api/v1/forum/hubs/smart-contracts/subscribe")
+    assert sub_resp.status_code == 200
+    assert sub_resp.json()['is_subscribed'] is True
+
+    unsub_resp = client.post("/api/v1/forum/hubs/smart-contracts/unsubscribe")
+    assert unsub_resp.status_code == 200
+    assert unsub_resp.json()['is_subscribed'] is False
