@@ -3,7 +3,7 @@
 {% block title %}SmartContractum — Здесь рождаются российские смарт-контракты | ПКСК Банка России{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/hero.css?v=3.23.0">
+<link rel="stylesheet" href="/static/css/hero.css?v=3.24.0">
 {% endblock %}
 
 {% block content %}
@@ -156,38 +156,25 @@
          1.2 СЕЛЕКТОР ЗАДАЧ ("Что вы хотите сделать?" / 6-Card Action Grid)
     ================================================================= -->
     <section class="task-router-section" id="taskRouterSection">
-        <!-- ================================================================
-             ГОРИЗОНТАЛЬНАЯ ДОРОЖНАЯ КАРТА & ДИАГРАММА ГАНТА ПКСК БАНКА РОССИИ
+                <!-- ================================================================
+             ГОРИЗОНТАЛЬНАЯ ДОРОЖНАЯ КАРТА ПКСК БАНКА РОССИИ (Легкий современный пайплайн)
         ================================================================= -->
         <div class="pksc-horizontal-timeline-container" id="pkscTimeline">
-            <!-- Modern Timeline & Gantt Header Bar with Interactive Switcher -->
+            <!-- Timeline Header Bar -->
             <div class="timeline-header-bar">
                 <div class="timeline-header-left">
                     <span class="timeline-radar-icon">⏱️</span>
                     <h3 class="timeline-main-title">Дорожная карта создания ПКСК Банка России</h3>
                 </div>
-
-                <!-- Modern View Switcher (Дорожная карта vs Диаграмма Ганта) -->
-                <div class="timeline-view-switcher" role="tablist" aria-label="Переключение вида таймлайна">
-                    <button type="button" class="view-switch-btn active" id="btnViewPipeline" role="tab" aria-selected="true" data-view="pipeline">
-                        <span class="switch-icon">🚀</span>
-                        <span class="switch-label">Дорожная карта</span>
-                    </button>
-                    <button type="button" class="view-switch-btn" id="btnViewGantt" role="tab" aria-selected="false" data-view="gantt">
-                        <span class="switch-icon">📊</span>
-                        <span class="switch-label">Диаграмма Ганта</span>
-                    </button>
-                </div>
-
                 <div class="timeline-header-right">
                     <span class="timeline-pulse-dot"></span>
                     <span class="timeline-nir-badge">Фаза НИР ЦБ РФ (до 31.03.2027)</span>
                 </div>
             </div>
 
-            <!-- View 1: Horizontal Pipeline Track & Steps -->
-            <div class="pksc-timeline-track-wrapper" id="pkscPipelineView">
-                <!-- Connecting Gradient Progress Line with Laser Beam -->
+            <!-- Sleek Horizontal Track & Steps -->
+            <div class="pksc-timeline-track-wrapper">
+                <!-- Connecting Gradient Progress Line -->
                 <div class="pksc-connecting-line" aria-hidden="true">
                     <div class="line-progress-fill">
                         <span class="bar-laser-glow"></span>
@@ -199,17 +186,19 @@
                     <div class="pksc-step-card step-status-completed">
                         <div class="step-node-anchor">
                             <div class="step-node-disc">
-                                <span class="node-icon-check">✓</span>
+                                <svg class="node-svg-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M16.667 5L7.5 14.167 3.333 10" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
                             </div>
-                            <span class="node-status-label">Завершено</span>
+                            <span class="node-step-number">01</span>
                         </div>
                         <div class="step-card-body">
                             <div class="step-card-meta">
                                 <span class="step-card-date">18 июня 2026</span>
-                                <span class="step-pill-badge pill-completed">Утверждено</span>
+                                <span class="step-pill-badge pill-completed">Завершено</span>
                             </div>
                             <h4 class="step-card-title">Публикация Концепции</h4>
-                            <p class="step-card-desc">Банк России опубликовал Концепцию ПКСК для общественных консультаций с рынком.</p>
+                            <p class="step-card-desc">Опубликован доклад Банка России для общественных консультаций.</p>
                         </div>
                     </div>
 
@@ -217,17 +206,19 @@
                     <div class="pksc-step-card step-status-active">
                         <div class="step-node-anchor">
                             <div class="step-node-disc active-node-pulse">
-                                <span class="node-icon-pulse">⚡</span>
+                                <svg class="node-svg-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10.833 1.667L2.5 11.667h6.667L8.333 18.333l9.167-10h-6.667l1.667-6.666z" stroke="#f59e0b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
                             </div>
-                            <span class="node-status-label active-label">Текущий этап</span>
+                            <span class="node-step-number active-number">02</span>
                         </div>
                         <div class="step-card-body active-body-highlight">
                             <div class="step-card-meta">
                                 <span class="step-card-date active-date">До 30 сентября 2026</span>
-                                <span class="step-pill-badge pill-active">В процессе</span>
+                                <span class="step-pill-badge pill-active">Текущий этап</span>
                             </div>
-                            <h4 class="step-card-title active-title">Сбор обратной связи & пилотов</h4>
-                            <p class="step-card-desc">Прием предложений, сбор вопросов по оракулам, аудит сценариев и формирование реестра пилотов.</p>
+                            <h4 class="step-card-title active-title">Сбор пилотов & оракулов</h4>
+                            <p class="step-card-desc">Прием предложений рынка, формирование сценариев и реестра пилотов.</p>
                         </div>
                     </div>
 
@@ -235,17 +226,20 @@
                     <div class="pksc-step-card step-status-planned">
                         <div class="step-node-anchor">
                             <div class="step-node-disc">
-                                <span class="node-icon-dot">🔬</span>
+                                <svg class="node-svg-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="3.333" y="3.333" width="13.333" height="13.333" rx="2" stroke="#38bdf8" stroke-width="1.8"/>
+                                    <path d="M7.5 1.667v1.666M12.5 1.667v1.666M7.5 16.667v1.666M12.5 16.667v1.666M1.667 7.5h1.666M1.667 12.5h1.666M16.667 7.5h1.666M16.667 12.5h1.666" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round"/>
+                                </svg>
                             </div>
-                            <span class="node-status-label">НИР ЦБ РФ</span>
+                            <span class="node-step-number">03</span>
                         </div>
                         <div class="step-card-body">
                             <div class="step-card-meta">
                                 <span class="step-card-date">IV кв. 2026 – I кв. 2027</span>
                                 <span class="step-pill-badge pill-planned">Проектирование</span>
                             </div>
-                            <h4 class="step-card-title">Разработка целевой модели</h4>
-                            <p class="step-card-desc">Научно-исследовательская работа регулятора, разработка стандартов ИБ и прототипа среды.</p>
+                            <h4 class="step-card-title">НИР & Целевая модель</h4>
+                            <p class="step-card-desc">Научно-исследовательская работа, стандарты ИБ и прототип среды.</p>
                         </div>
                     </div>
 
@@ -253,118 +247,22 @@
                     <div class="pksc-step-card step-status-future">
                         <div class="step-node-anchor">
                             <div class="step-node-disc">
-                                <span class="node-icon-dot">🚀</span>
+                                <svg class="node-svg-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.5 2.5a7.5 7.5 0 0 1 5 5c0 4.167-5 10-5 10s-5-5.833-5-10a7.5 7.5 0 0 1 5-5z" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="12.5" cy="7.5" r="2.5" stroke="#94a3b8" stroke-width="1.8"/>
+                                </svg>
                             </div>
-                            <span class="node-status-label">Пилотирование</span>
+                            <span class="node-step-number">04</span>
                         </div>
                         <div class="step-card-body">
                             <div class="step-card-meta">
                                 <span class="step-card-date">С 31 марта 2027</span>
                                 <span class="step-pill-badge pill-future">Пилотный контур</span>
                             </div>
-                            <h4 class="step-card-title">Запуск пилотных расчетов</h4>
-                            <p class="step-card-desc">Ввод платформы в промышленный пилот и запуск B2B сделок в контуре Банка России.</p>
+                            <h4 class="step-card-title">Пилотные расчеты</h4>
+                            <p class="step-card-desc">Ввод тестовой платформы в промышленный пилот Банка России.</p>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- View 2: High-Tech Interactive Gantt Chart Container -->
-            <div class="pksc-gantt-chart-wrapper" id="pkscGanttView" style="display: none;">
-                <!-- Gantt Time Axis (Q2 2026 -> Q4 2027) -->
-                <div class="gantt-time-axis">
-                    <div class="gantt-axis-col">II кв. 2026</div>
-                    <div class="gantt-axis-col current-quarter">
-                        <span>III кв. 2026</span>
-                        <span class="now-badge">СЕЙЧАС</span>
-                    </div>
-                    <div class="gantt-axis-col">IV кв. 2026</div>
-                    <div class="gantt-axis-col">I кв. 2027</div>
-                    <div class="gantt-axis-col">II кв. 2027</div>
-                    <div class="gantt-axis-col">III-IV кв. 2027</div>
-                </div>
-
-                <!-- Gantt Streams / Bars -->
-                <div class="gantt-streams-list">
-                    <!-- Stream 1: Концепция и нормативная база ЦБ РФ -->
-                    <div class="gantt-stream-row" data-stream="concept">
-                        <div class="stream-info">
-                            <span class="stream-icon">📜</span>
-                            <div class="stream-meta">
-                                <span class="stream-name">Концепция & Консультации ЦБ РФ</span>
-                                <span class="stream-sub">Доклад Банка России для консультаций</span>
-                            </div>
-                        </div>
-                        <div class="gantt-track-area">
-                            <div class="gantt-bar-fill bar-completed" style="--bar-start: 0%; --bar-width: 25%;" title="100% Завершено: Доклад ЦБ РФ опубликован 18.06.2026">
-                                <span class="bar-laser-glow"></span>
-                                <span class="bar-label">18.06.2026 • Утверждено</span>
-                                <span class="bar-percent">100%</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Stream 2: Сбор предложений, пилотов и оракулов -->
-                    <div class="gantt-stream-row active-stream-highlight" data-stream="feedback">
-                        <div class="stream-info">
-                            <span class="stream-icon">⚡</span>
-                            <div class="stream-meta">
-                                <span class="stream-name">Сбор пилотов & Реестр оракулов</span>
-                                <span class="stream-sub">Сбор предложений и аудит сценариев</span>
-                            </div>
-                        </div>
-                        <div class="gantt-track-area">
-                            <div class="gantt-bar-fill bar-active" style="--bar-start: 16%; --bar-width: 32%;" title="В процессе (78%): Сбор предложений до 30.09.2026">
-                                <span class="bar-laser-glow"></span>
-                                <span class="bar-label">До 30.09.2026 • Активный спринт</span>
-                                <span class="bar-percent">78%</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Stream 3: НИР ЦБ РФ и архитектурный прототип -->
-                    <div class="gantt-stream-row" data-stream="nir">
-                        <div class="stream-info">
-                            <span class="stream-icon">🔬</span>
-                            <div class="stream-meta">
-                                <span class="stream-name">НИР ЦБ РФ & Стандарты ИБ</span>
-                                <span class="stream-sub">Архитектурная модель и ГОСТ-прототип</span>
-                            </div>
-                        </div>
-                        <div class="gantt-track-area">
-                            <div class="gantt-bar-fill bar-planned" style="--bar-start: 35%; --bar-width: 33%;" title="Проектирование (25%): IV кв. 2026 - I кв. 2027">
-                                <span class="bar-laser-glow"></span>
-                                <span class="bar-label">IV кв. 2026 – I кв. 2027 • НИР</span>
-                                <span class="bar-percent">25%</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Stream 4: Запуск пилотного контура и расчеты ЦФА -->
-                    <div class="gantt-stream-row" data-stream="rollout">
-                        <div class="stream-info">
-                            <span class="stream-icon">🚀</span>
-                            <div class="stream-meta">
-                                <span class="stream-name">Промышленный пилотный контур</span>
-                                <span class="stream-sub">Запуск реальных B2B смарт-контрактов</span>
-                            </div>
-                        </div>
-                        <div class="gantt-track-area">
-                            <div class="gantt-bar-fill bar-future" style="--bar-start: 68%; --bar-width: 32%;" title="В плане: Старт с 31.03.2027">
-                                <span class="bar-laser-glow"></span>
-                                <span class="bar-label">С 31.03.2027 • Пилотирование</span>
-                                <span class="bar-percent">0%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Gantt Milestones Legend Bar -->
-                <div class="gantt-legend-bar">
-                    <div class="legend-item"><span class="legend-dot dot-completed"></span> Завершено (100%)</div>
-                    <div class="legend-item"><span class="legend-dot dot-active"></span> Текущий активный спринт (78%)</div>
-                    <div class="legend-item"><span class="legend-dot dot-planned"></span> Проектирование & НИР (25%)</div>
-                    <div class="legend-item"><span class="legend-dot dot-future"></span> Пилотный контур (2027)</div>
                 </div>
             </div>
         </div>
@@ -632,5 +530,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/hero.js?v=3.23.0" defer></script>
+<script src="/static/js/hero.js?v=3.24.0" defer></script>
 {% endblock %}
