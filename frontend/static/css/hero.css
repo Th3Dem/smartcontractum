@@ -676,6 +676,314 @@
     50% { transform: translateY(6px); }
 }
 
+
+/* ----------------------------------------------------------------------
+   1.1.5 ГОРИЗОНТАЛЬНЫЙ ТАЙМЛАЙН ПКСК БАНКА РОССИИ (Glassmorphism Roadmap)
+----------------------------------------------------------------------- */
+.pksc-horizontal-timeline-container {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(11, 20, 38, 0.96) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 18px;
+    padding: 24px 28px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.pksc-horizontal-timeline-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #10b981 0%, #38bdf8 35%, #f59e0b 65%, #6188ff 100%);
+    opacity: 0.8;
+}
+
+.timeline-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 24px;
+}
+
+.timeline-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.timeline-radar-icon {
+    font-size: 1.3rem;
+}
+
+.timeline-main-title {
+    font-size: 1.12rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.2px;
+    margin: 0;
+}
+
+.timeline-header-right {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    padding: 4px 12px;
+    border-radius: 9999px;
+}
+
+.timeline-pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #f59e0b;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #f59e0b;
+    animation: amberPulse 2s infinite;
+}
+
+@keyframes amberPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.6; }
+}
+
+.timeline-nir-badge {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #fbbf24;
+}
+
+/* Track & Steps */
+.pksc-timeline-track-wrapper {
+    position: relative;
+    padding-top: 8px;
+}
+
+.pksc-connecting-line {
+    position: absolute;
+    top: 25px;
+    left: 40px;
+    right: 40px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.12);
+    z-index: 1;
+    border-radius: 2px;
+}
+
+.line-progress-fill {
+    width: 38%;
+    height: 100%;
+    background: linear-gradient(90deg, #10b981 0%, #38bdf8 60%, #f59e0b 100%);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+    border-radius: 2px;
+}
+
+.pksc-timeline-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.pksc-step-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.step-node-anchor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.step-node-disc {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #0b1426;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.88rem;
+    color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    transition: all 0.25s ease;
+}
+
+.step-status-completed .step-node-disc {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: #10b981;
+    color: #10b981;
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.45);
+}
+
+.node-icon-check {
+    font-weight: 800;
+    font-size: 0.95rem;
+}
+
+.step-status-active .step-node-disc {
+    background: rgba(245, 158, 11, 0.2);
+    border-color: #f59e0b;
+    color: #f59e0b;
+    box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.2), 0 0 20px rgba(56, 189, 248, 0.5);
+    animation: activeHalo 2.5s infinite;
+}
+
+@keyframes activeHalo {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2), 0 0 16px rgba(56, 189, 248, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0.35), 0 0 24px rgba(56, 189, 248, 0.7); }
+}
+
+.step-status-planned .step-node-disc {
+    border-color: #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+    color: #38bdf8;
+}
+
+.step-status-future .step-node-disc {
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+}
+
+.node-status-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.node-status-label.active-label {
+    color: #fbbf24;
+}
+
+.step-card-body {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 140px;
+    transition: all 0.25s ease;
+}
+
+.pksc-step-card:hover .step-card-body {
+    background: rgba(20, 34, 66, 0.75);
+    border-color: rgba(56, 189, 248, 0.45);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 16px rgba(56, 189, 248, 0.2);
+}
+
+.active-body-highlight {
+    background: rgba(245, 158, 11, 0.06);
+    border-color: rgba(245, 158, 11, 0.35);
+}
+
+.step-card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.step-card-date {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #94a3b8;
+}
+
+.step-card-date.active-date {
+    color: #fbbf24;
+}
+
+.step-pill-badge {
+    font-size: 0.66rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.pill-completed {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #34d399;
+}
+
+.pill-active {
+    background: rgba(245, 158, 11, 0.2);
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    color: #fbbf24;
+}
+
+.pill-planned {
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #7dd3fc;
+}
+
+.pill-future {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #94a3b8;
+}
+
+.step-card-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.35;
+}
+
+.step-card-title.active-title {
+    color: #ffffff;
+}
+
+.step-card-desc {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    line-height: 1.45;
+    margin: 0;
+}
+
+@media (max-width: 1024px) {
+    .pksc-timeline-steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .pksc-connecting-line {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .pksc-timeline-steps-grid {
+        grid-template-columns: 1fr;
+    }
+    .pksc-horizontal-timeline-container {
+        padding: 18px;
+    }
+}
+
 /* ----------------------------------------------------------------------
    1.2 TASK SELECTOR ("ЧТО ВЫ ХОТИТЕ СДЕЛАТЬ?" / 6-CARD GRID)
 ---------------------------------------------------------------------- */

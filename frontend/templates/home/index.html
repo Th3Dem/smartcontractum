@@ -3,7 +3,7 @@
 {% block title %}SmartContractum — Здесь рождаются российские смарт-контракты | ПКСК Банка России{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/hero.css?v=3.19.0">
+<link rel="stylesheet" href="/static/css/hero.css?v=3.20.0">
 {% endblock %}
 
 {% block content %}
@@ -156,6 +156,105 @@
          1.2 СЕЛЕКТОР ЗАДАЧ ("Что вы хотите сделать?" / 6-Card Action Grid)
     ================================================================= -->
     <section class="task-router-section" id="taskRouterSection">
+        <!-- ================================================================
+             ГОРИЗОНТАЛЬНАЯ ДОРОЖНАЯ КАРТА & ТАЙМЛАЙН ПКСК БАНКА РОССИИ
+        ================================================================= -->
+        <div class="pksc-horizontal-timeline-container" id="pkscTimeline">
+            <!-- Timeline Header Bar -->
+            <div class="timeline-header-bar">
+                <div class="timeline-header-left">
+                    <span class="timeline-radar-icon">⏱️</span>
+                    <h3 class="timeline-main-title">Дорожная карта создания ПКСК Банка России</h3>
+                </div>
+                <div class="timeline-header-right">
+                    <span class="timeline-pulse-dot"></span>
+                    <span class="timeline-nir-badge">Фаза НИР ЦБ РФ (до 31.03.2027)</span>
+                </div>
+            </div>
+
+            <!-- Horizontal Track & Steps -->
+            <div class="pksc-timeline-track-wrapper">
+                <!-- Connecting Gradient Progress Line -->
+                <div class="pksc-connecting-line" aria-hidden="true">
+                    <div class="line-progress-fill"></div>
+                </div>
+
+                <div class="pksc-timeline-steps-grid">
+                    <!-- Step 1: Completed -->
+                    <div class="pksc-step-card step-status-completed">
+                        <div class="step-node-anchor">
+                            <div class="step-node-disc">
+                                <span class="node-icon-check">✓</span>
+                            </div>
+                            <span class="node-status-label">Завершено</span>
+                        </div>
+                        <div class="step-card-body">
+                            <div class="step-card-meta">
+                                <span class="step-card-date">18 июня 2026</span>
+                                <span class="step-pill-badge pill-completed">Утверждено</span>
+                            </div>
+                            <h4 class="step-card-title">Публикация Концепции</h4>
+                            <p class="step-card-desc">Банк России опубликовал Концепцию ПКСК для общественных консультаций с рынком.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Active / Current Stage -->
+                    <div class="pksc-step-card step-status-active">
+                        <div class="step-node-anchor">
+                            <div class="step-node-disc active-node-pulse">
+                                <span class="node-icon-pulse">⚡</span>
+                            </div>
+                            <span class="node-status-label active-label">Текущий этап</span>
+                        </div>
+                        <div class="step-card-body active-body-highlight">
+                            <div class="step-card-meta">
+                                <span class="step-card-date active-date">До 30 сентября 2026</span>
+                                <span class="step-pill-badge pill-active">В процессе</span>
+                            </div>
+                            <h4 class="step-card-title active-title">Сбор обратной связи & пилотов</h4>
+                            <p class="step-card-desc">Прием предложений, сбор вопросов по оракулам, аудит сценариев и формирование реестра пилотов.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Planned -->
+                    <div class="pksc-step-card step-status-planned">
+                        <div class="step-node-anchor">
+                            <div class="step-node-disc">
+                                <span class="node-icon-dot">🔬</span>
+                            </div>
+                            <span class="node-status-label">НИР ЦБ РФ</span>
+                        </div>
+                        <div class="step-card-body">
+                            <div class="step-card-meta">
+                                <span class="step-card-date">IV кв. 2026 – I кв. 2027</span>
+                                <span class="step-pill-badge pill-planned">Проектирование</span>
+                            </div>
+                            <h4 class="step-card-title">Разработка целевой модели</h4>
+                            <p class="step-card-desc">Научно-исследовательская работа регулятора, разработка стандартов ИБ и прототипа среды.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Future Rollout -->
+                    <div class="pksc-step-card step-status-future">
+                        <div class="step-node-anchor">
+                            <div class="step-node-disc">
+                                <span class="node-icon-dot">🚀</span>
+                            </div>
+                            <span class="node-status-label">Пилотирование</span>
+                        </div>
+                        <div class="step-card-body">
+                            <div class="step-card-meta">
+                                <span class="step-card-date">С 31 марта 2027</span>
+                                <span class="step-pill-badge pill-future">Пилотный контур</span>
+                            </div>
+                            <h4 class="step-card-title">Запуск пилотных расчетов</h4>
+                            <p class="step-card-desc">Ввод платформы в промышленный пилот и запуск B2B сделок в контуре Банка России.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="section-heading-box">
             <h2 class="section-title">Что вы хотите сделать?</h2>
             <p class="section-subtitle">Выберите ключевой пользовательский сценарий для старта работы</p>
@@ -419,5 +518,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/hero.js?v=3.19.0" defer></script>
+<script src="/static/js/hero.js?v=3.20.0" defer></script>
 {% endblock %}

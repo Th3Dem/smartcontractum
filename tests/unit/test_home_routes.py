@@ -161,3 +161,17 @@ def test_system_stats_api_endpoint() -> None:
             data.get("registered_experts", 0) > 0
             or data.get("experts_count", 0) > 0
         )
+
+
+def test_home_page_contains_horizontal_pksc_timeline() -> None:
+    """Verify horizontal PKSC roadmap timeline exists on homepage."""
+    response = client.get("/")
+    assert response.status_code == 200
+    html = response.text
+
+    assert "pkscTimeline" in html
+    assert "Дорожная карта создания ПКСК Банка России" in html
+    assert "Публикация Концепции" in html
+    assert "Сбор обратной связи & пилотов" in html
+    assert "Разработка целевой модели" in html
+    assert "Запуск пилотных расчетов" in html
