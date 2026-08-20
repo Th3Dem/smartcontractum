@@ -5,64 +5,65 @@ from pydantic import BaseModel, Field, field_validator
 
 
 class Category(BaseModel):
-    """Forum & Social category model."""
+    """Habr-style Hub category model."""
 
     id: int
     name: str
     slug: str
     icon: str = "📁"
     count_topics: int = 0
-
-
-class Tag(BaseModel):
-    """Topic tag model."""
-
-    id: int
-    name: str
-    slug: str
+    subscribers_count: str = "1.2k"
 
 
 class Comment(BaseModel):
-    """Comment under a post."""
+    """Habr-style comment model."""
 
     id: int
     post_id: int
     author_name: str
+    author_username: str = "developer"
     author_role: str = "Разработчик"
     author_avatar: str = "SC"
     author_role_badge: str = "[👨‍💻 Разработчик]"
-    author_role_class: str = "role-developer"
+    author_role_class: str = "role-dev"
     body: str
     created_at: str
-    likes_count: int = 0
-    is_liked: bool = False
+    score: int = 0
+    is_upvoted: bool = False
 
 
 class Topic(BaseModel):
-    """Forum & Social post entity model."""
+    """Habr-style article / post entity model."""
 
     id: int
     title: str
     snippet: str
     body: str
     author_name: str
+    author_username: str = "alex_smirnov"
     author_org: Optional[str] = None
     author_role: str = "Разработчик"
     author_role_badge: str = "[👨‍💻 Разработчик]"
-    author_role_class: str = "role-developer"
+    author_role_class: str = "role-dev"
     author_avatar: str = "SC"
     is_official: bool = False
     official_badge: Optional[str] = None
-    post_type: str = "article"  # 'cbr', 'bug', 'code', 'data', 'job', 'idea', 'article'
-    post_type_label: str = "📝 Статья"
-    post_type_class: str = "type-article"
+    post_type: str = "article"  # 'article', 'bug', 'code', 'data', 'job', 'cbr'
+    post_type_label: str = "Статья"
+    post_type_class: str = "badge-type-article"
+    hubs: List[str] = Field(default_factory=list)
     category_id: int
     category_slug: str
-    reading_time: str = "2 мин"
+    reading_time: str = "3 мин"
+    difficulty: str = "Средний"
     views_count: int = 0
-    upvotes_count: int = 0
+    views_formatted: str = "642"
+    score: int = 0
+    score_formatted: str = "+48"
     is_upvoted: bool = False
+    is_downvoted: bool = False
     is_bookmarked: bool = False
+    bookmarks_count: int = 12
     replies_count: int = 0
     comments: List[Comment] = Field(default_factory=list)
     tags: List[str] = Field(default_factory=list)
@@ -72,42 +73,40 @@ class Topic(BaseModel):
 
 
 class TopicCreateRequest(BaseModel):
-    """Schema for incoming new post / topic creation request."""
+    """Schema for creating a new Habr-style post/article."""
 
     title: str = Field(
         ...,
         min_length=10,
         max_length=250,
-        description="Post title (minimum 10 characters)",
+        description="Article title (min 10 characters)",
     )
     category_slug: str = Field(
         default="safe-deals",
         min_length=2,
         max_length=100,
-        description="Slug of target category",
     )
     post_type: str = Field(
         default="article",
-        description="Type of post: article, bug, job, idea, code, cbr, data",
+    )
+    hubs: List[str] = Field(
+        default_factory=list,
     )
     body: str = Field(
         ...,
         min_length=30,
-        max_length=15000,
-        description="Main post body in Markdown (minimum 30 characters)",
+        max_length=20000,
+        description="Main text in Markdown (min 30 characters)",
     )
     code_snippet: Optional[str] = Field(
         default=None,
         max_length=10000,
-        description="Optional code snippet",
     )
     code_language: Optional[str] = Field(
         default="solidity",
-        max_length=50,
     )
     tags: List[str] = Field(
         default_factory=list,
-        description="List of tag strings",
     )
     author_name: str = Field(
         default="ООО Интегратор (Umbrella-Dev)",
@@ -121,105 +120,91 @@ class TopicCreateRequest(BaseModel):
     @field_validator("title", "body", "author_name", "author_role")
     @classmethod
     def sanitize_strings(cls, v: str) -> str:
-        """Sanitize incoming text strings against XSS injection."""
+        """Sanitize text strings against XSS."""
         if not v:
             return v
-        clean = html.escape(v.strip())
-        return clean
+        return html.escape(v.strip())
 
-    @field_validator("tags")
+    @field_validator("tags", "hubs")
     @classmethod
-    def sanitize_tags(cls, tags: List[str]) -> List[str]:
-        """Normalize and sanitize tag strings."""
-        cleaned_tags: List[str] = []
-        for tag in tags:
-            tag_str = html.escape(tag.strip().lstrip("#"))
-            tag_clean = re.sub(r"[^\w\-_]", "", tag_str)
-            if tag_clean and len(tag_clean) <= 50:
-                cleaned_tags.append(tag_clean)
-        return cleaned_tags
+    def sanitize_lists(cls, items: List[str]) -> List[str]:
+        """Normalize tag and hub strings."""
+        cleaned: List[str] = []
+        for item in items:
+            s = html.escape(item.strip().lstrip("#"))
+            s_clean = re.sub(r"[^\w\-_ ]", "", s)
+            if s_clean and len(s_clean) <= 60:
+                cleaned.append(s_clean)
+        return cleaned
 
 
 class CommentCreateRequest(BaseModel):
-    """Schema for adding a comment to a post."""
+    """Schema for adding a comment."""
 
     body: str = Field(
         ...,
         min_length=3,
         max_length=3000,
-        description="Comment text (minimum 3 characters)",
     )
     author_name: str = Field(
         default="ООО Интегратор (Umbrella-Dev)",
-        max_length=120,
     )
     author_role: str = Field(
         default="Разработчик",
-        max_length=80,
     )
 
     @field_validator("body", "author_name", "author_role")
     @classmethod
     def sanitize_strings(cls, v: str) -> str:
-        """Sanitize incoming comment against XSS."""
         if not v:
             return v
         return html.escape(v.strip())
 
 
 class CategoryListResponse(BaseModel):
-    """Response containing list of categories with counts."""
-
     total: int
     items: List[Category]
 
 
 class TopicListResponse(BaseModel):
-    """Response containing paginated list of topics."""
-
     total: int
     page: int
     limit: int
     category_slug: Optional[str] = None
     post_type: Optional[str] = None
     tag: Optional[str] = None
+    sort: Optional[str] = "best"
     items: List[Topic]
 
 
 class TopicResponse(BaseModel):
-    """Single topic response."""
-
     topic: Topic
     message: str = "success"
 
 
 class UpvoteResponse(BaseModel):
-    """Upvote action toggle response."""
-
     post_id: int
-    upvotes_count: int
+    score: int
+    score_formatted: str
     is_upvoted: bool
     message: str = "success"
 
 
 class BookmarkResponse(BaseModel):
-    """Bookmark action toggle response."""
-
     post_id: int
+    bookmarks_count: int
     is_bookmarked: bool
     message: str = "success"
 
 
 class CommentResponse(BaseModel):
-    """Comment addition response."""
-
     comment: Comment
     comments_count: int
     message: str = "success"
 
 
-def generate_snippet(body_text: str, max_chars: int = 200) -> str:
-    """Generate a clean snippet from topic body up to max_chars."""
+def generate_snippet(body_text: str, max_chars: int = 250) -> str:
+    """Generate a clean snippet from article body."""
     plain = re.sub(r"<[^>]+>", "", body_text)
     plain = re.sub(r"\s+", " ", plain).strip()
     if len(plain) > max_chars:

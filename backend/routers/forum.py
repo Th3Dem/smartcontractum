@@ -18,20 +18,20 @@ from backend.models.forum import (
     generate_snippet,
 )
 
-router = APIRouter(tags=["Forum & Dev Social Network"])
+router = APIRouter(tags=["Habr-Style Dev Feed & Platform"])
 templates = Jinja2Templates(directory="frontend/templates")
 
 # ======================================================================
-# IN-MEMORY CATEGORY & SOCIAL FEED DATABASE
+# IN-MEMORY HABR HUBS & POSTS DATABASE
 # ======================================================================
 
 CATEGORIES_DB: List[Category] = [
-    Category(id=1, name="Все темы", slug="all", icon="🔥", count_topics=5),
-    Category(id=2, name="Безопасные сделки", slug="safe-deals", icon="🔒", count_topics=1),
-    Category(id=3, name="Казначейство & B2B", slug="treasury-b2b", icon="🏦", count_topics=1),
-    Category(id=4, name="Источники данных (Оракулы)", slug="oracles", icon="🌐", count_topics=1),
-    Category(id=5, name="ИБ, Аудит & Bug Bounty", slug="infosec-audit", icon="🛡️", count_topics=1),
-    Category(id=6, name="АПК & Субсидии", slug="agro-subsidies", icon="🌾", count_topics=1),
+    Category(id=1, name="Все потоки", slug="all", icon="🔥", count_topics=5, subscribers_count="18.4k"),
+    Category(id=2, name="Разработка смарт-контрактов", slug="smart-contracts", icon="💻", count_topics=2, subscribers_count="12.1k"),
+    Category(id=3, name="Информационная безопасность", slug="infosec-audit", icon="🛡️", count_topics=1, subscribers_count="9.8k"),
+    Category(id=4, name="Оракулы & Данные", slug="oracles", icon="🌐", count_topics=1, subscribers_count="6.5k"),
+    Category(id=5, name="Казначейство & B2B", slug="treasury-b2b", icon="🏦", count_topics=1, subscribers_count="5.2k"),
+    Category(id=6, name="Регуляторика & ЦБ РФ", slug="safe-deals", icon="🏛️", count_topics=1, subscribers_count="8.9k"),
 ]
 
 ROLE_BADGES = {
@@ -40,166 +40,189 @@ ROLE_BADGES = {
     "Поставщик данных": ("[📊 Поставщик данных]", "role-data"),
     "ЦБ/АБР Эксперт": ("[🏛️ ЦБ/АБР Эксперт]", "role-cbr"),
     "Заказчик": ("[💼 Заказчик]", "role-customer"),
-    "Enterprise Архитектор": ("[🏛️ Архитектор]", "role-cbr"),
-    "AppSec Lead": ("[🛡️ ИБ-Аудитор]", "role-auditor"),
-    "Интегратор": ("[👨‍💻 Разработчик]", "role-dev"),
-}
-
-POST_TYPES = {
-    "cbr": ("🟢 Официально ЦБ", "badge-type-cbr"),
-    "bug": ("🔴 Баг / Ошибка", "badge-type-bug"),
-    "code": ("💻 Стек & Код", "badge-type-code"),
-    "data": ("📊 Оракулы & Данные", "badge-type-data"),
-    "job": ("💼 Заказ / Проект", "badge-type-job"),
-    "idea": ("💡 Идея / Сценарий", "badge-type-idea"),
-    "article": ("📝 Новость / Статья", "badge-type-article"),
 }
 
 TOPICS_DB: List[Topic] = [
     # 1. Пост от ИБ-Аудитора
     Topic(
         id=1,
-        title="[CVE-2026-ПКСК-04] Разбор уязвимости Reentrancy при вызове асинхронного коммерческого оракула",
-        snippet="Анализ инцидента в тестовой сети: как небезопасный callback от оракула цен приводил к повторному входу в смарт-контракт эскроу до обновления баланса.",
+        title="Разбор уязвимости Reentrancy при асинхронном вызове оракулов в контуре ПКСК",
+        snippet=(
+            "Команда BI.ZONE и SmartContractum Security исследовала типовые ошибки интеграции внешних поставщиков котировок. "
+            "Показываем, как задержка в коллбеке оракула позволяет опустошить эскроу-пул и как защититься паттерном CEI."
+        ),
         body=(
-            "Команда BI.ZONE и SmartContractum Security выявила потенциальную проблему при использовании внешних оракулов с асинхронным ответом. "
-            "Если смарт-контракт осуществляет выплату до фиксации внутреннего состояния isFulfilled = true, злоумышленник может вызвать повторный fulfill().\n\n"
-            "Рекомендуем строго придерживаться паттерна Checks-Effects-Interactions (CEI) и подключать стандартный модификатор nonReentrant из открытого репозитория SmartContractum SDK."
+            "В рамках подготовки к кибер-учениям Standoff 365 мы провели аудит более 40 смарт-контрактов из реестра Банка России. "
+            "Наиболее частая архитектурная ошибка — предположение о мгновенном отклике оракула.\n\n"
+            "Если ваш смарт-контракт осуществляет выплату до фиксации внутреннего состояния `isFulfilled = true`, злоумышленник может инициировать повторный вход в функцию `fulfill()`.\n\n"
+            "### Рекомендации по безопасности:\n"
+            "1. Строго соблюдайте последовательность **Checks-Effects-Interactions**.\n"
+            "2. Подключайте модификатор `nonReentrant` из открытой библиотеки SmartContractum Core.\n"
+            "3. Используйте таймлоки на вывод крупных сумм."
         ),
         author_name="Алексей Смирнов",
+        author_username="alex_security",
         author_org="BI.ZONE Security Lab",
         author_role="ИБ-Аудитор",
         author_role_badge="[🛡️ ИБ-Аудитор]",
         author_role_class="role-auditor",
         author_avatar="АС",
         is_official=True,
-        official_badge="ИБ & Bug Bounty",
+        official_badge="Блог компании BI.ZONE",
         post_type="bug",
-        post_type_label="🔴 Баг / Ошибка",
+        post_type_label="Баги & Уязвимости",
         post_type_class="badge-type-bug",
-        category_id=5,
+        hubs=["Информационная безопасность*", "Разработка смарт-контрактов*", "Solidity*", "Bug Bounty"],
+        category_id=3,
         category_slug="infosec-audit",
-        reading_time="3 мин",
-        views_count=642,
-        upvotes_count=48,
+        reading_time="4 мин",
+        difficulty="Сложный",
+        views_count=3420,
+        views_formatted="3.4K",
+        score=68,
+        score_formatted="+68",
         is_upvoted=False,
+        is_downvoted=False,
         is_bookmarked=False,
+        bookmarks_count=24,
         replies_count=2,
         tags=["Solidity", "Standoff365", "BugBounty", "Reentrancy", "Оракулы"],
         code_snippet=(
-            "// ❌ Уязвимый код:\n"
+            "// ❌ Уязвимый сценарий вызова оракула:\n"
             "function fulfillOracleData(bytes32 requestId, uint256 price) external onlyOracle {\n"
             "    payable(beneficiary).transfer(escrowAmount);\n"
-            "    requestFulfilled[requestId] = true; // Слишком поздно!\n"
+            "    requestFulfilled[requestId] = true; // Состояние меняется ПОСЛЕ перевода!\n"
             "}\n\n"
-            "// ✅ Безопасный паттерн CEI:\n"
+            "// ✅ Безопасный паттерн CEI (Checks-Effects-Interactions):\n"
             "function fulfillOracleData(bytes32 requestId, uint256 price) external onlyOracle nonReentrant {\n"
             "    require(!requestFulfilled[requestId], 'Already fulfilled');\n"
-            "    requestFulfilled[requestId] = true;\n"
+            "    requestFulfilled[requestId] = true; // Сначала эффект!\n"
             "    (bool ok, ) = payable(beneficiary).call{value: escrowAmount}('');\n"
             "    require(ok, 'Transfer failed');\n"
             "}"
         ),
         code_language="solidity",
-        created_at="Сегодня в 18:20",
+        created_at="сегодня в 18:20",
         comments=[
             Comment(
                 id=101,
                 post_id=1,
                 author_name="Дмитрий Волков",
+                author_username="dmitry_dev",
                 author_role="Разработчик",
                 author_avatar="ДВ",
                 author_role_badge="[👨‍💻 Разработчик]",
                 author_role_class="role-dev",
-                body="Отличный разбор! Добавили проверку в CI-пайплайн Конструктора через Slither и Mythril.",
-                created_at="Сегодня в 18:45",
-                likes_count=12,
+                body="Отличный разбор! Добавили статический анализатор Slither с этим правилом в наш CI-контур.",
+                created_at="сегодня в 18:45",
+                score=14,
             ),
             Comment(
                 id=102,
                 post_id=1,
                 author_name="SmartContractum Bot",
-                author_role="AppSec Lead",
+                author_username="sc_audit_bot",
+                author_role="ИБ-Аудитор",
                 author_avatar="SC",
                 author_role_badge="[🛡️ ИБ-Аудитор]",
                 author_role_class="role-auditor",
-                body="Патч уже включен в базовые шаблоны реестра ПКСК v1.4.0.",
-                created_at="Сегодня в 19:10",
-                likes_count=8,
+                body="Патч включен в официальный релиз SDK платформы SmartContractum v1.4.0.",
+                created_at="сегодня в 19:10",
+                score=9,
             ),
         ],
     ),
     # 2. Пост от Эксперта ЦБ/АБР
     Topic(
         id=2,
-        title="Сбор обратной связи: Регламент третейского технического арбитража при сбоях поставщиков данных в ПКСК",
-        snippet="Формируем порядок заморозки исполнения контрактов и подключения арбитров в спорных ситуациях до окончания активной фазы НИР 30.09.2026.",
+        title="Процедура третейского арбитража в ПКСК: как разрешать споры при рассинхронизации оракулов",
+        snippet=(
+            "Комитет АБР открывает публичную дискуссию по проекту регламента технического арбитража. "
+            "Обсуждаем тайм-ауты эскроу-заморозки и критерии кворума валидаторов до окончания фазы НИР 30.09.2026."
+        ),
         body=(
-            "В рамках подготовки доклада Банка России Ассоциация ФинТех открывает публичную дискуссию. "
-            "Вопрос: какой тайм-аут эскроу-заморозки является оптимальным при рассинхронизации показаний двух независимых оракулов (например, ФНС и таможенного шлюза)?\n\n"
-            "Просим разработчиков и интеграторов поделиться реальными кейсами арбитража в комментариях."
+            "В концепции ПКСК Банка России заложен принцип детерминированного исполнения контрактов. "
+            "Однако в реальных сделках возможна ситуация, когда первичные источники данных (например, ГИС ЭДО и таможенный шлюз) дают противоречивые показания.\n\n"
+            "Предлагается трехуровневая модель арбитража:\n"
+            "1. **Автоматическая пауза**: эскроу блокируется на 48 часов при расхождении данных.\n"
+            "2. **Децентрализованное голосование**: подключение пула независимых оракулов-валидаторов.\n"
+            "3. **Правовой арбитраж**: ручная загрузка юридически значимой первичной документации с КЭП."
         ),
         author_name="Елена Васильева",
+        author_username="elena_abr",
         author_org="Комитет АБР & Консорциум",
         author_role="ЦБ/АБР Эксперт",
         author_role_badge="[🏛️ ЦБ/АБР Эксперт]",
         author_role_class="role-cbr",
         author_avatar="ЕВ",
         is_official=True,
-        official_badge="Официально ЦБ",
+        official_badge="Рабочая группа ЦБ РФ",
         post_type="cbr",
-        post_type_label="🟢 Официально ЦБ",
+        post_type_label="ЦБ РФ & Право",
         post_type_class="badge-type-cbr",
-        category_id=2,
+        hubs=["Регуляторика & ЦБ РФ*", "FinTech*", "Безопасные сделки*", "Арбитраж"],
+        category_id=6,
         category_slug="safe-deals",
-        reading_time="4 мин",
-        views_count=1120,
-        upvotes_count=84,
+        reading_time="5 мин",
+        difficulty="Средний",
+        views_count=5210,
+        views_formatted="5.2K",
+        score=94,
+        score_formatted="+94",
         is_upvoted=False,
+        is_downvoted=False,
         is_bookmarked=True,
+        bookmarks_count=48,
         replies_count=2,
         tags=["Арбитраж", "ПКСК_2026", "ЦБ_РФ", "Регламент", "БезопасныеСделки"],
         code_snippet=None,
         code_language="solidity",
-        created_at="Сегодня в 16:10",
+        created_at="сегодня в 16:10",
         comments=[
             Comment(
                 id=201,
                 post_id=2,
                 author_name="Михаил Орлов",
-                author_role="Enterprise Архитектор",
+                author_username="m_orlov",
+                author_role="ЦБ/АБР Эксперт",
                 author_avatar="МО",
-                author_role_badge="[🏛️ Архитектор]",
+                author_role_badge="[🏛️ ЦБ/АБР Эксперт]",
                 author_role_class="role-cbr",
-                body="Для B2B-сделок критичен тайм-аут не более 48 часов с возможностью предоставления оффлайн-первички через ЭДО.",
-                created_at="Сегодня в 16:40",
-                likes_count=19,
+                body="Для крупных B2B-сделок 48 часов — идеальный срок, позволяющий подтянуть оффлайн-первичку через Диадок.",
+                created_at="сегодня в 16:40",
+                score=22,
             ),
             Comment(
                 id=202,
                 post_id=2,
                 author_name="ООО СтрахФин",
+                author_username="strah_fin",
                 author_role="Заказчик",
                 author_avatar="СФ",
                 author_role_badge="[💼 Заказчик]",
                 author_role_class="role-customer",
-                body="Поддерживаем 48 часов. Главное — исключить автоматическое списание до вердикта арбитражной ноды.",
-                created_at="Сегодня в 17:15",
-                likes_count=14,
+                body="Поддерживаем инициативу. Готовы принять участие в закрытом тестировании арбитражного смарт-контракта.",
+                created_at="сегодня в 17:15",
+                score=16,
             ),
         ],
     ),
     # 3. Пост от Поставщика данных
     Topic(
         id=3,
-        title="Релиз REST API & WebSocket шлюза ГИС «Зерно» для автоматического исполнения субсидиарных контрактов АПК",
-        snippet="Подключен официальный коннектор партий зерна и цифровых СДИЗ. Теперь смарт-контракты могут проверять качество урожая в реальном времени.",
+        title="Подключаем смарт-контракты к ГИС «Зерно»: готовый шлюз и WebSocket-оракул для АПК-субсидий",
+        snippet=(
+            "Релиз открытого коннектора партий зерна и цифровых СДИЗ. "
+            "Разбираем структуру криптографической подписи партии и интеграцию с реестром Банка России."
+        ),
         body=(
-            "Запущен в эксплуатацию публичный шлюз данных для агропромышленных смарт-контрактов. "
-            "Шлюз подписан квалифицированной электронной подписью и передает хэш сертификата партии непосредственно в реестр ПКСК.\n\n"
-            "Доступен тестовый стенд с имитацией движения зерновых партий и проверки фитосанитарных документов."
+            "Для автоматического выделения субсидий агропроизводителям необходим непрерывный мониторинг параметров качества урожая. "
+            "Мы развернули доверенный шлюз, транслирующий данные ФГИС «Зерно» в контур ПКСК.\n\n"
+            "Оракул передает хеш партии, процент протеина, класс зерна и отметку о прохождении фитосанитарного контроля. "
+            "Смарт-контракт автоматически сверяет данные с пороговыми значениями договора и выполняет взаиморасчет."
         ),
         author_name="АгроДата Хаб",
+        author_username="agro_data",
         author_org="ГИС «Зерно» Партнер",
         author_role="Поставщик данных",
         author_role_badge="[📊 Поставщик данных]",
@@ -208,76 +231,93 @@ TOPICS_DB: List[Topic] = [
         is_official=False,
         official_badge="Провайдер данных",
         post_type="data",
-        post_type_label="📊 Оракулы & Данные",
+        post_type_label="Оракулы & Данные",
         post_type_class="badge-type-data",
-        category_id=6,
-        category_slug="agro-subsidies",
-        reading_time="2 мин",
-        views_count=430,
-        upvotes_count=37,
+        hubs=["Оракулы & Данные*", "АПК & Субсидии*", "Разработка смарт-контрактов*", "API"],
+        category_id=4,
+        category_slug="oracles",
+        reading_time="3 мин",
+        difficulty="Простой",
+        views_count=2180,
+        views_formatted="2.2K",
+        score=45,
+        score_formatted="+45",
         is_upvoted=False,
+        is_downvoted=False,
         is_bookmarked=False,
+        bookmarks_count=15,
         replies_count=1,
         tags=["ФНС_API", "АПК_Субсидии", "Оракулы", "ГИС_Зерно", "Агросделки"],
         code_snippet=(
-            "// Пример верификации партии в смарт-контракте:\n"
+            "// Пример структуры данных оракула зерновых партий:\n"
             "struct GrainLotVerification {\n"
-            "    bytes32 sdizHash;\n"
-            "    uint256 weightNettoKg;\n"
-            "    uint8 proteinClass;\n"
-            "    uint256 timestamp;\n"
+            "    bytes32 sdizHash;       // Хэш сертификата СДИЗ\n"
+            "    uint256 weightNettoKg;  // Вес партии в кг\n"
+            "    uint8 proteinClass;     // Класс зерна (3-5)\n"
+            "    uint256 timestamp;      // Метка времени фиксации\n"
             "}\n\n"
-            "function verifyLot(GrainLotVerification calldata lot) external returns (bool) {\n"
-            "    require(msg.sender == GIS_ZERNO_ORACLE, 'Unauthorized Oracle');\n"
-            "    require(lot.proteinClass >= 3, 'Quality below contract threshold');\n"
-            "    return true;\n"
+            "function verifyAndRelease(GrainLotVerification calldata lot) external onlyOracle {\n"
+            "    require(lot.proteinClass >= 3, 'Quality below required standard');\n"
+            "    escrowSettled = true;\n"
+            "    emit GrainSubsidyApproved(lot.sdizHash, lot.weightNettoKg);\n"
             "}"
         ),
         code_language="solidity",
-        created_at="Вчера в 19:40",
+        created_at="вчера в 19:40",
         comments=[
             Comment(
                 id=301,
                 post_id=3,
                 author_name="АгроХолдинг Юг",
+                author_username="agro_south",
                 author_role="Заказчик",
                 author_avatar="АЮ",
                 author_role_badge="[💼 Заказчик]",
                 author_role_class="role-customer",
-                body="Подключаем к нашему пилоту по факторингу зерновых поставок. Спасибо за документацию!",
-                created_at="Вчера в 20:20",
-                likes_count=7,
+                body="Спасибо за готовый пример! Забираем в свой пилотный проект по элеваторам.",
+                created_at="вчера в 20:20",
+                score=8,
             ),
         ],
     ),
     # 4. Пост от Разработчика
     Topic(
         id=4,
-        title="Оптимизация gas-лимитов и структуры комиссий при пакетных B2B-выплатах в контуре Цифрового Рубля",
-        snippet="Практические замеры: упаковка storage-слотов и битовые маски позволили снизить нагрузку на узлы консорциума на 34%.",
+        title="Оптимизация gas и транзакционных издержек при миллионных B2B-выплатах в Цифровом Рубле",
+        snippet=(
+            "Как упаковать 100 сплит-платежей в одну транзакцию: битовая упаковка адресов и сумм, "
+            "кастомный ассемблер и замеры экономии на узлах консорциума."
+        ),
         body=(
-            "При высокой частоте взаиморасчетов между контрагентами в казначейских сценариях классический вызов transfer() для каждого платежа неэффективен. "
-            "Мы реализовали паттерн BatchTreasurySplitter, который объединяет до 100 сплит-платежей в одну транзакцию с компактной упаковкой получателей.\n\n"
-            "Ниже приводим бенчмарки и фрагмент кода для использования сообществом."
+            "При масштабных взаиморасчетах в казначейских системах индивидуальные переводы приводят к перегрузке узлов валидации. "
+            "Мы реализовали компактную упаковку данных: 160 бит на адрес получателя + 96 бит на сумму в копейках.\n\n"
+            "Это позволяет уместить каждый платеж в ровно одно 256-битное слово (Word), снижая расходы на память и вызовы EVM на 34%."
         ),
         author_name="Иван Кузнецов",
+        author_username="ivan_kuznetsov",
         author_org="ООО ФинтехИнтегратор",
         author_role="Разработчик",
         author_role_badge="[👨‍💻 Разработчик]",
         author_role_class="role-dev",
         author_avatar="ИК",
         is_official=False,
-        official_badge="Dev Community",
+        official_badge="Блог автора",
         post_type="code",
-        post_type_label="💻 Стек & Код",
+        post_type_label="Стек & Код",
         post_type_class="badge-type-code",
-        category_id=3,
-        category_slug="treasury-b2b",
-        reading_time="3 мин",
-        views_count=580,
-        upvotes_count=62,
+        hubs=["Разработка смарт-контрактов*", "Казначейство & B2B*", "Цифровой Рубль*", "Оптимизация"],
+        category_id=2,
+        category_slug="smart-contracts",
+        reading_time="4 мин",
+        difficulty="Сложный",
+        views_count=4120,
+        views_formatted="4.1K",
+        score=76,
+        score_formatted="+76",
         is_upvoted=False,
+        is_downvoted=False,
         is_bookmarked=False,
+        bookmarks_count=31,
         replies_count=1,
         tags=["Solidity", "ЦифровойРубль", "GasOptimization", "B2B", "Казначейство"],
         code_snippet=(
@@ -292,50 +332,64 @@ TOPICS_DB: List[Topic] = [
             "}"
         ),
         code_language="solidity",
-        created_at="Вчера в 14:15",
+        created_at="вчера в 14:15",
         comments=[
             Comment(
                 id=401,
                 post_id=4,
                 author_name="Сергей Белов",
+                author_username="s_belov",
                 author_role="Разработчик",
                 author_avatar="СБ",
                 author_role_badge="[👨‍💻 Разработчик]",
                 author_role_class="role-dev",
-                body="96 бит под сумму — это до 79 миллиардов рублей в копейках, для большинства B2B-сделок запас огромный. Отличное решение!",
-                created_at="Вчера в 15:00",
-                likes_count=15,
+                body="96 бит под сумму — это до 79 млрд рублей с точностью до копеек, для любого корпоративного сплита с головой!",
+                created_at="вчера в 15:00",
+                score=18,
             ),
         ],
     ),
     # 5. Пост от Заказчика
     Topic(
         id=5,
-        title="[Заказ / Bounty 450,000 ₽] Ищем команду для разработки смарт-контракта параметрического страхования ж/д перевозок",
-        snippet="Требуется разработка и верификация смарт-контракта с подключением телематических датчиков температуры и интеграцией с ЕИС Закупки.",
+        title="[Заказ / Bounty 450,000 ₽] Разработка смарт-контракта параметрического страхования рефрижераторных ж/д поставок",
+        snippet=(
+            "Ищем команду или независимого разработчика для создания контракта с интеграцией IoT-датчиков температуры "
+            "и автоматическим выставлением штрафов через ЕИС Закупки."
+        ),
         body=(
-            "ПАО «Логистика & Трейд» ищет аккредитованную команду или независимых разработчиков смарт-контрактов для создания модуля параметрического страхования. "
-            "Контракт должен автоматически списывать компенсацию при превышении температурного режима в рефрижераторных контейнерах по данным подтвержденного IoT-оракула.\n\n"
-            "Срок реализации: 6 недель. Оплата через безопасную сделку на платформе SmartContractum под защитой Umbrella-лицензии."
+            "ПАО «Логистика & Трейд» объявляет конкурс на реализацию модуля параметрического страхования скоропортящихся грузов. "
+            "Контракт должен в режиме реального времени получать телеметрию датчиков и в случае нарушения температурного режима производить списание неустойки.\n\n"
+            "### Требования к кандидатам:\n"
+            "- Опыт работы со стандартами ПКСК Банка России;\n"
+            "- Наличие пройденного аудита в профиле SmartContractum;\n"
+            "- Срок реализации: 6 недель с оплатой через эскроу платформы."
         ),
         author_name="ПАО Логистика & Трейд",
+        author_username="logistics_trade",
         author_org="Департамент цифровой трансформации",
         author_role="Заказчик",
         author_role_badge="[💼 Заказчик]",
         author_role_class="role-customer",
         author_avatar="ЛТ",
         is_official=False,
-        official_badge="Bounty 450k ₽",
+        official_badge="Bounty 450,000 ₽",
         post_type="job",
-        post_type_label="💼 Заказ / Проект",
+        post_type_label="Заказ / Проект",
         post_type_class="badge-type-job",
-        category_id=2,
-        category_slug="safe-deals",
+        hubs=["Заказы & Проекты*", "Страхование*", "IoT*", "ЕИС Закупки"],
+        category_id=5,
+        category_slug="treasury-b2b",
         reading_time="2 мин",
-        views_count=890,
-        upvotes_count=53,
+        difficulty="Средний",
+        views_count=3890,
+        views_formatted="3.9K",
+        score=58,
+        score_formatted="+58",
         is_upvoted=False,
+        is_downvoted=False,
         is_bookmarked=False,
+        bookmarks_count=21,
         replies_count=1,
         tags=["ЕИС_Закупки", "Заказы", "Страхование", "IoT_Оракулы", "Bounty"],
         code_snippet=None,
@@ -346,13 +400,14 @@ TOPICS_DB: List[Topic] = [
                 id=501,
                 post_id=5,
                 author_name="ООО СмартТехнолоджи",
+                author_username="smart_tech",
                 author_role="Разработчик",
                 author_avatar="СТ",
                 author_role_badge="[👨‍💻 Разработчик]",
                 author_role_class="role-dev",
-                body="Имеем готовые наработки по IoT-оракулам телематики. Отправили отклик и портфолио в личные сообщения!",
+                body="Имеем готовые наработки по IoT-оракулам телематики. Отправили отклик и портфолио!",
                 created_at="2 дня назад",
-                likes_count=11,
+                score=12,
             ),
         ],
     ),
@@ -381,10 +436,9 @@ def _recalculate_category_counts() -> None:
 @router.get(
     "/api/v1/forum/categories",
     response_model=CategoryListResponse,
-    summary="Get all forum categories with topic counts",
+    summary="Get all Habr hubs with counters",
 )
 async def get_forum_categories() -> CategoryListResponse:
-    """Return list of categories with live updated topic counters."""
     _recalculate_category_counts()
     return CategoryListResponse(total=len(CATEGORIES_DB), items=CATEGORIES_DB)
 
@@ -392,7 +446,7 @@ async def get_forum_categories() -> CategoryListResponse:
 @router.get(
     "/api/v1/forum/topics",
     response_model=TopicListResponse,
-    summary="Get paginated list of topics with optional category and tag filtering",
+    summary="Get paginated Habr articles/posts",
 )
 @router.get(
     "/api/v1/forum/posts",
@@ -400,22 +454,13 @@ async def get_forum_categories() -> CategoryListResponse:
     summary="Alias for topics API",
 )
 async def get_forum_topics(
-    category_slug: Optional[str] = Query(
-        None,
-        description="Filter by category slug (e.g. 'safe-deals', 'oracles', 'all')",
-    ),
-    post_type: Optional[str] = Query(
-        None,
-        description="Filter by post type (e.g. 'bug', 'cbr', 'code', 'data', 'job', 'all')",
-    ),
-    tag: Optional[str] = Query(
-        None,
-        description="Filter by tag (e.g. 'Solidity', 'Оракулы')",
-    ),
-    page: int = Query(1, ge=1, description="Page number"),
-    limit: int = Query(20, ge=1, le=100, description="Items per page"),
+    category_slug: Optional[str] = Query(None),
+    post_type: Optional[str] = Query(None),
+    tag: Optional[str] = Query(None),
+    sort: Optional[str] = Query("best", description="Sorting: 'best', 'new', 'discussed'"),
+    page: int = Query(1, ge=1),
+    limit: int = Query(20, ge=1, le=100),
 ) -> TopicListResponse:
-    """Retrieve filtered topics ordered by newest first."""
     filtered = list(TOPICS_DB)
 
     if category_slug and category_slug != "all":
@@ -430,8 +475,13 @@ async def get_forum_topics(
             t for t in filtered if any(t_tag.lower() == tag_clean for t_tag in t.tags)
         ]
 
-    # Order newest first (descending by id)
-    filtered.sort(key=lambda t: t.id, reverse=True)
+    # Sorting
+    if sort == "new":
+        filtered.sort(key=lambda t: t.id, reverse=True)
+    elif sort == "discussed":
+        filtered.sort(key=lambda t: t.replies_count, reverse=True)
+    else:  # 'best'
+        filtered.sort(key=lambda t: t.score, reverse=True)
 
     start = (page - 1) * limit
     end = start + limit
@@ -444,6 +494,7 @@ async def get_forum_topics(
         category_slug=category_slug,
         post_type=post_type,
         tag=tag,
+        sort=sort,
         items=paginated_items,
     )
 
@@ -452,48 +503,31 @@ async def get_forum_topics(
     "/api/v1/forum/topics",
     response_model=TopicResponse,
     status_code=status.HTTP_201_CREATED,
-    summary="Create a new discussion topic with automatic sanitization",
+    summary="Create a new Habr post",
 )
 @router.post(
     "/api/v1/forum/posts",
     response_model=TopicResponse,
     status_code=status.HTTP_201_CREATED,
-    summary="Alias for creating a post",
+    summary="Alias for creating post",
 )
 async def create_forum_topic(payload: TopicCreateRequest) -> TopicResponse:
-    """Create and validate a new forum post with XSS-safe processing."""
     _recalculate_category_counts()
 
-    # Find matching category
     target_cat = next(
-        (
-            c
-            for c in CATEGORIES_DB
-            if c.slug == payload.category_slug and c.slug != "all"
-        ),
+        (c for c in CATEGORIES_DB if c.slug == payload.category_slug and c.slug != "all"),
         None,
     )
     if not target_cat:
-        target_cat = CATEGORIES_DB[1]  # safe-deals
+        target_cat = CATEGORIES_DB[1]
 
     new_id = max((t.id for t in TOPICS_DB), default=0) + 1
-    snippet = generate_snippet(payload.body, max_chars=200)
-    created_now = "Только что"
+    snippet = generate_snippet(payload.body, max_chars=250)
+    created_now = "только что"
 
-    # Determine author avatar initials
-    avatar_initials = (
-        "".join([w[0] for w in payload.author_name.split()[:2]]).upper() or "SC"
-    )
-
-    # Determine role badge
+    avatar_initials = "".join([w[0] for w in payload.author_name.split()[:2]]).upper() or "SC"
     author_role_badge, author_role_class = ROLE_BADGES.get(
         payload.author_role, ("[👨‍💻 Разработчик]", "role-dev")
-    )
-
-    # Determine post type badge
-    post_type = payload.post_type or "article"
-    post_type_label, post_type_class = POST_TYPES.get(
-        post_type, ("📝 Новость / Статья", "badge-type-article")
     )
 
     new_topic = Topic(
@@ -502,23 +536,30 @@ async def create_forum_topic(payload: TopicCreateRequest) -> TopicResponse:
         snippet=snippet,
         body=payload.body,
         author_name=payload.author_name,
-        author_org="Umbrella-Dev Ecosystem",
+        author_username="author_" + str(new_id),
+        author_org="Umbrella-Dev",
         author_role=payload.author_role,
         author_role_badge=author_role_badge,
         author_role_class=author_role_class,
         author_avatar=avatar_initials,
         is_official=False,
         official_badge=None,
-        post_type=post_type,
-        post_type_label=post_type_label,
-        post_type_class=post_type_class,
+        post_type=payload.post_type or "article",
+        post_type_label="Статья",
+        post_type_class="badge-type-article",
+        hubs=payload.hubs or [target_cat.name + "*", "ПКСК*"],
         category_id=target_cat.id,
         category_slug=target_cat.slug,
-        reading_time="2 мин",
+        reading_time="3 мин",
+        difficulty="Средний",
         views_count=1,
-        upvotes_count=1,
+        views_formatted="1",
+        score=1,
+        score_formatted="+1",
         is_upvoted=True,
+        is_downvoted=False,
         is_bookmarked=False,
+        bookmarks_count=0,
         replies_count=0,
         comments=[],
         tags=payload.tags or ["ПКСК", target_cat.name.split()[0]],
@@ -536,10 +577,9 @@ async def create_forum_topic(payload: TopicCreateRequest) -> TopicResponse:
 @router.post(
     "/api/v1/forum/posts/{post_id}/upvote",
     response_model=UpvoteResponse,
-    summary="Toggle upvote / like on a post",
+    summary="Toggle upvote / rating on a post",
 )
 async def toggle_post_upvote(post_id: int) -> UpvoteResponse:
-    """Increment/decrement upvotes on a post."""
     post = next((t for t in TOPICS_DB if t.id == post_id), None)
     if not post:
         raise HTTPException(
@@ -549,16 +589,19 @@ async def toggle_post_upvote(post_id: int) -> UpvoteResponse:
 
     if post.is_upvoted:
         post.is_upvoted = False
-        post.upvotes_count = max(0, post.upvotes_count - 1)
+        post.score -= 1
     else:
         post.is_upvoted = True
-        post.upvotes_count += 1
+        post.score += 1
+
+    post.score_formatted = f"+{post.score}" if post.score > 0 else str(post.score)
 
     return UpvoteResponse(
         post_id=post.id,
-        upvotes_count=post.upvotes_count,
+        score=post.score,
+        score_formatted=post.score_formatted,
         is_upvoted=post.is_upvoted,
-        message="Лайк обновлен",
+        message="Рейтинг обновлен",
     )
 
 
@@ -568,7 +611,6 @@ async def toggle_post_upvote(post_id: int) -> UpvoteResponse:
     summary="Toggle bookmark status on a post",
 )
 async def toggle_post_bookmark(post_id: int) -> BookmarkResponse:
-    """Toggle bookmark state on a post."""
     post = next((t for t in TOPICS_DB if t.id == post_id), None)
     if not post:
         raise HTTPException(
@@ -577,8 +619,14 @@ async def toggle_post_bookmark(post_id: int) -> BookmarkResponse:
         )
 
     post.is_bookmarked = not post.is_bookmarked
+    if post.is_bookmarked:
+        post.bookmarks_count += 1
+    else:
+        post.bookmarks_count = max(0, post.bookmarks_count - 1)
+
     return BookmarkResponse(
         post_id=post.id,
+        bookmarks_count=post.bookmarks_count,
         is_bookmarked=post.is_bookmarked,
         message="Закладка обновлена",
     )
@@ -593,7 +641,6 @@ async def toggle_post_bookmark(post_id: int) -> BookmarkResponse:
 async def add_post_comment(
     post_id: int, payload: CommentCreateRequest
 ) -> CommentResponse:
-    """Add a new comment under a post."""
     post = next((t for t in TOPICS_DB if t.id == post_id), None)
     if not post:
         raise HTTPException(
@@ -601,33 +648,26 @@ async def add_post_comment(
             detail=f"Пост #{post_id} не найден",
         )
 
-    avatar_initials = (
-        "".join([w[0] for w in payload.author_name.split()[:2]]).upper() or "SC"
-    )
+    avatar_initials = "".join([w[0] for w in payload.author_name.split()[:2]]).upper() or "SC"
     role_badge, role_class = ROLE_BADGES.get(
         payload.author_role, ("[👨‍💻 Разработчик]", "role-dev")
     )
 
-    new_comment_id = (
-        max(
-            [c.id for t in TOPICS_DB for c in t.comments],
-            default=0,
-        )
-        + 1
-    )
+    new_comment_id = max([c.id for t in TOPICS_DB for c in t.comments], default=0) + 1
 
     new_comment = Comment(
         id=new_comment_id,
         post_id=post.id,
         author_name=payload.author_name,
+        author_username="dev_user",
         author_role=payload.author_role,
         author_avatar=avatar_initials,
         author_role_badge=role_badge,
         author_role_class=role_class,
         body=payload.body,
-        created_at="Только что",
-        likes_count=0,
-        is_liked=False,
+        created_at="только что",
+        score=0,
+        is_upvoted=False,
     )
 
     post.comments.append(new_comment)
@@ -641,98 +681,74 @@ async def add_post_comment(
 
 
 # ======================================================================
-# SSR FORUM & SOCIAL HUB PAGE ROUTE
+# SSR HABR-STYLE FEED PAGE ROUTE
 # ======================================================================
 
 
-@router.get("/feed", summary="Feed & Dev Social Network HTML Page")
+@router.get("/feed", summary="Habr-Style Dev Feed HTML Page")
 async def render_forum_page(
     request: Request,
-    category: Optional[str] = Query(None, description="Active category slug"),
-    post_type: Optional[str] = Query(None, description="Active post type tab"),
+    stream: Optional[str] = Query(None, description="Active stream/category slug"),
+    category: Optional[str] = Query(None, description="Alias for stream/category slug"),
+    sort: Optional[str] = Query("best", description="Sort: best, new, discussed"),
     tag: Optional[str] = Query(None, description="Active tag filter"),
 ) -> Response:
-    """Render full 3-column Social Hub & Discussions HTML page."""
     _recalculate_category_counts()
-    active_cat = category if isinstance(category, str) and category else "all"
-    active_type = post_type if isinstance(post_type, str) and post_type else "all"
+    
+    # Support both 'stream' and 'category' parameters
+    active_stream = stream or category or "all"
+    active_sort = sort if isinstance(sort, str) and sort in ["best", "new", "discussed"] else "best"
 
     filtered_topics = list(TOPICS_DB)
-    if active_cat != "all":
-        filtered_topics = [
-            t for t in filtered_topics if t.category_slug == active_cat
-        ]
-
-    if active_type != "all":
-        filtered_topics = [
-            t for t in filtered_topics if t.post_type == active_type
-        ]
+    if active_stream != "all":
+        filtered_topics = [t for t in filtered_topics if t.category_slug == active_stream]
 
     if tag and isinstance(tag, str):
         tag_clean = tag.strip().lstrip("#").lower()
         filtered_topics = [
-            t
-            for t in filtered_topics
-            if any(tag_clean in x.lower() for x in t.tags)
+            t for t in filtered_topics if any(tag_clean in x.lower() for x in t.tags)
         ]
 
-    filtered_topics.sort(key=lambda t: t.id, reverse=True)
+    if active_sort == "new":
+        filtered_topics.sort(key=lambda t: t.id, reverse=True)
+    elif active_sort == "discussed":
+        filtered_topics.sort(key=lambda t: t.replies_count, reverse=True)
+    else:
+        filtered_topics.sort(key=lambda t: t.score, reverse=True)
 
-    # Extract top popular tags
-    all_tags: Dict[str, int] = {}
-    for topic in TOPICS_DB:
-        for t in topic.tags:
-            all_tags[t] = all_tags.get(t, 0) + 1
-    popular_tags = sorted(all_tags.items(), key=lambda x: x[1], reverse=True)[:8]
+    # Trending Now widget (Top 5 read)
+    trending_articles = sorted(TOPICS_DB, key=lambda t: t.views_count, reverse=True)[:5]
 
-    # Top authors for Widget 2
-    top_authors = [
-        {
-            "name": "Алексей Смирнов",
-            "org": "BI.ZONE AppSec",
-            "role_badge": "[🛡️ ИБ-Аудитор]",
-            "avatar": "АС",
-            "reputation": "4,920",
-            "posts_count": 18,
-        },
-        {
-            "name": "Елена Васильева",
-            "org": "Комитет АБР",
-            "role_badge": "[🏛️ ЦБ/АБР Эксперт]",
-            "avatar": "ЕВ",
-            "reputation": "6,410",
-            "posts_count": 24,
-        },
-        {
-            "name": "Иван Кузнецов",
-            "org": "ФинтехИнтегратор",
-            "role_badge": "[👨‍💻 Разработчик]",
-            "avatar": "ИК",
-            "reputation": "3,850",
-            "posts_count": 14,
-        },
-        {
-            "name": "АгроДата Хаб",
-            "org": "ГИС «Зерно»",
-            "role_badge": "[📊 Поставщик данных]",
-            "avatar": "АД",
-            "reputation": "2,980",
-            "posts_count": 9,
-        },
+    # Popular Hubs
+    popular_hubs = [
+        {"name": "Разработка смарт-контрактов", "slug": "smart-contracts", "subs": "12.1k", "rating": "840"},
+        {"name": "Информационная безопасность", "slug": "infosec-audit", "subs": "9.8k", "rating": "720"},
+        {"name": "Регуляторика & ЦБ РФ", "slug": "safe-deals", "subs": "8.9k", "rating": "650"},
+        {"name": "Оракулы & Данные", "slug": "oracles", "subs": "6.5k", "rating": "490"},
+        {"name": "Казначейство & B2B", "slug": "treasury-b2b", "subs": "5.2k", "rating": "380"},
+    ]
+
+    # Top Authors / Companies
+    top_companies = [
+        {"name": "BI.ZONE AppSec", "logo": "🛡️", "posts": "24 публикации", "rating": "+1,420"},
+        {"name": "Банк России (НИР)", "logo": "🏛️", "posts": "18 публикаций", "rating": "+2,890"},
+        {"name": "ФинтехИнтегратор", "logo": "⚡", "posts": "31 публикация", "rating": "+940"},
+        {"name": "ГИС «Зерно» Партнер", "logo": "🌾", "posts": "12 публикаций", "rating": "+630"},
     ]
 
     context: dict[str, Any] = {
         "active_nav": "feed",
         "categories": CATEGORIES_DB,
         "topics": filtered_topics,
-        "active_category": active_cat,
-        "active_post_type": active_type,
+        "active_stream": active_stream,
+        "active_category": active_stream,
+        "active_sort": active_sort,
         "active_tag": tag,
-        "popular_tags": popular_tags,
-        "top_authors": top_authors,
-        "user_org": "ООО Интегратор (Umbrella-Dev)",
-        "user_avatar": "ИД",
-        "nir_phase": "Фаза НИР ЦБ РФ (до 31.03.2027)",
+        "trending_articles": trending_articles,
+        "popular_hubs": popular_hubs,
+        "top_companies": top_companies,
+        "user_name": "developer",
+        "user_avatar": "SC",
     }
     return templates.TemplateResponse(
         request=request,

@@ -1,463 +1,414 @@
 {% extends "base.html" %}
 
-{% block title %}Лента & Форум — SmartContractum | Профессиональная соцсеть ПКСК{% endblock %}
+{% block title %}Моя лента / Хабр-ПКСК — SmartContractum | Сообщество разработчиков смарт-контрактов{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_social.css?v=4.0.0">
+<link rel="stylesheet" href="/static/css/forum_social.css?v=5.0.0">
 {% endblock %}
 
 {% block content %}
-<div class="social-layout-container">
-    <!-- ================================================================
-         2.1 ЛЕВАЯ ПАНЕЛЬ: КАТЕГОРИИ РЫНКА (Market Channels)
-    ================================================================= -->
-    <aside class="social-sidebar-left">
-        <div class="sidebar-sticky-panel">
-            <div class="panel-header">
-                <span class="panel-icon">🌐</span>
-                <h3 class="panel-title">Каналы & Сферы</h3>
-            </div>
+<div class="habr-feed-wrapper">
 
-            <ul class="channels-list" id="channelsList">
-                {% for cat in categories %}
-                <li class="channel-item">
-                    <a href="/feed?category={{ cat.slug }}" 
-                       class="channel-link {% if active_category == cat.slug %}is-active{% endif %}"
-                       data-category-slug="{{ cat.slug }}">
-                        <span class="channel-icon">{{ cat.icon }}</span>
-                        <span class="channel-name">{{ cat.name }}</span>
-                        <span class="channel-count" id="count-{{ cat.slug }}">{{ cat.count_topics }}</span>
+    <!-- ================================================================
+         1. HABR TOP STREAMS SUB-NAVIGATION (Потоки)
+    ================================================================= -->
+    <nav class="habr-streams-nav" aria-label="Потоки публикаций">
+        <div class="habr-streams-container">
+            <a href="/feed?stream=all" class="habr-stream-tab {% if active_stream == 'all' %}is-active{% endif %}" data-stream="all">
+                <span class="stream-icon">🔥</span> Все потоки
+            </a>
+            <a href="/feed?stream=smart-contracts" class="habr-stream-tab {% if active_stream == 'smart-contracts' %}is-active{% endif %}" data-stream="smart-contracts">
+                <span class="stream-icon">💻</span> Разработка
+            </a>
+            <a href="/feed?stream=infosec-audit" class="habr-stream-tab {% if active_stream == 'infosec-audit' %}is-active{% endif %}" data-stream="infosec-audit">
+                <span class="stream-icon">🛡️</span> ИБ & Аудит
+            </a>
+            <a href="/feed?stream=oracles" class="habr-stream-tab {% if active_stream == 'oracles' %}is-active{% endif %}" data-stream="oracles">
+                <span class="stream-icon">🌐</span> Оракулы & Данные
+            </a>
+            <a href="/feed?stream=treasury-b2b" class="habr-stream-tab {% if active_stream == 'treasury-b2b' %}is-active{% endif %}" data-stream="treasury-b2b">
+                <span class="stream-icon">🏦</span> Казначейство & B2B
+            </a>
+            <a href="/feed?stream=safe-deals" class="habr-stream-tab {% if active_stream == 'safe-deals' %}is-active{% endif %}" data-stream="safe-deals">
+                <span class="stream-icon">🏛️</span> ЦБ РФ & Регламенты
+            </a>
+        </div>
+    </nav>
+
+    <!-- ================================================================
+         2. HABR MAIN 2-COLUMN GRID (Feed + Sidebar)
+    ================================================================= -->
+    <div class="habr-main-grid">
+
+        <!-- 2.1 MAIN CONTENT STREAM -->
+        <main class="habr-articles-stream">
+
+            <!-- Habr Sorting & Filter Bar -->
+            <div class="habr-sorting-bar">
+                <div class="habr-sort-tabs">
+                    <a href="/feed?stream={{ active_stream }}&sort=best" class="sort-tab-btn {% if active_sort == 'best' %}is-active{% endif %}" data-sort="best">
+                        🔥 Лучшие
                     </a>
-                </li>
-                {% endfor %}
-            </ul>
-
-            <!-- Umbrella Platform Gateway Card -->
-            <div class="umbrella-gateway-card">
-                <div class="gateway-badge">🛡️ Umbrella-Лицензия</div>
-                <h4 class="gateway-title">Контур Банка России</h4>
-                <p class="gateway-desc">Все публикации и смарт-контракты проверяются на соответствие целевой архитектуре ПКСК 2026–2027.</p>
-                <a href="/passport" class="gateway-btn">
-                    <span>⚡ Проверить сценарий</span>
-                </a>
-            </div>
-        </div>
-    </aside>
-
-    <!-- ================================================================
-         2.2 ЦЕНТРАЛЬНАЯ ЛЕНТА: SMARTCONTRACTUM SOCIAL HUB
-    ================================================================= -->
-    <main class="social-main-feed" id="socialMainFeed">
-
-        <!-- 1.1 QUICK PUBLISHER BAR (Верхний блок создания публикации) -->
-        <div class="quick-publisher-card">
-            <div class="publisher-top-row">
-                <div class="user-avatar-badge" title="{{ user_org }}">{{ user_avatar }}</div>
-                <div class="publisher-input-trigger" id="btnOpenPublisherModal" tabindex="0" role="button" aria-label="Открыть редактор публикации">
-                    <span>Поделитесь новостью, багом, идеей или задайте вопрос по ПКСК...</span>
-                </div>
-            </div>
-            <div class="publisher-actions-row">
-                <button type="button" class="btn-quick-action" data-type-select="article">
-                    <span class="action-icon">📝</span>
-                    <span>Новость / Статья</span>
-                </button>
-                <button type="button" class="btn-quick-action btn-action-bug" data-type-select="bug">
-                    <span class="action-icon">🐛</span>
-                    <span>Баг / Сложность</span>
-                </button>
-                <button type="button" class="btn-quick-action btn-action-job" data-type-select="job">
-                    <span class="action-icon">💼</span>
-                    <span>Заказ / Задача</span>
-                </button>
-                <button type="button" class="btn-quick-action btn-action-idea" data-type-select="idea">
-                    <span class="action-icon">💡</span>
-                    <span>Идея / Сценарий</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- 1.2 CATEGORY & TAG FILTER TABS (Панель фильтров и табов) -->
-        <div class="feed-filters-panel">
-            <div class="filter-tabs-scroller" role="tablist">
-                <button type="button" class="filter-tab-btn {% if active_post_type == 'all' %}is-active{% endif %}" data-filter-type="all">
-                    🔥 Вся лента
-                </button>
-                <button type="button" class="filter-tab-btn {% if active_post_type == 'cbr' %}is-active{% endif %}" data-filter-type="cbr">
-                    📜 ПКСК & ЦБ
-                </button>
-                <button type="button" class="filter-tab-btn {% if active_post_type == 'bug' %}is-active{% endif %}" data-filter-type="bug">
-                    🐛 Баги & Ошибки
-                </button>
-                <button type="button" class="filter-tab-btn {% if active_post_type == 'code' %}is-active{% endif %}" data-filter-type="code">
-                    💻 Стек & Код
-                </button>
-                <button type="button" class="filter-tab-btn {% if active_post_type == 'data' %}is-active{% endif %}" data-filter-type="data">
-                    📊 Оракулы & Данные
-                </button>
-                <button type="button" class="filter-tab-btn {% if active_post_type == 'job' %}is-active{% endif %}" data-filter-type="job">
-                    💼 Заказы & Проекты
-                </button>
-            </div>
-
-            <!-- Live Tag Chips -->
-            <div class="live-tag-chips-bar">
-                <span class="tag-chips-label">Теги:</span>
-                <div class="tag-chips-list" id="tagChipsList">
-                    <button type="button" class="tag-chip-btn" data-tag="Solidity">#Solidity</button>
-                    <button type="button" class="tag-chip-btn" data-tag="Standoff365">#Standoff365</button>
-                    <button type="button" class="tag-chip-btn" data-tag="ФНС_API">#ФНС_API</button>
-                    <button type="button" class="tag-chip-btn" data-tag="ЕИС_Закупки">#ЕИС_Закупки</button>
-                    <button type="button" class="tag-chip-btn" data-tag="Арбитраж">#Арбитраж</button>
-                    <button type="button" class="tag-chip-btn" data-tag="BugBounty">#BugBounty</button>
-                    <button type="button" class="tag-chip-btn" data-tag="ЦифровойРубль">#ЦифровойРубль</button>
-                    <button type="button" class="tag-chip-btn btn-reset-tag" id="btnResetTagFilter" style="display: none;">✕ Сбросить</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 1.3 FEED POSTS STREAM (Карточки постов) -->
-        <div class="posts-stream" id="postsStream">
-            {% for post in topics %}
-            <article class="social-post-card" id="post-{{ post.id }}" data-post-id="{{ post.id }}" data-post-type="{{ post.post_type }}" data-category="{{ post.category_slug }}">
-                <!-- Post Header -->
-                <div class="post-header">
-                    <div class="author-avatar-wrap">
-                        <div class="author-avatar-box">{{ post.author_avatar }}</div>
-                    </div>
-                    <div class="author-info-box">
-                        <div class="author-name-row">
-                            <span class="author-name">{{ post.author_name }}</span>
-                            {% if post.author_org %}
-                            <span class="author-org">({{ post.author_org }})</span>
-                            {% endif %}
-                            <span class="author-role-badge {{ post.author_role_class }}">{{ post.author_role_badge }}</span>
-                            {% if post.is_official and post.official_badge %}
-                            <span class="official-verified-badge">✓ {{ post.official_badge }}</span>
-                            {% endif %}
-                        </div>
-                        <div class="post-meta-row">
-                            <span class="post-timestamp">{{ post.created_at }}</span>
-                            <span class="meta-dot">•</span>
-                            <span class="post-reading-time">⏱️ {{ post.reading_time }}</span>
-                            <span class="meta-dot">•</span>
-                            <span class="post-type-badge {{ post.post_type_class }}">{{ post.post_type_label }}</span>
-                        </div>
-                    </div>
+                    <a href="/feed?stream={{ active_stream }}&sort=new" class="sort-tab-btn {% if active_sort == 'new' %}is-active{% endif %}" data-sort="new">
+                        🕒 Новые
+                    </a>
+                    <a href="/feed?stream={{ active_stream }}&sort=discussed" class="sort-tab-btn {% if active_sort == 'discussed' %}is-active{% endif %}" data-sort="discussed">
+                        💬 Обсуждаемые
+                    </a>
                 </div>
 
-                <!-- Post Body & Title -->
-                <div class="post-content-body">
-                    <h3 class="post-title">{{ post.title }}</h3>
-                    <div class="post-text">{{ post.body | replace('\n', '<br>') | safe }}</div>
+                <!-- Create Publication Button -->
+                <button type="button" class="btn-habr-write" id="btnOpenWriteModal">
+                    <span class="btn-icon">✍️</span>
+                    <span>Написать статью</span>
+                </button>
+            </div>
 
-                    <!-- Code Snippet Box (Obsidian Dark) -->
-                    {% if post.code_snippet %}
-                    <div class="post-code-wrapper">
-                        <div class="code-header">
-                            <span class="code-lang-label">🔷 {{ post.code_language | upper }}</span>
-                            <button type="button" class="btn-copy-code" title="Скопировать код">
-                                <span class="copy-icon">📋</span>
-                                <span class="copy-text">Копировать</span>
-                            </button>
+            <!-- Habr Tag Filter Notice (if filtered) -->
+            {% if active_tag %}
+            <div class="habr-active-tag-banner">
+                <span>Фильтр по тегу: <strong>#{{ active_tag }}</strong></span>
+                <a href="/feed" class="btn-clear-tag">✕ Сбросить</a>
+            </div>
+            {% endif %}
+
+            <!-- Articles Feed List -->
+            <div class="habr-articles-list" id="habrArticlesList">
+                {% for post in topics %}
+                <article class="habr-article-card" id="post-{{ post.id }}" data-post-id="{{ post.id }}" data-post-type="{{ post.post_type }}" data-category="{{ post.category_slug }}">
+                    
+                    <!-- 1. Header: Author line & Timestamp -->
+                    <div class="habr-card-header">
+                        <div class="habr-author-box">
+                            <div class="habr-author-avatar">{{ post.author_avatar }}</div>
+                            <div class="habr-author-meta">
+                                <span class="habr-author-name">{{ post.author_name }}</span>
+                                <span class="habr-author-handle">@{{ post.author_username }}</span>
+                                {% if post.official_badge %}
+                                <span class="habr-company-badge">{{ post.official_badge }}</span>
+                                {% endif %}
+                            </div>
                         </div>
-                        <pre class="code-pre"><code class="code-content">{{ post.code_snippet }}</code></pre>
+                        <div class="habr-post-time">{{ post.created_at }}</div>
                     </div>
-                    {% endif %}
 
-                    <!-- Post Tags -->
-                    {% if post.tags %}
-                    <div class="post-tags-row">
-                        {% for tag_item in post.tags %}
-                        <button type="button" class="post-tag-item" data-tag="{{ tag_item }}">#{{ tag_item }}</button>
+                    <!-- 2. Article Title -->
+                    <h2 class="habr-article-title">
+                        <a href="#post-{{ post.id }}" class="habr-title-link">{{ post.title }}</a>
+                    </h2>
+
+                    <!-- 3. Hubs & Tags line (Habr style with asterisks) -->
+                    <div class="habr-hubs-line">
+                        {% for hub in post.hubs %}
+                        <a href="/feed?tag={{ hub | replace('*', '') }}" class="habr-hub-link">{{ hub }}</a>{% if not loop.last %}, {% endif %}
                         {% endfor %}
                     </div>
-                    {% endif %}
-                </div>
 
-                <!-- Post Footer & Interactions -->
-                <div class="post-footer">
-                    <div class="footer-actions-left">
-                        <!-- Upvote / Like Button -->
-                        <button type="button" class="btn-post-action btn-upvote {% if post.is_upvoted %}is-active{% endif %}" data-action="upvote" data-post-id="{{ post.id }}">
-                            <span class="action-icon">🔺</span>
-                            <span class="action-count">{{ post.upvotes_count }}</span>
-                            <span class="action-label">Лайк</span>
-                        </button>
-
-                        <!-- Comments Toggle Button -->
-                        <button type="button" class="btn-post-action btn-comments" data-action="toggle-comments" data-post-id="{{ post.id }}">
-                            <span class="action-icon">💬</span>
-                            <span class="action-count">{{ post.replies_count }}</span>
-                            <span class="action-label">Комментарии</span>
-                        </button>
+                    <!-- 4. Snippet / Lead text -->
+                    <div class="habr-lead-snippet">
+                        <p class="habr-snippet-text">{{ post.snippet }}</p>
                     </div>
 
-                    <div class="footer-actions-right">
-                        <!-- Bookmark Button -->
-                        <button type="button" class="btn-post-action btn-bookmark {% if post.is_bookmarked %}is-active{% endif %}" data-action="bookmark" data-post-id="{{ post.id }}" title="Сохранить в закладки">
-                            <span class="action-icon">🔖</span>
-                        </button>
+                    <!-- 5. Full Body (Expandable) -->
+                    <div class="habr-full-body" id="body-{{ post.id }}" style="display: none;">
+                        <div class="habr-body-content">
+                            {{ post.body | replace('\n', '<br>') | safe }}
+                        </div>
 
-                        <!-- Share Button -->
-                        <button type="button" class="btn-post-action btn-share" data-action="share" data-post-id="{{ post.id }}" title="Поделиться ссылкой">
-                            <span class="action-icon">🔗</span>
-                        </button>
+                        <!-- Code Snippet Box (Obsidian Dark) -->
+                        {% if post.code_snippet %}
+                        <div class="habr-code-block">
+                            <div class="habr-code-header">
+                                <span class="code-lang">🔷 {{ post.code_language | upper }}</span>
+                                <button type="button" class="btn-copy-code" title="Скопировать код">
+                                    <span class="copy-icon">📋</span> <span>Скопировать</span>
+                                </button>
+                            </div>
+                            <pre class="code-pre"><code class="code-content">{{ post.code_snippet }}</code></pre>
+                        </div>
+                        {% endif %}
                     </div>
-                </div>
 
-                <!-- 1.3.1 ACCORDION COMMENTS SECTION -->
-                <div class="post-comments-accordion" id="comments-{{ post.id }}" style="display: none;">
-                    <div class="comments-inner-wrap">
-                        <!-- Add Comment Input -->
-                        <form class="comment-create-form" data-post-id="{{ post.id }}">
-                            <div class="comment-input-row">
-                                <div class="comment-user-avatar">{{ user_avatar }}</div>
-                                <input type="text" class="comment-input-field" placeholder="Написать профессиональный комментарий..." required minlength="3">
-                                <button type="submit" class="btn-send-comment">Отправить</button>
+                    <!-- Read More Toggle Link -->
+                    <div class="habr-readmore-row">
+                        <button type="button" class="btn-habr-readmore" data-action="toggle-body" data-post-id="{{ post.id }}">
+                            <span class="readmore-text">Читать далее</span>
+                            <span class="readmore-arrow">↓</span>
+                        </button>
+                        <span class="habr-meta-reading">⏱️ {{ post.reading_time }} • Сложность: {{ post.difficulty }}</span>
+                    </div>
+
+                    <!-- 6. Habr Stats & Rating Footer -->
+                    <div class="habr-card-footer">
+                        <div class="habr-footer-left">
+                            <!-- Rating / Score Pill -->
+                            <div class="habr-score-box">
+                                <button type="button" class="btn-score-arrow btn-score-up {% if post.is_upvoted %}is-active{% endif %}" data-action="upvote" data-post-id="{{ post.id }}" title="Нравится">▲</button>
+                                <span class="habr-score-val {% if post.score > 0 %}is-positive{% endif %}">{{ post.score_formatted }}</span>
+                                <button type="button" class="btn-score-arrow btn-score-down" data-action="downvote" data-post-id="{{ post.id }}" title="Не нравится">▼</button>
+                            </div>
+
+                            <!-- Views Counter -->
+                            <div class="habr-stat-item" title="Количество просмотров">
+                                <span class="stat-icon">👁</span>
+                                <span class="stat-val">{{ post.views_formatted }}</span>
+                            </div>
+
+                            <!-- Bookmarks Counter -->
+                            <button type="button" class="habr-stat-btn btn-bookmark {% if post.is_bookmarked %}is-active{% endif %}" data-action="bookmark" data-post-id="{{ post.id }}" title="Добавить в закладки">
+                                <span class="stat-icon">🔖</span>
+                                <span class="stat-val">{{ post.bookmarks_count }}</span>
+                            </button>
+
+                            <!-- Comments Counter & Toggle -->
+                            <button type="button" class="habr-stat-btn btn-comments-toggle" data-action="toggle-comments" data-post-id="{{ post.id }}" title="Комментарии">
+                                <span class="stat-icon">💬</span>
+                                <span class="stat-val">{{ post.replies_count }}</span>
+                            </button>
+                        </div>
+
+                        <div class="habr-footer-right">
+                            <!-- Share Button -->
+                            <button type="button" class="habr-stat-btn btn-share" data-action="share" data-post-id="{{ post.id }}" title="Поделиться">
+                                <span class="stat-icon">🔗</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 7. Habr Comments Tree Accordion -->
+                    <div class="habr-comments-section" id="comments-{{ post.id }}" style="display: none;">
+                        <div class="habr-comments-header">
+                            <h4 class="comments-title">Комментарии ({{ post.replies_count }})</h4>
+                        </div>
+
+                        <!-- Write Comment Form -->
+                        <form class="habr-comment-form" data-post-id="{{ post.id }}">
+                            <div class="comment-input-wrap">
+                                <textarea class="habr-comment-textarea" placeholder="Написать комментарий..." rows="3" required minlength="3"></textarea>
+                                <div class="comment-form-footer">
+                                    <span class="comment-hint">Поддерживается Markdown</span>
+                                    <button type="submit" class="btn-habr-submit-comment">Отправить</button>
+                                </div>
                             </div>
                         </form>
 
                         <!-- Comments List -->
-                        <div class="comments-list" id="comments-list-{{ post.id }}">
+                        <div class="habr-comments-list" id="comments-list-{{ post.id }}">
                             {% for comment in post.comments %}
-                            <div class="comment-item">
-                                <div class="comment-avatar">{{ comment.author_avatar }}</div>
-                                <div class="comment-body-box">
-                                    <div class="comment-header">
-                                        <span class="comment-author">{{ comment.author_name }}</span>
-                                        <span class="comment-role-badge {{ comment.author_role_class }}">{{ comment.author_role_badge }}</span>
-                                        <span class="comment-time">{{ comment.created_at }}</span>
-                                    </div>
-                                    <p class="comment-text">{{ comment.body }}</p>
+                            <div class="habr-comment-item">
+                                <div class="comment-header-line">
+                                    <div class="comment-avatar">{{ comment.author_avatar }}</div>
+                                    <span class="comment-author-name">{{ comment.author_name }}</span>
+                                    <span class="comment-author-handle">@{{ comment.author_username }}</span>
+                                    <span class="comment-time">{{ comment.created_at }}</span>
+                                </div>
+                                <div class="comment-text-body">
+                                    <p>{{ comment.body }}</p>
                                 </div>
                             </div>
                             {% endfor %}
                         </div>
                     </div>
-                </div>
-            </article>
-            {% endfor %}
-        </div>
 
-        <!-- Empty State (When Filter yields no posts) -->
-        <div class="feed-empty-state" id="feedEmptyState" style="display: none;">
-            <div class="empty-icon">🔍</div>
-            <h3 class="empty-title">По выбранному фильтру публикаций не найдено</h3>
-            <p class="empty-desc">Будьте первым, кто опубликует кейс, баг или задаст вопрос в этой категории!</p>
-            <button type="button" class="btn-empty-create" id="btnEmptyCreate">✍️ Создать публикацию</button>
-        </div>
-    </main>
-
-    <!-- ================================================================
-         2.3 ПРАВАЯ ПАНЕЛЬ: WIDGETS & ECOSYSTEM PULSE
-    ================================================================= -->
-    <aside class="social-sidebar-right">
-        <!-- Widget 1: 🔥 Тренды & Теги ПКСК -->
-        <div class="social-widget trends-widget">
-            <div class="widget-head">
-                <span class="widget-icon">🔥</span>
-                <h3 class="widget-title">Тренды & Теги ПКСК</h3>
-            </div>
-            <div class="trends-tag-list" id="trendsTagList">
-                {% for tag_item, count in popular_tags %}
-                <a href="/feed?tag={{ tag_item }}" class="trend-tag-row" data-tag="{{ tag_item }}">
-                    <div class="trend-tag-info">
-                        <span class="trend-tag-name">#{{ tag_item }}</span>
-                        <span class="trend-tag-sub">ПКСК Экосистема</span>
-                    </div>
-                    <span class="trend-tag-count">{{ count }} постов</span>
-                </a>
+                </article>
                 {% endfor %}
             </div>
-        </div>
 
-        <!-- Widget 2: 🏆 Топ авторов недели -->
-        <div class="social-widget authors-widget">
-            <div class="widget-head">
-                <span class="widget-icon">🏆</span>
-                <h3 class="widget-title">Топ авторов недели</h3>
+            <!-- Empty State -->
+            <div class="habr-empty-state" id="habrEmptyState" style="display: none;">
+                <div class="empty-icon">🔍</div>
+                <h3 class="empty-title">Публикаций по выбранному фильтру не найдено</h3>
+                <p class="empty-desc">Попробуйте выбрать другой поток или сбросить активные теги.</p>
+                <a href="/feed" class="btn-habr-reset">Сбросить все фильтры</a>
             </div>
-            <div class="authors-list">
-                {% for author in top_authors %}
-                <div class="author-widget-card">
-                    <div class="author-widget-avatar">{{ author.avatar }}</div>
-                    <div class="author-widget-meta">
-                        <span class="author-widget-name">{{ author.name }}</span>
-                        <span class="author-widget-role">{{ author.role_badge }}</span>
-                        <span class="author-widget-score">⭐ {{ author.reputation }} репутация</span>
-                    </div>
-                    <button type="button" class="btn-follow-author" data-author="{{ author.name }}">
-                        <span>Читать</span>
-                    </button>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
+        </main>
 
-        <!-- Widget 3: 📅 Календарь НИР ЦБ РФ -->
-        <div class="social-widget calendar-widget">
-            <div class="widget-head">
-                <span class="widget-icon">📅</span>
-                <h3 class="widget-title">Календарь НИР ЦБ РФ</h3>
-            </div>
-            <div class="nir-timeline">
-                <div class="timeline-item is-passed">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">18.06.2026</span>
-                        <h4 class="timeline-name">Публикация Концепции</h4>
-                        <p class="timeline-sub">Банк России опубликовал Концепцию ПКСК для открытого обсуждения</p>
-                    </div>
-                </div>
+        <!-- 2.2 HABR RIGHT SIDEBAR (Читают сейчас, Хабы, Компании) -->
+        <aside class="habr-sidebar-right">
 
-                <div class="timeline-item is-active">
-                    <div class="timeline-dot is-pulse"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-active-badge">⚡ Активная фаза</div>
-                        <span class="timeline-date">До 30.09.2026</span>
-                        <h4 class="timeline-name">Сбор замечаний и предложений</h4>
-                        <p class="timeline-sub">Прием обратной связи от участников рынка через платформу</p>
-                    </div>
+            <!-- Sidebar Block 1: 🔥 ЧИТАЮТ СЕЙЧАС (Trending Articles) -->
+            <div class="habr-sidebar-block trending-block">
+                <div class="sidebar-block-head">
+                    <h3 class="block-title">Читают сейчас</h3>
                 </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">До 31.03.2027</span>
-                        <h4 class="timeline-name">НИР & Целевая архитектура</h4>
-                        <p class="timeline-sub">Пилотирование вариантов интеграции и запуск прототипа</p>
-                    </div>
+                <div class="trending-articles-list">
+                    {% for article in trending_articles %}
+                    <a href="#post-{{ article.id }}" class="trending-article-row">
+                        <span class="trending-rank">{{ loop.index }}</span>
+                        <div class="trending-content">
+                            <h4 class="trending-title">{{ article.title }}</h4>
+                            <div class="trending-meta">
+                                <span class="meta-score">{{ article.score_formatted }}</span>
+                                <span class="meta-dot">•</span>
+                                <span class="meta-views">👁 {{ article.views_formatted }}</span>
+                                <span class="meta-dot">•</span>
+                                <span class="meta-comments">💬 {{ article.replies_count }}</span>
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
                 </div>
             </div>
-        </div>
-    </aside>
+
+            <!-- Sidebar Block 2: 🏆 ПОПУЛЯРНЫЕ ХАБЫ (Popular Hubs) -->
+            <div class="habr-sidebar-block hubs-block">
+                <div class="sidebar-block-head">
+                    <h3 class="block-title">Популярные хабы</h3>
+                </div>
+                <div class="popular-hubs-list">
+                    {% for hub in popular_hubs %}
+                    <div class="hub-sidebar-row">
+                        <div class="hub-info">
+                            <a href="/feed?stream={{ hub.slug }}" class="hub-name">{{ hub.name }}</a>
+                            <span class="hub-subs">{{ hub.subs }} подписчиков</span>
+                        </div>
+                        <button type="button" class="btn-hub-follow" data-hub="{{ hub.slug }}">+ Подписаться</button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Sidebar Block 3: 🏛️ КОМПАНИИ ЭКОСИСТЕМЫ (Leading Teams) -->
+            <div class="habr-sidebar-block companies-block">
+                <div class="sidebar-block-head">
+                    <h3 class="block-title">Компании недели</h3>
+                </div>
+                <div class="companies-list">
+                    {% for comp in top_companies %}
+                    <div class="company-sidebar-row">
+                        <span class="company-logo">{{ comp.logo }}</span>
+                        <div class="company-info">
+                            <span class="company-name">{{ comp.name }}</span>
+                            <span class="company-stats">{{ comp.posts }}</span>
+                        </div>
+                        <span class="company-rating">{{ comp.rating }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Sidebar Block 4: 📅 КАЛЕНДАРЬ НИР ЦБ РФ -->
+            <div class="habr-sidebar-block nir-block">
+                <div class="sidebar-block-head">
+                    <h3 class="block-title">Календарь ПКСК & НИР</h3>
+                </div>
+                <div class="nir-timeline-box">
+                    <div class="nir-step is-passed">
+                        <div class="step-marker"></div>
+                        <div class="step-text">
+                            <span class="step-date">18 июня 2026</span>
+                            <h5 class="step-heading">Публикация Концепции</h5>
+                        </div>
+                    </div>
+                    <div class="nir-step is-active">
+                        <div class="step-marker is-pulse"></div>
+                        <div class="step-text">
+                            <span class="step-badge">Активная фаза</span>
+                            <span class="step-date">До 30 сентября 2026</span>
+                            <h5 class="step-heading">Сбор замечаний и предложений</h5>
+                        </div>
+                    </div>
+                    <div class="nir-step">
+                        <div class="step-marker"></div>
+                        <div class="step-text">
+                            <span class="step-date">До 31 марта 2027</span>
+                            <h5 class="step-heading">Пилотирование целевой архитектуры</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+    </div>
 </div>
 
 <!-- ====================================================================
-     2.4 МОДАЛЬНОЕ ОКНО СОЗДАНИЯ ПУБЛИКАЦИИ (Dev Social Publisher Modal)
+     3. HABR MODAL: НАПИСАТЬ СТАТЬЮ / ПУБЛИКАЦИЮ
 ==================================================================== -->
-<div class="modal-overlay" id="socialPublisherModal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="modal-card">
-        <!-- Modal Header -->
+<div class="modal-overlay" id="habrWriteModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card habr-modal-card">
         <div class="modal-header">
             <div class="modal-title-group">
                 <span class="modal-icon">✍️</span>
-                <h3 class="modal-title">Создать публикацию в соцсети</h3>
+                <h3 class="modal-title">Написать статью в хаб</h3>
             </div>
-            <button class="modal-close-btn" id="btnClosePublisherModal" aria-label="Закрыть окно">✕</button>
+            <button class="modal-close-btn" id="btnCloseWriteModal" aria-label="Закрыть окно">✕</button>
         </div>
 
-        <!-- Modal Form -->
-        <form class="modal-form" id="socialPublisherForm">
-            <!-- Form Alert Box -->
+        <form class="modal-form" id="habrWriteForm">
             <div class="form-alert-box" id="formAlertBox" style="display: none;"></div>
 
-            <!-- Type Selector Row -->
+            <!-- Title -->
             <div class="form-group">
-                <label class="form-label">Тип публикации <span class="required-star">*</span></label>
-                <div class="post-type-selector-grid">
-                    <label class="type-radio-card">
-                        <input type="radio" name="post_type" value="article" checked>
-                        <span class="radio-card-content">📝 Новость / Статья</span>
-                    </label>
-                    <label class="type-radio-card">
-                        <input type="radio" name="post_type" value="bug">
-                        <span class="radio-card-content">🐛 Баг / Сложность</span>
-                    </label>
-                    <label class="type-radio-card">
-                        <input type="radio" name="post_type" value="job">
-                        <span class="radio-card-content">💼 Заказ / Задача</span>
-                    </label>
-                    <label class="type-radio-card">
-                        <input type="radio" name="post_type" value="idea">
-                        <span class="radio-card-content">💡 Идея / Сценарий</span>
-                    </label>
-                    <label class="type-radio-card">
-                        <input type="radio" name="post_type" value="code">
-                        <span class="radio-card-content">💻 Стек & Код</span>
-                    </label>
-                    <label class="type-radio-card">
-                        <input type="radio" name="post_type" value="data">
-                        <span class="radio-card-content">📊 Оракулы & Данные</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Title Input -->
-            <div class="form-group">
-                <label for="postTitleInput" class="form-label">
-                    Заголовок темы / публикации <span class="required-star">*</span>
+                <label for="articleTitleInput" class="form-label">
+                    Заголовок статьи <span class="required-star">*</span>
                     <span class="label-hint">(минимум 10 символов)</span>
                 </label>
-                <input type="text" id="postTitleInput" name="title" class="form-input" 
-                       placeholder="Например: Архитектура оракулов для B2B казначейских расчетов" 
+                <input type="text" id="articleTitleInput" name="title" class="form-input" 
+                       placeholder="Например: Как мы оптимизировали расход газа в смарт-контрактах Цифрового Рубля" 
                        minlength="10" maxlength="250" required>
             </div>
 
-            <!-- Category & Role Row -->
+            <!-- Stream / Hub Select -->
             <div class="form-row-2">
                 <div class="form-group">
-                    <label for="postCategorySelect" class="form-label">
-                        Канал / Сфера рынка <span class="required-star">*</span>
-                    </label>
-                    <select id="postCategorySelect" name="category_slug" class="form-select" required>
-                        <option value="safe-deals">🔒 Безопасные сделки</option>
+                    <label for="articleCategorySelect" class="form-label">Основной поток / Хаб <span class="required-star">*</span></label>
+                    <select id="articleCategorySelect" name="category_slug" class="form-select" required>
+                        <option value="smart-contracts">💻 Разработка смарт-контрактов</option>
+                        <option value="infosec-audit">🛡️ Информационная безопасность</option>
+                        <option value="safe-deals">🏛️ Регуляторика & ЦБ РФ</option>
+                        <option value="oracles">🌐 Оракулы & Данные</option>
                         <option value="treasury-b2b">🏦 Казначейство & B2B</option>
-                        <option value="oracles">🌐 Источники данных (Оракулы)</option>
-                        <option value="infosec-audit">🛡️ ИБ, Аудит & Bug Bounty</option>
-                        <option value="agro-subsidies">🌾 АПК & Субсидии</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="postRoleSelect" class="form-label">Ваша роль</label>
-                    <select id="postRoleSelect" name="author_role" class="form-select">
-                        <option value="Разработчик">👨‍💻 Разработчик смарт-контрактов</option>
-                        <option value="ИБ-Аудитор">🛡️ ИБ-Аудитор / Белый Хакер</option>
-                        <option value="Поставщик данных">📊 Поставщик данных / Оракул</option>
+                    <label for="articleRoleSelect" class="form-label">Роль автора</label>
+                    <select id="articleRoleSelect" name="author_role" class="form-select">
+                        <option value="Разработчик">👨‍💻 Разработчик</option>
+                        <option value="ИБ-Аудитор">🛡️ ИБ-Аудитор</option>
+                        <option value="Поставщик данных">📊 Поставщик данных</option>
                         <option value="ЦБ/АБР Эксперт">🏛️ ЦБ/АБР Эксперт</option>
-                        <option value="Заказчик">💼 Заказчик / Бизнес-интегратор</option>
+                        <option value="Заказчик">💼 Заказчик</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Tags Input -->
+            <!-- Tags -->
             <div class="form-group">
-                <label for="postTagsInput" class="form-label">
-                    Теги публикации <span class="label-hint">(через запятую)</span>
+                <label for="articleTagsInput" class="form-label">
+                    Теги статьи <span class="label-hint">(через запятую, например: Solidity, GasOptimization, B2B)</span>
                 </label>
-                <input type="text" id="postTagsInput" name="tags" class="form-input" 
+                <input type="text" id="articleTagsInput" name="tags" class="form-input" 
                        placeholder="Solidity, ПКСК_2026, Оракулы, ЭДО">
             </div>
 
-            <!-- Body Input -->
+            <!-- Main Body -->
             <div class="form-group">
-                <label for="postBodyInput" class="form-label">
-                    Текст публикации <span class="required-star">*</span>
+                <label for="articleBodyInput" class="form-label">
+                    Текст статьи <span class="required-star">*</span>
                     <span class="label-hint">(минимум 30 символов, поддержка Markdown)</span>
                 </label>
-                <textarea id="postBodyInput" name="body" class="form-textarea" rows="5" 
-                          placeholder="Опишите контекст, сценарий использования смарт-контракта, баг или ТЗ заказа..." 
-                          minlength="30" maxlength="15000" required></textarea>
+                <textarea id="articleBodyInput" name="body" class="form-textarea" rows="6" 
+                          placeholder="Опишите контекст задачи, техническое решение, бенчмарки и выводы..." 
+                          minlength="30" maxlength="20000" required></textarea>
             </div>
 
-            <!-- Optional Code Snippet -->
+            <!-- Code Snippet -->
             <div class="form-group">
-                <label for="postCodeInput" class="form-label">
-                    Сниппет кода (опционально)
-                    <span class="label-hint">(Solidity, Python, JSON)</span>
+                <label for="articleCodeInput" class="form-label">
+                    Фрагмент кода (опционально)
                 </label>
-                <textarea id="postCodeInput" name="code_snippet" class="form-textarea code-textarea" rows="4" 
-                          placeholder="// Вставьте пример смарт-контракта или вызова API..."></textarea>
+                <textarea id="articleCodeInput" name="code_snippet" class="form-textarea code-textarea" rows="4" 
+                          placeholder="// Вставьте пример смарт-контракта на Solidity..."></textarea>
             </div>
 
-            <!-- Modal Footer / Actions -->
+            <!-- Modal Footer -->
             <div class="modal-footer">
-                <button type="button" class="btn-cancel" id="btnCancelPublisherModal">Отмена</button>
-                <button type="submit" class="btn-submit" id="btnSubmitPost">
+                <button type="button" class="btn-cancel" id="btnCancelWriteModal">Отмена</button>
+                <button type="submit" class="btn-submit" id="btnSubmitArticle">
                     <span class="spinner-icon" id="submitSpinner" style="display: none;">⏳</span>
-                    <span>Опубликовать в Соцсети</span>
+                    <span>Опубликовать на Хабре</span>
                 </button>
             </div>
         </form>
@@ -465,12 +416,12 @@
 </div>
 
 <!-- Floating Toast Notification -->
-<div class="social-toast" id="socialToast" style="display: none;">
+<div class="habr-toast" id="habrToast" style="display: none;">
     <span class="toast-icon">✨</span>
     <span class="toast-message" id="toastMessage">Ссылка скопирована в буфер обмена!</span>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_social.js?v=4.0.0" defer></script>
+<script src="/static/js/forum_social.js?v=5.0.0" defer></script>
 {% endblock %}

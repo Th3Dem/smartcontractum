@@ -1,6 +1,5 @@
 /**
- * SmartContractum — Dev Social Network Hub Controller
- * Instant client & AJAX filtering, upvotes, comment accordions, and quick publishing.
+ * SmartContractum — Habr Feed Controller (https://habr.com/ru/feed/)
  * File: frontend/static/js/forum_social.js
  */
 
@@ -8,159 +7,82 @@
     "use strict";
 
     document.addEventListener("DOMContentLoaded", function () {
-        // Elements
-        const postsStream = document.getElementById("postsStream");
-        const emptyState = document.getElementById("feedEmptyState");
-        const filterTabBtns = document.querySelectorAll(".filter-tab-btn");
-        const tagChips = document.querySelectorAll(".tag-chip-btn[data-tag]");
-        const btnResetTag = document.getElementById("btnResetTagFilter");
-
-        // Modal Elements
-        const publisherModal = document.getElementById("socialPublisherModal");
-        const btnOpenPublisher = document.getElementById("btnOpenPublisherModal");
-        const btnClosePublisher = document.getElementById("btnClosePublisherModal");
-        const btnCancelPublisher = document.getElementById("btnCancelPublisherModal");
-        const publisherForm = document.getElementById("socialPublisherForm");
-        const quickActionBtns = document.querySelectorAll(".btn-quick-action");
-        const btnEmptyCreate = document.getElementById("btnEmptyCreate");
+        const articlesList = document.getElementById("habrArticlesList");
+        const emptyState = document.getElementById("habrEmptyState");
+        const writeModal = document.getElementById("habrWriteModal");
+        const btnOpenWrite = document.getElementById("btnOpenWriteModal");
+        const btnCloseWrite = document.getElementById("btnCloseWriteModal");
+        const btnCancelWrite = document.getElementById("btnCancelWriteModal");
+        const writeForm = document.getElementById("habrWriteForm");
         const submitSpinner = document.getElementById("submitSpinner");
-        const btnSubmitPost = document.getElementById("btnSubmitPost");
+        const btnSubmitArticle = document.getElementById("btnSubmitArticle");
         const formAlertBox = document.getElementById("formAlertBox");
 
-        // Toast
-        const toast = document.getElementById("socialToast");
+        const toast = document.getElementById("habrToast");
         const toastMessage = document.getElementById("toastMessage");
-
-        let activeTypeFilter = "all";
-        let activeTagFilter = null;
 
         function showToast(msg) {
             if (!toast || !toastMessage) return;
             toastMessage.textContent = msg;
-            toast.style.display = "flex";
+            toast.style.display = "block";
             setTimeout(function () {
                 toast.style.display = "none";
             }, 3000);
         }
 
         // ==================================================================
-        // 1. FILTERING ENGINE (Instant Client-Side Tabs & Tags)
+        // 1. ARTICLE INTERACTIONS (Read More, Upvote, Bookmark, Share, Code)
         // ==================================================================
-        function applyFilters() {
-            let visibleCount = 0;
-            const allPosts = document.querySelectorAll(".social-post-card");
-            allPosts.forEach(function (card) {
-                const postType = card.getAttribute("data-post-type");
-                const tagElements = card.querySelectorAll(".post-tag-item");
-                const cardTags = Array.from(tagElements).map(function (el) {
-                    return el.getAttribute("data-tag").toLowerCase();
-                });
+        if (articlesList) {
+            articlesList.addEventListener("click", async function (e) {
+                // 1.1 Read More Toggle
+                const btnReadMore = e.target.closest(".btn-habr-readmore");
+                if (btnReadMore) {
+                    const postId = btnReadMore.getAttribute("data-post-id");
+                    const fullBody = document.getElementById("body-" + postId);
+                    const snippet = document.querySelector("#post-" + postId + " .habr-lead-snippet");
+                    const readText = btnReadMore.querySelector(".readmore-text");
+                    const arrow = btnReadMore.querySelector(".readmore-arrow");
 
-                let matchesType = (activeTypeFilter === "all") || (postType === activeTypeFilter);
-                let matchesTag = true;
-
-                if (activeTagFilter) {
-                    const targetTag = activeTagFilter.toLowerCase().replace("#", "");
-                    matchesTag = cardTags.some(function (t) {
-                        return t.includes(targetTag);
-                    });
-                }
-
-                if (matchesType && matchesTag) {
-                    card.style.display = "flex";
-                    visibleCount++;
-                } else {
-                    card.style.display = "none";
-                }
-            });
-
-            if (emptyState) {
-                emptyState.style.display = visibleCount === 0 ? "flex" : "none";
-            }
-        }
-
-        // Filter Tabs Click
-        filterTabBtns.forEach(function (btn) {
-            btn.addEventListener("click", function () {
-                filterTabBtns.forEach(function (b) { b.classList.remove("is-active"); });
-                btn.classList.add("is-active");
-                activeTypeFilter = btn.getAttribute("data-filter-type") || "all";
-                applyFilters();
-            });
-        });
-
-        // Live Tag Chips Click
-        tagChips.forEach(function (chip) {
-            chip.addEventListener("click", function () {
-                const tagVal = chip.getAttribute("data-tag");
-                if (activeTagFilter === tagVal) {
-                    activeTagFilter = null;
-                    chip.classList.remove("is-active");
-                    if (btnResetTag) btnResetTag.style.display = "none";
-                } else {
-                    tagChips.forEach(function (c) { c.classList.remove("is-active"); });
-                    chip.classList.add("is-active");
-                    activeTagFilter = tagVal;
-                    if (btnResetTag) btnResetTag.style.display = "inline-block";
-                }
-                applyFilters();
-            });
-        });
-
-        // Reset Tag Filter
-        if (btnResetTag) {
-            btnResetTag.addEventListener("click", function () {
-                activeTagFilter = null;
-                tagChips.forEach(function (c) { c.classList.remove("is-active"); });
-                btnResetTag.style.display = "none";
-                applyFilters();
-            });
-        }
-
-        // Post Tags Click inside Cards
-        document.addEventListener("click", function (e) {
-            const tagBtn = e.target.closest(".post-tag-item, .trend-tag-row");
-            if (tagBtn) {
-                e.preventDefault();
-                const targetTag = tagBtn.getAttribute("data-tag");
-                if (targetTag) {
-                    activeTagFilter = targetTag;
-                    tagChips.forEach(function (c) {
-                        if (c.getAttribute("data-tag").toLowerCase() === targetTag.toLowerCase()) {
-                            c.classList.add("is-active");
+                    if (fullBody) {
+                        if (fullBody.style.display === "none" || fullBody.style.display === "") {
+                            fullBody.style.display = "block";
+                            if (snippet) snippet.style.display = "none";
+                            readText.textContent = "Свернуть";
+                            arrow.textContent = "↑";
                         } else {
-                            c.classList.remove("is-active");
+                            fullBody.style.display = "none";
+                            if (snippet) snippet.style.display = "block";
+                            readText.textContent = "Читать далее";
+                            arrow.textContent = "↓";
                         }
-                    });
-                    if (btnResetTag) btnResetTag.style.display = "inline-block";
-                    applyFilters();
-                    window.scrollTo({ top: 150, behavior: "smooth" });
+                    }
+                    return;
                 }
-            }
-        });
 
-        // ==================================================================
-        // 2. INTERACTIVE POST ACTIONS (Upvotes, Accordions, Bookmarks, Share)
-        // ==================================================================
-        if (postsStream) {
-            postsStream.addEventListener("click", async function (e) {
-                // 2.1 Upvote / Like Button
-                const btnUpvote = e.target.closest(".btn-upvote");
+                // 1.2 Upvote Rating Arrow
+                const btnUpvote = e.target.closest(".btn-score-up");
                 if (btnUpvote) {
                     const postId = btnUpvote.getAttribute("data-post-id");
-                    const countEl = btnUpvote.querySelector(".action-count");
+                    const scoreBox = btnUpvote.closest(".habr-score-box");
+                    const scoreVal = scoreBox ? scoreBox.querySelector(".habr-score-val") : null;
                     const isActive = btnUpvote.classList.contains("is-active");
 
-                    let curCount = parseInt(countEl.textContent || "0", 10);
+                    let curScore = parseInt((scoreVal ? scoreVal.textContent : "0").replace("+", ""), 10) || 0;
                     if (isActive) {
                         btnUpvote.classList.remove("is-active");
-                        countEl.textContent = Math.max(0, curCount - 1);
+                        curScore = curScore - 1;
                     } else {
                         btnUpvote.classList.add("is-active");
-                        countEl.textContent = curCount + 1;
+                        curScore = curScore + 1;
                     }
 
-                    // Sync with Backend
+                    if (scoreVal) {
+                        scoreVal.textContent = curScore > 0 ? "+" + curScore : "" + curScore;
+                        if (curScore > 0) scoreVal.classList.add("is-positive");
+                        else scoreVal.classList.remove("is-positive");
+                    }
+
                     try {
                         await fetch("/api/v1/forum/posts/" + postId + "/upvote", { method: "POST" });
                     } catch (err) {
@@ -169,35 +91,39 @@
                     return;
                 }
 
-                // 2.2 Comments Toggle
-                const btnComments = e.target.closest(".btn-comments");
+                // 1.3 Comments Accordion Toggle
+                const btnComments = e.target.closest(".btn-comments-toggle");
                 if (btnComments) {
                     const postId = btnComments.getAttribute("data-post-id");
-                    const accordion = document.getElementById("comments-" + postId);
-                    if (accordion) {
-                        if (accordion.style.display === "none" || accordion.style.display === "") {
-                            accordion.style.display = "block";
-                            const input = accordion.querySelector(".comment-input-field");
-                            if (input) input.focus();
+                    const commentsSec = document.getElementById("comments-" + postId);
+                    if (commentsSec) {
+                        if (commentsSec.style.display === "none" || commentsSec.style.display === "") {
+                            commentsSec.style.display = "flex";
+                            const ta = commentsSec.querySelector(".habr-comment-textarea");
+                            if (ta) ta.focus();
                         } else {
-                            accordion.style.display = "none";
+                            commentsSec.style.display = "none";
                         }
                     }
                     return;
                 }
 
-                // 2.3 Bookmark Toggle
+                // 1.4 Bookmark Toggle
                 const btnBookmark = e.target.closest(".btn-bookmark");
                 if (btnBookmark) {
                     const postId = btnBookmark.getAttribute("data-post-id");
-                    const isBookmarked = btnBookmark.classList.contains("is-active");
+                    const countEl = btnBookmark.querySelector(".stat-val");
+                    const isActive = btnBookmark.classList.contains("is-active");
 
-                    if (isBookmarked) {
+                    let count = parseInt(countEl ? countEl.textContent : "0", 10) || 0;
+                    if (isActive) {
                         btnBookmark.classList.remove("is-active");
+                        if (countEl) countEl.textContent = Math.max(0, count - 1);
                         showToast("Удалено из закладок");
                     } else {
                         btnBookmark.classList.add("is-active");
-                        showToast("Сохранено в закладки!");
+                        if (countEl) countEl.textContent = count + 1;
+                        showToast("Добавлено в закладки!");
                     }
 
                     try {
@@ -208,31 +134,31 @@
                     return;
                 }
 
-                // 2.4 Share Button
+                // 1.5 Share Button
                 const btnShare = e.target.closest(".btn-share");
                 if (btnShare) {
                     const postId = btnShare.getAttribute("data-post-id");
-                    const postUrl = window.location.origin + "/feed#post-" + postId;
+                    const url = window.location.origin + "/feed#post-" + postId;
                     if (navigator.clipboard) {
-                        navigator.clipboard.writeText(postUrl).then(function () {
-                            showToast("Прямая ссылка на публикацию скопирована!");
+                        navigator.clipboard.writeText(url).then(function () {
+                            showToast("Ссылка на статью скопирована!");
                         });
                     } else {
-                        showToast("Ссылка: " + postUrl);
+                        showToast("Ссылка: " + url);
                     }
                     return;
                 }
 
-                // 2.5 Copy Code Snippet
+                // 1.6 Copy Code
                 const btnCopy = e.target.closest(".btn-copy-code");
                 if (btnCopy) {
-                    const codeWrap = btnCopy.closest(".post-code-wrapper");
-                    const codeEl = codeWrap ? codeWrap.querySelector(".code-content") : null;
+                    const codeBlock = btnCopy.closest(".habr-code-block");
+                    const codeEl = codeBlock ? codeBlock.querySelector(".code-content") : null;
                     if (codeEl && navigator.clipboard) {
                         navigator.clipboard.writeText(codeEl.textContent).then(function () {
-                            btnCopy.innerHTML = "<span class=\"copy-icon\">✓</span> <span>Скопировано!</span>";
+                            btnCopy.innerHTML = "<span>✓ Скопировано!</span>";
                             setTimeout(function () {
-                                btnCopy.innerHTML = "<span class=\"copy-icon\">📋</span> <span>Копировать</span>";
+                                btnCopy.innerHTML = "<span class=\"copy-icon\">📋</span> <span>Скопировать</span>";
                             }, 2000);
                         });
                     }
@@ -242,32 +168,31 @@
         }
 
         // ==================================================================
-        // 3. COMMENT SUBMISSION (Instant Append)
+        // 2. COMMENT SUBMISSION (Instant Append)
         // ==================================================================
         document.addEventListener("submit", async function (e) {
-            const commentForm = e.target.closest(".comment-create-form");
+            const commentForm = e.target.closest(".habr-comment-form");
             if (commentForm) {
                 e.preventDefault();
                 const postId = commentForm.getAttribute("data-post-id");
-                const inputField = commentForm.querySelector(".comment-input-field");
-                const text = inputField.value.trim();
+                const textarea = commentForm.querySelector(".habr-comment-textarea");
+                const text = textarea.value.trim();
                 if (!text) return;
 
                 const commentsList = document.getElementById("comments-list-" + postId);
-                const btnComments = document.querySelector('.btn-comments[data-post-id="' + postId + '"]');
-                const commentsCountEl = btnComments ? btnComments.querySelector(".action-count") : null;
+                const btnComments = document.querySelector('.btn-comments-toggle[data-post-id="' + postId + '"]');
+                const commentsCountEl = btnComments ? btnComments.querySelector(".stat-val") : null;
 
-                // Optimistic instant append
                 const newCommentHtml = `
-                    <div class="comment-item">
-                        <div class="comment-avatar">ИД</div>
-                        <div class="comment-body-box">
-                            <div class="comment-header">
-                                <span class="comment-author">ООО Интегратор (Umbrella-Dev)</span>
-                                <span class="comment-role-badge role-dev">[👨‍💻 Разработчик]</span>
-                                <span class="comment-time">Только что</span>
-                            </div>
-                            <p class="comment-text">${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>
+                    <div class="habr-comment-item">
+                        <div class="comment-header-line">
+                            <div class="comment-avatar">SC</div>
+                            <span class="comment-author-name">developer</span>
+                            <span class="comment-author-handle">@developer</span>
+                            <span class="comment-time">только что</span>
+                        </div>
+                        <div class="comment-text-body">
+                            <p>${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>
                         </div>
                     </div>
                 `;
@@ -275,23 +200,22 @@
                 if (commentsList) {
                     commentsList.insertAdjacentHTML("beforeend", newCommentHtml);
                 }
-                inputField.value = "";
+                textarea.value = "";
 
                 if (commentsCountEl) {
                     const cur = parseInt(commentsCountEl.textContent || "0", 10);
                     commentsCountEl.textContent = cur + 1;
                 }
 
-                showToast("Комментарий опубликован!");
+                showToast("Комментарий успешно отправлен!");
 
-                // Send to Server
                 try {
                     await fetch("/api/v1/forum/posts/" + postId + "/comments", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
                             body: text,
-                            author_name: "ООО Интегратор (Umbrella-Dev)",
+                            author_name: "developer",
                             author_role: "Разработчик"
                         })
                     });
@@ -302,58 +226,41 @@
         });
 
         // ==================================================================
-        // 4. QUICK PUBLISHER MODAL CONTROLLER
+        // 3. WRITE ARTICLE MODAL
         // ==================================================================
-        function openPublisherModal(preselectedType) {
-            if (!publisherModal) return;
-            publisherModal.classList.add("is-active");
-            publisherModal.setAttribute("aria-hidden", "false");
+        function openWriteModal() {
+            if (!writeModal) return;
+            writeModal.classList.add("is-active");
+            writeModal.setAttribute("aria-hidden", "false");
             document.body.style.overflow = "hidden";
-
-            if (preselectedType) {
-                const radio = publisherModal.querySelector('input[name="post_type"][value="' + preselectedType + '"]');
-                if (radio) radio.checked = true;
-            }
-
-            const titleInput = document.getElementById("postTitleInput");
-            if (titleInput) titleInput.focus();
+            const titleInp = document.getElementById("articleTitleInput");
+            if (titleInp) titleInp.focus();
         }
 
-        function closePublisherModal() {
-            if (!publisherModal) return;
-            publisherModal.classList.remove("is-active");
-            publisherModal.setAttribute("aria-hidden", "true");
+        function closeWriteModal() {
+            if (!writeModal) return;
+            writeModal.classList.remove("is-active");
+            writeModal.setAttribute("aria-hidden", "true");
             document.body.style.overflow = "";
             if (formAlertBox) formAlertBox.style.display = "none";
         }
 
-        if (btnOpenPublisher) btnOpenPublisher.addEventListener("click", () => openPublisherModal("article"));
-        if (btnEmptyCreate) btnEmptyCreate.addEventListener("click", () => openPublisherModal("article"));
-        if (btnClosePublisher) btnClosePublisher.addEventListener("click", closePublisherModal);
-        if (btnCancelPublisher) btnCancelPublisher.addEventListener("click", closePublisherModal);
-
-        quickActionBtns.forEach(function (btn) {
-            btn.addEventListener("click", function () {
-                const typeVal = btn.getAttribute("data-type-select") || "article";
-                openPublisherModal(typeVal);
-            });
-        });
-
-        if (publisherModal) {
-            publisherModal.addEventListener("click", function (e) {
-                if (e.target === publisherModal) closePublisherModal();
+        if (btnOpenWrite) btnOpenWrite.addEventListener("click", openWriteModal);
+        if (btnCloseWrite) btnCloseWrite.addEventListener("click", closeWriteModal);
+        if (btnCancelWrite) btnCancelWrite.addEventListener("click", closeWriteModal);
+        if (writeModal) {
+            writeModal.addEventListener("click", function (e) {
+                if (e.target === writeModal) closeWriteModal();
             });
         }
 
-        // Handle Create Post Form Submission
-        if (publisherForm) {
-            publisherForm.addEventListener("submit", async function (e) {
+        if (writeForm) {
+            writeForm.addEventListener("submit", async function (e) {
                 e.preventDefault();
 
-                const formData = new FormData(publisherForm);
+                const formData = new FormData(writeForm);
                 const title = formData.get("title");
                 const category_slug = formData.get("category_slug");
-                const post_type = formData.get("post_type") || "article";
                 const author_role = formData.get("author_role") || "Разработчик";
                 const tagsRaw = formData.get("tags") || "";
                 const body = formData.get("body");
@@ -362,7 +269,7 @@
                 const tags = tagsRaw.split(",").map(t => t.trim()).filter(Boolean);
 
                 if (submitSpinner) submitSpinner.style.display = "inline-block";
-                if (btnSubmitPost) btnSubmitPost.disabled = true;
+                if (btnSubmitArticle) btnSubmitArticle.disabled = true;
 
                 try {
                     const resp = await fetch("/api/v1/forum/posts", {
@@ -371,9 +278,8 @@
                         body: JSON.stringify({
                             title: title,
                             category_slug: category_slug,
-                            post_type: post_type,
                             author_role: author_role,
-                            author_name: "ООО Интегратор (Umbrella-Dev)",
+                            author_name: "developer",
                             tags: tags,
                             body: body,
                             code_snippet: code_snippet || null,
@@ -389,116 +295,110 @@
                     const resData = await resp.json();
                     const newPost = resData.topic;
 
-                    // Dynamically prepend new post card
                     const newCardHtml = `
-                        <article class="social-post-card" id="post-${newPost.id}" data-post-id="${newPost.id}" data-post-type="${newPost.post_type}" data-category="${newPost.category_slug}">
-                            <div class="post-header">
-                                <div class="author-avatar-wrap">
-                                    <div class="author-avatar-box">${newPost.author_avatar}</div>
-                                </div>
-                                <div class="author-info-box">
-                                    <div class="author-name-row">
-                                        <span class="author-name">${newPost.author_name}</span>
-                                        <span class="author-role-badge ${newPost.author_role_class}">${newPost.author_role_badge}</span>
-                                    </div>
-                                    <div class="post-meta-row">
-                                        <span class="post-timestamp">Только что</span>
-                                        <span class="meta-dot">•</span>
-                                        <span class="post-reading-time">⏱️ 2 мин</span>
-                                        <span class="meta-dot">•</span>
-                                        <span class="post-type-badge ${newPost.post_type_class}">${newPost.post_type_label}</span>
+                        <article class="habr-article-card" id="post-${newPost.id}" data-post-id="${newPost.id}">
+                            <div class="habr-card-header">
+                                <div class="habr-author-box">
+                                    <div class="habr-author-avatar">SC</div>
+                                    <div class="habr-author-meta">
+                                        <span class="habr-author-name">developer</span>
+                                        <span class="habr-author-handle">@developer</span>
                                     </div>
                                 </div>
+                                <div class="habr-post-time">только что</div>
                             </div>
-                            <div class="post-content-body">
-                                <h3 class="post-title">${newPost.title}</h3>
-                                <div class="post-text">${newPost.body.replace(/\n/g, "<br>")}</div>
+                            <h2 class="habr-article-title">
+                                <a href="#post-${newPost.id}" class="habr-title-link">${newPost.title}</a>
+                            </h2>
+                            <div class="habr-hubs-line">
+                                ${newPost.hubs ? newPost.hubs.map(h => `<a href="/feed?tag=${h.replace('*','')}" class="habr-hub-link">${h}</a>`).join(", ") : ""}
+                            </div>
+                            <div class="habr-lead-snippet">
+                                <p class="habr-snippet-text">${newPost.snippet}</p>
+                            </div>
+                            <div class="habr-full-body" id="body-${newPost.id}" style="display: none;">
+                                <div class="habr-body-content">${newPost.body.replace(/\n/g, "<br>")}</div>
                                 ${newPost.code_snippet ? `
-                                <div class="post-code-wrapper">
-                                    <div class="code-header">
-                                        <span class="code-lang-label">🔷 SOLIDITY</span>
+                                <div class="habr-code-block">
+                                    <div class="habr-code-header">
+                                        <span class="code-lang">🔷 SOLIDITY</span>
                                         <button type="button" class="btn-copy-code" title="Скопировать код">
-                                            <span class="copy-icon">📋</span>
-                                            <span class="copy-text">Копировать</span>
+                                            <span class="copy-icon">📋</span> <span>Скопировать</span>
                                         </button>
                                     </div>
                                     <pre class="code-pre"><code class="code-content">${newPost.code_snippet}</code></pre>
                                 </div>` : ""}
-                                ${newPost.tags && newPost.tags.length ? `
-                                <div class="post-tags-row">
-                                    ${newPost.tags.map(t => `<button type="button" class="post-tag-item" data-tag="${t}">#${t}</button>`).join("")}
-                                </div>` : ""}
                             </div>
-                            <div class="post-footer">
-                                <div class="footer-actions-left">
-                                    <button type="button" class="btn-post-action btn-upvote is-active" data-action="upvote" data-post-id="${newPost.id}">
-                                        <span class="action-icon">🔺</span>
-                                        <span class="action-count">1</span>
-                                        <span class="action-label">Лайк</span>
-                                    </button>
-                                    <button type="button" class="btn-post-action btn-comments" data-action="toggle-comments" data-post-id="${newPost.id}">
-                                        <span class="action-icon">💬</span>
-                                        <span class="action-count">0</span>
-                                        <span class="action-label">Комментарии</span>
-                                    </button>
+                            <div class="habr-readmore-row">
+                                <button type="button" class="btn-habr-readmore" data-action="toggle-body" data-post-id="${newPost.id}">
+                                    <span class="readmore-text">Читать далее</span>
+                                    <span class="readmore-arrow">↓</span>
+                                </button>
+                                <span class="habr-meta-reading">⏱️ 3 мин • Сложность: Средний</span>
+                            </div>
+                            <div class="habr-card-footer">
+                                <div class="habr-footer-left">
+                                    <div class="habr-score-box">
+                                        <button type="button" class="btn-score-arrow btn-score-up is-active" data-action="upvote" data-post-id="${newPost.id}">▲</button>
+                                        <span class="habr-score-val is-positive">+1</span>
+                                        <button type="button" class="btn-score-arrow btn-score-down" data-action="downvote" data-post-id="${newPost.id}">▼</button>
+                                    </div>
+                                    <div class="habr-stat-item"><span class="stat-icon">👁</span> <span class="stat-val">1</span></div>
+                                    <button type="button" class="habr-stat-btn btn-bookmark" data-action="bookmark" data-post-id="${newPost.id}"><span class="stat-icon">🔖</span> <span class="stat-val">0</span></button>
+                                    <button type="button" class="habr-stat-btn btn-comments-toggle" data-action="toggle-comments" data-post-id="${newPost.id}"><span class="stat-icon">💬</span> <span class="stat-val">0</span></button>
                                 </div>
-                                <div class="footer-actions-right">
-                                    <button type="button" class="btn-post-action btn-bookmark" data-action="bookmark" data-post-id="${newPost.id}" title="Сохранить в закладки">
-                                        <span class="action-icon">🔖</span>
-                                    </button>
-                                    <button type="button" class="btn-post-action btn-share" data-action="share" data-post-id="${newPost.id}" title="Поделиться ссылкой">
-                                        <span class="action-icon">🔗</span>
-                                    </button>
+                                <div class="habr-footer-right">
+                                    <button type="button" class="habr-stat-btn btn-share" data-action="share" data-post-id="${newPost.id}"><span class="stat-icon">🔗</span></button>
                                 </div>
                             </div>
-                            <div class="post-comments-accordion" id="comments-${newPost.id}" style="display: none;">
-                                <div class="comments-inner-wrap">
-                                    <form class="comment-create-form" data-post-id="${newPost.id}">
-                                        <div class="comment-input-row">
-                                            <div class="comment-user-avatar">ИД</div>
-                                            <input type="text" class="comment-input-field" placeholder="Написать профессиональный комментарий..." required minlength="3">
-                                            <button type="submit" class="btn-send-comment">Отправить</button>
+                            <div class="habr-comments-section" id="comments-${newPost.id}" style="display: none;">
+                                <div class="habr-comments-header"><h4 class="comments-title">Комментарии (0)</h4></div>
+                                <form class="habr-comment-form" data-post-id="${newPost.id}">
+                                    <div class="comment-input-wrap">
+                                        <textarea class="habr-comment-textarea" placeholder="Написать комментарий..." rows="3" required minlength="3"></textarea>
+                                        <div class="comment-form-footer">
+                                            <span class="comment-hint">Поддерживается Markdown</span>
+                                            <button type="submit" class="btn-habr-submit-comment">Отправить</button>
                                         </div>
-                                    </form>
-                                    <div class="comments-list" id="comments-list-${newPost.id}"></div>
-                                </div>
+                                    </div>
+                                </form>
+                                <div class="habr-comments-list" id="comments-list-${newPost.id}"></div>
                             </div>
                         </article>
                     `;
 
-                    if (postsStream) {
-                        postsStream.insertAdjacentHTML("afterbegin", newCardHtml);
+                    if (articlesList) {
+                        articlesList.insertAdjacentHTML("afterbegin", newCardHtml);
                     }
 
-                    publisherForm.reset();
-                    closePublisherModal();
-                    showToast("🎉 Публикация успешно размещена в Соцсети!");
-                    applyFilters();
+                    writeForm.reset();
+                    closeWriteModal();
+                    showToast("🎉 Статья успешно опубликована на Хабре!");
 
                 } catch (err) {
                     if (formAlertBox) {
-                        formAlertBox.textContent = err.message || "Ошибка создания публикации";
+                        formAlertBox.textContent = err.message || "Ошибка публикации";
                         formAlertBox.style.display = "block";
                     }
                 } finally {
                     if (submitSpinner) submitSpinner.style.display = "none";
-                    if (btnSubmitPost) btnSubmitPost.disabled = false;
+                    if (btnSubmitArticle) btnSubmitArticle.disabled = false;
                 }
             });
         }
 
-        // Follow Author Button Interaction
-        document.querySelectorAll(".btn-follow-author").forEach(function (btn) {
+        // Hub Follow Toggle
+        document.querySelectorAll(".btn-hub-follow").forEach(function (btn) {
             btn.addEventListener("click", function () {
-                const author = btn.getAttribute("data-author");
+                const hub = btn.getAttribute("data-hub");
                 if (btn.classList.contains("is-following")) {
                     btn.classList.remove("is-following");
-                    btn.textContent = "Читать";
-                    showToast("Вы отписались от " + author);
+                    btn.textContent = "+ Подписаться";
+                    showToast("Вы отписались от хаба");
                 } else {
                     btn.classList.add("is-following");
-                    btn.textContent = "Читаете ✓";
-                    showToast("Вы подписались на обновления " + author + "!");
+                    btn.textContent = "✓ Вы подписаны";
+                    showToast("Вы подписались на хаб!");
                 }
             });
         });
