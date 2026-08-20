@@ -1,6 +1,6 @@
 /* ======================================================================
    SmartContractum — Centered Node Constellation Graph Stylesheet
-   Design System: Larger Bold Titles + Compact Line-Height + 3D Glass
+   Design System: Bold 1.15rem Titles + Tight Line-Height + 3D Volumetric Glass
    File: frontend/static/css/hero_constellation.css
 ====================================================================== */
 
@@ -30,13 +30,13 @@
 }
 
 /* ----------------------------------------------------------------------
-   CONSTELLATION MAIN CONTAINER & CANVAS (1280px ORBIT)
+   CONSTELLATION MAIN CONTAINER & CANVAS (1300px ORBIT)
 ----------------------------------------------------------------------- */
 .constellation-container {
     position: relative;
     width: 100%;
-    max-width: 1280px;
-    height: 590px;
+    max-width: 1300px;
+    height: 600px;
     margin: 10px auto;
     display: flex;
     align-items: center;
@@ -98,7 +98,7 @@
     background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(20, 35, 75, 0.99) 100%);
     border: 2px solid rgba(56, 189, 248, 0.75);
     border-radius: 9999px;
-    padding: 16px 42px;
+    padding: 16px 44px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 50px rgba(56, 189, 248, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4);
     display: flex;
     align-items: center;
@@ -109,7 +109,7 @@
 }
 
 .core-brand-name {
-    font-size: 1.55rem;
+    font-size: 1.60rem;
     font-weight: 900;
     letter-spacing: -0.3px;
     background: linear-gradient(90deg, #ffffff 0%, #38bdf8 60%, #10b981 100%);
@@ -135,41 +135,41 @@
 /* Expanded 3D Cards */
 .constellation-satellite-card {
     position: absolute;
-    width: 440px;
-    min-height: 126px;
-    height: 126px;
-    box-sizing: border-box;
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    z-index: 4;
-    pointer-events: auto;
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
-    background: transparent;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    font-family: inherit;
+    width: 450px !important;
+    min-height: 134px !important;
+    height: 134px !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    text-decoration: none !important;
+    color: inherit !important;
+    z-index: 4 !important;
+    pointer-events: auto !important;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    cursor: pointer !important;
+    font-family: inherit !important;
 }
 
 /* TIGHT HARMONIOUS ORBITAL POSITIONS */
 /* Node 1: Top-Left */
 .node-pos-1 {
-    top: 15px;
-    left: calc(50% - 440px - 20px);
+    top: 15px !important;
+    left: calc(50% - 450px - 20px) !important;
 }
 
 /* Node 2: Top-Right (40px gap from Node 1) */
 .node-pos-2 {
-    top: 15px;
-    left: calc(50% + 20px);
+    top: 15px !important;
+    left: calc(50% + 20px) !important;
 }
 
 /* Node 3: Mid-Left */
 .node-pos-3 {
-    top: 50%;
-    left: 0px;
-    transform: translateY(-50%);
+    top: 50% !important;
+    left: 0px !important;
+    transform: translateY(-50%) !important;
 }
 .node-pos-3:hover {
     transform: translateY(-50%) translateY(-5px) scale(1.025) !important;
@@ -177,9 +177,9 @@
 
 /* Node 4: Mid-Right */
 .node-pos-4 {
-    top: 50%;
-    right: 0px;
-    transform: translateY(-50%);
+    top: 50% !important;
+    right: 0px !important;
+    transform: translateY(-50%) !important;
 }
 .node-pos-4:hover {
     transform: translateY(-50%) translateY(-5px) scale(1.025) !important;
@@ -187,134 +187,134 @@
 
 /* Node 5: Bottom-Left */
 .node-pos-5 {
-    bottom: 15px;
-    left: calc(50% - 440px - 20px);
+    bottom: 15px !important;
+    left: calc(50% - 450px - 20px) !important;
 }
 
 /* Node 6: Bottom-Right (40px gap from Node 5) */
 .node-pos-6 {
-    bottom: 15px;
-    left: calc(50% + 20px);
+    bottom: 15px !important;
+    left: calc(50% + 20px) !important;
 }
 
 /* Volumetric 3D Card Interior */
 .satellite-card-inner {
-    width: 100%;
-    height: 100%;
-    min-height: 126px;
-    background: linear-gradient(145deg, rgba(30, 41, 59, 0.92) 0%, rgba(15, 23, 42, 0.97) 100%);
-    border: 1.5px solid rgba(255, 255, 255, 0.12);
-    border-radius: 18px;
-    padding: 10px 14px 8px 14px;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), inset 0 1px 2px rgba(255, 255, 255, 0.25), inset 0 -2px 6px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    text-align: center;
-    gap: 3px;
-    box-sizing: border-box;
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 134px !important;
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.92) 0%, rgba(15, 23, 42, 0.97) 100%) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 18px !important;
+    padding: 12px 16px 10px 16px !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), inset 0 1px 2px rgba(255, 255, 255, 0.25), inset 0 -2px 6px rgba(0, 0, 0, 0.5) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 2px !important;
+    box-sizing: border-box !important;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 /* 1. Top Centered Row: Icon (Left) + Title (Right of Icon), All Centered */
 .satellite-header-centered {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 9px !important;
+    width: 100% !important;
 }
 
 .satellite-icon-inline {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.05rem;
-    flex-shrink: 0;
-    background: linear-gradient(135deg, rgba(11, 20, 38, 0.98) 0%, rgba(20, 35, 70, 0.95) 100%);
-    border: 1.5px solid rgba(255, 255, 255, 0.16);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.25);
-    transition: all 0.3s ease;
-    line-height: 1;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.15rem !important;
+    flex-shrink: 0 !important;
+    background: linear-gradient(135deg, rgba(11, 20, 38, 0.98) 0%, rgba(20, 35, 70, 0.95) 100%) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.16) !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
+    transition: all 0.3s ease !important;
+    line-height: 1 !important;
 }
 
-.glow-amber { border-color: rgba(245, 158, 11, 0.55); box-shadow: 0 0 12px rgba(245, 158, 11, 0.4); }
-.glow-cyan { border-color: rgba(56, 189, 248, 0.55); box-shadow: 0 0 12px rgba(56, 189, 248, 0.4); }
-.glow-violet { border-color: rgba(139, 92, 246, 0.55); box-shadow: 0 0 12px rgba(139, 92, 246, 0.4); }
-.glow-emerald { border-color: rgba(16, 185, 129, 0.55); box-shadow: 0 0 12px rgba(16, 185, 129, 0.4); }
-.glow-sky { border-color: rgba(2, 132, 199, 0.55); box-shadow: 0 0 12px rgba(2, 132, 199, 0.4); }
-.glow-gold { border-color: rgba(236, 72, 153, 0.55); box-shadow: 0 0 12px rgba(236, 72, 153, 0.4); }
+.glow-amber { border-color: rgba(245, 158, 11, 0.55) !important; box-shadow: 0 0 12px rgba(245, 158, 11, 0.4) !important; }
+.glow-cyan { border-color: rgba(56, 189, 248, 0.55) !important; box-shadow: 0 0 12px rgba(56, 189, 248, 0.4) !important; }
+.glow-violet { border-color: rgba(139, 92, 246, 0.55) !important; box-shadow: 0 0 12px rgba(139, 92, 246, 0.4) !important; }
+.glow-emerald { border-color: rgba(16, 185, 129, 0.55) !important; box-shadow: 0 0 12px rgba(16, 185, 129, 0.4) !important; }
+.glow-sky { border-color: rgba(2, 132, 199, 0.55) !important; box-shadow: 0 0 12px rgba(2, 132, 199, 0.4) !important; }
+.glow-gold { border-color: rgba(236, 72, 153, 0.55) !important; box-shadow: 0 0 12px rgba(236, 72, 153, 0.4) !important; }
 
-/* Centered Title (Enlarged to 1.08rem, Compact Line-Height) */
+/* Centered Title (Significantly Enlarged to 1.15rem, Bold 900) */
 .satellite-title {
-    font-size: 1.08rem;
-    font-weight: 800;
-    color: #ffffff;
-    margin: 0;
-    line-height: 1.15;
-    white-space: nowrap;
-    text-align: center;
-    letter-spacing: -0.2px;
+    font-size: 1.14rem !important;
+    font-weight: 900 !important;
+    color: #ffffff !important;
+    margin: 0 !important;
+    line-height: 1.15 !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    letter-spacing: -0.25px !important;
 }
 
-/* 2. Middle Row: Centered Compact Description */
+/* 2. Middle Row: Centered Dense Description (line-height: 1.20) */
 .satellite-desc {
-    font-size: 0.80rem;
-    color: #94a3b8;
-    line-height: 1.25;
-    margin: 0;
-    text-align: center;
-    white-space: normal;
-    overflow: visible;
-    display: block;
-    width: 100%;
+    font-size: 0.81rem !important;
+    color: #94a3b8 !important;
+    line-height: 1.20 !important;
+    margin: 0 !important;
+    text-align: center !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    display: block !important;
+    width: 100% !important;
 }
 
 /* 3. Bottom Row: Centered Smaller Sub-Badge */
 .satellite-footer-centered {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
 }
 
 .satellite-badge {
-    font-size: 0.62rem;
-    font-weight: 700;
-    padding: 1px 8px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-    flex-shrink: 0;
+    font-size: 0.62rem !important;
+    font-weight: 700 !important;
+    padding: 1px 8px !important;
+    border-radius: 4px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
 }
 
-.badge-amber { background: rgba(245, 158, 11, 0.18); border: 1px solid rgba(245, 158, 11, 0.5); color: #fbbf24; }
-.badge-cyan { background: rgba(56, 189, 248, 0.18); border: 1px solid rgba(56, 189, 248, 0.5); color: #38bdf8; }
-.badge-violet { background: rgba(139, 92, 246, 0.18); border: 1px solid rgba(139, 92, 246, 0.5); color: #a78bfa; }
-.badge-emerald { background: rgba(16, 185, 129, 0.18); border: 1px solid rgba(16, 185, 129, 0.5); color: #34d399; }
-.badge-sky { background: rgba(2, 132, 199, 0.18); border: 1px solid rgba(2, 132, 199, 0.5); color: #7dd3fc; }
-.badge-gold { background: rgba(236, 72, 153, 0.18); border: 1px solid rgba(236, 72, 153, 0.5); color: #f472b6; }
+.badge-amber { background: rgba(245, 158, 11, 0.18) !important; border: 1px solid rgba(245, 158, 11, 0.5) !important; color: #fbbf24 !important; }
+.badge-cyan { background: rgba(56, 189, 248, 0.18) !important; border: 1px solid rgba(56, 189, 248, 0.5) !important; color: #38bdf8 !important; }
+.badge-violet { background: rgba(139, 92, 246, 0.18) !important; border: 1px solid rgba(139, 92, 246, 0.5) !important; color: #a78bfa !important; }
+.badge-emerald { background: rgba(16, 185, 129, 0.18) !important; border: 1px solid rgba(16, 185, 129, 0.5) !important; color: #34d399 !important; }
+.badge-sky { background: rgba(2, 132, 199, 0.18) !important; border: 1px solid rgba(2, 132, 199, 0.5) !important; color: #7dd3fc !important; }
+.badge-gold { background: rgba(236, 72, 153, 0.18) !important; border: 1px solid rgba(236, 72, 153, 0.5) !important; color: #f472b6 !important; }
 
 /* 3D Hover Lift States */
 .constellation-satellite-card:hover {
-    transform: translateY(-5px) scale(1.025);
+    transform: translateY(-5px) scale(1.025) !important;
 }
 
 .constellation-satellite-card:hover .satellite-card-inner {
-    background: linear-gradient(145deg, rgba(30, 41, 59, 0.96) 0%, rgba(20, 35, 75, 0.98) 100%);
-    border-color: rgba(56, 189, 248, 0.65);
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.75), 0 0 28px rgba(56, 189, 248, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.96) 0%, rgba(20, 35, 75, 0.98) 100%) !important;
+    border-color: rgba(56, 189, 248, 0.65) !important;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.75), 0 0 28px rgba(56, 189, 248, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.4) !important;
 }
 
 .constellation-satellite-card:hover .satellite-icon-inline {
-    transform: scale(1.14);
+    transform: scale(1.14) !important;
 }
 
 /* ----------------------------------------------------------------------
@@ -322,48 +322,48 @@
 ----------------------------------------------------------------------- */
 @media (max-width: 1080px) {
     .constellation-container {
-        height: auto;
-        min-height: auto;
-        flex-direction: column;
-        gap: 20px;
+        height: auto !important;
+        min-height: auto !important;
+        flex-direction: column !important;
+        gap: 20px !important;
     }
 
     .constellation-wave-canvas {
-        display: none;
+        display: none !important;
     }
 
     .constellation-core-node {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        margin: 0 auto 10px auto;
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        transform: none !important;
+        margin: 0 auto 10px auto !important;
     }
 
     .constellation-core-node:hover,
     .constellation-core-node:focus-visible {
-        transform: scale(1.05);
+        transform: scale(1.05) !important;
     }
 
     .constellation-radial-ring {
-        position: relative;
-        width: 100%;
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-        pointer-events: auto;
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 14px !important;
+        pointer-events: auto !important;
     }
 
     .constellation-satellite-card {
-        position: relative;
+        position: relative !important;
         top: auto !important;
         left: auto !important;
         right: auto !important;
         bottom: auto !important;
         transform: none !important;
-        width: 100%;
-        min-height: auto;
-        height: auto;
+        width: 100% !important;
+        min-height: auto !important;
+        height: auto !important;
     }
 }
