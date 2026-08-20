@@ -1,25 +1,35 @@
 /* ======================================================================
-   SmartContractum — Habr Feed Design System (https://habr.com/ru/feed/)
-   Authentic Habr Dark Theme: Streams, Hubs, Live Search, Score Rating & Article Stream
+   SmartContractum — Habr Feed Light Theme (https://habr.com/ru/feed/)
+   Clean White Background (#FFFFFF), Slate Typography (#0F172A / #334155),
+   Habr Teal/Sky Blue Accents (#0284C7), Emerald Rating (+Green)
    File: frontend/static/css/forum_social.css
 ====================================================================== */
 
 /* ----------------------------------------------------------------------
-   1. HABR WRAPPER & SUB-NAV STREAMS
+   1. GLOBAL PAGE & WRAPPER LIGHT THEME OVERRIDES
 ----------------------------------------------------------------------- */
+body:has(.habr-feed-wrapper),
+body.app-body:has(.habr-feed-wrapper),
+body.light-theme-feed {
+    background-color: #f8fafc !important;
+    color: #1e293b !important;
+}
+
 .habr-feed-wrapper {
     max-width: 1240px;
     margin: 0 auto 50px auto;
     padding: 0 16px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    color: #e6edf3;
+    color: #1e293b;
+    background-color: transparent;
 }
 
 /* Streams Sub-Nav Bar */
 .habr-streams-nav {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid #e2e8f0;
     margin-bottom: 20px;
     padding: 4px 0;
+    background: transparent;
 }
 
 .habr-streams-container {
@@ -36,7 +46,7 @@
     padding: 10px 14px;
     font-size: 0.90rem;
     font-weight: 700;
-    color: #94a3b8;
+    color: #64748b;
     text-decoration: none;
     white-space: nowrap;
     border-bottom: 2px solid transparent;
@@ -44,12 +54,12 @@
 }
 
 .habr-stream-tab:hover {
-    color: #ffffff;
+    color: #0f172a;
 }
 
 .habr-stream-tab.is-active {
-    color: #38bdf8;
-    border-bottom-color: #38bdf8;
+    color: #0284c7;
+    border-bottom-color: #0284c7;
 }
 
 .stream-icon {
@@ -81,7 +91,7 @@
     align-items: center;
     justify-content: space-between;
     padding-bottom: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid #e2e8f0;
     gap: 12px;
     flex-wrap: wrap;
 }
@@ -97,19 +107,19 @@
     font-size: 0.84rem;
     font-weight: 700;
     text-decoration: none;
-    color: #94a3b8;
+    color: #64748b;
     background: transparent;
     transition: all 0.2s ease;
 }
 
 .sort-tab-btn:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.05);
+    color: #0f172a;
+    background: #f1f5f9;
 }
 
 .sort-tab-btn.is-active {
-    color: #38bdf8;
-    background: rgba(56, 189, 248, 0.12);
+    color: #0284c7;
+    background: #e0f2fe;
 }
 
 /* Right Actions (Search + Write Button) */
@@ -138,11 +148,11 @@
 
 .habr-search-input {
     width: 100%;
-    background: #0d1117;
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
     border-radius: 6px;
     padding: 6px 30px 6px 32px;
-    color: #ffffff;
+    color: #0f172a;
     font-size: 0.82rem;
     outline: none;
     font-family: inherit;
@@ -150,12 +160,12 @@
 }
 
 .habr-search-input::placeholder {
-    color: #64748b;
+    color: #94a3b8;
 }
 
 .habr-search-input:focus {
-    border-color: #38bdf8;
-    box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
 }
 
 .btn-clear-search {
@@ -171,7 +181,7 @@
 }
 
 .btn-clear-search:hover {
-    color: #f87171;
+    color: #ef4444;
 }
 
 .btn-habr-write {
@@ -187,34 +197,36 @@
     font-weight: 700;
     cursor: pointer;
     white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
     transition: all 0.2s ease;
 }
 
 .btn-habr-write:hover {
     background: #0369a1;
     transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(2, 132, 199, 0.35);
 }
 
 .habr-active-tag-banner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(56, 189, 248, 0.1);
-    border: 1px solid rgba(56, 189, 248, 0.3);
+    background: #e0f2fe;
+    border: 1px solid #bae6fd;
     border-radius: 8px;
     padding: 8px 14px;
     font-size: 0.84rem;
-    color: #38bdf8;
+    color: #0369a1;
 }
 
 .btn-clear-tag {
-    color: #f87171;
+    color: #dc2626;
     text-decoration: none;
     font-weight: 700;
 }
 
 /* ----------------------------------------------------------------------
-   4. HABR ARTICLE CARD (Authentic Layout)
+   4. HABR ARTICLE CARD (Clean White Background)
 ----------------------------------------------------------------------- */
 .habr-articles-list {
     display: flex;
@@ -223,20 +235,20 @@
 }
 
 .habr-article-card {
-    background: #161b22;
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
     border-radius: 12px;
     padding: 22px 24px;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .habr-article-card:hover {
-    border-color: rgba(56, 189, 248, 0.35);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+    border-color: #cbd5e1;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
 }
 
 /* Header: Author line */
@@ -275,7 +287,7 @@
 .habr-author-name {
     font-size: 0.84rem;
     font-weight: 700;
-    color: #f1f5f9;
+    color: #0f172a;
 }
 
 .habr-author-handle {
@@ -288,9 +300,9 @@
     font-weight: 700;
     padding: 1px 6px;
     border-radius: 4px;
-    background: rgba(139, 92, 246, 0.18);
-    border: 1px solid rgba(139, 92, 246, 0.4);
-    color: #c084fc;
+    background: #f3e8ff;
+    border: 1px solid #d8b4fe;
+    color: #7e22ce;
 }
 
 .habr-post-time {
@@ -307,13 +319,13 @@
 }
 
 .habr-title-link {
-    color: #ffffff;
+    color: #0f172a;
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
 .habr-title-link:hover {
-    color: #38bdf8;
+    color: #0284c7;
 }
 
 /* Hubs Line (with commas & asterisks) */
@@ -324,22 +336,22 @@
 }
 
 .habr-hub-link {
-    color: #38bdf8;
+    color: #0284c7;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.2s ease;
 }
 
 .habr-hub-link:hover {
-    color: #7dd3fc;
+    color: #0369a1;
     text-decoration: underline;
 }
 
 /* Snippet / Lead text */
 .habr-lead-snippet {
-    font-size: 0.90rem;
-    line-height: 1.55;
-    color: #cbd5e1;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: #334155;
     margin: 0;
 }
 
@@ -350,58 +362,59 @@
 /* Full Expandable Body */
 .habr-full-body {
     padding-top: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid #f1f5f9;
 }
 
 .habr-body-content {
-    font-size: 0.90rem;
-    line-height: 1.6;
-    color: #cbd5e1;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: #334155;
 }
 
 .habr-body-content h3 {
     font-size: 1.05rem;
-    color: #ffffff;
+    color: #0f172a;
     margin: 14px 0 6px 0;
 }
 
-/* Obsidian Dark Code Block */
+/* Light/Dark Code Block */
 .habr-code-block {
-    background: #0d1117;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
     margin: 12px 0;
     overflow: hidden;
 }
 
 .habr-code-header {
-    background: #161b22;
+    background: #f1f5f9;
     padding: 6px 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .code-lang {
     font-size: 0.72rem;
     font-weight: 800;
-    color: #38bdf8;
+    color: #0284c7;
 }
 
 .btn-copy-code {
     background: transparent;
     border: none;
-    color: #94a3b8;
+    color: #64748b;
     font-size: 0.72rem;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    transition: color 0.2s ease;
 }
 
 .btn-copy-code:hover {
-    color: #ffffff;
+    color: #0f172a;
 }
 
 .code-pre {
@@ -410,7 +423,7 @@
     font-family: 'JetBrains Mono', Consolas, monospace;
     font-size: 0.82rem;
     line-height: 1.45;
-    color: #e6edf3;
+    color: #0f172a;
     overflow-x: auto;
 }
 
@@ -425,7 +438,7 @@
 .btn-habr-readmore {
     background: transparent;
     border: none;
-    color: #38bdf8;
+    color: #0284c7;
     font-size: 0.88rem;
     font-weight: 700;
     cursor: pointer;
@@ -437,7 +450,7 @@
 }
 
 .btn-habr-readmore:hover {
-    color: #7dd3fc;
+    color: #0369a1;
     text-decoration: underline;
 }
 
@@ -454,7 +467,7 @@
     align-items: center;
     justify-content: space-between;
     padding-top: 12px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid #f1f5f9;
 }
 
 .habr-footer-left,
@@ -469,7 +482,8 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(255, 255, 255, 0.05);
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-radius: 6px;
     padding: 3px 8px;
 }
@@ -485,21 +499,21 @@
 }
 
 .btn-score-arrow:hover {
-    color: #ffffff;
+    color: #0f172a;
 }
 
 .btn-score-up.is-active {
-    color: #34d399;
+    color: #16a34a;
 }
 
 .habr-score-val {
     font-size: 0.82rem;
     font-weight: 800;
-    color: #94a3b8;
+    color: #64748b;
 }
 
 .habr-score-val.is-positive {
-    color: #34d399;
+    color: #16a34a;
 }
 
 /* Stats items & Buttons */
@@ -528,12 +542,12 @@
 }
 
 .habr-stat-btn:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: #f1f5f9;
+    background: #f1f5f9;
+    color: #0f172a;
 }
 
 .btn-bookmark.is-active {
-    color: #fbbf24;
+    color: #d97706;
 }
 
 /* ----------------------------------------------------------------------
@@ -541,7 +555,7 @@
 ----------------------------------------------------------------------- */
 .habr-comments-section {
     padding-top: 14px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid #f1f5f9;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -550,7 +564,7 @@
 .comments-title {
     font-size: 0.95rem;
     font-weight: 800;
-    color: #ffffff;
+    color: #0f172a;
     margin: 0;
 }
 
@@ -566,20 +580,21 @@
 }
 
 .habr-comment-textarea {
-    background: #0d1117;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
     border-radius: 8px;
     padding: 10px 12px;
-    color: #f1f5f9;
+    color: #0f172a;
     font-size: 0.84rem;
     font-family: inherit;
     outline: none;
     resize: vertical;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .habr-comment-textarea:focus {
-    border-color: #38bdf8;
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
 }
 
 .comment-form-footer {
@@ -616,8 +631,8 @@
 }
 
 .habr-comment-item {
-    background: rgba(255, 255, 255, 0.03);
-    border-left: 2px solid #38bdf8;
+    background: #f8fafc;
+    border-left: 3px solid #0284c7;
     padding: 10px 14px;
     border-radius: 0 8px 8px 0;
     display: flex;
@@ -634,7 +649,7 @@
 
 .comment-author-name {
     font-weight: 700;
-    color: #f1f5f9;
+    color: #0f172a;
 }
 
 .comment-author-handle {
@@ -648,15 +663,15 @@
 
 .comment-text-body p {
     margin: 0;
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     line-height: 1.45;
-    color: #cbd5e1;
+    color: #334155;
 }
 
 /* Empty State */
 .habr-empty-state {
-    background: #161b22;
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
     border-radius: 12px;
     padding: 40px 20px;
     display: flex;
@@ -665,6 +680,7 @@
     justify-content: center;
     gap: 10px;
     text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .empty-icon {
@@ -673,13 +689,14 @@
 
 .empty-title {
     font-size: 1.15rem;
-    color: #ffffff;
+    color: #0f172a;
+    font-weight: 700;
     margin: 0;
 }
 
 .empty-desc {
     font-size: 0.86rem;
-    color: #94a3b8;
+    color: #64748b;
     margin: 0;
 }
 
@@ -705,25 +722,25 @@
 }
 
 .habr-sidebar-block {
-    background: #161b22;
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
     border-radius: 12px;
     padding: 18px;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-block-head {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid #f1f5f9;
     padding-bottom: 8px;
 }
 
 .block-title {
-    font-size: 0.90rem;
+    font-size: 0.88rem;
     font-weight: 800;
-    color: #ffffff;
+    color: #0f172a;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     margin: 0;
@@ -746,7 +763,7 @@
 .trending-rank {
     font-size: 1.15rem;
     font-weight: 900;
-    color: #38bdf8;
+    color: #0284c7;
     line-height: 1;
     min-width: 16px;
 }
@@ -761,14 +778,14 @@
 .trending-title {
     font-size: 0.82rem;
     font-weight: 700;
-    color: #e2e8f0;
+    color: #1e293b;
     line-height: 1.35;
     margin: 0;
     transition: color 0.2s ease;
 }
 
 .trending-article-row:hover .trending-title {
-    color: #38bdf8;
+    color: #0284c7;
 }
 
 .trending-meta {
@@ -780,7 +797,7 @@
 }
 
 .meta-score {
-    color: #34d399;
+    color: #16a34a;
     font-weight: 700;
 }
 
@@ -805,7 +822,7 @@
 .hub-name {
     font-size: 0.82rem;
     font-weight: 700;
-    color: #38bdf8;
+    color: #0284c7;
     text-decoration: none;
 }
 
@@ -819,9 +836,9 @@
 }
 
 .btn-hub-follow {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: #cbd5e1;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    color: #334155;
     font-size: 0.72rem;
     font-weight: 700;
     padding: 4px 8px;
@@ -834,6 +851,12 @@
     background: #0284c7;
     color: #ffffff;
     border-color: #0284c7;
+}
+
+.btn-hub-follow.is-following {
+    background: #e0f2fe;
+    color: #0369a1;
+    border-color: #7dd3fc;
 }
 
 /* Companies Block */
@@ -862,7 +885,7 @@
 .company-name {
     font-size: 0.82rem;
     font-weight: 700;
-    color: #f1f5f9;
+    color: #0f172a;
 }
 
 .company-stats {
@@ -873,7 +896,7 @@
 .company-rating {
     font-size: 0.76rem;
     font-weight: 800;
-    color: #34d399;
+    color: #16a34a;
 }
 
 /* NIR Timeline Block */
@@ -892,7 +915,7 @@
     bottom: 6px;
     left: 4px;
     width: 2px;
-    background: rgba(255, 255, 255, 0.1);
+    background: #e2e8f0;
 }
 
 .nir-step {
@@ -908,17 +931,17 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #475569;
-    border: 2px solid #0f172a;
+    background: #cbd5e1;
+    border: 2px solid #ffffff;
 }
 
 .nir-step.is-passed .step-marker {
-    background: #10b981;
+    background: #16a34a;
 }
 
 .nir-step.is-active .step-marker {
-    background: #38bdf8;
-    box-shadow: 0 0 10px #38bdf8;
+    background: #0284c7;
+    box-shadow: 0 0 8px rgba(2, 132, 199, 0.5);
 }
 
 .step-badge {
@@ -927,8 +950,8 @@
     font-size: 0.62rem;
     font-weight: 800;
     text-transform: uppercase;
-    background: rgba(56, 189, 248, 0.18);
-    color: #38bdf8;
+    background: #e0f2fe;
+    color: #0369a1;
     padding: 1px 5px;
     border-radius: 4px;
     margin-bottom: 2px;
@@ -937,13 +960,13 @@
 .step-date {
     font-size: 0.70rem;
     font-weight: 700;
-    color: #94a3b8;
+    color: #64748b;
 }
 
 .step-heading {
     font-size: 0.80rem;
     font-weight: 700;
-    color: #ffffff;
+    color: #0f172a;
     margin: 0;
 }
 
@@ -956,8 +979,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(6px);
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -974,15 +997,15 @@
 }
 
 .habr-modal-card {
-    background: #161b22;
-    border: 1px solid rgba(56, 189, 248, 0.4);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
     border-radius: 14px;
     width: 100%;
     max-width: 660px;
     max-height: 90vh;
     overflow-y: auto;
     padding: 24px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -992,7 +1015,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid #e2e8f0;
     padding-bottom: 12px;
 }
 
@@ -1005,18 +1028,26 @@
 .modal-title {
     font-size: 1.15rem;
     font-weight: 800;
-    color: #ffffff;
+    color: #0f172a;
     margin: 0;
 }
 
 .modal-close-btn {
-    background: rgba(255, 255, 255, 0.08);
+    background: #f1f5f9;
     border: none;
-    color: #94a3b8;
+    color: #64748b;
     width: 30px;
     height: 30px;
     border-radius: 6px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close-btn:hover {
+    color: #0f172a;
+    background: #e2e8f0;
 }
 
 .modal-form {
@@ -1034,11 +1065,11 @@
 .form-label {
     font-size: 0.82rem;
     font-weight: 700;
-    color: #e2e8f0;
+    color: #0f172a;
 }
 
 .required-star {
-    color: #f87171;
+    color: #ef4444;
 }
 
 .label-hint {
@@ -1050,20 +1081,22 @@
 .form-input,
 .form-select,
 .form-textarea {
-    background: #0d1117;
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
     border-radius: 8px;
     padding: 10px 12px;
-    color: #ffffff;
+    color: #0f172a;
     font-size: 0.86rem;
     outline: none;
     font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
-    border-color: #38bdf8;
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
 }
 
 .form-row-2 {
@@ -1078,17 +1111,22 @@
     justify-content: flex-end;
     gap: 10px;
     padding-top: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid #e2e8f0;
 }
 
 .btn-cancel {
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #94a3b8;
+    border: 1px solid #cbd5e1;
+    color: #64748b;
     padding: 8px 14px;
     border-radius: 6px;
     font-size: 0.82rem;
     cursor: pointer;
+}
+
+.btn-cancel:hover {
+    background: #f1f5f9;
+    color: #0f172a;
 }
 
 .btn-submit {
@@ -1100,21 +1138,26 @@
     font-size: 0.82rem;
     font-weight: 700;
     cursor: pointer;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+}
+
+.btn-submit:hover {
+    background: #0369a1;
 }
 
 .habr-toast {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    background: #161b22;
-    border: 1px solid #38bdf8;
+    background: #0f172a;
+    border: 1px solid #0284c7;
     color: #ffffff;
     padding: 12px 18px;
     border-radius: 8px;
     font-size: 0.84rem;
     font-weight: 700;
     z-index: 1000;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 /* ----------------------------------------------------------------------

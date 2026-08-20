@@ -3,7 +3,12 @@
 {% block title %}Моя лента / Хабр-ПКСК — SmartContractum | Сообщество разработчиков смарт-контрактов{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_social.css?v=5.1.0">
+<link rel="stylesheet" href="/static/css/forum_social.css?v=7.0.0">
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('light-theme-feed');
+    });
+</script>
 {% endblock %}
 
 {% block content %}
@@ -134,7 +139,7 @@
                             {{ post.body | replace('\n', '<br>') | safe }}
                         </div>
 
-                        <!-- Code Snippet Box (Obsidian Dark) -->
+                        <!-- Code Snippet Box (Light Code Block) -->
                         {% if post.code_snippet %}
                         <div class="habr-code-block">
                             <div class="habr-code-header">
@@ -442,5 +447,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_social.js?v=5.1.0" defer></script>
+<script src="/static/js/forum_social.js?v=7.0.0" defer></script>
 {% endblock %}
