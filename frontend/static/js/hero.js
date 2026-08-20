@@ -476,6 +476,163 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+
+    // 8. Interactive Node Constellation Graph Canvas Controller
+    function initConstellationGraph() {
+        const canvas = document.getElementById('constellationCanvas');
+        const container = document.getElementById('constellationGraphSection');
+        const core = document.getElementById('constellationCore');
+        const nodes = document.querySelectorAll('.constellation-node');
+
+        if (!canvas || !container || !core || nodes.length === 0) return;
+
+        const ctx = canvas.getContext('2d');
+        let width = 0;
+        let height = 0;
+        let hoveredNodeIndex = -1;
+        let isCoreHovered = false;
+        let animationFrameId = null;
+
+        // Packet particle system
+        const packets = [];
+        const packetCountPerNode = 3;
+
+        for (let n = 0; n < nodes.length; n++) {
+            for (let p = 0; p < packetCountPerNode; p++) {
+                packets.push({
+                    nodeIndex: n,
+                    progress: Math.random(),
+                    speed: 0.0035 + Math.random() * 0.0035,
+                    size: 2.5 + Math.random() * 1.5,
+                    direction: Math.random() > 0.5 ? 1 : -1
+                });
+            }
+        }
+
+        function resize() {
+            if (window.innerWidth <= 1080) {
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                    animationFrameId = null;
+                }
+                return;
+            }
+            const rect = container.getBoundingClientRect();
+            width = rect.width;
+            height = rect.height;
+            if (width === 0 || height === 0) return;
+
+            canvas.width = width * (window.devicePixelRatio || 1);
+            canvas.height = height * (window.devicePixelRatio || 1);
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+
+            if (!animationFrameId) {
+                render();
+            }
+        }
+
+        function getPositions() {
+            const containerRect = container.getBoundingClientRect();
+            const coreRect = core.getBoundingClientRect();
+            const corePos = {
+                x: coreRect.left - containerRect.left + coreRect.width / 2,
+                y: coreRect.top - containerRect.top + coreRect.height / 2
+            };
+
+            const nodePositions = [];
+            nodes.forEach((node) => {
+                const bubble = node.querySelector('.node-icon-bubble') || node;
+                const bRect = bubble.getBoundingClientRect();
+                nodePositions.push({
+                    x: bRect.left - containerRect.left + bRect.width / 2,
+                    y: bRect.top - containerRect.top + bRect.height / 2,
+                    color: node.getAttribute('data-color') || '#38bdf8'
+                });
+            });
+
+            return { corePos, nodePositions };
+        }
+
+        function render() {
+            if (window.innerWidth <= 1080) return;
+
+            ctx.clearRect(0, 0, width, height);
+
+            const { corePos, nodePositions } = getPositions();
+
+            // Draw synaptic laser lines to all nodes
+            nodePositions.forEach((nPos, idx) => {
+                const isHovered = (hoveredNodeIndex === idx) || isCoreHovered;
+                const strokeColor = isHovered ? nPos.color : 'rgba(56, 189, 248, 0.22)';
+                const lineWidth = isHovered ? 2.5 : 1.2;
+
+                ctx.beginPath();
+                ctx.moveTo(corePos.x, corePos.y);
+
+                const cpX = (corePos.x + nPos.x) / 2;
+                const cpY = corePos.y + (nPos.y - corePos.y) * 0.15;
+                ctx.quadraticCurveTo(cpX, cpY, nPos.x, nPos.y);
+
+                ctx.strokeStyle = strokeColor;
+                ctx.lineWidth = lineWidth;
+                if (isHovered) {
+                    ctx.shadowColor = nPos.color;
+                    ctx.shadowBlur = 12;
+                } else {
+                    ctx.shadowBlur = 0;
+                }
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+            });
+
+            // Update & Draw Packets
+            packets.forEach((packet) => {
+                const targetNode = nodePositions[packet.nodeIndex];
+                if (!targetNode) return;
+
+                const isHovered = (hoveredNodeIndex === packet.nodeIndex) || isCoreHovered;
+                const currentSpeed = isHovered ? packet.speed * 2.2 : packet.speed;
+
+                packet.progress += currentSpeed;
+                if (packet.progress > 1) packet.progress = 0;
+
+                const cpX = (corePos.x + targetNode.x) / 2;
+                const cpY = corePos.y + (targetNode.y - corePos.y) * 0.15;
+
+                const t = packet.direction === 1 ? packet.progress : (1 - packet.progress);
+                const invT = 1 - t;
+                const px = invT * invT * corePos.x + 2 * invT * t * cpX + t * t * targetNode.x;
+                const py = invT * invT * corePos.y + 2 * invT * t * cpY + t * t * targetNode.y;
+
+                ctx.beginPath();
+                ctx.arc(px, py, isHovered ? packet.size * 1.35 : packet.size, 0, Math.PI * 2);
+                ctx.fillStyle = targetNode.color;
+                ctx.shadowColor = targetNode.color;
+                ctx.shadowBlur = isHovered ? 12 : 6;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            });
+
+            animationFrameId = requestAnimationFrame(render);
+        }
+
+        nodes.forEach((node, idx) => {
+            node.addEventListener('mouseenter', () => { hoveredNodeIndex = idx; });
+            node.addEventListener('mouseleave', () => { hoveredNodeIndex = -1; });
+        });
+
+        core.addEventListener('mouseenter', () => { isCoreHovered = true; });
+        core.addEventListener('mouseleave', () => { isCoreHovered = false; });
+
+        window.addEventListener('resize', resize, { passive: true });
+        setTimeout(resize, 100);
+    }
+
+    // Initialize Constellation Graph
+    initConstellationGraph();
+
     // Initialize stats
     updateSystemStats();
 });

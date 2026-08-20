@@ -3,7 +3,7 @@
 {% block title %}SmartContractum — Здесь рождаются российские смарт-контракты | ПКСК Банка России{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/hero.css?v=3.30.0">
+<link rel="stylesheet" href="/static/css/hero.css?v=3.31.0">
 {% endblock %}
 
 {% block content %}
@@ -238,81 +238,136 @@
 
         <div class="section-heading-box" id="actionScenariosHeading">
             <h2 class="section-title">Что вы хотите сделать?</h2>
-            <p class="section-subtitle">Выберите ключевой пользовательский сценарий для старта работы</p>
+            <p class="section-subtitle">Интерактивное созвездие возможностей экосистемы SmartContractum</p>
         </div>
 
-        <div class="router-cards-grid">
-            <!-- Card 1: У меня есть бизнес-задача -> Паспорт -->
-            <a href="/passport" class="route-card" data-route="passport" data-analytics-event="hero_action_click" data-action-target="passport">
-                <div class="route-icon-box amber-glow">
-                    <span class="route-icon">💡</span>
-                </div>
-                <div class="route-content">
-                    <h3 class="route-title">У меня есть бизнес-задача</h3>
-                    <p class="route-subtext">Поможем понять, нужен ли смарт-контракт, сформировать сценарий и паспорт решения.</p>
-                </div>
-                <div class="route-card-badge">Паспорт решения</div>
-            </a>
+        <!-- ================================================================
+             1.2 ИНТЕРАКТИВНОЕ НЕЙРОСЕТЕВОЕ СОЗВЕЗДИЕ УСЛУГ (Node Constellation Graph)
+        ================================================================= -->
+        <div class="constellation-graph-container" id="constellationGraphSection">
+            <!-- Synaptic Laser Canvas (Dynamic Data Beams) -->
+            <canvas class="constellation-synapse-canvas" id="constellationCanvas" aria-hidden="true"></canvas>
 
-            <!-- Card 2: Ищу готовое решение -> Каталог решений -->
-            <a href="/solutions" class="route-card" data-route="solutions" data-analytics-event="hero_action_click" data-action-target="solutions">
-                <div class="route-icon-box cyan-glow">
-                    <span class="route-icon">📦</span>
-                </div>
-                <div class="route-content">
-                    <h3 class="route-title">Ищу готовое решение</h3>
-                    <p class="route-subtext">Сценарии, типовые компоненты и готовые разработки.</p>
-                </div>
-                <div class="route-card-badge">Каталог решений</div>
-            </a>
+            <!-- Orbit Rings Around Central Core -->
+            <div class="constellation-orbit-ring orbit-ring-inner" aria-hidden="true"></div>
+            <div class="constellation-orbit-ring orbit-ring-middle" aria-hidden="true"></div>
+            <div class="constellation-orbit-ring orbit-ring-outer" aria-hidden="true"></div>
 
-            <!-- Card 3: Ищу специалиста или услугу -> Быстрый модальный подвыбор ролей -->
-            <button type="button" class="route-card route-card-btn" id="btnSpecialistModalTrigger" data-route="specialist-modal" data-analytics-event="hero_action_click" data-action-target="specialist_modal" aria-haspopup="dialog">
-                <div class="route-icon-box violet-glow">
-                    <span class="route-icon">🔍</span>
+            <!-- CENTRAL CORE NODE (SmartContractum Core) -->
+            <div class="constellation-central-core" id="constellationCore" tabindex="0" role="region" aria-label="Ядро Экосистемы SmartContractum">
+                <div class="core-pulse-ambient"></div>
+                <div class="core-inner-disc">
+                    <div class="core-logo-mark">
+                        <svg class="core-sc-svg" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="18" cy="18" r="16" stroke="url(#coreGradient)" stroke-width="2" stroke-dasharray="4 2"/>
+                            <path d="M12 18h12M18 12v12M14 14l8 8M22 14l-8 8" stroke="#38bdf8" stroke-width="1.5" stroke-linecap="round"/>
+                            <circle cx="18" cy="18" r="4" fill="#10b981"/>
+                            <defs>
+                                <linearGradient id="coreGradient" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#38bdf8"/>
+                                    <stop offset="0.5" stop-color="#6366f1"/>
+                                    <stop offset="1" stop-color="#10b981"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span class="core-title-text">SmartContractum</span>
+                    <span class="core-subtitle-badge">ПКСК Экосистема</span>
                 </div>
-                <div class="route-content">
-                    <h3 class="route-title">Ищу специалиста или услугу</h3>
-                    <p class="route-subtext">Разработчики, эксперты, команды, аудиторы и интеграторы.</p>
-                </div>
-                <div class="route-card-badge">Подбор экспертов</div>
-            </button>
+            </div>
 
-            <!-- Card 4: Я специалист и хочу участвовать -> Кабинет специалиста -->
-            <a href="/profile/join" class="route-card" data-route="profile-join" data-analytics-event="hero_action_click" data-action-target="profile_join">
-                <div class="route-icon-box emerald-glow">
-                    <span class="route-icon">🚀</span>
-                </div>
-                <div class="route-content">
-                    <h3 class="route-title">Я специалист и хочу участвовать</h3>
-                    <p class="route-subtext">Проекты, рабочие группы, публикация разработок и профессиональная репутация.</p>
-                </div>
-                <div class="route-card-badge">Вход для профи</div>
-            </a>
+            <!-- 6 SATELLITE NODES IN RADIAL CONSTELLATION -->
+            <div class="constellation-satellites-grid">
+                <!-- Left Column (3 Nodes) -->
+                <div class="satellites-column satellites-left">
+                    <!-- Node 1: Top Left -> Паспорт решения -->
+                    <a href="/passport" class="constellation-node node-pos-tl" data-node="passport" data-color="#f59e0b" data-analytics-event="hero_action_click" data-action-target="passport">
+                        <div class="node-icon-bubble amber-glow">
+                            <span class="node-icon">💡</span>
+                        </div>
+                        <div class="node-card-glass">
+                            <div class="node-header">
+                                <h3 class="node-title">У меня есть бизнес-задача</h3>
+                                <span class="node-badge badge-amber">Паспорт решения</span>
+                            </div>
+                            <p class="node-desc">Поможем понять, нужен ли смарт-контракт, сформировать сценарий и паспорт решения.</p>
+                        </div>
+                    </a>
 
-            <!-- Card 5: Данные и оракулы -> Маркетплейс Оракулов -->
-            <a href="/data-sources" class="route-card" data-route="sources" data-analytics-event="hero_action_click" data-action-target="data_sources">
-                <div class="route-icon-box sky-glow">
-                    <span class="route-icon">📊</span>
-                </div>
-                <div class="route-content">
-                    <h3 class="route-title">Данные и оракулы</h3>
-                    <p class="route-subtext">Найти источник данных или предложить свои данные рынку.</p>
-                </div>
-                <div class="route-card-badge">Маркетплейс данных</div>
-            </a>
+                    <!-- Node 3: Mid Left -> Подбор экспертов -->
+                    <button type="button" class="constellation-node node-pos-ml node-btn" id="btnSpecialistModalTrigger" data-node="specialist-modal" data-color="#8b5cf6" data-analytics-event="hero_action_click" data-action-target="specialist_modal" aria-haspopup="dialog">
+                        <div class="node-icon-bubble violet-glow">
+                            <span class="node-icon">🔍</span>
+                        </div>
+                        <div class="node-card-glass">
+                            <div class="node-header">
+                                <h3 class="node-title">Ищу специалиста или услугу</h3>
+                                <span class="node-badge badge-violet">Подбор экспертов</span>
+                            </div>
+                            <p class="node-desc">Разработчики, эксперты, команды, аудиторы и интеграторы.</p>
+                        </div>
+                    </button>
 
-            <!-- Card 6: Хочу разобраться в ПКСК -> База знаний & Форум НИР -->
-            <a href="/knowledge" class="route-card" data-route="knowledge" data-analytics-event="hero_action_click" data-action-target="knowledge">
-                <div class="route-icon-box gold-glow">
-                    <span class="route-icon">🎓</span>
+                    <!-- Node 5: Bottom Left -> Маркетплейс Оракулов -->
+                    <a href="/data-sources" class="constellation-node node-pos-bl" data-node="sources" data-color="#0284c7" data-analytics-event="hero_action_click" data-action-target="data_sources">
+                        <div class="node-icon-bubble sky-glow">
+                            <span class="node-icon">📊</span>
+                        </div>
+                        <div class="node-card-glass">
+                            <div class="node-header">
+                                <h3 class="node-title">Данные и оракулы</h3>
+                                <span class="node-badge badge-sky">Маркетплейс данных</span>
+                            </div>
+                            <p class="node-desc">Найти источник данных или предложить свои данные рынку.</p>
+                        </div>
+                    </a>
                 </div>
-                <div class="route-content">
-                    <h3 class="route-title">Хочу разобраться в ПКСК</h3>
-                    <p class="route-subtext">Знания, изменения, открытые вопросы и обучение.</p>
+
+                <!-- Right Column (3 Nodes) -->
+                <div class="satellites-column satellites-right">
+                    <!-- Node 2: Top Right -> Каталог решений -->
+                    <a href="/solutions" class="constellation-node node-pos-tr" data-node="solutions" data-color="#38bdf8" data-analytics-event="hero_action_click" data-action-target="solutions">
+                        <div class="node-icon-bubble cyan-glow">
+                            <span class="node-icon">📦</span>
+                        </div>
+                        <div class="node-card-glass">
+                            <div class="node-header">
+                                <h3 class="node-title">Ищу готовое решение</h3>
+                                <span class="node-badge badge-cyan">Каталог решений</span>
+                            </div>
+                            <p class="node-desc">Сценарии, типовые компоненты и готовые разработки.</p>
+                        </div>
+                    </a>
+
+                    <!-- Node 4: Mid Right -> Кабинет специалиста -->
+                    <a href="/profile/join" class="constellation-node node-pos-mr" data-node="profile-join" data-color="#10b981" data-analytics-event="hero_action_click" data-action-target="profile_join">
+                        <div class="node-icon-bubble emerald-glow">
+                            <span class="node-icon">🚀</span>
+                        </div>
+                        <div class="node-card-glass">
+                            <div class="node-header">
+                                <h3 class="node-title">Я специалист и хочу участвовать</h3>
+                                <span class="node-badge badge-emerald">Вход для профи</span>
+                            </div>
+                            <p class="node-desc">Проекты, рабочие группы, публикация разработок и профессиональная репутация.</p>
+                        </div>
+                    </a>
+
+                    <!-- Node 6: Bottom Right -> База знаний -->
+                    <a href="/knowledge" class="constellation-node node-pos-br" data-node="knowledge" data-color="#ec4899" data-analytics-event="hero_action_click" data-action-target="knowledge">
+                        <div class="node-icon-bubble gold-glow">
+                            <span class="node-icon">🎓</span>
+                        </div>
+                        <div class="node-card-glass">
+                            <div class="node-header">
+                                <h3 class="node-title">Хочу разобраться в ПКСК</h3>
+                                <span class="node-badge badge-gold">База знаний</span>
+                            </div>
+                            <p class="node-desc">Знания, изменения, открытые вопросы и обучение.</p>
+                        </div>
+                    </a>
                 </div>
-                <div class="route-card-badge">База знаний</div>
-            </a>
+            </div>
         </div>
     </section>
 
@@ -499,5 +554,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/hero.js?v=3.30.0" defer></script>
+<script src="/static/js/hero.js?v=3.31.0" defer></script>
 {% endblock %}

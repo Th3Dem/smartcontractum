@@ -171,3 +171,17 @@ def test_home_page_contains_horizontal_pksc_timeline() -> None:
     assert "Сбор обратной связи" in html
     assert "НИР & Целевая модель" in html
     assert "Проектирование пилота" in html
+
+
+def test_home_page_contains_constellation_graph_and_core() -> None:
+    """Verify interactive Node Constellation Graph and Central Core elements exist."""
+    response = client.get("/")
+    assert response.status_code == 200
+    html = response.text
+
+    assert "constellationGraphSection" in html
+    assert "constellationCanvas" in html
+    assert "constellationCore" in html
+    assert "SmartContractum" in html
+    assert "ПКСК Экосистема" in html
+    assert "constellation-satellites-grid" in html
