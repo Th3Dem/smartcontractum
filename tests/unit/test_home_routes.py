@@ -174,4 +174,4 @@ def test_home_page_contains_horizontal_pksc_timeline() -> None:
     assert "Публикация Концепции" in html
     assert "Сбор пилотов & оракулов" in html
     assert "НИР & Целевая модель" in html
-    assert "Пилотные расчеты" in html
+    assert "Проектирование пилота" in html
