@@ -411,341 +411,45 @@ document.addEventListener('DOMContentLoaded', () => {
         animateShards();
     }
 
-    // 6. Interactive 3D Mission Motto & Elegant Cyber Sparks / Stardust Particle Engine
-    const mottoCanvas = document.getElementById('mottoLightningCanvas');
-    const mottoPill = document.getElementById('heroEyebrow');
+    // 6. Interactive 3D Mission Motto Pop-Out & Dynamic Mouse Parallax Engine
     const wordItems = document.querySelectorAll('.eyebrow-word-item');
 
-    if (mottoCanvas && mottoPill && wordItems.length > 0) {
-        const mCtx = mottoCanvas.getContext('2d');
-        let mWidth = window.innerWidth;
-        let mHeight = window.innerHeight;
-        let activeWord = null;
-        let isEngineRunning = false;
-        let sparksRaf = null;
-        let sparks = [];
-        let microArcs = [];
-        let shockwaves = [];
-        let surgeTimer = null;
-
-        function resizeMottoCanvas() {
-            const hBanner = document.getElementById('heroBanner') || document.querySelector('.hero-3d-banner');
-            if (hBanner && mottoCanvas) {
-                const rect = hBanner.getBoundingClientRect();
-                mWidth = Math.max(window.innerWidth, Math.round(rect.width));
-                mHeight = Math.max(window.innerHeight, Math.round(rect.height));
-                mottoCanvas.width = mWidth;
-                mottoCanvas.height = mHeight;
-            }
-        }
-
-        resizeMottoCanvas();
-        window.addEventListener('resize', resizeMottoCanvas, { passive: true });
-        window.addEventListener('load', resizeMottoCanvas, { passive: true });
-
-        // Palette definitions for pure neon aesthetics
-        const wordPalettes = {
-            'ideas': ['#38bdf8', '#60a5fa', '#3861fb', '#ffffff'],
-            'people': ['#16c784', '#34d399', '#10b981', '#ffffff'],
-            'data': ['#f6b83f', '#fbbf24', '#f59e0b', '#ffffff'],
-            'solutions': ['#c084fc', '#e879f9', '#a855f7', '#ffffff']
-        };
-
-        class CyberSpark {
-            constructor(x, y, wordKey, highSpeed = false) {
-                this.x = x;
-                this.y = y;
-                this.lastX = x;
-                this.lastY = y;
-                const palette = wordPalettes[wordKey] || wordPalettes['ideas'];
-                this.color = palette[Math.floor(Math.random() * palette.length)];
-
-                const angle = Math.random() * Math.PI * 2;
-                const speed = highSpeed
-                    ? (Math.random() * 12 + 5.0)
-                    : (Math.random() * 6.5 + 2.0);
-
-                this.vx = Math.cos(angle) * speed;
-                this.vy = Math.sin(angle) * speed - (Math.random() * 1.8);
-                this.life = 1.0;
-                this.decay = Math.random() * 0.024 + 0.015;
-                this.size = Math.random() * 2.8 + 1.2;
-                this.twinklePhase = Math.random() * Math.PI * 2;
-                this.flutter = (Math.random() - 0.5) * 0.2;
-                this.type = Math.random() > 0.4 ? 'streak' : 'stardust'; // Streak or soft dot
-            }
-
-            update() {
-                this.lastX = this.x;
-                this.lastY = this.y;
-
-                this.x += this.vx;
-                this.y += this.vy;
-
-                // Gentle air resistance & micro-buoyancy
-                this.vx *= 0.96;
-                this.vy = this.vy * 0.96 + 0.03 + Math.sin(this.life * 10) * this.flutter;
-                this.twinklePhase += 0.2;
-                this.life -= this.decay;
-            }
-
-            draw(ctx) {
-                if (this.life <= 0) return;
-                const alpha = Math.max(0, this.life);
-                const twinkle = Math.sin(this.twinklePhase) * 0.3 + 0.7;
-                const currentAlpha = alpha * twinkle;
-
-                ctx.save();
-                if (this.type === 'streak') {
-                    // Fine Luminous Neon Motion Streak
-                    ctx.strokeStyle = this.color;
-                    ctx.lineWidth = this.size * 0.85;
-                    ctx.lineCap = 'round';
-                    ctx.globalAlpha = currentAlpha * 0.85;
-                    ctx.shadowColor = this.color;
-                    ctx.shadowBlur = 8;
-                    ctx.beginPath();
-                    ctx.moveTo(this.lastX, this.lastY);
-                    ctx.lineTo(this.x, this.y);
-                    ctx.stroke();
-
-                    // Sparkling White Head
-                    ctx.fillStyle = '#ffffff';
-                    ctx.globalAlpha = currentAlpha;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size * 0.45, 0, Math.PI * 2);
-                    ctx.fill();
-                } else {
-                    // Soft Glowing Stardust Orb
-                    ctx.fillStyle = this.color;
-                    ctx.globalAlpha = currentAlpha * 0.5;
-                    ctx.shadowColor = this.color;
-                    ctx.shadowBlur = 12;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size * 1.5, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    ctx.fillStyle = '#ffffff';
-                    ctx.globalAlpha = currentAlpha * 0.95;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size * 0.6, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                ctx.restore();
-            }
-        }
-
-        // Delicate Micro-Energy Arc along the word border (subtle, non-intrusive)
-        class MicroArc {
-            constructor(x, y, wordKey) {
-                this.startX = x;
-                this.startY = y;
-                const palette = wordPalettes[wordKey] || wordPalettes['ideas'];
-                this.color = palette[0];
-                const angle = Math.random() * Math.PI * 2;
-                const len = Math.random() * 20 + 10;
-                this.endX = x + Math.cos(angle) * len;
-                this.endY = y + Math.sin(angle) * len;
-
-                const midX = (this.startX + this.endX) / 2 + (Math.random() - 0.5) * 8;
-                const midY = (this.startY + this.endY) / 2 + (Math.random() - 0.5) * 8;
-                this.points = [{ x: this.startX, y: this.startY }, { x: midX, y: midY }, { x: this.endX, y: this.endY }];
-                this.life = 1.0;
-                this.decay = 0.18;
-            }
-
-            update() {
-                this.life -= this.decay;
-            }
-
-            draw(ctx) {
-                if (this.life <= 0) return;
-                ctx.save();
-                ctx.strokeStyle = this.color;
-                ctx.lineWidth = 1.4;
-                ctx.lineCap = 'round';
-                ctx.globalAlpha = this.life * 0.75;
-                ctx.shadowColor = this.color;
-                ctx.shadowBlur = 8;
-                ctx.beginPath();
-                ctx.moveTo(this.points[0].x, this.points[0].y);
-                ctx.lineTo(this.points[1].x, this.points[1].y);
-                ctx.lineTo(this.points[2].x, this.points[2].y);
-                ctx.stroke();
-
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 0.8;
-                ctx.globalAlpha = this.life * 0.9;
-                ctx.stroke();
-                ctx.restore();
-            }
-        }
-
-        class SubtleShockwave {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                this.radius = 8;
-                this.maxRadius = Math.random() * 120 + 90;
-                this.life = 1.0;
-                this.decay = 0.055;
-            }
-
-            update() {
-                this.radius += (this.maxRadius - this.radius) * 0.16;
-                this.life -= this.decay;
-            }
-
-            draw(ctx) {
-                if (this.life <= 0) return;
-                ctx.save();
-                ctx.strokeStyle = this.color;
-                ctx.lineWidth = 1.6 * this.life;
-                ctx.globalAlpha = this.life * 0.5;
-                ctx.shadowColor = this.color;
-                ctx.shadowBlur = 10;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.stroke();
-                ctx.restore();
-            }
-        }
-
-        function triggerSparks(wordElem, isBurst = false) {
-            const hBanner = document.getElementById('heroBanner') || document.querySelector('.hero-3d-banner');
-            if (!wordElem || !hBanner) return;
-
-            const bRect = hBanner.getBoundingClientRect();
-            const wRect = wordElem.getBoundingClientRect();
-            const wordKey = wordElem.getAttribute('data-word') || 'ideas';
-            const color = wordElem.getAttribute('data-color') || '#38bdf8';
-
-            const startX = wRect.left - bRect.left + wRect.width / 2;
-            const startY = wRect.top - bRect.top + wRect.height / 2;
-
-            if (isBurst) {
-                shockwaves.push(new SubtleShockwave(startX, startY, color));
-            }
-
-            // Spawn elegant sparks
-            const count = isBurst ? 22 : (Math.floor(Math.random() * 3) + 2);
-            for (let i = 0; i < count; i++) {
-                const sx = startX + (Math.random() - 0.5) * wRect.width;
-                const sy = startY + (Math.random() - 0.5) * wRect.height;
-                sparks.push(new CyberSpark(sx, sy, wordKey, isBurst));
-            }
-
-            // Occasional micro-energy crackle at the edge
-            if (Math.random() > 0.5) {
-                const mx = startX + (Math.random() - 0.5) * wRect.width;
-                const my = startY + (Math.random() - 0.5) * wRect.height;
-                microArcs.push(new MicroArc(mx, my, wordKey));
-            }
-        }
-
-        function renderSparks() {
-            mCtx.clearRect(0, 0, mWidth, mHeight);
-
-            // Continuously emit delicate sparks while hovered
-            if (activeWord && Math.random() > 0.25) {
-                triggerSparks(activeWord, false);
-            }
-
-            // Update & Draw shockwaves
-            for (let i = shockwaves.length - 1; i >= 0; i--) {
-                shockwaves[i].update();
-                shockwaves[i].draw(mCtx);
-                if (shockwaves[i].life <= 0) {
-                    shockwaves.splice(i, 1);
-                }
-            }
-
-            // Update & Draw micro-arcs
-            for (let i = microArcs.length - 1; i >= 0; i--) {
-                microArcs[i].update();
-                microArcs[i].draw(mCtx);
-                if (microArcs[i].life <= 0) {
-                    microArcs.splice(i, 1);
-                }
-            }
-
-            // Update & Draw sparks
-            for (let i = sparks.length - 1; i >= 0; i--) {
-                sparks[i].update();
-                sparks[i].draw(mCtx);
-                if (sparks[i].life <= 0) {
-                    sparks.splice(i, 1);
-                }
-            }
-
-            if (sparks.length > 0 || microArcs.length > 0 || shockwaves.length > 0 || activeWord !== null) {
-                sparksRaf = requestAnimationFrame(renderSparks);
-            } else {
-                isEngineRunning = false;
-                mCtx.clearRect(0, 0, mWidth, mHeight);
-            }
-        }
-
-        function startEngine() {
-            if (!isEngineRunning) {
-                isEngineRunning = true;
-                sparksRaf = requestAnimationFrame(renderSparks);
-            }
-        }
-
+    if (wordItems.length > 0) {
         wordItems.forEach((item) => {
+            let itemRaf = null;
+
             item.addEventListener('mouseenter', () => {
-                resizeMottoCanvas();
-                activeWord = item;
-                triggerSparks(item, true);
-                startEngine();
+                item.style.transition = 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease';
             });
 
             item.addEventListener('mousemove', (e) => {
-                const rect = item.getBoundingClientRect();
-                const normX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-                const normY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-                item.style.transform = `translateZ(28px) scale(1.15) rotateX(${(-normY * 18).toFixed(1)}deg) rotateY(${(normX * 22).toFixed(1)}deg)`;
-                if (!isEngineRunning) {
-                    startEngine();
-                }
+                if (itemRaf) cancelAnimationFrame(itemRaf);
+
+                itemRaf = requestAnimationFrame(() => {
+                    const rect = item.getBoundingClientRect();
+                    const normX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+                    const normY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+
+                    const transX = (normX * 12).toFixed(1);
+                    const transY = (normY * 8).toFixed(1);
+                    const rotX = (-normY * 26).toFixed(1);
+                    const rotY = (normX * 30).toFixed(1);
+
+                    item.style.transform = `translate3d(${transX}px, ${transY}px, 70px) scale(1.42) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+                });
             });
 
             item.addEventListener('mouseleave', () => {
+                if (itemRaf) cancelAnimationFrame(itemRaf);
+                item.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease';
                 item.style.transform = '';
-                if (activeWord === item) {
-                    activeWord = null;
-                }
-            });
-
-            item.addEventListener('focus', () => {
-                resizeMottoCanvas();
-                activeWord = item;
-                triggerSparks(item, true);
-                startEngine();
-            });
-
-            item.addEventListener('blur', () => {
-                if (activeWord === item) {
-                    activeWord = null;
-                }
             });
 
             item.addEventListener('touchstart', () => {
-                resizeMottoCanvas();
-                activeWord = item;
-                item.classList.add('active-surge');
-                triggerSparks(item, true);
-                startEngine();
-
-                clearTimeout(surgeTimer);
-                surgeTimer = setTimeout(() => {
-                    item.classList.remove('active-surge');
-                    if (activeWord === item) {
-                        activeWord = null;
-                    }
-                }, 1400);
+                item.style.transform = 'translate3d(0px, -4px, 70px) scale(1.42) rotateX(8deg) rotateY(0deg)';
+                setTimeout(() => {
+                    item.style.transform = '';
+                }, 1500);
             }, { passive: true });
         });
     }
