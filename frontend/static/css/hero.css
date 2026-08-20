@@ -585,6 +585,9 @@
     text-transform: uppercase;
     margin-top: 14px;
     transition: all var(--transition-fast);
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    user-select: none;
 }
 
 .hero-scroll-cue:hover {
@@ -608,6 +611,7 @@
 .task-router-section {
     margin-top: 40px;
     padding-top: 60px;
+    scroll-margin-top: 80px;
     display: flex;
     flex-direction: column;
     gap: 32px;

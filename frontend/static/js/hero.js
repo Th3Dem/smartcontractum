@@ -454,6 +454,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 7. Smooth Anchor Scrolling for Hero Scroll Cue
+    const heroScrollCue = document.querySelector('.hero-scroll-cue');
+    if (heroScrollCue) {
+        heroScrollCue.addEventListener('click', (e) => {
+            const targetHref = heroScrollCue.getAttribute('href');
+            if (targetHref && targetHref.startsWith('#')) {
+                const targetElement = document.querySelector(targetHref);
+                if (targetElement) {
+                    e.preventDefault();
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    if (window.history && window.history.pushState) {
+                        window.history.pushState(null, null, targetHref);
+                    }
+                }
+            }
+        });
+    }
+
     // Initialize stats
     updateSystemStats();
 });

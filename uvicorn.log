@@ -1,0 +1,33 @@
+INFO:     Will watch for changes in these directories: ['/root/projects/smartcontractum']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [207792] using WatchFiles
+INFO:     Started server process [207794]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:39808 - "HEAD / HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:39824 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37118 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37122 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37122 - "GET /static/css/main.css?v=2.6.0 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:37138 - "GET /static/css/hero.css?v=3.7.0 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:37138 - "GET /static/js/hero.js?v=3.7.0 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:37138 - "GET /api/v1/system/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56670 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56670 - "GET /static/css/hero.css?v=3.7.0 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:56674 - "GET /static/js/hero.js?v=3.7.0 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:56674 - "GET /api/v1/system/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43662 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42484 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42484 - "GET /static/css/hero.css?v=3.8.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42486 - "GET /static/js/hero.js?v=3.8.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38578 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39796 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39810 - "GET /static/css/hero.css?v=3.7.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39796 - "GET /static/css/main.css?v=2.6.0 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:39796 - "GET /static/js/hero.js?v=3.7.0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39796 - "GET /api/v1/system/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39004 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39004 - "GET /static/css/main.css?v=2.6.0 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:39010 - "GET /static/css/hero.css?v=3.7.0 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:39010 - "GET /static/js/hero.js?v=3.7.0 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:39010 - "GET /api/v1/system/stats HTTP/1.1" 200 OK

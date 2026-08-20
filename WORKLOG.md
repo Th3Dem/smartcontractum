@@ -848,6 +848,17 @@
 
 ---
 
+
+---
+
+### 2026-08-20 16:37 | FIX_HERO_SCROLL_CUE_ANCHOR: Pointer Events & Smooth Scroll Interceptor
+* **pm_bot (Paula)**: Выявила причину блокировки якорного перехода: родительский контейнер .hero-foreground-content имел pointer-events: none, из-за чего клики по кнопке-якорю «Что вы хотите сделать? ↓» не обрабатывались браузером.
+* **ui_bot**: Установил pointer-events: auto !important и cursor: pointer !important на .hero-scroll-cue, добавил scroll-margin-top: 80px на #taskRouterSection для идеального отступа от липкого хедера и внедрил плавный скролл scrollIntoView({ behavior: 'smooth' }) в hero.js.
+* **py_bot**: Проверил отдачу шаблонов с обновленными ассетами ?v=3.9.0.
+* **qa_bot**: Прогнал полный тестовый контур pytest tests/unit — **40/40 тестов 100% PASSED** (0.73s).
+* **devops_bot**: Синхронизировал релиз в dev -> staging -> main.
+* **Итог релиза:** Якорная кнопка полностью восстановлена и плавно скроллит к блоку задач.
+
 ## 📊 Итоговая матрица качества и покрытия тестами:
 
 | Модуль | Файл тестов | Пройдено | Статус |
