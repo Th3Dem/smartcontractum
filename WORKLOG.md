@@ -718,6 +718,20 @@
 * **`seo_bot`**: Проверил семантическую документацию.
 * **`load_bot`**: Подтвердил готовность модуля `load_qa_bot`.
 * **`ai_bot`**: Проверил конфигурацию Circuit Breaker.
+* **Итог релиза:** Коммит `12ab914` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
+
+---
+
+### 2026-08-20 11:24 | FACTORY_GLOBAL_CORE_ARCHITECTURE: Global /_core_agents/ over projects/ Directory
+* **`pm_bot`**: Перенесла универсальное Инженерное Ядро `/_core_agents/` на глобальный уровень Фабрики Проектов (`/root/_core_agents/`), параллельно директории `projects/`. Внутри проекта `smartcontractum/` зафиксированы проектные боты в `/agents/` и локальные конфигурационные манифесты (`AGENTS.md`, `SETTINGS.md`, `SOUL.md`).
+* **`py_bot`**: Подтвердил автономность серверного ядра платформы `smartcontractum`.
+* **`ui_bot`**: Зафиксировал локализацию интерфейсного модуля в `projects/smartcontractum/agents/ui_bot/`.
+* **`qa_bot`**: Прогнал полный тестовый контур `pytest tests/unit` — **40/40 тестов 100% PASSED** (0.59s).
+* **`devops_bot`**: Выполнил синхронизацию Git-репозитория по цепочке `dev` $\to$ `staging` $\to$ `main`.
+* **`design_bot`**: Зафиксировал локализацию дизайн-модуля в `projects/smartcontractum/agents/design_bot/`.
+* **`seo_bot`**: Зафиксировал локализацию SEO-модуля в `projects/smartcontractum/agents/seo_bot/`.
+* **`load_bot`**: Подтвердил готовность нагрузочного модуля `projects/smartcontractum/agents/load_qa_bot/`.
+* **`ai_bot`**: Зафиксировал локализацию ИИ-модуля в `projects/smartcontractum/agents/ai_bot/`.
 * **Итог релиза:** Коммит зафиксирован и запушен в ветку `dev` и синхронизирован с `staging` и `main`.
 
 ---
