@@ -411,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
         animateShards();
     }
 
-    // 6. Interactive 3D Mission Motto & Screen-Wide Electrical Lightning Storm Engine
+    // 6. Interactive 3D Mission Motto & Elegant Cyber Sparks / Stardust Particle Engine
     const mottoCanvas = document.getElementById('mottoLightningCanvas');
     const mottoPill = document.getElementById('heroEyebrow');
     const wordItems = document.querySelectorAll('.eyebrow-word-item');
@@ -422,9 +422,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let mHeight = window.innerHeight;
         let activeWord = null;
         let isEngineRunning = false;
-        let lightningRaf = null;
+        let sparksRaf = null;
         let sparks = [];
-        let bolts = [];
+        let microArcs = [];
         let shockwaves = [];
         let surgeTimer = null;
 
@@ -443,177 +443,118 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('resize', resizeMottoCanvas, { passive: true });
         window.addEventListener('load', resizeMottoCanvas, { passive: true });
 
-        // Helper: create fractal lightning path via recursive midpoint displacement
-        function createLightningPath(x1, y1, x2, y2, displace, iterations) {
-            let points = [{ x: x1, y: y1 }, { x: x2, y: y2 }];
-            for (let i = 0; i < iterations; i++) {
-                let newPoints = [];
-                for (let j = 0; j < points.length - 1; j++) {
-                    const p1 = points[j];
-                    const p2 = points[j + 1];
-                    const midX = (p1.x + p2.x) / 2;
-                    const midY = (p1.y + p2.y) / 2;
-                    const normalX = -(p2.y - p1.y);
-                    const normalY = (p2.x - p1.x);
-                    const len = Math.hypot(normalX, normalY) || 1;
-                    const offset = (Math.random() - 0.5) * displace * Math.pow(0.58, i);
-                    newPoints.push(p1);
-                    newPoints.push({
-                        x: midX + (normalX / len) * offset,
-                        y: midY + (normalY / len) * offset
-                    });
-                }
-                newPoints.push(points[points.length - 1]);
-                points = newPoints;
-            }
-            return points;
-        }
+        // Palette definitions for pure neon aesthetics
+        const wordPalettes = {
+            'ideas': ['#38bdf8', '#60a5fa', '#3861fb', '#ffffff'],
+            'people': ['#16c784', '#34d399', '#10b981', '#ffffff'],
+            'data': ['#f6b83f', '#fbbf24', '#f59e0b', '#ffffff'],
+            'solutions': ['#c084fc', '#e879f9', '#a855f7', '#ffffff']
+        };
 
-        class LightningBolt {
-            constructor(startX, startY, endX, endY, color, tier = 0) {
-                this.color = color || '#38bdf8';
-                this.tier = tier;
-                const iterations = tier === 0 ? 6 : (tier === 1 ? 5 : 4);
-                const displace = tier === 0 ? 65 : (tier === 1 ? 38 : 20);
-                this.path = createLightningPath(startX, startY, endX, endY, displace, iterations);
-                this.life = 1.0;
-                this.decay = Math.random() * 0.10 + 0.06;
-                this.width = tier === 0 ? (Math.random() * 3.0 + 2.2) : (tier === 1 ? (Math.random() * 1.8 + 1.2) : 0.9);
-                this.branches = [];
-
-                // Sub-branches
-                if (tier < 2 && Math.random() > 0.20 && this.path.length > 5) {
-                    const branchCount = Math.floor(Math.random() * 2) + 1;
-                    for (let b = 0; b < branchCount; b++) {
-                        const branchIdx = Math.floor(Math.random() * (this.path.length - 4)) + 2;
-                        const bp = this.path[branchIdx];
-                        const baseAngle = Math.atan2(endY - startY, endX - startX);
-                        const angle = baseAngle + (Math.random() - 0.5) * 1.6;
-                        const fullDist = Math.hypot(endX - startX, endY - startY);
-                        const branchLen = fullDist * (Math.random() * 0.55 + 0.3);
-                        const bx2 = bp.x + Math.cos(angle) * branchLen;
-                        const by2 = bp.y + Math.sin(angle) * branchLen;
-                        this.branches.push(new LightningBolt(bp.x, bp.y, bx2, by2, this.color, tier + 1));
-                    }
-                }
-            }
-
-            update() {
-                this.life -= this.decay;
-                for (let b of this.branches) {
-                    b.update();
-                }
-            }
-
-            draw(ctx) {
-                if (this.life <= 0 || this.path.length < 2) return;
-                ctx.save();
-                ctx.lineCap = 'round';
-                ctx.lineJoin = 'round';
-
-                // Layer 1: Wide Outer Atmospheric Neon Bloom
-                ctx.strokeStyle = this.color;
-                ctx.lineWidth = this.width * 5.5;
-                ctx.globalAlpha = Math.max(0, this.life * 0.4);
-                ctx.shadowColor = this.color;
-                ctx.shadowBlur = 24;
-                ctx.beginPath();
-                ctx.moveTo(this.path[0].x, this.path[0].y);
-                for (let i = 1; i < this.path.length; i++) {
-                    ctx.lineTo(this.path[i].x, this.path[i].y);
-                }
-                ctx.stroke();
-
-                // Layer 2: Main Plasma Body Channel
-                ctx.strokeStyle = this.color;
-                ctx.lineWidth = this.width * 2.4;
-                ctx.globalAlpha = Math.max(0, this.life * 0.88);
-                ctx.shadowBlur = 12;
-                ctx.stroke();
-
-                // Layer 3: Hot Blinding White-Cyan Core
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = Math.max(1.4, this.width * 0.8);
-                ctx.globalAlpha = Math.max(0, this.life * 0.98);
-                ctx.shadowBlur = 6;
-                ctx.stroke();
-
-                ctx.restore();
-
-                for (let b of this.branches) {
-                    b.draw(ctx);
-                }
-            }
-        }
-
-        class ElectricalSpark {
-            constructor(x, y, color, highSpeed = false) {
+        class CyberSpark {
+            constructor(x, y, wordKey, highSpeed = false) {
                 this.x = x;
                 this.y = y;
                 this.lastX = x;
                 this.lastY = y;
-                this.color = color || '#38bdf8';
+                const palette = wordPalettes[wordKey] || wordPalettes['ideas'];
+                this.color = palette[Math.floor(Math.random() * palette.length)];
+
                 const angle = Math.random() * Math.PI * 2;
-                const speed = highSpeed ? (Math.random() * 18 + 8) : (Math.random() * 11 + 4.5);
+                const speed = highSpeed
+                    ? (Math.random() * 12 + 5.0)
+                    : (Math.random() * 6.5 + 2.0);
+
                 this.vx = Math.cos(angle) * speed;
-                this.vy = Math.sin(angle) * speed - (Math.random() * 2.8);
+                this.vy = Math.sin(angle) * speed - (Math.random() * 1.8);
                 this.life = 1.0;
-                this.decay = Math.random() * 0.03 + 0.018;
-                this.size = Math.random() * 3.2 + 1.4;
-                this.gravity = 0.12;
+                this.decay = Math.random() * 0.024 + 0.015;
+                this.size = Math.random() * 2.8 + 1.2;
+                this.twinklePhase = Math.random() * Math.PI * 2;
+                this.flutter = (Math.random() - 0.5) * 0.2;
+                this.type = Math.random() > 0.4 ? 'streak' : 'stardust'; // Streak or soft dot
             }
 
             update() {
                 this.lastX = this.x;
                 this.lastY = this.y;
+
                 this.x += this.vx;
                 this.y += this.vy;
-                this.vy += this.gravity;
-                this.vx *= 0.95;
-                this.vy *= 0.95;
+
+                // Gentle air resistance & micro-buoyancy
+                this.vx *= 0.96;
+                this.vy = this.vy * 0.96 + 0.03 + Math.sin(this.life * 10) * this.flutter;
+                this.twinklePhase += 0.2;
                 this.life -= this.decay;
             }
 
             draw(ctx) {
                 if (this.life <= 0) return;
+                const alpha = Math.max(0, this.life);
+                const twinkle = Math.sin(this.twinklePhase) * 0.3 + 0.7;
+                const currentAlpha = alpha * twinkle;
+
                 ctx.save();
+                if (this.type === 'streak') {
+                    // Fine Luminous Neon Motion Streak
+                    ctx.strokeStyle = this.color;
+                    ctx.lineWidth = this.size * 0.85;
+                    ctx.lineCap = 'round';
+                    ctx.globalAlpha = currentAlpha * 0.85;
+                    ctx.shadowColor = this.color;
+                    ctx.shadowBlur = 8;
+                    ctx.beginPath();
+                    ctx.moveTo(this.lastX, this.lastY);
+                    ctx.lineTo(this.x, this.y);
+                    ctx.stroke();
 
-                // Motion Blur Streak
-                ctx.strokeStyle = this.color;
-                ctx.lineWidth = this.size;
-                ctx.lineCap = 'round';
-                ctx.globalAlpha = Math.max(0, this.life * 0.9);
-                ctx.shadowColor = this.color;
-                ctx.shadowBlur = 14;
-                ctx.beginPath();
-                ctx.moveTo(this.lastX, this.lastY);
-                ctx.lineTo(this.x, this.y);
-                ctx.stroke();
+                    // Sparkling White Head
+                    ctx.fillStyle = '#ffffff';
+                    ctx.globalAlpha = currentAlpha;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 0.45, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
+                    // Soft Glowing Stardust Orb
+                    ctx.fillStyle = this.color;
+                    ctx.globalAlpha = currentAlpha * 0.5;
+                    ctx.shadowColor = this.color;
+                    ctx.shadowBlur = 12;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 1.5, 0, Math.PI * 2);
+                    ctx.fill();
 
-                // Spark Head Glow
-                ctx.fillStyle = '#ffffff';
-                ctx.globalAlpha = Math.max(0, this.life * 0.98);
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size * 0.55, 0, Math.PI * 2);
-                ctx.fill();
-
+                    ctx.fillStyle = '#ffffff';
+                    ctx.globalAlpha = currentAlpha * 0.95;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 0.6, 0, Math.PI * 2);
+                    ctx.fill();
+                }
                 ctx.restore();
             }
         }
 
-        class PlasmaShockwave {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                this.radius = 12;
-                this.maxRadius = Math.random() * 280 + 220;
+        // Delicate Micro-Energy Arc along the word border (subtle, non-intrusive)
+        class MicroArc {
+            constructor(x, y, wordKey) {
+                this.startX = x;
+                this.startY = y;
+                const palette = wordPalettes[wordKey] || wordPalettes['ideas'];
+                this.color = palette[0];
+                const angle = Math.random() * Math.PI * 2;
+                const len = Math.random() * 20 + 10;
+                this.endX = x + Math.cos(angle) * len;
+                this.endY = y + Math.sin(angle) * len;
+
+                const midX = (this.startX + this.endX) / 2 + (Math.random() - 0.5) * 8;
+                const midY = (this.startY + this.endY) / 2 + (Math.random() - 0.5) * 8;
+                this.points = [{ x: this.startX, y: this.startY }, { x: midX, y: midY }, { x: this.endX, y: this.endY }];
                 this.life = 1.0;
-                this.decay = 0.04;
+                this.decay = 0.18;
             }
 
             update() {
-                this.radius += (this.maxRadius - this.radius) * 0.14;
                 this.life -= this.decay;
             }
 
@@ -621,10 +562,49 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (this.life <= 0) return;
                 ctx.save();
                 ctx.strokeStyle = this.color;
-                ctx.lineWidth = 3.0 * this.life;
-                ctx.globalAlpha = Math.max(0, this.life * 0.7);
+                ctx.lineWidth = 1.4;
+                ctx.lineCap = 'round';
+                ctx.globalAlpha = this.life * 0.75;
                 ctx.shadowColor = this.color;
-                ctx.shadowBlur = 20;
+                ctx.shadowBlur = 8;
+                ctx.beginPath();
+                ctx.moveTo(this.points[0].x, this.points[0].y);
+                ctx.lineTo(this.points[1].x, this.points[1].y);
+                ctx.lineTo(this.points[2].x, this.points[2].y);
+                ctx.stroke();
+
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 0.8;
+                ctx.globalAlpha = this.life * 0.9;
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        class SubtleShockwave {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.radius = 8;
+                this.maxRadius = Math.random() * 120 + 90;
+                this.life = 1.0;
+                this.decay = 0.055;
+            }
+
+            update() {
+                this.radius += (this.maxRadius - this.radius) * 0.16;
+                this.life -= this.decay;
+            }
+
+            draw(ctx) {
+                if (this.life <= 0) return;
+                ctx.save();
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 1.6 * this.life;
+                ctx.globalAlpha = this.life * 0.5;
+                ctx.shadowColor = this.color;
+                ctx.shadowBlur = 10;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                 ctx.stroke();
@@ -632,67 +612,44 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        function triggerScreenStorm(wordElem, isBurst = false) {
+        function triggerSparks(wordElem, isBurst = false) {
             const hBanner = document.getElementById('heroBanner') || document.querySelector('.hero-3d-banner');
             if (!wordElem || !hBanner) return;
 
             const bRect = hBanner.getBoundingClientRect();
             const wRect = wordElem.getBoundingClientRect();
+            const wordKey = wordElem.getAttribute('data-word') || 'ideas';
             const color = wordElem.getAttribute('data-color') || '#38bdf8';
 
             const startX = wRect.left - bRect.left + wRect.width / 2;
             const startY = wRect.top - bRect.top + wRect.height / 2;
-            const cubeCenterX = mWidth / 2;
-            const cubeCenterY = mHeight / 2;
 
             if (isBurst) {
-                shockwaves.push(new PlasmaShockwave(startX, startY, color));
+                shockwaves.push(new SubtleShockwave(startX, startY, color));
             }
 
-            // 1. Screen-Wide Sky & Ground Lightning Bolts (Lengths 350px - 1100px)
-            const boltCount = isBurst ? (Math.floor(Math.random() * 4) + 6) : (Math.floor(Math.random() * 3) + 3);
-            for (let i = 0; i < boltCount; i++) {
-                let targetX, targetY;
-                const mode = Math.random();
-
-                if (mode > 0.65) {
-                    // Strike towards 3D Cube Core in center
-                    const cubeJitterX = (Math.random() - 0.5) * 180;
-                    const cubeJitterY = (Math.random() - 0.5) * 180;
-                    targetX = cubeCenterX + cubeJitterX;
-                    targetY = cubeCenterY + cubeJitterY;
-                } else if (mode > 0.35) {
-                    // Strike towards screen edges / corners
-                    const angle = Math.random() * Math.PI * 2;
-                    const dist = Math.random() * (mWidth * 0.6) + 320;
-                    targetX = startX + Math.cos(angle) * dist;
-                    targetY = startY + Math.sin(angle) * dist;
-                } else {
-                    // Skyward or downward sweeping arc
-                    const angle = (Math.random() > 0.5 ? -Math.PI / 2 : Math.PI / 2) + (Math.random() - 0.5) * 1.8;
-                    const dist = Math.random() * 520 + 280;
-                    targetX = startX + Math.cos(angle) * dist;
-                    targetY = startY + Math.sin(angle) * dist;
-                }
-
-                bolts.push(new LightningBolt(startX, startY, targetX, targetY, color));
-            }
-
-            // 2. High-Velocity Sparks Exploding Across Screen (20 - 45 particles)
-            const sparkCount = isBurst ? (Math.floor(Math.random() * 25) + 30) : (Math.floor(Math.random() * 10) + 12);
-            for (let i = 0; i < sparkCount; i++) {
+            // Spawn elegant sparks
+            const count = isBurst ? 22 : (Math.floor(Math.random() * 3) + 2);
+            for (let i = 0; i < count; i++) {
                 const sx = startX + (Math.random() - 0.5) * wRect.width;
                 const sy = startY + (Math.random() - 0.5) * wRect.height;
-                sparks.push(new ElectricalSpark(sx, sy, color, isBurst));
+                sparks.push(new CyberSpark(sx, sy, wordKey, isBurst));
+            }
+
+            // Occasional micro-energy crackle at the edge
+            if (Math.random() > 0.5) {
+                const mx = startX + (Math.random() - 0.5) * wRect.width;
+                const my = startY + (Math.random() - 0.5) * wRect.height;
+                microArcs.push(new MicroArc(mx, my, wordKey));
             }
         }
 
-        function renderLightning() {
+        function renderSparks() {
             mCtx.clearRect(0, 0, mWidth, mHeight);
 
-            // Continuously spawn lightning storm if word is actively hovered
-            if (activeWord) {
-                triggerScreenStorm(activeWord, false);
+            // Continuously emit delicate sparks while hovered
+            if (activeWord && Math.random() > 0.25) {
+                triggerSparks(activeWord, false);
             }
 
             // Update & Draw shockwaves
@@ -704,12 +661,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Update & Draw bolts
-            for (let i = bolts.length - 1; i >= 0; i--) {
-                bolts[i].update();
-                bolts[i].draw(mCtx);
-                if (bolts[i].life <= 0) {
-                    bolts.splice(i, 1);
+            // Update & Draw micro-arcs
+            for (let i = microArcs.length - 1; i >= 0; i--) {
+                microArcs[i].update();
+                microArcs[i].draw(mCtx);
+                if (microArcs[i].life <= 0) {
+                    microArcs.splice(i, 1);
                 }
             }
 
@@ -722,8 +679,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            if (bolts.length > 0 || sparks.length > 0 || shockwaves.length > 0 || activeWord !== null) {
-                lightningRaf = requestAnimationFrame(renderLightning);
+            if (sparks.length > 0 || microArcs.length > 0 || shockwaves.length > 0 || activeWord !== null) {
+                sparksRaf = requestAnimationFrame(renderSparks);
             } else {
                 isEngineRunning = false;
                 mCtx.clearRect(0, 0, mWidth, mHeight);
@@ -733,7 +690,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function startEngine() {
             if (!isEngineRunning) {
                 isEngineRunning = true;
-                lightningRaf = requestAnimationFrame(renderLightning);
+                sparksRaf = requestAnimationFrame(renderSparks);
             }
         }
 
@@ -741,7 +698,7 @@ document.addEventListener('DOMContentLoaded', () => {
             item.addEventListener('mouseenter', () => {
                 resizeMottoCanvas();
                 activeWord = item;
-                triggerScreenStorm(item, true);
+                triggerSparks(item, true);
                 startEngine();
             });
 
@@ -765,7 +722,7 @@ document.addEventListener('DOMContentLoaded', () => {
             item.addEventListener('focus', () => {
                 resizeMottoCanvas();
                 activeWord = item;
-                triggerScreenStorm(item, true);
+                triggerSparks(item, true);
                 startEngine();
             });
 
@@ -779,8 +736,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 resizeMottoCanvas();
                 activeWord = item;
                 item.classList.add('active-surge');
-                triggerScreenStorm(item, true);
-                triggerScreenStorm(item, true);
+                triggerSparks(item, true);
                 startEngine();
 
                 clearTimeout(surgeTimer);
@@ -789,7 +745,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (activeWord === item) {
                         activeWord = null;
                     }
-                }, 1600);
+                }, 1400);
             }, { passive: true });
         });
     }
