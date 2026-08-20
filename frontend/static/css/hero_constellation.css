@@ -1,6 +1,6 @@
 /* ======================================================================
    SmartContractum — Centered Node Constellation Graph Stylesheet
-   Design System: Top Centered Icon+Title | Mid Desc | Bottom Sub-Badge
+   Design System: Larger Bold Titles + Compact Line-Height + 3D Glass
    File: frontend/static/css/hero_constellation.css
 ====================================================================== */
 
@@ -30,13 +30,13 @@
 }
 
 /* ----------------------------------------------------------------------
-   CONSTELLATION MAIN CONTAINER & CANVAS (1260px ORBIT)
+   CONSTELLATION MAIN CONTAINER & CANVAS (1280px ORBIT)
 ----------------------------------------------------------------------- */
 .constellation-container {
     position: relative;
     width: 100%;
-    max-width: 1260px;
-    height: 600px;
+    max-width: 1280px;
+    height: 590px;
     margin: 10px auto;
     display: flex;
     align-items: center;
@@ -120,7 +120,7 @@
 }
 
 /* ----------------------------------------------------------------------
-   1.2 CIRCULAR RADIAL RING (CENTERED CONTENT & 1-LINE TITLES)
+   1.2 CIRCULAR RADIAL RING (CENTERED CONTENT & ENLARGED TITLES)
 ----------------------------------------------------------------------- */
 .constellation-radial-ring {
     position: absolute;
@@ -135,9 +135,9 @@
 /* Expanded 3D Cards */
 .constellation-satellite-card {
     position: absolute;
-    width: 430px;
-    min-height: 130px;
-    height: 130px;
+    width: 440px;
+    min-height: 126px;
+    height: 126px;
     box-sizing: border-box;
     display: block;
     text-decoration: none;
@@ -156,7 +156,7 @@
 /* Node 1: Top-Left */
 .node-pos-1 {
     top: 15px;
-    left: calc(50% - 430px - 20px);
+    left: calc(50% - 440px - 20px);
 }
 
 /* Node 2: Top-Right (40px gap from Node 1) */
@@ -188,7 +188,7 @@
 /* Node 5: Bottom-Left */
 .node-pos-5 {
     bottom: 15px;
-    left: calc(50% - 430px - 20px);
+    left: calc(50% - 440px - 20px);
 }
 
 /* Node 6: Bottom-Right (40px gap from Node 5) */
@@ -201,11 +201,11 @@
 .satellite-card-inner {
     width: 100%;
     height: 100%;
-    min-height: 130px;
+    min-height: 126px;
     background: linear-gradient(145deg, rgba(30, 41, 59, 0.92) 0%, rgba(15, 23, 42, 0.97) 100%);
     border: 1.5px solid rgba(255, 255, 255, 0.12);
     border-radius: 18px;
-    padding: 13px 16px 11px 16px;
+    padding: 10px 14px 8px 14px;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), inset 0 1px 2px rgba(255, 255, 255, 0.25), inset 0 -2px 6px rgba(0, 0, 0, 0.5);
@@ -214,6 +214,7 @@
     justify-content: space-between;
     align-items: center;
     text-align: center;
+    gap: 3px;
     box-sizing: border-box;
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -250,22 +251,23 @@
 .glow-sky { border-color: rgba(2, 132, 199, 0.55); box-shadow: 0 0 12px rgba(2, 132, 199, 0.4); }
 .glow-gold { border-color: rgba(236, 72, 153, 0.55); box-shadow: 0 0 12px rgba(236, 72, 153, 0.4); }
 
-/* Centered Title (Strict Single Line) */
+/* Centered Title (Enlarged to 1.08rem, Compact Line-Height) */
 .satellite-title {
-    font-size: 1.02rem;
+    font-size: 1.08rem;
     font-weight: 800;
     color: #ffffff;
     margin: 0;
-    line-height: 1.2;
+    line-height: 1.15;
     white-space: nowrap;
     text-align: center;
+    letter-spacing: -0.2px;
 }
 
-/* 2. Middle Row: Centered Description */
+/* 2. Middle Row: Centered Compact Description */
 .satellite-desc {
     font-size: 0.80rem;
     color: #94a3b8;
-    line-height: 1.35;
+    line-height: 1.25;
     margin: 0;
     text-align: center;
     white-space: normal;
