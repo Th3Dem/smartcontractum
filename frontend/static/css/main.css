@@ -310,7 +310,7 @@ ul {
     font-size: 1rem;
 }
 
-/* Header User Login Button */
+/* Header User Login / Profile Action Button */
 .header-user-bar {
     display: flex;
     align-items: center;
@@ -320,26 +320,107 @@ ul {
 .header-login-action-btn {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 18px;
-    background: var(--accent-blue);
+    gap: 10px;
+    padding: 6px 16px 6px 8px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.16) 0%, rgba(6, 182, 212, 0.10) 100%);
+    border: 1px solid rgba(56, 189, 248, 0.35);
     color: #ffffff;
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     font-weight: 700;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-full);
     text-decoration: none;
-    box-shadow: 0 4px 12px rgba(56, 97, 251, 0.3);
-    transition: all var(--transition-fast);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.header-login-action-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    z-index: 0;
+}
+
+.header-login-action-btn > * {
+    position: relative;
+    z-index: 1;
 }
 
 .header-login-action-btn:hover {
-    background: var(--accent-blue-hover);
+    border-color: rgba(56, 189, 248, 0.85);
+    box-shadow: 0 0 18px rgba(56, 189, 248, 0.40), 0 4px 14px rgba(0, 0, 0, 0.35);
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(56, 97, 251, 0.45);
+    color: #ffffff;
 }
 
-.btn-user-icon {
-    font-size: 1rem;
+.header-login-action-btn:hover::before {
+    opacity: 0.22;
+}
+
+.header-login-action-btn:active {
+    transform: translateY(0);
+}
+
+.btn-user-avatar-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3861fb 0%, #38bdf8 100%);
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+    flex-shrink: 0;
+}
+
+.btn-user-svg {
+    width: 15px;
+    height: 15px;
+}
+
+.btn-user-status-dot {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    border: 1.5px solid #0b1426;
+    box-shadow: 0 0 6px #10b981;
+}
+
+.btn-user-label {
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: #f1f5f9;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+}
+
+.header-login-action-btn:hover .btn-user-label {
+    color: #ffffff;
+}
+
+.btn-user-arrow {
+    width: 12px;
+    height: 12px;
+    color: #94a3b8;
+    transition: transform 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.header-login-action-btn:hover .btn-user-arrow {
+    color: #38bdf8;
+    transform: translateX(2px);
 }
 
 /* Mobile Hamburger Toggle */
