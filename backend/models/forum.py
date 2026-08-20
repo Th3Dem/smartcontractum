@@ -200,6 +200,28 @@ class CommentResponse(BaseModel):
     message: str = "success"
 
 
+class DraftSaveRequest(BaseModel):
+    title: Optional[str] = Field(default="", description="Draft title")
+    body: Optional[str] = Field(default="", description="Draft content")
+    category_slug: Optional[str] = Field(default="smart-contracts")
+    hubs: List[str] = Field(default_factory=list)
+    tags: List[str] = Field(default_factory=list)
+    code_snippet: Optional[str] = None
+    code_language: Optional[str] = "solidity"
+    author_role: Optional[str] = "Разработчик"
+    timestamp: Optional[str] = None
+
+
+class DraftResponse(BaseModel):
+    draft: Optional[DraftSaveRequest] = None
+    has_draft: bool = False
+    message: str = "success"
+
+
+class DraftDeleteResponse(BaseModel):
+    message: str = "draft deleted"
+
+
 def generate_snippet(body_text: str, max_chars: int = 250) -> str:
     plain = re.sub(r"<[^>]+>", "", body_text)
     plain = re.sub(r"\s+", " ", plain).strip()

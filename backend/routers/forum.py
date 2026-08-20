@@ -10,6 +10,9 @@ from backend.models.forum import (
     Comment,
     CommentCreateRequest,
     CommentResponse,
+    DraftDeleteResponse,
+    DraftResponse,
+    DraftSaveRequest,
     Topic,
     TopicCreateRequest,
     TopicListResponse,
@@ -817,3 +820,46 @@ async def render_article_editor_page(request: Request) -> Response:
         name="forum/editor.html",
         context=context,
     )
+
+
+# ======================================================================
+# ARTICLE DRAFT STORAGE API
+# ======================================================================
+
+_GLOBAL_DRAFT: Optional[DraftSaveRequest] = None
+
+
+@router.post(
+    "/api/v1/forum/drafts",
+    response_model=DraftResponse,
+    summary="Save article draft to server",
+)
+async def save_article_draft(payload: DraftSaveRequest) -> DraftResponse:
+    """Persist the current article draft."""
+    global _GLOBAL_DRAFT
+    _GLOBAL_DRAFT = payload
+    return DraftResponse(draft=_GLOBAL_DRAFT, has_draft=True, message="Draft saved successfully")
+
+
+@router.get(
+    "/api/v1/forum/drafts",
+    response_model=DraftResponse,
+    summary="Get saved article draft",
+)
+async def get_article_draft() -> DraftResponse:
+    """Retrieve the latest saved article draft."""
+    if _GLOBAL_DRAFT:
+        return DraftResponse(draft=_GLOBAL_DRAFT, has_draft=True, message="Draft retrieved")
+    return DraftResponse(draft=None, has_draft=False, message="No draft found")
+
+
+@router.delete(
+    "/api/v1/forum/drafts",
+    response_model=DraftDeleteResponse,
+    summary="Clear saved article draft",
+)
+async def clear_article_draft() -> DraftDeleteResponse:
+    """Clear the stored article draft upon publication."""
+    global _GLOBAL_DRAFT
+    _GLOBAL_DRAFT = None
+    return DraftDeleteResponse(message="Draft cleared successfully")

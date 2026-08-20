@@ -247,25 +247,81 @@ def test_render_habr_article_editor_page() -> None:
     assert "text/html" in response.headers.get("content-type", "")
 
     html = response.text
-    # 1. Header & Title
+    # 1. Header, Title & Segmented View Switcher
     assert "Создание статьи" in html
+    assert "sc-segmented-nav" in html
+    assert "btnViewEditor" in html
+    assert "btnViewPreview" in html
+    assert "btnViewSplit" in html
     assert "WYSIWYG" in html
     assert "Markdown" in html
     assert "Сохранено в черновиках" in html
 
-    # 2. Main Writing Area
+    # 2. Main Writing Area & Floating / Block Components
     assert "articleTitleInput" in html
     assert "editorCanvas" in html
     assert "rawMarkdownEditor" in html
     assert "formatToolbar" in html
+    assert "scFloatingToolbar" in html
+    assert "scBlockHandle" in html
+    assert "scBlockActionMenu" in html
+    assert "scTableQuickToolbar" in html
 
-    # 3. Sidebar Widgets
+    # 3. Live Preview Components & SEO
+    assert "editorStepPreview" in html
+    assert "editorSplitPreviewPane" in html
+    assert "sc-preview-article" in html
+    assert "og:title" in html
+    assert "application/ld+json" in html
+
+    # 4. Sidebar Widgets
     assert "О песочнице" in html
     assert "Типограф" in html
     assert "Памятка автору" in html
     assert "О модерации" in html
 
-    # 4. Alias Route /articles/create
+    # 5. Alias Route /articles/create
     alias_resp = client.get("/articles/create")
     assert alias_resp.status_code == 200
     assert "Создание статьи" in alias_resp.text
+
+
+def test_article_draft_api_crud_flow() -> None:
+    """Verify full CRUD lifecycle for server draft storage."""
+    # 1. Initially clear draft
+    del_resp = client.delete("/api/v1/forum/drafts")
+    assert del_resp.status_code == 200
+
+    # 2. Get draft (empty)
+    get_resp = client.get("/api/v1/forum/drafts")
+    assert get_resp.status_code == 200
+    assert get_resp.json()["has_draft"] is False
+
+    # 3. Save draft
+    draft_payload = {
+        "title": "Архитектура смарт-контрактов для ПКСК 2026",
+        "body": "<p>Подробный разбор взаимодействия с контуром Банка России...</p>",
+        "category_slug": "smart-contracts",
+        "hubs": ["smart-contracts"],
+        "tags": ["Solidity", "ПКСК_2026"],
+        "author_role": "Разработчик",
+        "timestamp": "12:30",
+    }
+    save_resp = client.post("/api/v1/forum/drafts", json=draft_payload)
+    assert save_resp.status_code == 200
+    save_data = save_resp.json()
+    assert save_data["has_draft"] is True
+    assert save_data["draft"]["title"] == "Архитектура смарт-контрактов для ПКСК 2026"
+
+    # 4. Retrieve saved draft
+    get_saved = client.get("/api/v1/forum/drafts")
+    assert get_saved.status_code == 200
+    get_data = get_saved.json()
+    assert get_data["has_draft"] is True
+    assert get_data["draft"]["title"] == "Архитектура смарт-контрактов для ПКСК 2026"
+    assert get_data["draft"]["category_slug"] == "smart-contracts"
+
+    # 5. Clear draft
+    del_again = client.delete("/api/v1/forum/drafts")
+    assert del_again.status_code == 200
+    assert client.get("/api/v1/forum/drafts").json()["has_draft"] is False

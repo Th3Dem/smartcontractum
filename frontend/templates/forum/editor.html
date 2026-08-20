@@ -3,7 +3,40 @@
 {% block title %}Создание статьи / Хабр-ПКСК — SmartContractum | Полнофункциональный редактор{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_editor.css?v=2.0.0">
+<!-- SEO & OpenGraph Meta Tags -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="Создание статьи / Хабр-ПКСК — SmartContractum">
+<meta property="og:description" content="Полнофункциональный редактор публикаций, архитектурных обзоров и спецификаций смарт-контрактов для ПКСК Банка России.">
+<meta property="og:site_name" content="SmartContractum">
+<meta property="og:locale" content="ru_RU">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Создание статьи — SmartContractum Хабр 2.0">
+<meta name="twitter:description" content="Редактор технических статей, смарт-контрактов, формул LaTeX и архитектурных схем.">
+
+<!-- Schema.org JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Создание и публикация технической статьи на SmartContractum",
+  "description": "Профессиональный редактор технических статей экосистемы SmartContractum и ПКСК Банка России.",
+  "author": {
+    "@type": "Organization",
+    "name": "SmartContractum Community"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "SmartContractum",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://smartcontractum.ru/static/img/logo.png"
+    }
+  },
+  "inLanguage": "ru-RU"
+}
+</script>
+
+<link rel="stylesheet" href="/static/css/forum_editor.css?v=2.1.0">
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.add('light-theme-feed');
@@ -15,7 +48,7 @@
 <div class="habr-editor-page-wrapper">
 
     <!-- ================================================================
-         1. SUB-HEADER / TOP TOOLBAR (Создание статьи, WYSIWYG, Автосохранение)
+         1. SUB-HEADER / TOP TOOLBAR (Создание статьи, Режимы отображения, Автосохранение)
     ================================================================= -->
     <header class="habr-editor-topbar">
         <div class="editor-topbar-inner">
@@ -29,6 +62,29 @@
                 <div class="topbar-divider"></div>
                 <h1 class="editor-page-title">Создание статьи</h1>
                 
+                <!-- Segmented View Mode Switcher: [✎ Редактор] [👁 Предпросмотр] [◫ Сплит] -->
+                <div class="sc-segmented-nav" id="editorViewSwitcher" role="tablist" aria-label="Режимы отображения редактора">
+                    <button type="button" class="sc-segmented-btn is-active" data-view="editor" id="btnViewEditor" role="tab" aria-selected="true" title="Полноэкранный редактор">
+                        <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
+                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.886 2.215 2.215-.886.64-.64-1.329-1.329-.64.64z"/>
+                        </svg>
+                        <span>Редактор</span>
+                    </button>
+                    <button type="button" class="sc-segmented-btn" data-view="preview" id="btnViewPreview" role="tab" aria-selected="false" title="Живой предпросмотр статьи">
+                        <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
+                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.133 13.133 0 0 1 1.172 8z"/>
+                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                        </svg>
+                        <span>Предпросмотр</span>
+                    </button>
+                    <button type="button" class="sc-segmented-btn" data-view="split" id="btnViewSplit" role="tab" aria-selected="false" title="Режим разделенного экрана: Редактор + Предпросмотр">
+                        <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
+                            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm7.25 1v10h6.75a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H7.25zm-1.5 0H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3.75V3z"/>
+                        </svg>
+                        <span>Сплит</span>
+                    </button>
+                </div>
+
                 <!-- Switcher Control: WYSIWYG / Markdown -->
                 <div class="editor-mode-switcher">
                     <button type="button" class="mode-switch-btn is-active" id="btnModeWysiwyg" data-mode="wysiwyg" title="Визуальный редактор блоков">
@@ -63,12 +119,12 @@
     </header>
 
     <!-- ================================================================
-         2. MAIN 2-COLUMN GRID (Editor Canvas + Sidebar)
+         2. MAIN MULTI-PANE GRID (Editor Canvas + Preview + Sidebar)
     ================================================================= -->
-    <div class="habr-editor-main-grid">
+    <div class="habr-editor-main-grid" id="editorMainGrid">
 
         <!-- 2.1 MAIN WRITING COLUMN -->
-        <main class="habr-editor-main-column">
+        <main class="habr-editor-main-column" id="editorMainColumn">
 
             <!-- STEP 1: РЕДАКТИРОВАНИЕ ТЕКСТА СТАТЬИ -->
             <div class="editor-step-panel" id="editorStepText">
@@ -203,14 +259,143 @@
                 </div>
 
                 <!-- WYSIWYG Editable Canvas Area -->
-                <div class="habr-editor-canvas" id="editorCanvas" contenteditable="true" 
-                     data-placeholder="Введите текст статьи... Нажмите '/' на новой строке для быстрого вызова меню вставки блоков">
+                <div class="habr-editor-canvas-wrapper" style="position: relative;">
+                    <div class="habr-editor-canvas" id="editorCanvas" contenteditable="true" 
+                         data-placeholder="Введите текст статьи... Нажмите '/' на новой строке для быстрого вызова меню вставки блоков">
+                    </div>
+
+                    <!-- Block Handle (6-dots ⋮⋮) -->
+                    <div class="sc-block-handle" id="scBlockHandle" style="display: none;" title="Действия с блоком" aria-label="Меню блока">
+                        <button type="button" class="sc-handle-btn" id="scHandleTrigger" aria-haspopup="true" aria-expanded="false">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                                <circle cx="5" cy="3" r="1.5"/>
+                                <circle cx="11" cy="3" r="1.5"/>
+                                <circle cx="5" cy="8" r="1.5"/>
+                                <circle cx="11" cy="8" r="1.5"/>
+                                <circle cx="5" cy="13" r="1.5"/>
+                                <circle cx="11" cy="13" r="1.5"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Floating Block Action Menu (#scBlockActionMenu) -->
+                    <div class="sc-block-menu" id="scBlockActionMenu" style="display: none;" role="menu">
+                        <div class="sc-block-menu-section">
+                            <div class="sc-menu-section-title">Перемещение & Действия</div>
+                            <button type="button" class="sc-block-menu-item" data-action="block-move-up" role="menuitem">
+                                <span class="sc-menu-icon">↑</span>
+                                <span>Переместить вверх</span>
+                            </button>
+                            <button type="button" class="sc-block-menu-item" data-action="block-move-down" role="menuitem">
+                                <span class="sc-menu-icon">↓</span>
+                                <span>Переместить вниз</span>
+                            </button>
+                            <button type="button" class="sc-block-menu-item" data-action="block-duplicate" role="menuitem">
+                                <span class="sc-menu-icon">⧉</span>
+                                <span>Дублировать блок</span>
+                            </button>
+                        </div>
+                        <div class="sc-block-menu-divider"></div>
+                        <div class="sc-block-menu-section">
+                            <div class="sc-menu-section-title">Преобразовать в</div>
+                            <button type="button" class="sc-block-menu-item" data-transform="p" role="menuitem">
+                                <span class="sc-menu-icon">¶</span>
+                                <span>Обычный текст (Параграф)</span>
+                            </button>
+                            <button type="button" class="sc-block-menu-item" data-transform="h2" role="menuitem">
+                                <span class="sc-menu-icon">H2</span>
+                                <span>Заголовок H2</span>
+                            </button>
+                            <button type="button" class="sc-block-menu-item" data-transform="h3" role="menuitem">
+                                <span class="sc-menu-icon">H3</span>
+                                <span>Заголовок H3</span>
+                            </button>
+                            <button type="button" class="sc-block-menu-item" data-transform="quote" role="menuitem">
+                                <span class="sc-menu-icon">❝</span>
+                                <span>Цитата</span>
+                            </button>
+                            <button type="button" class="sc-block-menu-item" data-transform="code" role="menuitem">
+                                <span class="sc-menu-icon">&lt;/&gt;</span>
+                                <span>Блок кода</span>
+                            </button>
+                            <button type="button" class="sc-block-menu-item" data-transform="callout" role="menuitem">
+                                <span class="sc-menu-icon">💡</span>
+                                <span>Блок-врезка (Callout)</span>
+                            </button>
+                        </div>
+                        <div class="sc-block-menu-divider"></div>
+                        <div class="sc-block-menu-section">
+                            <button type="button" class="sc-block-menu-item item-danger" data-action="block-delete" role="menuitem">
+                                <span class="sc-menu-icon">🗑</span>
+                                <span>Удалить блок</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Table Interactive Quick Controls (#scTableQuickToolbar) -->
+                    <div class="sc-table-quick-toolbar" id="scTableQuickToolbar" style="display: none;" role="toolbar">
+                        <div class="sc-table-tools-left">
+                            <span class="table-tools-badge">▦ Таблица</span>
+                            <label class="sc-table-chk-label" title="Включить/выключить строку заголовков">
+                                <input type="checkbox" id="tableQuickToggleHeader">
+                                <span>Заголовок</span>
+                            </label>
+                            <label class="sc-table-chk-label" title="Чередовать цвета строк (зебра)">
+                                <input type="checkbox" id="tableQuickToggleZebra">
+                                <span>Зебра</span>
+                            </label>
+                        </div>
+                        <div class="sc-table-tools-divider"></div>
+                        <div class="sc-table-tools-right">
+                            <button type="button" class="sc-table-tool-btn" id="tableQuickBtnAddRow" title="Добавить строку снизу">+ Строка</button>
+                            <button type="button" class="sc-table-tool-btn" id="tableQuickBtnDelRow" title="Удалить текущую строку">- Строка</button>
+                            <button type="button" class="sc-table-tool-btn" id="tableQuickBtnAddCol" title="Добавить колонку справа">+ Колонка</button>
+                            <button type="button" class="sc-table-tool-btn" id="tableQuickBtnDelCol" title="Удалить текущую колонку">- Колонка</button>
+                            <button type="button" class="sc-table-tool-btn btn-table-danger" id="tableQuickBtnDeleteTable" title="Удалить таблицу">✕</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Raw Markdown Textarea (for Markdown mode) -->
                 <textarea class="habr-editor-raw-markdown" id="rawMarkdownEditor" 
                           placeholder="Введите текст статьи в формате Markdown (поддерживаются заголовки ##, цитаты >, таблицы, блоки кода ```solidity, формулы $$E=mc^2$$, спойлеры <details>)..." 
                           style="display: none;"></textarea>
+
+                <!-- Floating Inline Selection Toolbar (#scFloatingToolbar) -->
+                <div class="sc-floating-toolbar" id="scFloatingToolbar" style="display: none;" role="toolbar" aria-label="Панель форматирования выделенного текста">
+                    <div class="sc-inline-btn-group">
+                        <button type="button" class="sc-inline-btn" data-inline-cmd="bold" title="Жирный (Ctrl+B)">
+                            <strong>B</strong>
+                        </button>
+                        <button type="button" class="sc-inline-btn" data-inline-cmd="italic" title="Курсив (Ctrl+I)">
+                            <em>I</em>
+                        </button>
+                        <button type="button" class="sc-inline-btn" data-inline-cmd="strikeThrough" title="Зачеркнутый">
+                            <s>S</s>
+                        </button>
+                        <button type="button" class="sc-inline-btn" data-inline-cmd="code" title="Встроенный код">
+                            <code>&lt;&gt;</code>
+                        </button>
+                        <button type="button" class="sc-inline-btn" data-inline-cmd="marker" title="Выделение маркером">
+                            <span class="sc-marker-icon">🎨</span>
+                        </button>
+                        <button type="button" class="sc-inline-btn" data-inline-action="toggle-link" id="btnInlineLink" title="Вставить ссылку (Ctrl+K)">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
+                                <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"/>
+                                <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 0 0-4.243-4.243L6.586 4.672z"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Link Popover -->
+                    <div class="sc-link-popover" id="scLinkPopover" style="display: none;">
+                        <div class="sc-link-popover-inner">
+                            <input type="url" class="sc-link-input" id="scInlineLinkInput" placeholder="https://smartcontractum.ru/..." />
+                            <button type="button" class="sc-btn-apply-link" id="scBtnApplyLink">Применить</button>
+                            <button type="button" class="sc-btn-unlink" id="scBtnUnlink" title="Удалить ссылку">✕</button>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Floating Slash Quick Menu (Popup on '/' keypress) -->
                 <div class="habr-slash-popup-menu" id="slashPopupMenu" style="display: none;">
@@ -404,10 +589,122 @@
                 </form>
             </div>
 
+            <!-- STEP 3: LIVE PREVIEW TAB CONTAINER (#editorStepPreview) -->
+            <div class="editor-step-panel" id="editorStepPreview" style="display: none;">
+                <div class="preview-panel-header">
+                    <div class="preview-header-meta">
+                        <span class="preview-badge-status">👁 Предварительный просмотр</span>
+                        <span class="preview-badge-pksc">🛡️ ПКСК Банка России: Верифицировано</span>
+                    </div>
+                    <button type="button" class="btn-back-to-editor-from-preview" id="btnBackFromPreview">
+                        <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                            <path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z" clip-rule="evenodd" />
+                        </svg>
+                        <span>Вернуться в редактор</span>
+                    </button>
+                </div>
+
+                <!-- Article Full Preview Card -->
+                <article class="sc-preview-article" id="previewArticleCard">
+                    <!-- Hub / Category & Reading Time -->
+                    <div class="preview-article-top">
+                        <span class="preview-hub-badge" id="previewHubBadge">💻 Разработка смарт-контрактов</span>
+                        <span class="preview-read-time" id="previewReadTime">1 мин чтения</span>
+                    </div>
+
+                    <!-- Article Title -->
+                    <h1 class="preview-article-title" id="previewArticleTitle">Заголовок публикации</h1>
+
+                    <!-- Author Bar -->
+                    <div class="preview-author-bar">
+                        <div class="author-avatar-badge">SC</div>
+                        <div class="author-info-group">
+                            <div class="author-name-row">
+                                <span class="author-name" id="previewAuthorName">ООО Интегратор (Umbrella-Dev)</span>
+                                <span class="author-handle">@SmartContractum</span>
+                                <span class="author-role-chip" id="previewAuthorRole">Разработчик</span>
+                            </div>
+                            <div class="author-date-row">
+                                <span id="previewPublicationDate">Сегодня в 12:00</span>
+                                <span class="dot-sep">•</span>
+                                <span class="preview-karma-badge">+42 репутация</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Article Body Content -->
+                    <div class="preview-article-body" id="previewArticleBody">
+                        <p>Здесь будет отображаться форматированный текст вашей статьи со всеми интерактивными элементами (видеоплееры, таблицы, формулы, подсветка кода).</p>
+                    </div>
+
+                    <!-- Article Tags -->
+                    <div class="preview-tags-section">
+                        <span class="tags-label">Теги публикации:</span>
+                        <div class="preview-tags-list" id="previewTagsList">
+                            <span class="preview-tag-chip">#Solidity</span>
+                            <span class="preview-tag-chip">#ПКСК_2026</span>
+                        </div>
+                    </div>
+
+                    <!-- Author Profile Summary Card in Footer -->
+                    <div class="preview-author-card">
+                        <div class="card-author-left">
+                            <div class="author-big-avatar">SC</div>
+                            <div class="author-bio">
+                                <div class="bio-name">@SmartContractum <span class="badge-verified-mini">✓ Verified PKSC</span></div>
+                                <p class="bio-text">Официальный аккаунт разработки и аудита смарт-контрактов для платформы SmartContractum и контура Банка России.</p>
+                            </div>
+                        </div>
+                        <div class="card-author-right">
+                            <button type="button" class="btn-author-subscribe" disabled>+ Подписаться</button>
+                        </div>
+                    </div>
+
+                    <!-- Mock Habr Stats / Reactions Bar -->
+                    <div class="preview-reactions-bar">
+                        <div class="reaction-item"><span class="reaction-icon">▲</span> +48</div>
+                        <div class="reaction-item"><span class="reaction-icon">👁</span> 1.4k просмотров</div>
+                        <div class="reaction-item"><span class="reaction-icon">🔖</span> 24 закладки</div>
+                        <div class="reaction-item"><span class="reaction-icon">💬</span> 12 комментариев</div>
+                    </div>
+                </article>
+            </div>
+
         </main>
 
-        <!-- 2.2 HABR HELP & UTILITY SIDEBAR (Точно по эталону Хабра) -->
-        <aside class="habr-editor-sidebar">
+        <!-- 2.2 SPLIT-VIEW LIVE PREVIEW PANE -->
+        <aside class="split-preview-pane" id="editorSplitPreviewPane" style="display: none;">
+            <div class="split-preview-header">
+                <span class="split-preview-title">👁 Предпросмотр в реальном времени</span>
+                <span class="split-preview-pksc-badge">🛡️ ПКСК Verified</span>
+            </div>
+            
+            <article class="sc-preview-article" id="splitPreviewArticle">
+                <div class="preview-article-top">
+                    <span class="preview-hub-badge" id="splitHubBadge">💻 Разработка смарт-контрактов</span>
+                    <span class="preview-read-time" id="splitReadTime">1 мин чтения</span>
+                </div>
+                <h1 class="preview-article-title" id="splitArticleTitle">Заголовок публикации</h1>
+                <div class="preview-author-bar">
+                    <div class="author-avatar-badge">SC</div>
+                    <div class="author-info-group">
+                        <div class="author-name-row">
+                            <span class="author-name">ООО Интегратор (Umbrella-Dev)</span>
+                            <span class="author-role-chip" id="splitAuthorRole">Разработчик</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="preview-article-body" id="splitArticleBody">
+                    <p>Текст статьи синхронизируется в реальном времени при вводе...</p>
+                </div>
+                <div class="preview-tags-section">
+                    <div class="preview-tags-list" id="splitTagsList"></div>
+                </div>
+            </article>
+        </aside>
+
+        <!-- 2.3 HABR HELP & UTILITY SIDEBAR -->
+        <aside class="habr-editor-sidebar" id="editorSidebar">
 
             <!-- Sidebar Block 1: О ПЕСОЧНИЦЕ -->
             <div class="editor-sidebar-card">
@@ -491,6 +788,7 @@
                     <div class="hotkey-row"><kbd>/</kbd> <span>Меню вставки блоков</span></div>
                     <div class="hotkey-row"><kbd>Ctrl</kbd>+<kbd>B</kbd> <span>Жирный текст</span></div>
                     <div class="hotkey-row"><kbd>Ctrl</kbd>+<kbd>I</kbd> <span>Курсив</span></div>
+                    <div class="hotkey-row"><kbd>Ctrl</kbd>+<kbd>K</kbd> <span>Вставить ссылку</span></div>
                     <div class="hotkey-row"><kbd>Ctrl</kbd>+<kbd>Z</kbd> <span>Отмена действия</span></div>
                 </div>
             </div>
@@ -712,5 +1010,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_editor.js?v=2.0.0" defer></script>
+<script src="/static/js/forum_editor.js?v=2.1.0" defer></script>
 {% endblock %}
