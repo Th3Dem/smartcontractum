@@ -1,6 +1,7 @@
 /**
- * SmartContractum — Micro-Elements & Particle Flow Constellation Engine
- * Particles fly smoothly from behind cards and dissolve behind SmartContractum.
+ * SmartContractum — Volumetric Micro-Elements & Broad Particle Stream Engine
+ * Particles emanate across the entire volume of each button, drifting slowly & smoothly
+ * along wide orbital arcs and dissolving behind the central SmartContractum core.
  * File: frontend/static/js/hero_constellation.js
  */
 
@@ -22,12 +23,12 @@
         let isCoreHovered = false;
         let animationFrameId = null;
 
-        // Particle Types: 'spark', 'diamond', 'streak', 'ring'
-        const particleTypes = ['spark', 'spark', 'diamond', 'streak', 'streak', 'ring'];
+        // Particle Types: 'spark', 'diamond', 'streak', 'ring', 'dust'
+        const particleTypes = ['spark', 'spark', 'diamond', 'streak', 'streak', 'ring', 'dust'];
         const particles = [];
-        const totalBaseParticles = 54; // 9 per card
+        const totalParticles = 144; // 24 particles per card for rich density
 
-        for (let i = 0; i < totalBaseParticles; i++) {
+        for (let i = 0; i < totalParticles; i++) {
             const cardIdx = i % 6;
             particles.push(createParticle(cardIdx, Math.random()));
         }
@@ -37,13 +38,21 @@
             return {
                 cardIndex: cardIdx,
                 progress: (initialProgress !== undefined) ? initialProgress : 0,
-                speed: 0.0032 + Math.random() * 0.0028,
-                size: 2.2 + Math.random() * 2.8,
+                // Slower speed for serene, fluid, majestic drifting motion
+                speed: 0.0012 + Math.random() * 0.0012,
+                size: 2.0 + Math.random() * 2.6,
                 type: type,
                 angle: Math.random() * Math.PI * 2,
-                rotSpeed: (Math.random() - 0.5) * 0.08,
-                curveVariance: (Math.random() - 0.5) * 45, // Subtle individual curve offset
-                tailLength: 10 + Math.random() * 16
+                rotSpeed: (Math.random() - 0.5) * 0.04,
+                // Broad spatial curve variance (wide range)
+                curveVariance: (Math.random() - 0.5) * 110,
+                tailLength: 12 + Math.random() * 20,
+                // Volume spawn offsets across the full 2D area of the button
+                spawnOffsetX: (Math.random() - 0.5) * 0.85, // -42.5% to +42.5% of card width
+                spawnOffsetY: (Math.random() - 0.5) * 0.80, // -40% to +40% of card height
+                // Core destination offset behind SmartContractum
+                destOffsetX: (Math.random() - 0.5) * 60,
+                destOffsetY: (Math.random() - 0.5) * 30
             };
         }
 
@@ -84,11 +93,13 @@
             return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
         }
 
-        function getCardPosition(card, containerRect) {
+        function getCardBoundingData(card, containerRect) {
             const rect = card.getBoundingClientRect();
             return {
                 x: rect.left - containerRect.left + rect.width / 2,
-                y: rect.top - containerRect.top + rect.height / 2
+                y: rect.top - containerRect.top + rect.height / 2,
+                width: rect.width,
+                height: rect.height
             };
         }
 
@@ -104,16 +115,16 @@
                 y: coreRect.top - containerRect.top + coreRect.height / 2
             };
 
-            // Collect card origins and accent colors
+            // Collect card bounding boxes and accent colors
             const nodeData = [];
             cards.forEach(function (card) {
                 const id = card.getAttribute('data-node-id');
                 const accent = card.getAttribute('data-accent') || '#38bdf8';
-                const pos = getCardPosition(card, containerRect);
+                const bounds = getCardBoundingData(card, containerRect);
                 nodeData.push({
                     id: id,
                     accent: accent,
-                    pos: pos,
+                    bounds: bounds,
                     isHovered: (hoveredNodeId === id) || isCoreHovered
                 });
             });
@@ -126,53 +137,60 @@
                 const isHovered = node.isHovered;
                 const anyHovered = (hoveredNodeId !== null) || isCoreHovered;
 
-                // Speed boost on hover
-                const currentSpeed = isHovered ? (p.speed * 1.8) : (anyHovered ? p.speed * 0.7 : p.speed);
+                // Gentle speed boost on hover
+                const currentSpeed = isHovered ? (p.speed * 1.6) : (anyHovered ? p.speed * 0.75 : p.speed);
                 p.progress += currentSpeed;
                 p.angle += p.rotSpeed;
 
                 if (p.progress >= 1) {
                     p.progress = 0;
-                    p.curveVariance = (Math.random() - 0.5) * 45;
+                    p.curveVariance = (Math.random() - 0.5) * 110;
+                    p.spawnOffsetX = (Math.random() - 0.5) * 0.85;
+                    p.spawnOffsetY = (Math.random() - 0.5) * 0.80;
+                    p.destOffsetX = (Math.random() - 0.5) * 60;
+                    p.destOffsetY = (Math.random() - 0.5) * 30;
                 }
 
-                // Path Calculation: From behind card (t=0) to behind Core (t=1)
-                const start = node.pos;
-                const end = coreCenter;
+                // Start position distributed across the FULL volume of the button
+                const startX = node.bounds.x + p.spawnOffsetX * node.bounds.width;
+                const startY = node.bounds.y + p.spawnOffsetY * node.bounds.height;
+
+                // Destination point behind SmartContractum center pill
+                const endX = coreCenter.x + p.destOffsetX;
+                const endY = coreCenter.y + p.destOffsetY;
+
                 const t = p.progress;
 
-                // Smooth organic Bezier curve trajectory
-                const midX = (start.x + end.x) / 2;
-                const midY = (start.y + end.y) / 2;
+                // Wide Curved Trajectory with Bezier Control Point
+                const midX = (startX + endX) / 2;
+                const midY = (startY + endY) / 2;
 
-                const dx = end.x - start.x;
-                const dy = end.y - start.y;
+                const dx = endX - startX;
+                const dy = endY - startY;
                 const dist = Math.hypot(dx, dy);
                 const normalX = -dy / dist;
                 const normalY = dx / dist;
 
-                // Control point with subtle individual variance
                 const cpX = midX + normalX * p.curveVariance;
                 const cpY = midY + normalY * p.curveVariance;
 
-                // Quadratic Bezier Formula: B(t) = (1-t)^2 * P0 + 2(1-t)t * P1 + t^2 * P2
+                // Quadratic Bezier Interpolation
                 const u = 1 - t;
-                const px = u * u * start.x + 2 * u * t * cpX + t * t * end.x;
-                const py = u * u * start.y + 2 * u * t * cpY + t * t * end.y;
+                const px = u * u * startX + 2 * u * t * cpX + t * t * endX;
+                const py = u * u * startY + 2 * u * t * cpY + t * t * endY;
 
-                // Previous position for streak / comet tail
-                const tPrev = Math.max(0, t - 0.05);
+                // Previous position for smooth comet tail direction
+                const tPrev = Math.max(0, t - 0.04);
                 const uPrev = 1 - tPrev;
-                const prevX = uPrev * uPrev * start.x + 2 * uPrev * tPrev * cpX + tPrev * tPrev * end.x;
-                const prevY = uPrev * uPrev * start.y + 2 * uPrev * tPrev * cpY + tPrev * tPrev * end.y;
+                const prevX = uPrev * uPrev * startX + 2 * uPrev * tPrev * cpX + tPrev * tPrev * endX;
+                const prevY = uPrev * uPrev * startY + 2 * uPrev * tPrev * cpY + tPrev * tPrev * endY;
 
-                // Opacity curve: Fades in smoothly as it leaves card (0 -> 0.2), fully visible in flight,
-                // and dissolves smoothly behind SmartContractum core (0.7 -> 1.0)
+                // Smooth Opacity Fade: Emerge from behind button, stay bright in flight, dissolve behind core
                 let alpha = 1;
-                if (t < 0.2) {
-                    alpha = t / 0.2; // Smooth emergence from behind card
+                if (t < 0.18) {
+                    alpha = t / 0.18; // Smooth emergence
                 } else if (t > 0.65) {
-                    alpha = Math.max(0, (1 - t) / 0.35); // Smooth dissolution behind SmartContractum
+                    alpha = Math.max(0, (1 - t) / 0.35); // Smooth dissolution
                 }
 
                 if (!isHovered && anyHovered) {
@@ -181,12 +199,11 @@
 
                 if (alpha <= 0.01) return;
 
-                // Draw Specific Micro-Element Type
                 ctx.save();
                 ctx.globalAlpha = alpha;
 
                 if (p.type === 'streak') {
-                    // 1. Light Comet / Streak with Flow Tail
+                    // 1. Luminous Comet / Streak with Flowing Trail
                     const grad = ctx.createLinearGradient(prevX, prevY, px, py);
                     grad.addColorStop(0, hexToRgba(node.accent, 0));
                     grad.addColorStop(1, isHovered ? '#ffffff' : node.accent);
@@ -195,14 +212,14 @@
                     ctx.moveTo(prevX, prevY);
                     ctx.lineTo(px, py);
                     ctx.strokeStyle = grad;
-                    ctx.lineWidth = isHovered ? (p.size * 1.2) : (p.size * 0.8);
+                    ctx.lineWidth = isHovered ? (p.size * 1.2) : (p.size * 0.85);
                     ctx.shadowColor = node.accent;
-                    ctx.shadowBlur = isHovered ? 14 : 8;
+                    ctx.shadowBlur = isHovered ? 16 : 8;
                     ctx.lineCap = 'round';
                     ctx.stroke();
 
                 } else if (p.type === 'diamond') {
-                    // 2. Data Diamond / Micro-Shard
+                    // 2. Rotating Data Diamond
                     ctx.translate(px, py);
                     ctx.rotate(p.angle);
                     const dSize = isHovered ? (p.size * 1.3) : p.size;
@@ -221,25 +238,34 @@
 
                 } else if (p.type === 'ring') {
                     // 3. Quantum Energy Ring
-                    const rSize = (p.size * (1 + (1 - alpha) * 0.8));
+                    const rSize = (p.size * (1 + (1 - alpha) * 0.7));
                     ctx.beginPath();
                     ctx.arc(px, py, rSize, 0, Math.PI * 2);
                     ctx.strokeStyle = node.accent;
-                    ctx.lineWidth = 1.4;
+                    ctx.lineWidth = 1.3;
                     ctx.shadowColor = node.accent;
                     ctx.shadowBlur = 10;
                     ctx.stroke();
 
+                } else if (p.type === 'dust') {
+                    // 4. Soft Cyber Dust Mote
+                    ctx.beginPath();
+                    ctx.arc(px, py, p.size * 0.75, 0, Math.PI * 2);
+                    ctx.fillStyle = hexToRgba(node.accent, 0.7);
+                    ctx.shadowColor = node.accent;
+                    ctx.shadowBlur = 6;
+                    ctx.fill();
+
                 } else {
-                    // 4. Glowing Photon Dot / Spark
+                    // 5. Glowing Photon Spark
                     const dotRadius = isHovered ? (p.size * 1.2) : p.size;
 
-                    // Outer Glow
+                    // Outer Halo
                     ctx.beginPath();
                     ctx.arc(px, py, dotRadius, 0, Math.PI * 2);
                     ctx.fillStyle = node.accent;
                     ctx.shadowColor = node.accent;
-                    ctx.shadowBlur = isHovered ? 16 : 10;
+                    ctx.shadowBlur = isHovered ? 18 : 10;
                     ctx.fill();
 
                     // Hot White Core
