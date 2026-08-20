@@ -1,6 +1,6 @@
 ﻿/* ======================================================================
-   SmartContractum — Interactive Node Constellation Graph Stylesheet
-   Design System: Centered Uniform Plaquettes + Enlarged SmartContractum Core
+   SmartContractum — Circular Node Constellation Graph Stylesheet
+   Design System: Radial Ring Symmetry + Integrated Inside Icons + Slow Waves
    File: frontend/static/css/hero_constellation.css
 ====================================================================== */
 
@@ -30,22 +30,22 @@
 }
 
 /* ----------------------------------------------------------------------
-   CONSTELLATION MAIN CONTAINER & SVG NEURAL NETWORK
+   CONSTELLATION MAIN CONTAINER & CANVAS
 ----------------------------------------------------------------------- */
 .constellation-container {
     position: relative;
     width: 100%;
-    min-height: 520px;
+    max-width: 1220px;
+    height: 520px;
+    margin: 10px auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 10px 0;
-    padding: 10px 0;
     overflow: visible;
 }
 
-/* SVG Neural Line Canvas */
-.constellation-neural-svg {
+/* Canvas for Slow Undulating Energy Waves */
+.constellation-wave-canvas {
     position: absolute;
     top: 0;
     left: 0;
@@ -53,39 +53,10 @@
     height: 100%;
     pointer-events: none;
     z-index: 1;
-    overflow: visible;
-}
-
-.neural-line {
-    fill: none;
-    stroke: rgba(56, 189, 248, 0.25);
-    stroke-width: 1.8;
-    transition: stroke 0.3s ease, stroke-width 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
-}
-
-.neural-line.is-active {
-    stroke-width: 3.0;
-    filter: drop-shadow(0 0 10px var(--active-accent, #38bdf8));
-    opacity: 1 !important;
-}
-
-.neural-line.is-dimmed {
-    opacity: 0.12;
-}
-
-/* Animated Photons */
-.photon-particle {
-    fill: #38bdf8;
-    filter: drop-shadow(0 0 6px #38bdf8);
-    transition: opacity 0.3s ease;
-}
-
-.photon-particle.is-dimmed {
-    opacity: 0.12;
 }
 
 /* ----------------------------------------------------------------------
-   1.1 CENTRAL CORE NODE (Enlarged SmartContractum Highlighted Pill)
+   1.1 CENTRAL CORE NODE (Prominent SmartContractum Pill)
 ----------------------------------------------------------------------- */
 .constellation-core-node {
     position: absolute;
@@ -98,171 +69,203 @@
     z-index: 5;
     cursor: pointer;
     user-select: none;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     outline: none;
 }
 
 .constellation-core-node:hover,
 .constellation-core-node:focus-visible {
-    transform: translate(-50%, -50%) scale(1.06);
+    transform: translate(-50%, -50%) scale(1.08);
 }
 
 .core-aura-pulse {
     position: absolute;
-    width: 110%;
-    height: 120%;
+    width: 115%;
+    height: 130%;
     border-radius: 9999px;
-    background: radial-gradient(ellipse, rgba(56, 189, 248, 0.4) 0%, rgba(99, 102, 241, 0.2) 50%, transparent 75%);
-    animation: coreAuraPulse 3s infinite ease-in-out;
+    background: radial-gradient(ellipse, rgba(56, 189, 248, 0.45) 0%, rgba(99, 102, 241, 0.22) 50%, transparent 75%);
+    animation: coreAuraPulse 3.5s infinite ease-in-out;
 }
 
 @keyframes coreAuraPulse {
     0%, 100% { transform: scale(1); opacity: 0.8; }
-    50% { transform: scale(1.15); opacity: 1; }
+    50% { transform: scale(1.18); opacity: 1; filter: blur(2px); }
 }
 
 .core-glass-body {
     position: relative;
     z-index: 2;
     background: linear-gradient(135deg, rgba(15, 23, 42, 0.96) 0%, rgba(20, 35, 70, 0.98) 100%);
-    border: 2px solid rgba(56, 189, 248, 0.65);
+    border: 2px solid rgba(56, 189, 248, 0.7);
     border-radius: 9999px;
-    padding: 16px 36px;
-    box-shadow: 0 0 45px rgba(56, 189, 248, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.25);
+    padding: 16px 38px;
+    box-shadow: 0 0 45px rgba(56, 189, 248, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+    transition: all 0.3s ease;
 }
 
 .core-brand-name {
-    font-size: 1.45rem;
+    font-size: 1.5rem;
     font-weight: 900;
     letter-spacing: -0.3px;
     background: linear-gradient(90deg, #ffffff 0%, #38bdf8 60%, #10b981 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 2px 20px rgba(56, 189, 248, 0.5);
+    text-shadow: 0 2px 20px rgba(56, 189, 248, 0.6);
     white-space: nowrap;
 }
 
 /* ----------------------------------------------------------------------
-   1.2 SATELLITE NODES (UNIFORM-SIZE EQUAL GLASSMORPHISM CARDS)
+   1.2 CIRCULAR RADIAL RING OF SATELLITE CARDS (EQUAL SIZE & DISTANCE)
 ----------------------------------------------------------------------- */
-.constellation-satellites-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.constellation-radial-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    position: relative;
+    height: 100%;
     z-index: 3;
-    gap: 300px;
+    pointer-events: none;
 }
 
-.satellites-col {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 22px;
-    flex: 1;
-    max-width: 430px;
-}
-
-/* Identical Equal Uniform Card Box */
+/* Unified Exact Equal Dimensions for all 6 Cards */
 .constellation-satellite-card {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+    position: absolute;
+    width: 320px;
+    height: 94px;
+    box-sizing: border-box;
+    display: block;
     text-decoration: none;
     color: inherit;
-    position: relative;
     z-index: 3;
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    pointer-events: auto;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
     background: transparent;
     border: none;
     padding: 0;
     text-align: left;
     cursor: pointer;
     font-family: inherit;
+}
+
+/* EXACT CIRCULAR / RADIAL RING POSITIONS AROUND THE CENTER */
+/* Node 1: Top-Left (Arc at -145 deg) */
+.node-pos-1 {
+    top: 30px;
+    left: 30px;
+}
+
+/* Node 2: Top-Right (Arc at -35 deg) */
+.node-pos-2 {
+    top: 30px;
+    right: 30px;
+}
+
+/* Node 3: Mid-Left (Arc at 180 deg) */
+.node-pos-3 {
+    top: 50%;
+    left: 0px;
+    transform: translateY(-50%);
+}
+.node-pos-3:hover {
+    transform: translateY(-50%) scale(1.03) !important;
+}
+
+/* Node 4: Mid-Right (Arc at 0 deg) */
+.node-pos-4 {
+    top: 50%;
+    right: 0px;
+    transform: translateY(-50%);
+}
+.node-pos-4:hover {
+    transform: translateY(-50%) scale(1.03) !important;
+}
+
+/* Node 5: Bottom-Left (Arc at 145 deg) */
+.node-pos-5 {
+    bottom: 30px;
+    left: 30px;
+}
+
+/* Node 6: Bottom-Right (Arc at 35 deg) */
+.node-pos-6 {
+    bottom: 30px;
+    right: 30px;
+}
+
+/* Card Interior with INSIDE Integrated Icon */
+.satellite-card-inner {
     width: 100%;
-    height: 94px;
-    min-height: 94px;
-    max-height: 94px;
-    box-sizing: border-box;
-}
-
-.satellite-btn {
-    width: 100%;
-}
-
-.satellite-icon-box {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.35rem;
-    flex-shrink: 0;
-    background: rgba(11, 20, 38, 0.95);
-    border: 1.5px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
-    transition: all 0.25s ease;
-}
-
-.satellite-icon {
-    line-height: 1;
-}
-
-.glow-amber { border-color: rgba(245, 158, 11, 0.4); box-shadow: 0 0 14px rgba(245, 158, 11, 0.25); }
-.glow-cyan { border-color: rgba(56, 189, 248, 0.4); box-shadow: 0 0 14px rgba(56, 189, 248, 0.25); }
-.glow-violet { border-color: rgba(139, 92, 246, 0.4); box-shadow: 0 0 14px rgba(139, 92, 246, 0.25); }
-.glow-emerald { border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 0 14px rgba(16, 185, 129, 0.25); }
-.glow-sky { border-color: rgba(2, 132, 199, 0.4); box-shadow: 0 0 14px rgba(2, 132, 199, 0.25); }
-.glow-gold { border-color: rgba(236, 72, 153, 0.4); box-shadow: 0 0 14px rgba(236, 72, 153, 0.25); }
-
-.satellite-content {
-    flex: 1;
     height: 100%;
-    background: rgba(30, 41, 59, 0.72);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(30, 41, 59, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: 14px;
-    padding: 12px 16px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    padding: 12px 14px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 4px;
     box-sizing: border-box;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.satellite-header {
+.satellite-top-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 8px;
+    gap: 10px;
 }
 
+/* Integrated Inside Icon Box */
+.satellite-icon-inner {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    background: rgba(11, 20, 38, 0.95);
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+.satellite-icon {
+    line-height: 1;
+}
+
+.glow-amber { border-color: rgba(245, 158, 11, 0.45); box-shadow: 0 0 10px rgba(245, 158, 11, 0.3); }
+.glow-cyan { border-color: rgba(56, 189, 248, 0.45); box-shadow: 0 0 10px rgba(56, 189, 248, 0.3); }
+.glow-violet { border-color: rgba(139, 92, 246, 0.45); box-shadow: 0 0 10px rgba(139, 92, 246, 0.3); }
+.glow-emerald { border-color: rgba(16, 185, 129, 0.45); box-shadow: 0 0 10px rgba(16, 185, 129, 0.3); }
+.glow-sky { border-color: rgba(2, 132, 199, 0.45); box-shadow: 0 0 10px rgba(2, 132, 199, 0.3); }
+.glow-gold { border-color: rgba(236, 72, 153, 0.45); box-shadow: 0 0 10px rgba(236, 72, 153, 0.3); }
+
 .satellite-title {
-    font-size: 0.94rem;
+    font-size: 0.88rem;
     font-weight: 800;
     color: #ffffff;
     margin: 0;
-    line-height: 1.25;
+    line-height: 1.2;
+    flex: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .satellite-badge {
-    font-size: 0.62rem;
+    font-size: 0.60rem;
     font-weight: 700;
-    padding: 2px 7px;
-    border-radius: 5px;
+    padding: 2px 6px;
+    border-radius: 4px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     white-space: nowrap;
@@ -277,7 +280,7 @@
 .badge-gold { background: rgba(236, 72, 153, 0.15); border: 1px solid rgba(236, 72, 153, 0.4); color: #f472b6; }
 
 .satellite-desc {
-    font-size: 0.76rem;
+    font-size: 0.74rem;
     color: #94a3b8;
     line-height: 1.35;
     margin: 0;
@@ -289,27 +292,32 @@
 
 /* Hover States */
 .constellation-satellite-card:hover {
-    transform: translateY(-3px) scale(1.02);
+    transform: translateY(-3px) scale(1.03);
 }
 
-.constellation-satellite-card:hover .satellite-content {
-    background: rgba(30, 41, 59, 0.9);
-    border-color: rgba(56, 189, 248, 0.5);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.25);
+.constellation-satellite-card:hover .satellite-card-inner {
+    background: rgba(30, 41, 59, 0.92);
+    border-color: rgba(56, 189, 248, 0.55);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 22px rgba(56, 189, 248, 0.3);
 }
 
-.constellation-satellite-card:hover .satellite-icon-box {
-    transform: scale(1.08);
+.constellation-satellite-card:hover .satellite-icon-inner {
+    transform: scale(1.1);
 }
 
 /* ----------------------------------------------------------------------
-   1.3 RESPONSIVE BREAKPOINTS
+   1.3 RESPONSIVE BREAKPOINTS (Mobile & Tablet Fallback)
 ----------------------------------------------------------------------- */
 @media (max-width: 1080px) {
     .constellation-container {
+        height: auto;
         min-height: auto;
         flex-direction: column;
-        gap: 24px;
+        gap: 20px;
+    }
+
+    .constellation-wave-canvas {
+        display: none;
     }
 
     .constellation-core-node {
@@ -317,31 +325,33 @@
         top: auto;
         left: auto;
         transform: none;
-        margin: 0 auto 12px auto;
+        margin: 0 auto 10px auto;
     }
 
     .constellation-core-node:hover,
     .constellation-core-node:focus-visible {
-        transform: scale(1.06);
+        transform: scale(1.05);
     }
 
-    .constellation-neural-svg {
-        display: none;
-    }
-
-    .constellation-satellites-container {
+    .constellation-radial-ring {
+        position: relative;
+        width: 100%;
+        height: auto;
+        display: flex;
         flex-direction: column;
-        gap: 16px;
-    }
-
-    .satellites-col {
-        max-width: 100%;
-        gap: 16px;
+        gap: 14px;
+        pointer-events: auto;
     }
 
     .constellation-satellite-card {
+        position: relative;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+        width: 100%;
         height: auto;
-        min-height: 80px;
-        max-height: none;
+        min-height: 84px;
     }
 }

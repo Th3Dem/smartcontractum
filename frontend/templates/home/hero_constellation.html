@@ -20,34 +20,12 @@
         <li><a href="/knowledge">Хочу разобраться в ПКСК: Знания, изменения, открытые вопросы и обучение</a></li>
     </ul>
 
-    <!-- Constellation Interactive Graph Canvas & Nodes -->
+    <!-- Constellation Interactive Graph Canvas & Circular Radial Nodes -->
     <div class="constellation-container" id="constellationContainer">
-        <!-- SVG Neural Connection Network & Animated Photons -->
-        <svg class="constellation-neural-svg" id="constellationSvg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-                <!-- Neural Line Gradients -->
-                <linearGradient id="laserBeamGradCore" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.85"/>
-                    <stop offset="50%" stop-color="#6366f1" stop-opacity="0.65"/>
-                    <stop offset="100%" stop-color="#10b981" stop-opacity="0.85"/>
-                </linearGradient>
+        <!-- Interactive Wave Canvas for Slow Majestic Energy Waves -->
+        <canvas class="constellation-wave-canvas" id="constellationCanvas" aria-hidden="true"></canvas>
 
-                <!-- Glowing Filter -->
-                <filter id="laserGlow" x="-30%" y="-30%" width="160%" height="160%">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feMerge>
-                        <feMergeNode in="blur" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                </filter>
-            </defs>
-
-            <!-- Dynamic Smooth Lines & Photons -->
-            <g id="svgCoreLines" class="svg-core-lines"></g>
-            <g id="svgPhotonsGroup" class="svg-photons-group"></g>
-        </svg>
-
-        <!-- 1.1 CENTRAL CORE NODE (Pure SmartContractum Text, Enlarged with Highlighted Glow Background) -->
+        <!-- 1.1 CENTRAL CORE NODE (Pure SmartContractum Highlighted Pill) -->
         <div class="constellation-core-node" id="constellationCore" tabindex="0" role="region" aria-label="SmartContractum">
             <div class="core-aura-pulse"></div>
             <div class="core-glass-body">
@@ -55,97 +33,91 @@
             </div>
         </div>
 
-        <!-- 1.2 SATELLITE NODES (6 Uniform-Size Equal Plaquettes Centered Symmetrically) -->
-        <div class="constellation-satellites-container">
-            <!-- Left Orbital Column (3 Cards) -->
-            <div class="satellites-col satellites-col-left">
-                <!-- Node 1: Бизнес-задача -->
-                <a href="/passport" class="constellation-satellite-card node-amber" id="nodeCardPassport" data-node-id="1" data-accent="#f59e0b" data-analytics-event="hero_action_click" data-action-target="passport">
-                    <div class="satellite-icon-box glow-amber">
-                        <span class="satellite-icon">💡</span>
-                    </div>
-                    <div class="satellite-content">
-                        <div class="satellite-header">
-                            <h3 class="satellite-title">У меня есть бизнес-задача</h3>
-                            <span class="satellite-badge badge-amber">Паспорт</span>
+        <!-- 1.2 SATELLITE NODES (Circular Ring Layout with Integrated Inside Icons) -->
+        <div class="constellation-radial-ring" id="constellationRing">
+            <!-- Node 1: Top-Left (Бизнес-задача) -->
+            <a href="/passport" class="constellation-satellite-card node-pos-1 node-amber" id="nodeCardPassport" data-node-id="1" data-accent="#f59e0b" data-analytics-event="hero_action_click" data-action-target="passport">
+                <div class="satellite-card-inner">
+                    <div class="satellite-top-row">
+                        <div class="satellite-icon-inner glow-amber">
+                            <span class="satellite-icon">💡</span>
                         </div>
-                        <p class="satellite-desc">Нужен ли смарт-контракт, сценарий и паспорт решения.</p>
+                        <h3 class="satellite-title">У меня есть бизнес-задача</h3>
+                        <span class="satellite-badge badge-amber">Паспорт</span>
                     </div>
-                </a>
+                    <p class="satellite-desc">Нужен ли смарт-контракт, сценарий и паспорт решения.</p>
+                </div>
+            </a>
 
-                <!-- Node 3: Специалист или услуга (Modal Trigger) -->
-                <button type="button" class="constellation-satellite-card satellite-btn node-violet" id="btnSpecialistModalTrigger" data-node-id="3" data-accent="#8b5cf6" data-analytics-event="hero_action_click" data-action-target="specialist_modal" aria-haspopup="dialog">
-                    <div class="satellite-icon-box glow-violet">
-                        <span class="satellite-icon">🔍</span>
-                    </div>
-                    <div class="satellite-content">
-                        <div class="satellite-header">
-                            <h3 class="satellite-title">Ищу специалиста или услугу</h3>
-                            <span class="satellite-badge badge-violet">Эксперты</span>
+            <!-- Node 2: Top-Right (Готовое решение) -->
+            <a href="/solutions" class="constellation-satellite-card node-pos-2 node-cyan" id="nodeCardSolutions" data-node-id="2" data-accent="#38bdf8" data-analytics-event="hero_action_click" data-action-target="solutions">
+                <div class="satellite-card-inner">
+                    <div class="satellite-top-row">
+                        <div class="satellite-icon-inner glow-cyan">
+                            <span class="satellite-icon">📦</span>
                         </div>
-                        <p class="satellite-desc">Разработчики, эксперты, команды, аудиторы.</p>
+                        <h3 class="satellite-title">Ищу готовое решение</h3>
+                        <span class="satellite-badge badge-cyan">Каталог</span>
                     </div>
-                </button>
+                    <p class="satellite-desc">Сценарии, типовые компоненты и готовые разработки.</p>
+                </div>
+            </a>
 
-                <!-- Node 5: Данные и оракулы -->
-                <a href="/data-sources" class="constellation-satellite-card node-sky" id="nodeCardSources" data-node-id="5" data-accent="#0284c7" data-analytics-event="hero_action_click" data-action-target="data_sources">
-                    <div class="satellite-icon-box glow-sky">
-                        <span class="satellite-icon">📊</span>
-                    </div>
-                    <div class="satellite-content">
-                        <div class="satellite-header">
-                            <h3 class="satellite-title">Данные и оракулы</h3>
-                            <span class="satellite-badge badge-sky">Оракулы</span>
+            <!-- Node 3: Mid-Left (Специалист или услуга -> Modal Trigger) -->
+            <button type="button" class="constellation-satellite-card node-pos-3 satellite-btn node-violet" id="btnSpecialistModalTrigger" data-node-id="3" data-accent="#8b5cf6" data-analytics-event="hero_action_click" data-action-target="specialist_modal" aria-haspopup="dialog">
+                <div class="satellite-card-inner">
+                    <div class="satellite-top-row">
+                        <div class="satellite-icon-inner glow-violet">
+                            <span class="satellite-icon">🔍</span>
                         </div>
-                        <p class="satellite-desc">Найти источник данных или предложить свои.</p>
+                        <h3 class="satellite-title">Ищу специалиста или услугу</h3>
+                        <span class="satellite-badge badge-violet">Эксперты</span>
                     </div>
-                </a>
-            </div>
+                    <p class="satellite-desc">Разработчики, эксперты, команды, аудиторы.</p>
+                </div>
+            </button>
 
-            <!-- Right Orbital Column (3 Cards) -->
-            <div class="satellites-col satellites-col-right">
-                <!-- Node 2: Готовое решение -->
-                <a href="/solutions" class="constellation-satellite-card node-cyan" id="nodeCardSolutions" data-node-id="2" data-accent="#38bdf8" data-analytics-event="hero_action_click" data-action-target="solutions">
-                    <div class="satellite-icon-box glow-cyan">
-                        <span class="satellite-icon">📦</span>
-                    </div>
-                    <div class="satellite-content">
-                        <div class="satellite-header">
-                            <h3 class="satellite-title">Ищу готовое решение</h3>
-                            <span class="satellite-badge badge-cyan">Каталог</span>
+            <!-- Node 4: Mid-Right (Вход для профи) -->
+            <a href="/profile/join" class="constellation-satellite-card node-pos-4 node-emerald" id="nodeCardProfile" data-node-id="4" data-accent="#10b981" data-analytics-event="hero_action_click" data-action-target="profile_join">
+                <div class="satellite-card-inner">
+                    <div class="satellite-top-row">
+                        <div class="satellite-icon-inner glow-emerald">
+                            <span class="satellite-icon">🚀</span>
                         </div>
-                        <p class="satellite-desc">Сценарии, типовые компоненты и готовые разработки.</p>
+                        <h3 class="satellite-title">Я специалист и хочу участвовать</h3>
+                        <span class="satellite-badge badge-emerald">Профи</span>
                     </div>
-                </a>
+                    <p class="satellite-desc">Проекты, рабочие группы, публикация разработок.</p>
+                </div>
+            </a>
 
-                <!-- Node 4: Вход для профи -->
-                <a href="/profile/join" class="constellation-satellite-card node-emerald" id="nodeCardProfile" data-node-id="4" data-accent="#10b981" data-analytics-event="hero_action_click" data-action-target="profile_join">
-                    <div class="satellite-icon-box glow-emerald">
-                        <span class="satellite-icon">🚀</span>
-                    </div>
-                    <div class="satellite-content">
-                        <div class="satellite-header">
-                            <h3 class="satellite-title">Я специалист и хочу участвовать</h3>
-                            <span class="satellite-badge badge-emerald">Профи</span>
+            <!-- Node 5: Bottom-Left (Данные и оракулы) -->
+            <a href="/data-sources" class="constellation-satellite-card node-pos-5 node-sky" id="nodeCardSources" data-node-id="5" data-accent="#0284c7" data-analytics-event="hero_action_click" data-action-target="data_sources">
+                <div class="satellite-card-inner">
+                    <div class="satellite-top-row">
+                        <div class="satellite-icon-inner glow-sky">
+                            <span class="satellite-icon">📊</span>
                         </div>
-                        <p class="satellite-desc">Проекты, рабочие группы, публикация разработок.</p>
+                        <h3 class="satellite-title">Данные и оракулы</h3>
+                        <span class="satellite-badge badge-sky">Оракулы</span>
                     </div>
-                </a>
+                    <p class="satellite-desc">Найти источник данных или предложить свои.</p>
+                </div>
+            </a>
 
-                <!-- Node 6: База знаний ПКСК -->
-                <a href="/knowledge" class="constellation-satellite-card node-gold" id="nodeCardKnowledge" data-node-id="6" data-accent="#ec4899" data-analytics-event="hero_action_click" data-action-target="knowledge">
-                    <div class="satellite-icon-box glow-gold">
-                        <span class="satellite-icon">🎓</span>
-                    </div>
-                    <div class="satellite-content">
-                        <div class="satellite-header">
-                            <h3 class="satellite-title">Хочу разобраться в ПКСК</h3>
-                            <span class="satellite-badge badge-gold">Знания</span>
+            <!-- Node 6: Bottom-Right (База знаний ПКСК) -->
+            <a href="/knowledge" class="constellation-satellite-card node-pos-6 node-gold" id="nodeCardKnowledge" data-node-id="6" data-accent="#ec4899" data-analytics-event="hero_action_click" data-action-target="knowledge">
+                <div class="satellite-card-inner">
+                    <div class="satellite-top-row">
+                        <div class="satellite-icon-inner glow-gold">
+                            <span class="satellite-icon">🎓</span>
                         </div>
-                        <p class="satellite-desc">Знания, изменения, открытые вопросы и обучение.</p>
+                        <h3 class="satellite-title">Хочу разобраться в ПКСК</h3>
+                        <span class="satellite-badge badge-gold">Знания</span>
                     </div>
-                </a>
-            </div>
+                    <p class="satellite-desc">Знания, изменения, открытые вопросы и обучение.</p>
+                </div>
+            </a>
         </div>
     </div>
 </section>
