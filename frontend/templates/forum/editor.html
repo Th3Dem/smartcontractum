@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Создание статьи / Хабр-ПКСК — SmartContractum{% endblock %}
+{% block title %}Создание статьи / Хабр-ПКСК — SmartContractum | Полнофункциональный редактор{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_editor.css?v=1.0.0">
+<link rel="stylesheet" href="/static/css/forum_editor.css?v=2.0.0">
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.add('light-theme-feed');
@@ -20,7 +20,7 @@
     <header class="habr-editor-topbar">
         <div class="editor-topbar-inner">
             <div class="editor-topbar-left">
-                <a href="/feed" class="btn-back-feed" title="Вернуться в ленту">
+                <a href="/feed" class="btn-back-feed" title="Вернуться в ленту сообщества">
                     <svg class="back-svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
                         <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
                     </svg>
@@ -31,13 +31,13 @@
                 
                 <!-- Switcher Control: WYSIWYG / Markdown -->
                 <div class="editor-mode-switcher">
-                    <button type="button" class="mode-switch-btn is-active" id="btnModeWysiwyg" data-mode="wysiwyg" title="Визуальный редактор">
+                    <button type="button" class="mode-switch-btn is-active" id="btnModeWysiwyg" data-mode="wysiwyg" title="Визуальный редактор блоков">
                         <svg class="mode-svg" viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
                             <path d="M4 2a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H4zm0 1h8a1 1 0 011 1v8a1 1 0 01-1 1H4a1 1 0 01-1-1V4a1 1 0 011-1z" />
                         </svg>
                         <span>WYSIWYG</span>
                     </button>
-                    <button type="button" class="mode-switch-btn" id="btnModeMarkdown" data-mode="markdown" title="Режим разметки Markdown">
+                    <button type="button" class="mode-switch-btn" id="btnModeMarkdown" data-mode="markdown" title="Режим прямой разметки Markdown">
                         <svg class="mode-svg" viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
                             <path fill-rule="evenodd" d="M14.85 3H1.15C.52 3 0 3.52 0 4.15v7.69C0 12.48.52 13 1.15 13h13.7c.63 0 1.15-.52 1.15-1.15V4.15C16 3.52 15.48 3 14.85 3zM9 11H7V8L5.5 9.5 4 8v3H2V5h2l1.5 2L7 5h2v6zm2.99.5L9.5 8H11V5h2v3h1.5l-2.51 3.5z" clip-rule="evenodd"/>
                         </svg>
@@ -76,82 +76,199 @@
                 <!-- Article Title Input Area -->
                 <div class="editor-title-container">
                     <textarea class="habr-title-textarea" id="articleTitleInput" 
-                              placeholder="Заголовок" 
+                              placeholder="Заголовок публикации" 
                               rows="1" 
                               maxlength="250" 
                               aria-label="Заголовок публикации"></textarea>
                 </div>
 
-                <!-- Floating / Sticky Formatting Toolbar -->
-                <div class="habr-format-toolbar" id="formatToolbar">
-                    <button type="button" class="toolbar-btn" data-cmd="bold" title="Жирный текст (Ctrl+B)">
-                        <strong>B</strong>
-                    </button>
-                    <button type="button" class="toolbar-btn" data-cmd="italic" title="Курсив (Ctrl+I)">
-                        <em>I</em>
-                    </button>
-                    <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="h2" title="Заголовок H2">
-                        <strong>H2</strong>
-                    </button>
-                    <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="h3" title="Заголовок H3">
-                        <strong>H3</strong>
-                    </button>
+                <!-- ALL 12 TOOLS: Comprehensive Formatting Toolbar -->
+                <div class="habr-format-toolbar" id="formatToolbar" role="toolbar" aria-label="Панель инструментов редактирования">
+                    
+                    <!-- 1. Text & Headings -->
+                    <div class="toolbar-group">
+                        <button type="button" class="toolbar-btn" data-cmd="bold" title="Жирный текст (Ctrl+B)">
+                            <strong>B</strong>
+                        </button>
+                        <button type="button" class="toolbar-btn" data-cmd="italic" title="Курсив (Ctrl+I)">
+                            <em>I</em>
+                        </button>
+                        <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="h2" title="Заголовок H2 (Ctrl+2)">
+                            <strong>H2</strong>
+                        </button>
+                        <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="h3" title="Заголовок H3 (Ctrl+3)">
+                            <strong>H3</strong>
+                        </button>
+                    </div>
+
                     <div class="toolbar-sep"></div>
 
-                    <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="blockquote" title="Цитата">
-                        <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
-                            <path d="M12 12a1 1 0 001-1V8.558a1 1 0 00-1-1h-1.388c0-.351.021-.703.064-1.054.062-.515.163-.995.302-1.44.14-.447.317-.842.53-1.185a.75.75 0 00-1.276-.79c-.318.513-.574 1.077-.768 1.692a8.614 8.614 0 00-.414 2.215A4.54 4.54 0 009 8.558V11a1 1 0 001 1h2zm-6 0a1 1 0 001-1V8.558a1 1 0 00-1-1H4.612c0-.351.021-.703.064-1.054.062-.515.163-.995.302-1.44.14-.447.317-.842.53-1.185a.75.75 0 00-1.276-.79c-.318.513-.574 1.077-.768 1.692a8.614 8.614 0 00-.414 2.215A4.54 4.54 0 003 8.558V11a1 1 0 001 1h2z"/>
-                        </svg>
-                    </button>
+                    <!-- 2. Quotes & Lists -->
+                    <div class="toolbar-group">
+                        <button type="button" class="toolbar-btn" data-action="insert-quote" title="Цитата (Quote)">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                                <path d="M12 12a1 1 0 001-1V8.558a1 1 0 00-1-1h-1.388c0-.351.021-.703.064-1.054.062-.515.163-.995.302-1.44.14-.447.317-.842.53-1.185a.75.75 0 00-1.276-.79c-.318.513-.574 1.077-.768 1.692a8.614 8.614 0 00-.414 2.215A4.54 4.54 0 009 8.558V11a1 1 0 001 1h2zm-6 0a1 1 0 001-1V8.558a1 1 0 00-1-1H4.612c0-.351.021-.703.064-1.054.062-.515.163-.995.302-1.44.14-.447.317-.842.53-1.185a.75.75 0 00-1.276-.79c-.318.513-.574 1.077-.768 1.692a8.614 8.614 0 00-.414 2.215A4.54 4.54 0 003 8.558V11a1 1 0 001 1h2z"/>
+                            </svg>
+                            <span>Цитата</span>
+                        </button>
 
-                    <button type="button" class="toolbar-btn" data-action="insert-code" title="Вставить блок кода (Solidity / Python / Rust)">
-                        <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
-                            <path fill-rule="evenodd" d="M4.72 3.22a.75.75 0 011.06 1.06L2.06 8l3.72 3.72a.75.75 0 11-1.06 1.06L.47 8.53a.75.75 0 010-1.06l4.25-4.25zm6.56 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L13.94 8l-3.72-3.72a.75.75 0 010-1.06z" clip-rule="evenodd" />
-                        </svg>
-                        <span class="code-btn-text">&lt;/&gt; Код</span>
-                    </button>
+                        <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList" title="Маркированный список">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                                <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM2 9a1 1 0 100-2 1 1 0 000 2zm1 4a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span>Список</span>
+                        </button>
 
-                    <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList" title="Маркированный список">
-                        <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
-                            <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM2 9a1 1 0 100-2 1 1 0 000 2zm1 4a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
+                        <button type="button" class="toolbar-btn" data-cmd="insertOrderedList" title="Нумерованный список">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                                <path d="M2.003 2.5a.5.5 0 00-.723-.447l-1.003.5a.5.5 0 00.446.894l.28-.14V6.5a.5.5 0 001 0V2.5zm3.747 0a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5z"/>
+                            </svg>
+                            <span>1. Нумерованный</span>
+                        </button>
+                    </div>
 
-                    <button type="button" class="toolbar-btn" data-action="insert-spoiler" title="Вставить спойлер">
-                        <span class="spoiler-icon">▼ Спойлер</span>
-                    </button>
+                    <div class="toolbar-sep"></div>
 
-                    <button type="button" class="toolbar-btn btn-apply-typograf-inline" id="btnApplyTypografInline" title="Применить авто-типограф к тексту">
+                    <!-- 3. Media, Code, Table, Formula, Spoiler, Divider, Anchor -->
+                    <div class="toolbar-group">
+                        <!-- Media: Video Player (YouTube, Vimeo, VK, Rutube) -->
+                        <button type="button" class="toolbar-btn btn-highlight" data-action="open-video-modal" title="Вставить видеоплеер (YouTube, Vimeo, VK, Rutube)">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                                <path d="M8 15A7 7 0 118 1a7 7 0 010 14zm-.8-9.4v4.8l3.8-2.4-3.8-2.4z"/>
+                            </svg>
+                            <span>▶ Видео</span>
+                        </button>
+
+                        <!-- Image -->
+                        <button type="button" class="toolbar-btn" data-action="open-image-modal" title="Вставить изображение с подписью">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                                <path fill-rule="evenodd" d="M1.75 2.5a.75.75 0 00-.75.75v9.5c0 .414.336.75.75.75h12.5a.75.75 0 00.75-.75v-9.5a.75.75 0 00-.75-.75H1.75zM2.5 12V4h11v8H2.5zm8.5-5.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm-7 4.5l2.5-3 2 2 3-4 2.5 5H4z" clip-rule="evenodd" />
+                            </svg>
+                            <span>Изображение</span>
+                        </button>
+
+                        <!-- Divider -->
+                        <button type="button" class="toolbar-btn" data-action="insert-divider" title="Разделитель (Horizontal Rule)">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                                <path fill-rule="evenodd" d="M1 8a.75.75 0 01.75-.75h12.5a.75.75 0 010 1.5H1.75A.75.75 0 011 8z" clip-rule="evenodd" />
+                            </svg>
+                            <span>— Разделитель</span>
+                        </button>
+
+                        <!-- Table Generator -->
+                        <button type="button" class="toolbar-btn" data-action="open-table-modal" title="Вставить интерактивную таблицу">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                                <path fill-rule="evenodd" d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0114.25 14H1.75A1.75 1.75 0 010 12.25v-8.5zm1.5.75v2.5h5.75V4.5H1.5zm7.25 0v2.5h5.75V4.5H8.75zM1.5 8.5v3.75c0 .138.112.25.25.25h5.5V8.5H1.5zm7.25 0v3.75h5.5a.25.25 0 00.25-.25V8.5H8.75z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>▦ Таблица</span>
+                        </button>
+
+                        <!-- Code Block -->
+                        <button type="button" class="toolbar-btn" data-action="open-code-modal" title="Вставить блок кода с подсветкой синтаксиса">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                                <path fill-rule="evenodd" d="M4.72 3.22a.75.75 0 011.06 1.06L2.06 8l3.72 3.72a.75.75 0 11-1.06 1.06L.47 8.53a.75.75 0 010-1.06l4.25-4.25zm6.56 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L13.94 8l-3.72-3.72a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                            </svg>
+                            <span>&lt;/&gt; Код</span>
+                        </button>
+
+                        <!-- Math Formula (LaTeX) -->
+                        <button type="button" class="toolbar-btn" data-action="open-formula-modal" title="Математическая формула (LaTeX)">
+                            <span class="math-sigma-icon">∑</span>
+                            <span>Формула</span>
+                        </button>
+
+                        <!-- Spoiler -->
+                        <button type="button" class="toolbar-btn" data-action="open-spoiler-modal" title="Вставить сворачиваемый спойлер">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                                <path fill-rule="evenodd" d="M1.75 3a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h12.5a.75.75 0 00.75-.75v-8.5a.75.75 0 00-.75-.75H1.75zm3.47 3.97a.75.75 0 011.06 0L8 8.69l1.72-1.72a.75.75 0 111.06 1.06l-2.25 2.25a.75.75 0 01-1.06 0L5.22 8.03a.75.75 0 010-1.06z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>▼ Спойлер</span>
+                        </button>
+
+                        <!-- Anchor -->
+                        <button type="button" class="toolbar-btn" data-action="open-anchor-modal" title="Вставить якорную закладку (Anchor #)">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                                <path d="M8 1a2.5 2.5 0 00-.5 4.95V7.5H5.75a.75.75 0 000 1.5h1.75v4.95A4.502 4.502 0 012 9.5a.75.75 0 00-1.5 0 6.002 6.002 0 007 5.917V15.5a.75.75 0 001.5 0v-.083a6.002 6.002 0 007-5.917.75.75 0 00-1.5 0 4.502 4.502 0 01-5.5 4.45V9H11a.75.75 0 000-1.5H9.25V5.95A2.5 2.5 0 008 1zm0 1.5a1 1 0 110 2 1 1 0 010-2z"/>
+                            </svg>
+                            <span>⚓ Якорь</span>
+                        </button>
+                    </div>
+
+                    <div class="toolbar-sep"></div>
+
+                    <!-- Typographer Engine Button -->
+                    <button type="button" class="toolbar-btn btn-apply-typograf-inline" id="btnApplyTypografInline" title="Авто-типограф: исправление кавычек «», тире — и неразрывных пробелов">
                         <span>« » Типограф</span>
                     </button>
                 </div>
 
-                <!-- WYSIWYG Editable Canvas -->
+                <!-- WYSIWYG Editable Canvas Area -->
                 <div class="habr-editor-canvas" id="editorCanvas" contenteditable="true" 
-                     data-placeholder="Введите текст... Нажмите '/' для вызова меню">
+                     data-placeholder="Введите текст статьи... Нажмите '/' на новой строке для быстрого вызова меню вставки блоков">
                 </div>
 
                 <!-- Raw Markdown Textarea (for Markdown mode) -->
                 <textarea class="habr-editor-raw-markdown" id="rawMarkdownEditor" 
-                          placeholder="Введите текст статьи в формате Markdown (поддерживаются заголовки ##, списки, блоки кода ```solidity)..." 
+                          placeholder="Введите текст статьи в формате Markdown (поддерживаются заголовки ##, цитаты >, таблицы, блоки кода ```solidity, формулы $$E=mc^2$$, спойлеры <details>)..." 
                           style="display: none;"></textarea>
 
-                <!-- Optional Attached Code Box -->
-                <div class="editor-code-snippet-box" id="attachedCodeBox" style="display: none;">
-                    <div class="code-box-header">
-                        <div class="code-lang-selector-wrap">
-                            <label for="codeLangSelect" class="code-lang-label">Язык кода:</label>
-                            <select id="codeLangSelect" class="code-lang-select">
-                                <option value="solidity">Solidity (.sol)</option>
-                                <option value="rust">Rust (.rs)</option>
-                                <option value="python">Python (.py)</option>
-                                <option value="typescript">TypeScript (.ts)</option>
-                                <option value="json">JSON / ABI</option>
-                            </select>
-                        </div>
-                        <button type="button" class="btn-remove-code" id="btnRemoveCodeBox" title="Удалить блок кода">✕ Удалить блок</button>
+                <!-- Floating Slash Quick Menu (Popup on '/' keypress) -->
+                <div class="habr-slash-popup-menu" id="slashPopupMenu" style="display: none;">
+                    <div class="slash-menu-header">Вставка блока (нажмите Enter или кликните):</div>
+                    <div class="slash-menu-items">
+                        <button type="button" class="slash-item" data-action="insert-h2">
+                            <span class="slash-icon">H2</span>
+                            <div class="slash-text"><span class="slash-title">Заголовок H2</span><span class="slash-desc">Крупный раздел статьи</span></div>
+                        </button>
+                        <button type="button" class="slash-item" data-action="insert-h3">
+                            <span class="slash-icon">H3</span>
+                            <div class="slash-text"><span class="slash-title">Заголовок H3</span><span class="slash-desc">Подраздел</span></div>
+                        </button>
+                        <button type="button" class="slash-item" data-action="insert-quote">
+                            <span class="slash-icon">❝</span>
+                            <div class="slash-text"><span class="slash-title">Цитата</span><span class="slash-desc">Выделенный блок цитаты</span></div>
+                        </button>
+                        <button type="button" class="slash-item" data-action="insert-ul">
+                            <span class="slash-icon">•</span>
+                            <div class="slash-text"><span class="slash-title">Маркированный список</span><span class="slash-desc">Простой список с маркерами</span></div>
+                        </button>
+                        <button type="button" class="slash-item" data-action="insert-ol">
+                            <span class="slash-icon">1.</span>
+                            <div class="slash-text"><span class="slash-title">Нумерованный список</span><span class="slash-desc">Пошаговый перечень</span></div>
+                        </button>
+                        <button type="button" class="slash-item" data-action="open-video-modal">
+                            <span class="slash-icon">▶</span>
+                            <div class="slash-text"><span class="slash-title">Видеоплеер</span><span class="slash-desc">YouTube, Vimeo, VK, Rutube</span></div>
+                        </button>
+                        <button type="button" class="slash-item" data-action="open-image-modal">
+                            <span class="slash-icon">🖼</span>
+                            <div class="slash-text"><span class="slash-title">Изображение</span><span class="slash-desc">Фотография или схема с подписью</span></div>
+                        </button>
+                        <button type="button" class="slash-item" data-action="open-table-modal">
+                            <span class="slash-icon">▦</span>
+                            <div class="slash-text"><span class="slash-title">Таблица</span><span class="slash-desc">Интерактивная таблица с колонками</span></div>
+                        </button>
+                        <button type="button" class="slash-item" data-action="open-code-modal">
+                            <span class="slash-icon">&lt;/&gt;</span>
+                            <div class="slash-text"><span class="slash-title">Блок кода</span><span class="slash-desc">Solidity, Rust, Python, Go, TS</span></div>
+                        </button>
+                        <button type="button" class="slash-item" data-action="open-formula-modal">
+                            <span class="slash-icon">∑</span>
+                            <div class="slash-text"><span class="slash-title">Формула</span><span class="slash-desc">Математическое выражение LaTeX</span></div>
+                        </button>
+                        <button type="button" class="slash-item" data-action="open-spoiler-modal">
+                            <span class="slash-icon">▼</span>
+                            <div class="slash-text"><span class="slash-title">Спойлер</span><span class="slash-desc">Сворачиваемый блок текста</span></div>
+                        </button>
+                        <button type="button" class="slash-item" data-action="open-anchor-modal">
+                            <span class="slash-icon">⚓</span>
+                            <div class="slash-text"><span class="slash-title">Якорь</span><span class="slash-desc">Метка для ссылки оглавления</span></div>
+                        </button>
+                        <button type="button" class="slash-item" data-action="insert-divider">
+                            <span class="slash-icon">—</span>
+                            <div class="slash-text"><span class="slash-title">Разделитель</span><span class="slash-desc">Горизонтальная линия отбивки</span></div>
+                        </button>
                     </div>
-                    <textarea class="code-box-textarea" id="articleCodeInput" rows="6" placeholder="// Вставьте фрагмент смарт-контракта или теста..."></textarea>
                 </div>
 
                 <!-- Bottom Action Row Step 1 -->
@@ -238,6 +355,7 @@
                             <button type="button" class="btn-quick-tag" data-tag="АудитИБ">+ АудитИБ</button>
                             <button type="button" class="btn-quick-tag" data-tag="Оракулы">+ Оракулы</button>
                             <button type="button" class="btn-quick-tag" data-tag="ЦифровойРубль">+ ЦифровойРубль</button>
+                            <button type="button" class="btn-quick-tag" data-tag="B2B">+ B2B</button>
                         </div>
                     </div>
 
@@ -288,7 +406,7 @@
 
         </main>
 
-        <!-- 2.2 HABR HELP & UTILITY SIDEBAR (Точно как в эталоне Хабра) -->
+        <!-- 2.2 HABR HELP & UTILITY SIDEBAR (Точно по эталону Хабра) -->
         <aside class="habr-editor-sidebar">
 
             <!-- Sidebar Block 1: О ПЕСОЧНИЦЕ -->
@@ -312,7 +430,7 @@
                     Типограф
                 </h3>
                 <p class="sidebar-card-text">
-                    Мы автоматически улучшаем типографику текста: исправляем кавычки на «ёлочки», дефисы на длинные тире (—) и привязываем неразрывные пробелы к коротким предлогам.
+                    Автоматически улучшает типографику: исправляет кавычки на «ёлочки», дефисы на длинные тире (—) и привязывает неразрывные пробелы к предлогам.
                 </p>
                 <button type="button" class="btn-sidebar-typograf" id="btnApplyTypografSidebar">
                     <span>⚡ Запустить типограф</span>
@@ -328,15 +446,19 @@
                 <ul class="sidebar-guidelines-list">
                     <li class="guideline-item">
                         <span class="guideline-bullet">✓</span>
-                        <span>Соблюдайте правила платформы и техническую терминологию.</span>
+                        <span>Соблюдайте технические стандарты ПКСК Банка России.</span>
                     </li>
                     <li class="guideline-item">
                         <span class="guideline-bullet">✓</span>
-                        <span>Используйте блок кода <code>&lt;/&gt;</code> для Solidity/Rust смарт-контрактов.</span>
+                        <span>Вставляйте видеоплееры <code>▶</code> по ссылкам из YouTube, Vimeo, VK Video или Rutube.</span>
                     </li>
                     <li class="guideline-item">
                         <span class="guideline-bullet">✓</span>
-                        <span>Загружайте картинки и диаграммы меньше 8 МБ.</span>
+                        <span>Форматируйте формулы через <code>∑</code> (LaTeX) и смарт-контракты через <code>&lt;/&gt;</code>.</span>
+                    </li>
+                    <li class="guideline-item">
+                        <span class="guideline-bullet">✓</span>
+                        <span>Загружайте картинки меньше 8 МБ.</span>
                     </li>
                 </ul>
             </div>
@@ -350,12 +472,26 @@
                 <div class="moderation-rules-box">
                     <div class="moderation-group">
                         <span class="moderation-badge pass">Рекомендуется</span>
-                        <p class="moderation-desc">Архитектура смарт-контрактов, тесты безопасности, интеграции с оракулами, анализ НИР ЦБ РФ.</p>
+                        <p class="moderation-desc">Архитектура смарт-контрактов, тесты ИБ, оракулы, цифровой рубль, бенчмарки газа.</p>
                     </div>
                     <div class="moderation-group">
                         <span class="moderation-badge fail">Не пройдёт</span>
-                        <p class="moderation-desc">Прямая реклама без технической сути, скопированный чужой код без указания авторства, спам.</p>
+                        <p class="moderation-desc">Реклама без технической сути, спам, невалидный или небезопасный код.</p>
                     </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Block 5: ГОРЯЧИЕ КЛАВИШИ -->
+            <div class="editor-sidebar-card">
+                <h3 class="sidebar-card-title">
+                    <span class="card-title-icon">⌨️</span>
+                    Горячие клавиши
+                </h3>
+                <div class="hotkeys-list">
+                    <div class="hotkey-row"><kbd>/</kbd> <span>Меню вставки блоков</span></div>
+                    <div class="hotkey-row"><kbd>Ctrl</kbd>+<kbd>B</kbd> <span>Жирный текст</span></div>
+                    <div class="hotkey-row"><kbd>Ctrl</kbd>+<kbd>I</kbd> <span>Курсив</span></div>
+                    <div class="hotkey-row"><kbd>Ctrl</kbd>+<kbd>Z</kbd> <span>Отмена действия</span></div>
                 </div>
             </div>
 
@@ -363,6 +499,209 @@
 
     </div>
 
+</div>
+
+<!-- ====================================================================
+     3. INTERACTIVE MODALS FOR THE 12 BLOCK TOOLS
+==================================================================== -->
+
+<!-- 3.1 VIDEO EMBED MODAL (YouTube, Vimeo, VK Video, Rutube) -->
+<div class="editor-modal-overlay" id="modalVideoEmbed" aria-hidden="true" role="dialog">
+    <div class="editor-modal-box">
+        <div class="modal-head">
+            <h3 class="modal-heading">Вставить видеоплеер (Медиаэлемент)</h3>
+            <button type="button" class="modal-btn-close" data-close-modal>✕</button>
+        </div>
+        <div class="modal-body">
+            <p class="modal-instruction">Поддерживаются ссылки из <strong>YouTube, Vimeo, VK Video и Rutube</strong>:</p>
+            <div class="modal-input-group">
+                <label for="videoUrlInput" class="modal-label">Ссылка на видео <span class="required-star">*</span></label>
+                <input type="url" id="videoUrlInput" class="modal-text-input" 
+                       placeholder="Например: https://www.youtube.com/watch?v=dQw4w9WgXcQ или https://vk.com/video-...">
+            </div>
+            <div class="modal-input-group">
+                <label for="videoCaptionInput" class="modal-label">Подпись к видео (опционально)</label>
+                <input type="text" id="videoCaptionInput" class="modal-text-input" 
+                       placeholder="Демонстрация вызова смарт-контракта через оракул">
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button type="button" class="btn-modal-cancel" data-close-modal>Отмена</button>
+            <button type="button" class="btn-modal-submit" id="btnSubmitVideoEmbed">Вставить видеоплеер</button>
+        </div>
+    </div>
+</div>
+
+<!-- 3.2 IMAGE MODAL -->
+<div class="editor-modal-overlay" id="modalImageInsert" aria-hidden="true" role="dialog">
+    <div class="editor-modal-box">
+        <div class="modal-head">
+            <h3 class="modal-heading">Вставить изображение</h3>
+            <button type="button" class="modal-btn-close" data-close-modal>✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-input-group">
+                <label for="imageUrlInput" class="modal-label">URL изображения или выберите файл <span class="required-star">*</span></label>
+                <input type="url" id="imageUrlInput" class="modal-text-input" placeholder="https://example.com/architecture-diagram.png">
+            </div>
+            <div class="modal-file-dropzone" id="imageDropzone">
+                <span>📁 Или перетащите файл сюда / нажмите для выбора</span>
+                <input type="file" id="imageFileInput" accept="image/*" style="display: none;">
+            </div>
+            <div class="modal-input-group" style="margin-top: 14px;">
+                <label for="imageCaptionInput" class="modal-label">Подпись к изображению (figcaption)</label>
+                <input type="text" id="imageCaptionInput" class="modal-text-input" placeholder="Схема 1: Поток валидации транзакций">
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button type="button" class="btn-modal-cancel" data-close-modal>Отмена</button>
+            <button type="button" class="btn-modal-submit" id="btnSubmitImageInsert">Вставить изображение</button>
+        </div>
+    </div>
+</div>
+
+<!-- 3.3 TABLE GENERATOR MODAL -->
+<div class="editor-modal-overlay" id="modalTableGenerator" aria-hidden="true" role="dialog">
+    <div class="editor-modal-box">
+        <div class="modal-head">
+            <h3 class="modal-heading">Вставить таблицу</h3>
+            <button type="button" class="modal-btn-close" data-close-modal>✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-row-2">
+                <div class="modal-input-group">
+                    <label for="tableRowsInput" class="modal-label">Количество строк</label>
+                    <input type="number" id="tableRowsInput" class="modal-text-input" min="1" max="25" value="3">
+                </div>
+                <div class="modal-input-group">
+                    <label for="tableColsInput" class="modal-label">Количество столбцов</label>
+                    <input type="number" id="tableColsInput" class="modal-text-input" min="1" max="10" value="3">
+                </div>
+            </div>
+            <div class="modal-input-group">
+                <label class="modal-checkbox-label">
+                    <input type="checkbox" id="tableHasHeader" checked>
+                    <span>Выделить первую строку как заголовок таблицы (th)</span>
+                </label>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button type="button" class="btn-modal-cancel" data-close-modal>Отмена</button>
+            <button type="button" class="btn-modal-submit" id="btnSubmitTableInsert">Создать таблицу</button>
+        </div>
+    </div>
+</div>
+
+<!-- 3.4 CODE BLOCK MODAL -->
+<div class="editor-modal-overlay" id="modalCodeBlock" aria-hidden="true" role="dialog">
+    <div class="editor-modal-box modal-wide">
+        <div class="modal-head">
+            <h3 class="modal-heading">Вставить блок кода (&lt;/&gt;)</h3>
+            <button type="button" class="modal-btn-close" data-close-modal>✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-row-2">
+                <div class="modal-input-group">
+                    <label for="modalCodeLangSelect" class="modal-label">Язык программирования</label>
+                    <select id="modalCodeLangSelect" class="modal-select-input">
+                        <option value="solidity" selected>Solidity (.sol)</option>
+                        <option value="rust">Rust (.rs)</option>
+                        <option value="python">Python (.py)</option>
+                        <option value="typescript">TypeScript / JS (.ts/.js)</option>
+                        <option value="go">Go (.go)</option>
+                        <option value="json">JSON / ABI</option>
+                        <option value="sql">SQL</option>
+                        <option value="bash">Bash / Shell</option>
+                    </select>
+                </div>
+                <div class="modal-input-group">
+                    <label for="modalCodeTitleInput" class="modal-label">Название файла (опционально)</label>
+                    <input type="text" id="modalCodeTitleInput" class="modal-text-input" placeholder="SmartContractumRegistry.sol">
+                </div>
+            </div>
+            <div class="modal-input-group">
+                <label for="modalCodeTextarea" class="modal-label">Исходный код <span class="required-star">*</span></label>
+                <textarea id="modalCodeTextarea" class="modal-code-textarea" rows="8" placeholder="// Вставьте исходный код смарт-контракта..."></textarea>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button type="button" class="btn-modal-cancel" data-close-modal>Отмена</button>
+            <button type="button" class="btn-modal-submit" id="btnSubmitCodeInsert">Вставить код</button>
+        </div>
+    </div>
+</div>
+
+<!-- 3.5 FORMULA MODAL (LaTeX / MathTeX) -->
+<div class="editor-modal-overlay" id="modalFormulaInsert" aria-hidden="true" role="dialog">
+    <div class="editor-modal-box">
+        <div class="modal-head">
+            <h3 class="modal-heading">Математическая формула (LaTeX)</h3>
+            <button type="button" class="modal-btn-close" data-close-modal>✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-input-group">
+                <label for="formulaTexInput" class="modal-label">Код формулы (TeX / LaTeX) <span class="required-star">*</span></label>
+                <input type="text" id="formulaTexInput" class="modal-text-input font-mono" 
+                       placeholder="E = mc^2 или \sum_{i=1}^n x_i" value="E = mc^2">
+            </div>
+            <div class="formula-preview-card">
+                <span class="preview-label">Предпросмотр формулы:</span>
+                <div class="formula-render-preview" id="formulaRenderPreview">$$E = mc^2$$</div>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button type="button" class="btn-modal-cancel" data-close-modal>Отмена</button>
+            <button type="button" class="btn-modal-submit" id="btnSubmitFormulaInsert">Вставить формулу</button>
+        </div>
+    </div>
+</div>
+
+<!-- 3.6 SPOILER MODAL -->
+<div class="editor-modal-overlay" id="modalSpoilerInsert" aria-hidden="true" role="dialog">
+    <div class="editor-modal-box">
+        <div class="modal-head">
+            <h3 class="modal-heading">Вставить спойлер</h3>
+            <button type="button" class="modal-btn-close" data-close-modal>✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-input-group">
+                <label for="spoilerTitleInput" class="modal-label">Заголовок спойлера <span class="required-star">*</span></label>
+                <input type="text" id="spoilerTitleInput" class="modal-text-input" 
+                       value="Технические детали и логи развертывания">
+            </div>
+            <div class="modal-input-group">
+                <label for="spoilerContentInput" class="modal-label">Содержимое спойлера</label>
+                <textarea id="spoilerContentInput" class="modal-text-input" rows="4" 
+                          placeholder="Скрытый текст, параметры транзакций или инструкции..."></textarea>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button type="button" class="btn-modal-cancel" data-close-modal>Отмена</button>
+            <button type="button" class="btn-modal-submit" id="btnSubmitSpoilerInsert">Вставить спойлер</button>
+        </div>
+    </div>
+</div>
+
+<!-- 3.7 ANCHOR MODAL -->
+<div class="editor-modal-overlay" id="modalAnchorInsert" aria-hidden="true" role="dialog">
+    <div class="editor-modal-box">
+        <div class="modal-head">
+            <h3 class="modal-heading">Вставить якорь (Anchor Bookmark)</h3>
+            <button type="button" class="modal-btn-close" data-close-modal>✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-input-group">
+                <label for="anchorIdInput" class="modal-label">Идентификатор якоря (id) <span class="required-star">*</span></label>
+                <input type="text" id="anchorIdInput" class="modal-text-input font-mono" 
+                       placeholder="section-architecture-overview" value="section-architecture">
+                <p class="modal-hint">Вы сможете ссылаться на этот якорь через <code>#section-architecture</code></p>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button type="button" class="btn-modal-cancel" data-close-modal>Отмена</button>
+            <button type="button" class="btn-modal-submit" id="btnSubmitAnchorInsert">Вставить якорь</button>
+        </div>
+    </div>
 </div>
 
 <!-- Floating Toast Notification -->
@@ -373,5 +712,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_editor.js?v=1.0.0" defer></script>
+<script src="/static/js/forum_editor.js?v=2.0.0" defer></script>
 {% endblock %}
