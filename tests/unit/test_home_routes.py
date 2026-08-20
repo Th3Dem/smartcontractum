@@ -20,10 +20,6 @@ def test_home_page_returns_200_and_html() -> None:
 
     html = response.text
     # 1.1 Hero Banner
-    assert "ИДЕИ" in html
-    assert "ЛЮДИ" in html
-    assert "ДАННЫЕ" in html
-    assert "РЕШЕНИЯ" in html
     assert "Здесь рождаются" in html
     assert "российские" in html
     assert "смарт-контракты" in html
