@@ -676,7 +676,21 @@
 * **`seo_bot`**: Подтвердил отсутствие артефактов растеризации.
 * **`load_bot`**: Зафиксировал стабильные 60 FPS.
 * **`ai_bot`**: Проверил физическую симметрию векторов ускорения.
-* **Итог релиза:** Коммит `f9e4c12` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
+* **Итог релиза:** Коммит `8774031` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
+
+---
+
+### 2026-08-20 10:30 | AGENTS_MODULAR_RESTRUCTURING: 9 Isolated Agent Folders with AGENTS.MD, SETTINGS.MD & SOUL.MD
+* **`pm_bot`**: Возглавила масштабную модульную реструктуризацию архитектуры агентов: создана директория `agents/` с 9 изолированными подпапками (`pm_bot`, `py_bot`, `ui_bot`, `qa_bot`, `devops_bot`, `design_bot`, `seo_bot`, `load_bot`, `ai_bot`), в каждой из которых созданы 3 специализированных документа (`AGENTS.md`, `SETTINGS.md`, `SOUL.md`).
+* **`py_bot`**: Зафиксировал в `agents/py_bot/` стандарты строгой статической типизации MyPy, архитектуру асинхронного REST API, схемы Pydantic v2 и правила транзакционности PostgreSQL.
+* **`ui_bot`**: Зафиксировал в `agents/ui_bot/` стандарты 60 FPS производительности, правила аппаратного ускорения GPU, изоляцию CSS 3D и реактивных канвас-созвездий.
+* **`qa_bot`**: Прогнал полный тестовый контур `pytest tests/unit` — **40/40 тестов 100% PASSED** (0.76s), зафиксировал матрицу покрытия в `agents/qa_bot/`.
+* **`devops_bot`**: Выполнил синхронизацию Git-репозитория по цепочке `dev` $\to$ `staging` $\to$ `main`, зафиксировал правила Staging Gate Protocol и AppSec в `agents/devops_bot/`.
+* **`design_bot`**: Описал полную палитру дизайн-токенов CoinMarketCap / Web3 Glassmorphism и гайдлайны первого экрана в `agents/design_bot/`.
+* **`seo_bot`**: Сформировал спецификацию семантической разметки Schema.org JSON-LD и правила UX-копирайтинга в `agents/seo_bot/`.
+* **`load_bot`**: Зафиксировал Performance Budget (p95 < 350ms, 60 FPS, 0% CPU idle) в `agents/load_bot/`.
+* **`ai_bot`**: Зафиксировал архитектуру Circuit Breaker, интеграцию Google Gemini REST API и детерминированный fallback в `agents/ai_bot/`.
+* **Итог релиза:** Коммит `e5d2a19` синхронизирован в `dev` $\to$ `staging` $\to$ `main`.
 
 ---
 
