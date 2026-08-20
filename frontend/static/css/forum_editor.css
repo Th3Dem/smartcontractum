@@ -1,3 +1,41 @@
+/* ====================================================================
+   SmartContractum — Habr 2.0 Article Creation & Editor Suite
+   File: frontend/static/css/forum_editor.css (v2.2.0)
+   100% PURE WHITE BACKGROUND THEME
+===================================================================== */
+
+body:has(.habr-editor-page-wrapper),
+body.app-body:has(.habr-editor-page-wrapper),
+body.light-theme-editor,
+body.light-theme-feed:has(.habr-editor-page-wrapper) {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+}
+
+.habr-editor-page-wrapper {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    min-height: calc(100vh - 70px);
+    color: #0f172a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    padding-bottom: 60px;
+}
+
+.habr-editor-main-container,
+.habr-editor-layout,
+.habr-editor-main-column,
+.sc-editor-split-container,
+.split-preview-pane,
+.habr-format-toolbar,
+.editor-sidebar-card,
+.editor-settings-card,
+.sc-preview-article,
+.editor-step-card {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+}
+
 /* ======================================================================
    SmartContractum — Habr 2.0 Article Creation & Editor Suite
    File: frontend/static/css/forum_editor.css (v2.1.0)
