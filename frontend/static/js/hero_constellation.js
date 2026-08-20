@@ -1,5 +1,6 @@
 /**
- * SmartContractum — Volumetric Plasma Funnel Waves & Snug Node Constellation
+ * SmartContractum — Micro-Elements & Particle Flow Constellation Engine
+ * Particles fly smoothly from behind cards and dissolve behind SmartContractum.
  * File: frontend/static/js/hero_constellation.js
  */
 
@@ -19,28 +20,31 @@
         let height = 0;
         let hoveredNodeId = null;
         let isCoreHovered = false;
-        let waveTime = 0;
         let animationFrameId = null;
 
-        // Ambient floating particles (3 per card)
-        const ambientParticles = [];
-        for (let i = 0; i < 18; i++) {
-            ambientParticles.push({
-                cardIndex: i % 6,
-                progress: (Math.floor(i / 6) * 0.33 + Math.random() * 0.2) % 1,
-                speed: 0.0028 + Math.random() * 0.0015,
-                size: 3.5
-            });
+        // Particle Types: 'spark', 'diamond', 'streak', 'ring'
+        const particleTypes = ['spark', 'spark', 'diamond', 'streak', 'streak', 'ring'];
+        const particles = [];
+        const totalBaseParticles = 54; // 9 per card
+
+        for (let i = 0; i < totalBaseParticles; i++) {
+            const cardIdx = i % 6;
+            particles.push(createParticle(cardIdx, Math.random()));
         }
 
-        // Active hover wave pulse streams
-        const wavePackets = [];
-        for (let i = 0; i < 6; i++) {
-            wavePackets.push({
-                progress: i * 0.166,
-                speed: 0.0055,
-                size: 6.5
-            });
+        function createParticle(cardIdx, initialProgress) {
+            const type = particleTypes[Math.floor(Math.random() * particleTypes.length)];
+            return {
+                cardIndex: cardIdx,
+                progress: (initialProgress !== undefined) ? initialProgress : 0,
+                speed: 0.0032 + Math.random() * 0.0028,
+                size: 2.2 + Math.random() * 2.8,
+                type: type,
+                angle: Math.random() * Math.PI * 2,
+                rotSpeed: (Math.random() - 0.5) * 0.08,
+                curveVariance: (Math.random() - 0.5) * 45, // Subtle individual curve offset
+                tailLength: 10 + Math.random() * 16
+            };
         }
 
         function resize() {
@@ -80,46 +84,11 @@
             return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
         }
 
-        function getCardEdgeData(card, containerRect, coreCenter) {
+        function getCardPosition(card, containerRect) {
             const rect = card.getBoundingClientRect();
-            const cardCenter = {
+            return {
                 x: rect.left - containerRect.left + rect.width / 2,
                 y: rect.top - containerRect.top + rect.height / 2
-            };
-
-            const cardH = rect.height;
-            let edgeX = cardCenter.x;
-            let isLeft = true;
-
-            if (cardCenter.x < coreCenter.x) {
-                edgeX = rect.right - containerRect.left;
-                isLeft = true;
-            } else {
-                edgeX = rect.left - containerRect.left;
-                isLeft = false;
-            }
-
-            return {
-                x: edgeX,
-                y: cardCenter.y,
-                height: cardH,
-                isLeft: isLeft
-            };
-        }
-
-        function getCoreEdgeData(coreRect, containerRect, cardEdge) {
-            const coreCenter = {
-                x: coreRect.left - containerRect.left + coreRect.width / 2,
-                y: coreRect.top - containerRect.top + coreRect.height / 2
-            };
-
-            let edgeX = cardEdge.isLeft ? (coreRect.left - containerRect.left + 15) : (coreRect.right - containerRect.left - 15);
-            let edgeY = coreCenter.y + (cardEdge.y - coreCenter.y) * 0.45;
-
-            return {
-                x: edgeX,
-                y: edgeY,
-                height: 60
             };
         }
 
@@ -127,252 +96,161 @@
             if (window.innerWidth <= 1080) return;
 
             ctx.clearRect(0, 0, width, height);
-            waveTime += 0.032;
 
             const containerRect = container.getBoundingClientRect();
             const coreRect = core.getBoundingClientRect();
-            const rawCoreCenter = {
+            const coreCenter = {
                 x: coreRect.left - containerRect.left + coreRect.width / 2,
                 y: coreRect.top - containerRect.top + coreRect.height / 2
             };
 
-            const nodeDataList = [];
+            // Collect card origins and accent colors
+            const nodeData = [];
             cards.forEach(function (card) {
                 const id = card.getAttribute('data-node-id');
                 const accent = card.getAttribute('data-accent') || '#38bdf8';
-                const cardEdge = getCardEdgeData(card, containerRect, rawCoreCenter);
-                const coreEdge = getCoreEdgeData(coreRect, containerRect, cardEdge);
-
-                nodeDataList.push({
+                const pos = getCardPosition(card, containerRect);
+                nodeData.push({
                     id: id,
                     accent: accent,
-                    cardEdge: cardEdge,
-                    coreEdge: coreEdge,
+                    pos: pos,
                     isHovered: (hoveredNodeId === id) || isCoreHovered
                 });
             });
 
-            // Draw Funnel Waves
-            nodeDataList.forEach(function (node) {
-                const start = node.cardEdge;
-                const end = node.coreEdge;
+            // Update & Draw Micro-Particle Streams
+            particles.forEach(function (p) {
+                const node = nodeData[p.cardIndex];
+                if (!node) return;
+
                 const isHovered = node.isHovered;
                 const anyHovered = (hoveredNodeId !== null) || isCoreHovered;
+
+                // Speed boost on hover
+                const currentSpeed = isHovered ? (p.speed * 1.8) : (anyHovered ? p.speed * 0.7 : p.speed);
+                p.progress += currentSpeed;
+                p.angle += p.rotSpeed;
+
+                if (p.progress >= 1) {
+                    p.progress = 0;
+                    p.curveVariance = (Math.random() - 0.5) * 45;
+                }
+
+                // Path Calculation: From behind card (t=0) to behind Core (t=1)
+                const start = node.pos;
+                const end = coreCenter;
+                const t = p.progress;
+
+                // Smooth organic Bezier curve trajectory
+                const midX = (start.x + end.x) / 2;
+                const midY = (start.y + end.y) / 2;
 
                 const dx = end.x - start.x;
                 const dy = end.y - start.y;
                 const dist = Math.hypot(dx, dy);
                 const normalX = -dy / dist;
                 const normalY = dx / dist;
-                const steps = 60;
 
-                const cardHalfH = start.height * 0.46;
-                const coreHalfH = end.height * 0.42;
+                // Control point with subtle individual variance
+                const cpX = midX + normalX * p.curveVariance;
+                const cpY = midY + normalY * p.curveVariance;
 
-                const topPoints = [];
-                const botPoints = [];
-                const centerPoints = [];
+                // Quadratic Bezier Formula: B(t) = (1-t)^2 * P0 + 2(1-t)t * P1 + t^2 * P2
+                const u = 1 - t;
+                const px = u * u * start.x + 2 * u * t * cpX + t * t * end.x;
+                const py = u * u * start.y + 2 * u * t * cpY + t * t * end.y;
 
-                for (let i = 0; i <= steps; i++) {
-                    const t = i / steps;
-                    const lx = start.x + dx * t;
-                    const ly = start.y + dy * t;
-                    const envelope = Math.sin(t * Math.PI);
+                // Previous position for streak / comet tail
+                const tPrev = Math.max(0, t - 0.05);
+                const uPrev = 1 - tPrev;
+                const prevX = uPrev * uPrev * start.x + 2 * uPrev * tPrev * cpX + tPrev * tPrev * end.x;
+                const prevY = uPrev * uPrev * start.y + 2 * uPrev * tPrev * cpY + tPrev * tPrev * end.y;
 
-                    // Hourglass Funnel width
-                    const baseHalfW = (cardHalfH * (1 - t) + coreHalfH * t) * (1 - 0.72 * envelope) + 8;
-
-                    // Sine wave undulation
-                    const waveFreq = isHovered ? 8.0 : 6.0;
-                    const waveSpeed = isHovered ? 2.6 : 1.3;
-                    const waveAmp = isHovered ? (11 * envelope) : (6 * envelope);
-                    const waveOffset = Math.sin(t * waveFreq - waveTime * waveSpeed) * waveAmp;
-
-                    const cx = lx + normalX * waveOffset;
-                    const cy = ly + normalY * waveOffset;
-
-                    centerPoints.push({ x: cx, y: cy, t: t, halfW: baseHalfW });
-
-                    topPoints.push({
-                        x: cx + normalX * baseHalfW,
-                        y: cy + normalY * baseHalfW
-                    });
-
-                    botPoints.push({
-                        x: cx - normalX * baseHalfW,
-                        y: cy - normalY * baseHalfW
-                    });
+                // Opacity curve: Fades in smoothly as it leaves card (0 -> 0.2), fully visible in flight,
+                // and dissolves smoothly behind SmartContractum core (0.7 -> 1.0)
+                let alpha = 1;
+                if (t < 0.2) {
+                    alpha = t / 0.2; // Smooth emergence from behind card
+                } else if (t > 0.65) {
+                    alpha = Math.max(0, (1 - t) / 0.35); // Smooth dissolution behind SmartContractum
                 }
 
-                if (isHovered) {
-                    // ======================================================
-                    // ACTIVE HOVER: Volumetric Glowing 3D Plasma Funnel Wave
-                    // ======================================================
+                if (!isHovered && anyHovered) {
+                    alpha *= 0.25; // Dim non-hovered streams
+                }
 
-                    // 1. Funnel Mesh Fill
+                if (alpha <= 0.01) return;
+
+                // Draw Specific Micro-Element Type
+                ctx.save();
+                ctx.globalAlpha = alpha;
+
+                if (p.type === 'streak') {
+                    // 1. Light Comet / Streak with Flow Tail
+                    const grad = ctx.createLinearGradient(prevX, prevY, px, py);
+                    grad.addColorStop(0, hexToRgba(node.accent, 0));
+                    grad.addColorStop(1, isHovered ? '#ffffff' : node.accent);
+
                     ctx.beginPath();
-                    ctx.moveTo(topPoints[0].x, topPoints[0].y);
-                    for (let i = 1; i <= steps; i++) ctx.lineTo(topPoints[i].x, topPoints[i].y);
-                    for (let i = steps; i >= 0; i--) ctx.lineTo(botPoints[i].x, botPoints[i].y);
+                    ctx.moveTo(prevX, prevY);
+                    ctx.lineTo(px, py);
+                    ctx.strokeStyle = grad;
+                    ctx.lineWidth = isHovered ? (p.size * 1.2) : (p.size * 0.8);
+                    ctx.shadowColor = node.accent;
+                    ctx.shadowBlur = isHovered ? 14 : 8;
+                    ctx.lineCap = 'round';
+                    ctx.stroke();
+
+                } else if (p.type === 'diamond') {
+                    // 2. Data Diamond / Micro-Shard
+                    ctx.translate(px, py);
+                    ctx.rotate(p.angle);
+                    const dSize = isHovered ? (p.size * 1.3) : p.size;
+
+                    ctx.beginPath();
+                    ctx.moveTo(0, -dSize);
+                    ctx.lineTo(dSize, 0);
+                    ctx.lineTo(0, dSize);
+                    ctx.lineTo(-dSize, 0);
                     ctx.closePath();
 
-                    const grad = ctx.createLinearGradient(start.x, start.y, end.x, end.y);
-                    grad.addColorStop(0, hexToRgba(node.accent, 0.65));
-                    grad.addColorStop(0.5, hexToRgba(node.accent, 0.40));
-                    grad.addColorStop(1, hexToRgba('#38bdf8', 0.75));
-
-                    ctx.fillStyle = grad;
+                    ctx.fillStyle = isHovered ? '#ffffff' : node.accent;
                     ctx.shadowColor = node.accent;
-                    ctx.shadowBlur = 32;
+                    ctx.shadowBlur = isHovered ? 16 : 8;
                     ctx.fill();
 
-                    // 2. Glowing Outer Boundary Lines
+                } else if (p.type === 'ring') {
+                    // 3. Quantum Energy Ring
+                    const rSize = (p.size * (1 + (1 - alpha) * 0.8));
                     ctx.beginPath();
-                    ctx.moveTo(topPoints[0].x, topPoints[0].y);
-                    for (let i = 1; i <= steps; i++) ctx.lineTo(topPoints[i].x, topPoints[i].y);
-                    ctx.strokeStyle = hexToRgba(node.accent, 0.95);
-                    ctx.lineWidth = 2.5;
-                    ctx.shadowBlur = 20;
+                    ctx.arc(px, py, rSize, 0, Math.PI * 2);
+                    ctx.strokeStyle = node.accent;
+                    ctx.lineWidth = 1.4;
+                    ctx.shadowColor = node.accent;
+                    ctx.shadowBlur = 10;
                     ctx.stroke();
-
-                    ctx.beginPath();
-                    ctx.moveTo(botPoints[0].x, botPoints[0].y);
-                    for (let i = 1; i <= steps; i++) ctx.lineTo(botPoints[i].x, botPoints[i].y);
-                    ctx.strokeStyle = hexToRgba(node.accent, 0.95);
-                    ctx.lineWidth = 2.5;
-                    ctx.shadowBlur = 20;
-                    ctx.stroke();
-
-                    // 3. Central Specular Fiber Core Line
-                    ctx.beginPath();
-                    ctx.moveTo(centerPoints[0].x, centerPoints[0].y);
-                    for (let i = 1; i <= steps; i++) ctx.lineTo(centerPoints[i].x, centerPoints[i].y);
-                    ctx.strokeStyle = '#ffffff';
-                    ctx.lineWidth = 2.4;
-                    ctx.shadowColor = '#ffffff';
-                    ctx.shadowBlur = 14;
-                    ctx.stroke();
-                    ctx.shadowBlur = 0;
-
-                    // 4. Volumetric Flowing Energy Packets
-                    wavePackets.forEach(function (p) {
-                        p.progress += p.speed;
-                        if (p.progress > 1) p.progress = 0;
-
-                        const idx = Math.min(Math.floor(p.progress * steps), steps);
-                        const pt = centerPoints[idx];
-                        if (!pt) return;
-
-                        const scaleW = 1 + (pt.halfW / cardHalfH) * 0.4;
-
-                        // Glow Halo
-                        ctx.beginPath();
-                        ctx.arc(pt.x, pt.y, p.size * scaleW, 0, Math.PI * 2);
-                        ctx.fillStyle = node.accent;
-                        ctx.shadowColor = node.accent;
-                        ctx.shadowBlur = 24;
-                        ctx.fill();
-
-                        // Hot White Center
-                        ctx.beginPath();
-                        ctx.arc(pt.x, pt.y, p.size * 0.45, 0, Math.PI * 2);
-                        ctx.fillStyle = '#ffffff';
-                        ctx.fill();
-                        ctx.shadowBlur = 0;
-                    });
 
                 } else {
-                    // ======================================================
-                    // IDLE STATE: CLEARLY VISIBLE, RICH PLASMA FUNNEL WAVE
-                    // ======================================================
+                    // 4. Glowing Photon Dot / Spark
+                    const dotRadius = isHovered ? (p.size * 1.2) : p.size;
 
-                    // 1. Visible translucent ribbon fill
+                    // Outer Glow
                     ctx.beginPath();
-                    ctx.moveTo(topPoints[0].x, topPoints[0].y);
-                    for (let i = 1; i <= steps; i++) ctx.lineTo(topPoints[i].x, topPoints[i].y);
-                    for (let i = steps; i >= 0; i--) ctx.lineTo(botPoints[i].x, botPoints[i].y);
-                    ctx.closePath();
-
-                    const grad = ctx.createLinearGradient(start.x, start.y, end.x, end.y);
-                    const alpha = anyHovered ? 0.04 : 0.20;
-                    grad.addColorStop(0, hexToRgba(node.accent, alpha * 1.8));
-                    grad.addColorStop(0.5, hexToRgba(node.accent, alpha * 1.2));
-                    grad.addColorStop(1, hexToRgba('#38bdf8', alpha * 1.6));
-
-                    ctx.fillStyle = grad;
-                    ctx.shadowBlur = 0;
-                    ctx.fill();
-
-                    // 2. Visible undulating wave boundary lines
-                    ctx.beginPath();
-                    ctx.moveTo(topPoints[0].x, topPoints[0].y);
-                    for (let i = 1; i <= steps; i++) ctx.lineTo(topPoints[i].x, topPoints[i].y);
-                    ctx.strokeStyle = anyHovered ? hexToRgba(node.accent, 0.08) : hexToRgba(node.accent, 0.45);
-                    ctx.lineWidth = 1.6;
-                    ctx.stroke();
-
-                    ctx.beginPath();
-                    ctx.moveTo(botPoints[0].x, botPoints[0].y);
-                    for (let i = 1; i <= steps; i++) ctx.lineTo(botPoints[i].x, botPoints[i].y);
-                    ctx.strokeStyle = anyHovered ? hexToRgba(node.accent, 0.08) : hexToRgba(node.accent, 0.45);
-                    ctx.lineWidth = 1.6;
-                    ctx.stroke();
-
-                    // 3. Main Centerline Undulating Wave (BOLD & GLOWING)
-                    ctx.beginPath();
-                    ctx.moveTo(centerPoints[0].x, centerPoints[0].y);
-                    for (let i = 1; i <= steps; i++) ctx.lineTo(centerPoints[i].x, centerPoints[i].y);
-                    ctx.strokeStyle = anyHovered ? hexToRgba(node.accent, 0.10) : hexToRgba(node.accent, 0.75);
-                    ctx.lineWidth = 2.4;
-                    ctx.shadowColor = node.accent;
-                    ctx.shadowBlur = anyHovered ? 0 : 10;
-                    ctx.stroke();
-                    ctx.shadowBlur = 0;
-                }
-            });
-
-            // 2. Ambient Flowing Photons in Idle Mode (Continual movement)
-            if (hoveredNodeId === null && !isCoreHovered) {
-                ambientParticles.forEach(function (p) {
-                    const node = nodeDataList[p.cardIndex];
-                    if (!node) return;
-
-                    p.progress += p.speed;
-                    if (p.progress > 1) p.progress = 0;
-
-                    const start = node.cardEdge;
-                    const end = node.coreEdge;
-                    const dx = end.x - start.x;
-                    const dy = end.y - start.y;
-                    const dist = Math.hypot(dx, dy);
-                    const normalX = -dy / dist;
-                    const normalY = dx / dist;
-
-                    const t = p.progress;
-                    const envelope = Math.sin(t * Math.PI);
-                    const waveOffset = Math.sin(t * 6.0 - waveTime * 1.3) * (6 * envelope);
-
-                    const lx = start.x + dx * t;
-                    const ly = start.y + dy * t;
-                    const px = lx + normalX * waveOffset;
-                    const py = ly + normalY * waveOffset;
-
-                    // Glowing particle
-                    ctx.beginPath();
-                    ctx.arc(px, py, p.size, 0, Math.PI * 2);
+                    ctx.arc(px, py, dotRadius, 0, Math.PI * 2);
                     ctx.fillStyle = node.accent;
                     ctx.shadowColor = node.accent;
-                    ctx.shadowBlur = 12;
+                    ctx.shadowBlur = isHovered ? 16 : 10;
                     ctx.fill();
 
-                    // White Core
+                    // Hot White Core
                     ctx.beginPath();
-                    ctx.arc(px, py, p.size * 0.45, 0, Math.PI * 2);
+                    ctx.arc(px, py, dotRadius * 0.45, 0, Math.PI * 2);
                     ctx.fillStyle = '#ffffff';
                     ctx.fill();
-                    ctx.shadowBlur = 0;
-                });
-            }
+                }
+
+                ctx.restore();
+            });
 
             animationFrameId = requestAnimationFrame(render);
         }
@@ -383,9 +261,6 @@
 
             card.addEventListener('mouseenter', function () {
                 hoveredNodeId = id;
-                wavePackets.forEach(function (p, idx) {
-                    p.progress = idx * 0.166;
-                });
             });
 
             card.addEventListener('mouseleave', function () {
