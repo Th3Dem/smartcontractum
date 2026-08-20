@@ -235,27 +235,32 @@
 }
 
 .satellite-icon-inline {
-    width: 30px !important;
-    height: 30px !important;
-    border-radius: 8px !important;
+    width: 24px !important;
+    height: 24px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-size: 1.15rem !important;
     flex-shrink: 0 !important;
-    background: linear-gradient(135deg, rgba(11, 20, 38, 0.98) 0%, rgba(20, 35, 70, 0.95) 100%) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.16) !important;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.25) !important;
-    transition: transform 0.25s ease !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    transition: transform 0.25s ease, filter 0.25s ease !important;
     line-height: 1 !important;
 }
 
-.glow-amber { border-color: rgba(245, 158, 11, 0.55) !important; box-shadow: 0 0 12px rgba(245, 158, 11, 0.4) !important; }
-.glow-cyan { border-color: rgba(56, 189, 248, 0.55) !important; box-shadow: 0 0 12px rgba(56, 189, 248, 0.4) !important; }
-.glow-violet { border-color: rgba(139, 92, 246, 0.55) !important; box-shadow: 0 0 12px rgba(139, 92, 246, 0.4) !important; }
-.glow-emerald { border-color: rgba(16, 185, 129, 0.55) !important; box-shadow: 0 0 12px rgba(16, 185, 129, 0.4) !important; }
-.glow-sky { border-color: rgba(2, 132, 199, 0.55) !important; box-shadow: 0 0 12px rgba(2, 132, 199, 0.4) !important; }
-.glow-gold { border-color: rgba(236, 72, 153, 0.55) !important; box-shadow: 0 0 12px rgba(236, 72, 153, 0.4) !important; }
+.sat-vector-icon {
+    width: 22px !important;
+    height: 22px !important;
+    fill: currentColor !important;
+    transition: transform 0.25s ease !important;
+}
+
+.glow-amber { color: #f59e0b !important; filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.65)) !important; }
+.glow-cyan { color: #38bdf8 !important; filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.65)) !important; }
+.glow-violet { color: #a78bfa !important; filter: drop-shadow(0 0 6px rgba(167, 139, 250, 0.65)) !important; }
+.glow-emerald { color: #10b981 !important; filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.65)) !important; }
+.glow-sky { color: #0284c7 !important; filter: drop-shadow(0 0 6px rgba(2, 132, 199, 0.65)) !important; }
+.glow-gold { color: #ec4899 !important; filter: drop-shadow(0 0 6px rgba(236, 72, 153, 0.65)) !important; }
 
 /* Centered Title (Significantly Enlarged to 1.14rem, Bold 900) */
 .satellite-title {
