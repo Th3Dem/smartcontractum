@@ -198,37 +198,34 @@ ul {
 .brand-logo {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     flex-shrink: 0;
     text-decoration: none;
     transition: transform var(--transition-fast);
 }
 
 .brand-logo:hover .logo-icon-box {
-    transform: scale(1.06) translateY(-1px);
-    box-shadow: 0 6px 20px rgba(56, 97, 251, 0.55), 0 0 20px rgba(56, 189, 248, 0.35);
-    border-color: rgba(56, 189, 248, 0.65);
+    transform: scale(1.08) translateY(-1px);
+    filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.65)) drop-shadow(0 0 10px rgba(22, 199, 132, 0.4));
 }
 
 .logo-icon-box {
-    width: 38px;
-    height: 38px;
-    background: linear-gradient(135deg, rgba(20, 36, 75, 0.95), rgba(11, 20, 42, 0.98));
-    border: 1px solid rgba(56, 189, 248, 0.4);
-    border-radius: 11px;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.25);
-    transition: all var(--transition-fast);
-    overflow: hidden;
+    transition: transform var(--transition-fast), filter var(--transition-fast);
+    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.35));
     position: relative;
 }
 
 .logo-icon-box.small {
-    width: 30px;
-    height: 30px;
-    border-radius: 9px;
+    width: 26px;
+    height: 26px;
 }
 
 .smart-contract-logo-svg {
