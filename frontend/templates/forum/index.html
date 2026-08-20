@@ -3,7 +3,7 @@
 {% block title %}Моя лента / Хабр-ПКСК — SmartContractum | Сообщество разработчиков смарт-контрактов{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_social.css?v=8.0.0">
+<link rel="stylesheet" href="/static/css/forum_social.css?v=9.5.0">
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.add('light-theme-feed');
@@ -29,47 +29,172 @@
                     <!-- Dropdown: КАТЕГОРИИ (Выпадающий список при наведении курсора) -->
                     <div class="categories-dropdown-wrapper" id="categoriesDropdownWrap">
                         <button type="button" class="btn-categories-dropdown {% if active_stream and active_stream != 'all' %}is-filtered{% endif %}" id="btnCategoriesDropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="cat-btn-icon">{{ active_category_icon }}</span>
+                            <span class="cat-btn-icon-wrap" aria-hidden="true">
+                                <svg class="cat-vector-svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M2 4.75C2 3.784 2.784 3 3.75 3h4.836c.464 0 .909.184 1.237.513l1.414 1.414a.25.25 0 00.177.073h4.836c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0116.25 17H3.75A1.75 1.75 0 012 15.25V4.75z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
                             <span class="cat-btn-text">Категории</span>
                             {% if active_stream and active_stream != 'all' %}
                             <span class="cat-active-badge">{{ active_category_name }}</span>
                             {% endif %}
-                            <span class="cat-dropdown-arrow">▾</span>
+                            <svg class="cat-dropdown-arrow" viewBox="0 0 16 16" fill="currentColor" width="12" height="12" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 011.06 0L8 8.94l2.72-2.72a.75.75 0 111.06 1.06l-3.25 3.25a.75.75 0 01-1.06 0L4.22 7.28a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                            </svg>
                         </button>
 
                         <div class="categories-dropdown-menu" id="categoriesDropdownMenu" role="menu">
                             <div class="cat-menu-header">
                                 <span>Выберите категорию / поток:</span>
                             </div>
-                            {% for cat in categories %}
-                            <a href="/feed?stream={{ cat.slug }}{% if active_query %}&q={{ active_query }}{% endif %}{% if active_sort %}&sort={{ active_sort }}{% endif %}" 
-                               class="cat-menu-item {% if active_stream == cat.slug %}is-active{% endif %}" role="menuitem">
-                                <span class="cat-menu-icon">{{ cat.icon }}</span>
+                            
+                            <!-- 1. Все потоки -->
+                            <a href="/feed?stream=all{% if active_query %}&q={{ active_query }}{% endif %}{% if active_sort %}&sort={{ active_sort }}{% endif %}" 
+                               class="cat-menu-item {% if active_stream == 'all' %}is-active{% endif %}" role="menuitem">
+                                <span class="cat-menu-icon-box cat-icon-all">
+                                    <svg class="cat-item-svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.17 1.998-1.528 2.87-.367.893-.595 1.583-.595 1.832 0 .043.01.127.058.21.05.087.147.19.34.257.377.13 1.01.13 1.637-.123.636-.257 1.258-.753 1.66-1.37.054-.083.1-.167.141-.25.041.134.062.278.062.426 0 1.268-.696 2.457-1.634 3.19-.948.74-2.148 1.15-3.218 1.15-1.282 0-2.522-.524-3.39-1.47-.86-.938-1.29-2.222-1.29-3.568 0-.46.06-.91.17-1.34.085-.333-.14-.666-.48-.718a.67.67 0 00-.77.46C2.24 7.6 2 8.78 2 10c0 4.418 3.582 8 8 8s8-3.582 8-8c0-3.34-1.92-6.17-4.605-7.447z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
                                 <div class="cat-menu-text-wrap">
                                     <div class="cat-menu-top-line">
-                                        <span class="cat-menu-name">{{ cat.name }}</span>
-                                        <span class="cat-menu-count">{{ cat.count_topics }} тем</span>
+                                        <span class="cat-menu-name">Все потоки</span>
+                                        <span class="cat-menu-count">5 тем</span>
                                     </div>
-                                    <span class="cat-menu-subs">{{ cat.subscribers_count }} читателей</span>
+                                    <span class="cat-menu-subs">18.4k читателей</span>
                                 </div>
-                                {% if active_stream == cat.slug %}
+                                {% if active_stream == 'all' %}
                                 <span class="cat-menu-check">✓</span>
                                 {% endif %}
                             </a>
-                            {% endfor %}
+
+                            <!-- 2. Разработка смарт-контрактов -->
+                            <a href="/feed?stream=smart-contracts{% if active_query %}&q={{ active_query }}{% endif %}{% if active_sort %}&sort={{ active_sort }}{% endif %}" 
+                               class="cat-menu-item {% if active_stream == 'smart-contracts' %}is-active{% endif %}" role="menuitem">
+                                <span class="cat-menu-icon-box cat-icon-dev">
+                                    <svg class="cat-item-svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <div class="cat-menu-text-wrap">
+                                    <div class="cat-menu-top-line">
+                                        <span class="cat-menu-name">Разработка смарт-контрактов</span>
+                                        <span class="cat-menu-count">2 темы</span>
+                                    </div>
+                                    <span class="cat-menu-subs">12.1k читателей</span>
+                                </div>
+                                {% if active_stream == 'smart-contracts' %}
+                                <span class="cat-menu-check">✓</span>
+                                {% endif %}
+                            </a>
+
+                            <!-- 3. Информационная безопасность -->
+                            <a href="/feed?stream=infosec-audit{% if active_query %}&q={{ active_query }}{% endif %}{% if active_sort %}&sort={{ active_sort }}{% endif %}" 
+                               class="cat-menu-item {% if active_stream == 'infosec-audit' %}is-active{% endif %}" role="menuitem">
+                                <span class="cat-menu-icon-box cat-icon-sec">
+                                    <svg class="cat-item-svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.268 4.66-1.597 8-6.043 8-11.268 0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <div class="cat-menu-text-wrap">
+                                    <div class="cat-menu-top-line">
+                                        <span class="cat-menu-name">Информационная безопасность</span>
+                                        <span class="cat-menu-count">1 тема</span>
+                                    </div>
+                                    <span class="cat-menu-subs">9.8k читателей</span>
+                                </div>
+                                {% if active_stream == 'infosec-audit' %}
+                                <span class="cat-menu-check">✓</span>
+                                {% endif %}
+                            </a>
+
+                            <!-- 4. Оракулы & Данные -->
+                            <a href="/feed?stream=oracles{% if active_query %}&q={{ active_query }}{% endif %}{% if active_sort %}&sort={{ active_sort }}{% endif %}" 
+                               class="cat-menu-item {% if active_stream == 'oracles' %}is-active{% endif %}" role="menuitem">
+                                <span class="cat-menu-icon-box cat-icon-data">
+                                    <svg class="cat-item-svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-.2c0-1.546-.616-3.029-1.713-4.123l-.174-.174A2 2 0 006.7 11H5a1 1 0 00-1 1v.077c-.426-.91-.668-1.928-.668-3.077 0-.342.029-.677.083-1.003l.917.03z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <div class="cat-menu-text-wrap">
+                                    <div class="cat-menu-top-line">
+                                        <span class="cat-menu-name">Оракулы & Данные</span>
+                                        <span class="cat-menu-count">1 тема</span>
+                                    </div>
+                                    <span class="cat-menu-subs">6.5k читателей</span>
+                                </div>
+                                {% if active_stream == 'oracles' %}
+                                <span class="cat-menu-check">✓</span>
+                                {% endif %}
+                            </a>
+
+                            <!-- 5. Казначейство & B2B -->
+                            <a href="/feed?stream=treasury-b2b{% if active_query %}&q={{ active_query }}{% endif %}{% if active_sort %}&sort={{ active_sort }}{% endif %}" 
+                               class="cat-menu-item {% if active_stream == 'treasury-b2b' %}is-active{% endif %}" role="menuitem">
+                                <span class="cat-menu-icon-box cat-icon-bank">
+                                    <svg class="cat-item-svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10.496 2.132a1 1 0 00-.992 0l-7 4A1 1 0 002 7v1a1 1 0 001 1h14a1 1 0 001-1V7a1 1 0 00-.504-.868l-7-4zM3 11a1 1 0 011-1h1a1 1 0 011 1v4a1 1 0 01-1 1H4a1 1 0 01-1-1v-4zm5 0a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1H9a1 1 0 01-1-1v-4zm6-1a1 1 0 00-1 1v4a1 1 0 001 1h1a1 1 0 001-1v-4a1 1 0 00-1-1h-1zM2 17a1 1 0 011-1h14a1 1 0 110 2H3a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <div class="cat-menu-text-wrap">
+                                    <div class="cat-menu-top-line">
+                                        <span class="cat-menu-name">Казначейство & B2B</span>
+                                        <span class="cat-menu-count">1 тема</span>
+                                    </div>
+                                    <span class="cat-menu-subs">5.2k читателей</span>
+                                </div>
+                                {% if active_stream == 'treasury-b2b' %}
+                                <span class="cat-menu-check">✓</span>
+                                {% endif %}
+                            </a>
+
+                            <!-- 6. Регуляторика & ЦБ РФ -->
+                            <a href="/feed?stream=safe-deals{% if active_query %}&q={{ active_query }}{% endif %}{% if active_sort %}&sort={{ active_sort }}{% endif %}" 
+                               class="cat-menu-item {% if active_stream == 'safe-deals' %}is-active{% endif %}" role="menuitem">
+                                <span class="cat-menu-icon-box cat-icon-cbr">
+                                    <svg class="cat-item-svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 2a1 1 0 01.707.293l6 6a1 1 0 01-1.414 1.414L15 9.414V16a2 2 0 01-2 2H7a2 2 0 01-2-2V9.414l-.293.293a1 1 0 01-1.414-1.414l6-6A1 1 0 0110 2zm0 3.414L6 9.414V16h8V9.414l-4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <div class="cat-menu-text-wrap">
+                                    <div class="cat-menu-top-line">
+                                        <span class="cat-menu-name">Регуляторика & ЦБ РФ</span>
+                                        <span class="cat-menu-count">1 тема</span>
+                                    </div>
+                                    <span class="cat-menu-subs">8.9k читателей</span>
+                                </div>
+                                {% if active_stream == 'safe-deals' %}
+                                <span class="cat-menu-check">✓</span>
+                                {% endif %}
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Sort Tabs -->
+                    <!-- Sort Tabs with Vector Icons -->
                     <div class="habr-sort-tabs">
                         <a href="/feed?stream={{ active_stream }}&sort=best{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'best' %}is-active{% endif %}" data-sort="best">
-                            🔥 Лучшие
+                            <span class="tab-icon-wrap">
+                                <svg class="tab-svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.17 1.998-1.528 2.87-.367.893-.595 1.583-.595 1.832 0 .043.01.127.058.21.05.087.147.19.34.257.377.13 1.01.13 1.637-.123.636-.257 1.258-.753 1.66-1.37.054-.083.1-.167.141-.25.041.134.062.278.062.426 0 1.268-.696 2.457-1.634 3.19-.948.74-2.148 1.15-3.218 1.15-1.282 0-2.522-.524-3.39-1.47-.86-.938-1.29-2.222-1.29-3.568 0-.46.06-.91.17-1.34.085-.333-.14-.666-.48-.718a.67.67 0 00-.77.46C2.24 7.6 2 8.78 2 10c0 4.418 3.582 8 8 8s8-3.582 8-8c0-3.34-1.92-6.17-4.605-7.447z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                            <span>Лучшие</span>
                         </a>
                         <a href="/feed?stream={{ active_stream }}&sort=new{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'new' %}is-active{% endif %}" data-sort="new">
-                            🕒 Новые
+                            <span class="tab-icon-wrap">
+                                <svg class="tab-svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                            <span>Новые</span>
                         </a>
                         <a href="/feed?stream={{ active_stream }}&sort=discussed{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'discussed' %}is-active{% endif %}" data-sort="discussed">
-                            💬 Обсуждаемые
+                            <span class="tab-icon-wrap">
+                                <svg class="tab-svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 2c-4.418 0-8 3.134-8 7 0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-1.093 3.024-.206.27-.018.65.313.626 2.016-.145 3.655-.956 4.604-1.636C8.47 15.845 9.22 16 10 16c4.418 0 8-3.134 8-7s-3.582-7-8-7z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
+                            <span>Обсуждаемые</span>
                         </a>
                     </div>
                 </div>
@@ -77,7 +202,11 @@
                 <!-- Right Actions: Search Box + Write Article Button -->
                 <div class="habr-actions-right">
                     <div class="habr-search-box">
-                        <span class="search-icon">🔍</span>
+                        <span class="search-icon" aria-hidden="true">
+                            <svg class="search-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
                         <input type="text" class="habr-search-input" id="habrSearchInput" 
                                placeholder="Поиск по статьям, коду..." 
                                value="{{ active_query }}"
@@ -86,7 +215,11 @@
                     </div>
 
                     <button type="button" class="btn-habr-write" id="btnOpenWriteModal">
-                        <span class="btn-icon">✍️</span>
+                        <span class="btn-icon-wrap" aria-hidden="true">
+                            <svg class="write-btn-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                            </svg>
+                        </span>
                         <span>Написать статью</span>
                     </button>
                 </div>
@@ -148,16 +281,26 @@
                     <!-- 5. Full Body (Expandable) -->
                     <div class="habr-full-body" id="body-{{ post.id }}" style="display: none;">
                         <div class="habr-body-content">
-                            {{ post.body | replace('\n', '<br>') | safe }}
+                            {{ post.body | replace('
+', '<br>') | safe }}
                         </div>
 
                         <!-- Code Snippet Box (Light Code Block) -->
                         {% if post.code_snippet %}
                         <div class="habr-code-block">
                             <div class="habr-code-header">
-                                <span class="code-lang">🔷 {{ post.code_language | upper }}</span>
+                                <span class="code-lang">
+                                    <svg class="code-badge-svg" viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
+                                        <path fill-rule="evenodd" d="M4.72 3.22a.75.75 0 011.06 1.06L2.06 8l3.72 3.72a.75.75 0 11-1.06 1.06L.47 8.53a.75.75 0 010-1.06l4.25-4.25zm6.56 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L13.94 8l-3.72-3.72a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                                    </svg>
+                                    {{ post.code_language | upper }}
+                                </span>
                                 <button type="button" class="btn-copy-code" title="Скопировать код">
-                                    <span class="copy-icon">📋</span> <span>Скопировать</span>
+                                    <svg class="copy-svg-icon" viewBox="0 0 20 20" fill="currentColor" width="13" height="13">
+                                        <path d="M7 3.5A1.5 1.5 0 018.5 2h3.879a1.5 1.5 0 011.06.44l3.122 3.12a1.5 1.5 0 01.439 1.061V14.5A1.5 1.5 0 0115.5 16h-7A1.5 1.5 0 017 14.5v-11z" />
+                                        <path d="M5 6a1.5 1.5 0 00-1.5 1.5v8A1.5 1.5 0 005 17h7a1.5 1.5 0 001.5-1.5v-.5H8.5A2.5 2.5 0 016 12.5V6H5z" />
+                                    </svg>
+                                    <span>Скопировать</span>
                                 </button>
                             </div>
                             <pre class="code-pre"><code class="code-content">{{ post.code_snippet }}</code></pre>
@@ -186,19 +329,32 @@
 
                             <!-- Views Counter -->
                             <div class="habr-stat-item" title="Количество просмотров">
-                                <span class="stat-icon">👁</span>
+                                <span class="stat-icon-wrap" aria-hidden="true">
+                                    <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+                                        <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
                                 <span class="stat-val">{{ post.views_formatted }}</span>
                             </div>
 
                             <!-- Bookmarks Counter -->
                             <button type="button" class="habr-stat-btn btn-bookmark {% if post.is_bookmarked %}is-active{% endif %}" data-action="bookmark" data-post-id="{{ post.id }}" title="Добавить в закладки">
-                                <span class="stat-icon">🔖</span>
+                                <span class="stat-icon-wrap" aria-hidden="true">
+                                    <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-3.125L5 18V4z" />
+                                    </svg>
+                                </span>
                                 <span class="stat-val">{{ post.bookmarks_count }}</span>
                             </button>
 
                             <!-- Comments Counter & Toggle -->
                             <button type="button" class="habr-stat-btn btn-comments-toggle" data-action="toggle-comments" data-post-id="{{ post.id }}" title="Комментарии">
-                                <span class="stat-icon">💬</span>
+                                <span class="stat-icon-wrap" aria-hidden="true">
+                                    <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zm-4 0H9v2h2V9z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
                                 <span class="stat-val">{{ post.replies_count }}</span>
                             </button>
                         </div>
@@ -206,7 +362,11 @@
                         <div class="habr-footer-right">
                             <!-- Share Button -->
                             <button type="button" class="habr-stat-btn btn-share" data-action="share" data-post-id="{{ post.id }}" title="Поделиться">
-                                <span class="stat-icon">🔗</span>
+                                <span class="stat-icon-wrap" aria-hidden="true">
+                                    <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+                                    </svg>
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -252,7 +412,12 @@
 
             <!-- Empty State -->
             <div class="habr-empty-state" id="habrEmptyState" style="{% if topics %}display: none;{% else %}display: flex;{% endif %}">
-                <div class="empty-icon">🔍</div>
+                <div class="empty-icon-wrap" aria-hidden="true">
+                    <svg class="empty-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                    </svg>
+                </div>
                 <h3 class="empty-title">Публикаций по запросу не найдено</h3>
                 <p class="empty-desc">Попробуйте изменить поисковые слова или сбросить фильтры.</p>
                 <a href="/feed" class="btn-habr-reset">Сбросить все фильтры</a>
@@ -262,10 +427,17 @@
         <!-- 1.2 HABR RIGHT SIDEBAR (Читают сейчас, Хабы, Компании) -->
         <aside class="habr-sidebar-right">
 
-            <!-- Sidebar Block 1: 🔥 ЧИТАЮТ СЕЙЧАС (Trending Articles) -->
+            <!-- Sidebar Block 1: ЧИТАЮТ СЕЙЧАС (Trending Articles) -->
             <div class="habr-sidebar-block trending-block">
                 <div class="sidebar-block-head">
-                    <h3 class="block-title">Читают сейчас</h3>
+                    <h3 class="block-title">
+                        <span class="block-title-icon">
+                            <svg class="block-title-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.17 1.998-1.528 2.87-.367.893-.595 1.583-.595 1.832 0 .043.01.127.058.21.05.087.147.19.34.257.377.13 1.01.13 1.637-.123.636-.257 1.258-.753 1.66-1.37.054-.083.1-.167.141-.25.041.134.062.278.062.426 0 1.268-.696 2.457-1.634 3.19-.948.74-2.148 1.15-3.218 1.15-1.282 0-2.522-.524-3.39-1.47-.86-.938-1.29-2.222-1.29-3.568 0-.46.06-.91.17-1.34.085-.333-.14-.666-.48-.718a.67.67 0 00-.77.46C2.24 7.6 2 8.78 2 10c0 4.418 3.582 8 8 8s8-3.582 8-8c0-3.34-1.92-6.17-4.605-7.447z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                        Читают сейчас
+                    </h3>
                 </div>
                 <div class="trending-articles-list">
                     {% for article in trending_articles %}
@@ -276,9 +448,20 @@
                             <div class="trending-meta">
                                 <span class="meta-score">{{ article.score_formatted }}</span>
                                 <span class="meta-dot">•</span>
-                                <span class="meta-views">👁 {{ article.views_formatted }}</span>
+                                <span class="meta-views">
+                                    <svg class="mini-stat-svg" viewBox="0 0 20 20" fill="currentColor" width="12" height="12">
+                                        <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+                                        <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                    </svg>
+                                    {{ article.views_formatted }}
+                                </span>
                                 <span class="meta-dot">•</span>
-                                <span class="meta-comments">💬 {{ article.replies_count }}</span>
+                                <span class="meta-comments">
+                                    <svg class="mini-stat-svg" viewBox="0 0 20 20" fill="currentColor" width="12" height="12">
+                                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zm-4 0H9v2h2V9z" clip-rule="evenodd" />
+                                    </svg>
+                                    {{ article.replies_count }}
+                                </span>
                             </div>
                         </div>
                     </a>
@@ -286,10 +469,17 @@
                 </div>
             </div>
 
-            <!-- Sidebar Block 2: 🏆 ПОПУЛЯРНЫЕ ХАБЫ (Popular Hubs) -->
+            <!-- Sidebar Block 2: ПОПУЛЯРНЫЕ ХАБЫ (Popular Hubs) -->
             <div class="habr-sidebar-block hubs-block">
                 <div class="sidebar-block-head">
-                    <h3 class="block-title">Популярные хабы</h3>
+                    <h3 class="block-title">
+                        <span class="block-title-icon">
+                            <svg class="block-title-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.068 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.83-4.401z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                        Популярные хабы
+                    </h3>
                 </div>
                 <div class="popular-hubs-list">
                     {% for hub in popular_hubs %}
@@ -304,15 +494,26 @@
                 </div>
             </div>
 
-            <!-- Sidebar Block 3: 🏛️ КОМПАНИИ ЭКОСИСТЕМЫ (Leading Teams) -->
+            <!-- Sidebar Block 3: КОМПАНИИ ЭКОСИСТЕМЫ (Leading Teams) -->
             <div class="habr-sidebar-block companies-block">
                 <div class="sidebar-block-head">
-                    <h3 class="block-title">Компании недели</h3>
+                    <h3 class="block-title">
+                        <span class="block-title-icon">
+                            <svg class="block-title-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                        Компании недели
+                    </h3>
                 </div>
                 <div class="companies-list">
                     {% for comp in top_companies %}
                     <div class="company-sidebar-row">
-                        <span class="company-logo">{{ comp.logo }}</span>
+                        <div class="company-logo-badge">
+                            <svg class="comp-badge-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
                         <div class="company-info">
                             <span class="company-name">{{ comp.name }}</span>
                             <span class="company-stats">{{ comp.posts }}</span>
@@ -323,10 +524,17 @@
                 </div>
             </div>
 
-            <!-- Sidebar Block 4: 📅 КАЛЕНДАРЬ НИР ЦБ РФ -->
+            <!-- Sidebar Block 4: КАЛЕНДАРЬ НИР ЦБ РФ -->
             <div class="habr-sidebar-block nir-block">
                 <div class="sidebar-block-head">
-                    <h3 class="block-title">Календарь ПКСК & НИР</h3>
+                    <h3 class="block-title">
+                        <span class="block-title-icon">
+                            <svg class="block-title-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                        Календарь ПКСК & НИР
+                    </h3>
                 </div>
                 <div class="nir-timeline-box">
                     <div class="nir-step is-passed">
@@ -365,7 +573,11 @@
     <div class="modal-card habr-modal-card">
         <div class="modal-header">
             <div class="modal-title-group">
-                <span class="modal-icon">✍️</span>
+                <div class="modal-icon-box">
+                    <svg class="modal-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                    </svg>
+                </div>
                 <h3 class="modal-title">Написать статью в хаб</h3>
             </div>
             <button class="modal-close-btn" id="btnCloseWriteModal" aria-label="Закрыть окно">✕</button>
@@ -390,22 +602,22 @@
                 <div class="form-group">
                     <label for="articleCategorySelect" class="form-label">Основной поток / Хаб <span class="required-star">*</span></label>
                     <select id="articleCategorySelect" name="category_slug" class="form-select" required>
-                        <option value="smart-contracts">💻 Разработка смарт-контрактов</option>
-                        <option value="infosec-audit">🛡️ Информационная безопасность</option>
-                        <option value="safe-deals">🏛️ Регуляторика & ЦБ РФ</option>
-                        <option value="oracles">🌐 Оракулы & Данные</option>
-                        <option value="treasury-b2b">🏦 Казначейство & B2B</option>
+                        <option value="smart-contracts">Разработка смарт-контрактов</option>
+                        <option value="infosec-audit">Информационная безопасность</option>
+                        <option value="safe-deals">Регуляторика & ЦБ РФ</option>
+                        <option value="oracles">Оракулы & Данные</option>
+                        <option value="treasury-b2b">Казначейство & B2B</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="articleRoleSelect" class="form-label">Роль автора</label>
                     <select id="articleRoleSelect" name="author_role" class="form-select">
-                        <option value="Разработчик">👨‍💻 Разработчик</option>
-                        <option value="ИБ-Аудитор">🛡️ ИБ-Аудитор</option>
-                        <option value="Поставщик данных">📊 Поставщик данных</option>
-                        <option value="ЦБ/АБР Эксперт">🏛️ ЦБ/АБР Эксперт</option>
-                        <option value="Заказчик">💼 Заказчик</option>
+                        <option value="Разработчик">Разработчик</option>
+                        <option value="ИБ-Аудитор">ИБ-Аудитор</option>
+                        <option value="Поставщик данных">Поставщик данных</option>
+                        <option value="ЦБ/АБР Эксперт">ЦБ/АБР Эксперт</option>
+                        <option value="Заказчик">Заказчик</option>
                     </select>
                 </div>
             </div>
@@ -459,5 +671,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_social.js?v=8.0.0" defer></script>
+<script src="/static/js/forum_social.js?v=9.5.0" defer></script>
 {% endblock %}

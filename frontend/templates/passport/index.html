@@ -27,7 +27,7 @@
         ============================================================ -->
         <section class="wizard-form-panel">
             <div class="panel-header">
-                <div class="panel-icon-box">✍️</div>
+                <div class="panel-icon-box"><svg class="panel-svg-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg></div>
                 <div>
                     <h2 class="panel-title">Мастер параметров сценария</h2>
                     <span class="panel-hint">Заполните ключевые условия сделки</span>
@@ -110,7 +110,7 @@
                 <div class="form-actions-bar">
                     <button type="submit" id="btnGeneratePassport" class="btn-generate-tree">
                         <span id="genSpinner" class="gen-spinner" style="display: none;">⏳</span>
-                        <span>⚡ Сгенерировать «Дерево решений»</span>
+                        <span>Сгенерировать «Дерево решений»</span>
                     </button>
                 </div>
             </form>
@@ -121,7 +121,7 @@
         ============================================================ -->
         <section class="tree-preview-panel">
             <div class="panel-header">
-                <div class="panel-icon-box cyan">🌳</div>
+                <div class="panel-icon-box cyan"><svg class="panel-svg-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM3 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2A1 1 0 003 9.236z" /></svg></div>
                 <div class="tree-header-meta">
                     <h2 class="panel-title">Дерево решений ПКСК</h2>
                     <span class="passport-id-badge" id="displayPassportCode">{{ sample_code }}</span>
@@ -138,7 +138,7 @@
                     </div>
                     <span class="terminal-title">DECISION_TREE_VIEWER // PKSC-SPEC</span>
                     <button class="btn-copy-code" id="btnCopyTree" title="Скопировать в буфер">
-                        📋 Копировать
+                        Копировать
                     </button>
                 </div>
                 <pre class="terminal-body"><code id="decisionTreeDisplay">{{ sample_tree }}</code></pre>
@@ -147,10 +147,10 @@
             <!-- Action Buttons for Export & Next Step -->
             <div class="preview-actions-bar">
                 <button type="button" class="btn-action-secondary" id="btnDownloadMarkdown">
-                    <span>📥 Скачать Паспорт (.md)</span>
+                    <span>Скачать Паспорт (.md)</span>
                 </button>
                 <a href="/builder" class="btn-action-primary" id="btnSendToAudit">
-                    <span>🛡️ Отправить на пред-аудит ИБ →</span>
+                    <span>Отправить на пред-аудит ИБ →</span>
                 </a>
             </div>
 

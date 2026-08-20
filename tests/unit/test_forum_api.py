@@ -222,9 +222,10 @@ def test_render_habr_feed_html_page_with_categories_dropdown() -> None:
     assert "Все потоки" in html
     assert "Разработка смарт-контрактов" in html
 
-    # 2. Search Bar with magnifying glass
+    # 2. Search Bar with vector magnifying glass
     assert "habrSearchInput" in html
-    assert "🔍" in html
+    assert "search-icon" in html
+    assert "search-svg" in html
 
     # 3. Sorting Tabs
     assert "Лучшие" in html

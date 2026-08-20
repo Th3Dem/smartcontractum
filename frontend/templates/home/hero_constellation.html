@@ -1,16 +1,8 @@
-<!-- ======================================================================
-     SmartContractum — Interactive Node Constellation Graph Component
-     Jinja2 Template: hero_constellation.html
-====================================================================== -->
-
-<section class="constellation-section" id="actionScenariosHeading" aria-label="Созвездие услуг SmartContractum">
-    <!-- Section Heading -->
-    <div class="section-heading-box">
-        <h2 class="section-title">Что вы хотите сделать?</h2>
-        <p class="section-subtitle">Интерактивное созвездие возможностей и сервисов экосистемы SmartContractum</p>
-    </div>
-
-    <!-- Accessibility: Hidden Semantic List for Screen Readers -->
+<!-- ====================================================================
+     1.2 ИНТЕРАКТИВНОЕ СОЗВЕЗДИЕ УСЛУГ (Hero Constellation Graph v3.70)
+==================================================================== -->
+<section class="hero-constellation-section" id="heroConstellationSection" aria-label="Интерактивное созвездие услуг и сценариев платформы">
+    <!-- Accessibility Screen Reader Navigation -->
     <ul class="sr-only" aria-label="Быстрая навигация по сценариям и услугам платформы">
         <li><a href="/passport">У меня есть бизнес-задача: Нужен ли смарт-контракт, сценарий и паспорт решения</a></li>
         <li><a href="/solutions">Ищу готовое решение: Сценарии, типовые компоненты и готовые разработки</a></li>
@@ -35,11 +27,16 @@
 
         <!-- 1.2 SATELLITE NODES (Top: Icon+Title | Mid: Desc | Bottom: Badge) -->
         <div class="constellation-radial-ring" id="constellationRing">
-            <!-- Node 1: Top-Left (Бизнес-задача) -->
+            
+            <!-- Node 1: Top-Left (Бизнес-задача -> Паспорт решения) -->
             <a href="/passport" class="constellation-satellite-card node-pos-1 node-amber" id="nodeCardPassport" data-node-id="1" data-accent="#f59e0b" data-analytics-event="hero_action_click" data-action-target="passport">
                 <div class="satellite-card-inner">
                     <div class="satellite-header-centered">
-                        <span class="satellite-icon-inline glow-amber">💡</span>
+                        <span class="satellite-icon-inline glow-amber" aria-hidden="true">
+                            <svg class="sat-vector-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10 2a6 6 0 00-6 6c0 1.887.87 3.57 2.235 4.673A2.5 2.5 0 017 14.5v.5a1.5 1.5 0 001.5 1.5h3A1.5 1.5 0 0013 15v-.5a2.5 2.5 0 01.765-1.827C15.13 11.57 16 9.887 16 8a6 6 0 00-6-6zM8 18.5a.5.5 0 00.5.5h3a.5.5 0 00.5-.5V18H8v.5z" />
+                            </svg>
+                        </span>
                         <h3 class="satellite-title">У меня есть бизнес-задача</h3>
                     </div>
                     <p class="satellite-desc">Нужен ли смарт-контракт, сценарий и паспорт решения.</p>
@@ -49,11 +46,15 @@
                 </div>
             </a>
 
-            <!-- Node 2: Top-Right (Готовое решение) -->
+            <!-- Node 2: Top-Right (Готовое решение -> Каталог решений) -->
             <a href="/solutions" class="constellation-satellite-card node-pos-2 node-cyan" id="nodeCardSolutions" data-node-id="2" data-accent="#38bdf8" data-analytics-event="hero_action_click" data-action-target="solutions">
                 <div class="satellite-card-inner">
                     <div class="satellite-header-centered">
-                        <span class="satellite-icon-inline glow-cyan">📦</span>
+                        <span class="satellite-icon-inline glow-cyan" aria-hidden="true">
+                            <svg class="sat-vector-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v2.5C2 7.99 3.01 9 4.25 9h11.5C16.99 9 18 7.99 18 6.75v-2.5A2.25 2.25 0 0015.75 2H4.25zM3.5 4.25a.75.75 0 01.75-.75h11.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75H4.25a.75.75 0 01-.75-.75v-2.5zM2 10.75A2.25 2.25 0 014.25 8.5h11.5A2.25 2.25 0 0118 10.75v5A2.25 2.25 0 0115.75 18H4.25A2.25 2.25 0 012 15.75v-5zm2.25-.75a.75.75 0 00-.75.75v5c0 .414.336.75.75.75h11.5a.75.75 0 00.75-.75v-5a.75.75 0 00-.75-.75H4.25z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
                         <h3 class="satellite-title">Ищу готовое решение</h3>
                     </div>
                     <p class="satellite-desc">Сценарии, типовые компоненты и готовые разработки.</p>
@@ -67,7 +68,11 @@
             <button type="button" class="constellation-satellite-card node-pos-3 satellite-btn node-violet" id="btnSpecialistModalTrigger" data-node-id="3" data-accent="#8b5cf6" data-analytics-event="hero_action_click" data-action-target="specialist_modal" aria-haspopup="dialog">
                 <div class="satellite-card-inner">
                     <div class="satellite-header-centered">
-                        <span class="satellite-icon-inline glow-violet">🔍</span>
+                        <span class="satellite-icon-inline glow-violet" aria-hidden="true">
+                            <svg class="sat-vector-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
                         <h3 class="satellite-title">Ищу специалиста или услугу</h3>
                     </div>
                     <p class="satellite-desc">Разработчики, эксперты, команды, аудиторы.</p>
@@ -81,7 +86,11 @@
             <a href="/profile/join" class="constellation-satellite-card node-pos-4 node-emerald" id="nodeCardProfile" data-node-id="4" data-accent="#10b981" data-analytics-event="hero_action_click" data-action-target="profile_join">
                 <div class="satellite-card-inner">
                     <div class="satellite-header-centered">
-                        <span class="satellite-icon-inline glow-emerald">🚀</span>
+                        <span class="satellite-icon-inline glow-emerald" aria-hidden="true">
+                            <svg class="sat-vector-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.068 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.83-4.401z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
                         <h3 class="satellite-title">Я специалист и хочу участвовать</h3>
                     </div>
                     <p class="satellite-desc">Проекты, рабочие группы, публикация разработок.</p>
@@ -95,7 +104,11 @@
             <a href="/data-sources" class="constellation-satellite-card node-pos-5 node-sky" id="nodeCardSources" data-node-id="5" data-accent="#0284c7" data-analytics-event="hero_action_click" data-action-target="data_sources">
                 <div class="satellite-card-inner">
                     <div class="satellite-header-centered">
-                        <span class="satellite-icon-inline glow-sky">📊</span>
+                        <span class="satellite-icon-inline glow-sky" aria-hidden="true">
+                            <svg class="sat-vector-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M2 3a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H3a1 1 0 01-1-1V3zm0 6a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H3a1 1 0 01-1-1V9zm0 6a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H3a1 1 0 01-1-1v-2z" />
+                            </svg>
+                        </span>
                         <h3 class="satellite-title">Данные и оракулы</h3>
                     </div>
                     <p class="satellite-desc">Найти источник данных или предложить свои.</p>
@@ -109,7 +122,11 @@
             <a href="/knowledge" class="constellation-satellite-card node-pos-6 node-gold" id="nodeCardKnowledge" data-node-id="6" data-accent="#ec4899" data-analytics-event="hero_action_click" data-action-target="knowledge">
                 <div class="satellite-card-inner">
                     <div class="satellite-header-centered">
-                        <span class="satellite-icon-inline glow-gold">🎓</span>
+                        <span class="satellite-icon-inline glow-gold" aria-hidden="true">
+                            <svg class="sat-vector-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 017 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+                            </svg>
+                        </span>
                         <h3 class="satellite-title">Хочу разобраться в ПКСК</h3>
                     </div>
                     <p class="satellite-desc">Знания, изменения, открытые вопросы и обучение.</p>

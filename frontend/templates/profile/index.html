@@ -75,17 +75,17 @@
     <!-- Navigation Tabs -->
     <div class="profile-tabs-nav" id="profileTabsNav">
         <button type="button" class="tab-nav-btn active" data-tab="contracts">
-            <span>💼 Umbrella-Контракты & Публикации</span>
+            <span>Umbrella-Контракты & Публикации</span>
             <span class="tab-counter">{{ contracts|length }}</span>
         </button>
         <button type="button" class="tab-nav-btn" data-tab="royalties">
-            <span>💰 Роялти & Финансы</span>
+            <span>Роялти & Финансы</span>
         </button>
         <button type="button" class="tab-nav-btn" data-tab="passports">
-            <span>📑 Мои Паспорта</span>
+            <span>Мои Паспорта</span>
         </button>
         <button type="button" class="tab-nav-btn" data-tab="settings">
-            <span>⚙️ Настройки & API</span>
+            <span>Настройки & API</span>
         </button>
     </div>
 
@@ -95,7 +95,7 @@
     <div class="tab-content-panel active" id="tabContentContracts">
         <!-- Umbrella Notice Callout -->
         <div class="umbrella-info-box">
-            <div class="info-icon">🏛️</div>
+            <div class="info-icon"><svg class="info-svg-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a1 1 0 01.707.293l6 6a1 1 0 01-1.414 1.414L15 9.414V16a2 2 0 01-2 2H7a2 2 0 01-2-2V9.414l-.293.293a1 1 0 01-1.414-1.414l6-6A1 1 0 0110 2zm0 3.414L6 9.414V16h8V9.414l-4-4z" clip-rule="evenodd" /></svg></div>
             <div class="info-content">
                 <h4 class="info-title">Правовой мост к ПКСК Банка России:</h4>
                 <p class="info-text">
@@ -246,7 +246,7 @@
                     <tr>
                         <td class="col-bold-title">Безопасная сделка факторинга с ЭДО</td>
                         <td><code class="code-passport">SC-2026-PKSC-FACT-09</code></td>
-                        <td><span class="status-pill status-audit">🛡️ Пред-аудит</span></td>
+                        <td><span class="status-pill status-audit">Пред-аудит</span></td>
                         <td><a href="/passport" class="text-cyan font-semibold">Просмотр →</a></td>
                     </tr>
                 </tbody>
@@ -269,7 +269,7 @@
                 <label class="form-label">API-ключ разработчика (Sandbox / Testnet):</label>
                 <div class="api-key-row">
                     <input type="text" class="form-input font-mono" value="sc_live_pksc_892f3a10e7b99c2d" readonly>
-                    <button type="button" class="btn-canvas-tool" onclick="navigator.clipboard.writeText('sc_live_pksc_892f3a10e7b99c2d')">📋 Скопировать</button>
+                    <button type="button" class="btn-canvas-tool" onclick="navigator.clipboard.writeText('sc_live_pksc_892f3a10e7b99c2d')">Скопировать</button>
                 </div>
             </div>
         </div>
@@ -283,7 +283,7 @@
     <div class="modal-dialog">
         <div class="modal-header">
             <div class="modal-header-meta">
-                <span class="modal-icon">🏛️</span>
+                <span class="modal-icon"><svg class="modal-head-svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a1 1 0 01.707.293l6 6a1 1 0 01-1.414 1.414L15 9.414V16a2 2 0 01-2 2H7a2 2 0 01-2-2V9.414l-.293.293a1 1 0 01-1.414-1.414l6-6A1 1 0 0110 2zm0 3.414L6 9.414V16h8V9.414l-4-4z" clip-rule="evenodd" /></svg></span>
                 <h3 class="modal-title">Подать контракт на Umbrella-публикацию</h3>
             </div>
             <button type="button" class="btn-modal-close" id="btnCloseUmbrellaModal">&times;</button>

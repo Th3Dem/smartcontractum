@@ -1356,3 +1356,172 @@ body.light-theme-feed {
         flex: 1;
     }
 }
+
+/* ----------------------------------------------------------------------
+   ICONOGRAPHY SYSTEM (SVG Vector Icons & Cohesive Badges)
+----------------------------------------------------------------------- */
+.cat-btn-icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #0284c7;
+    width: 18px;
+    height: 18px;
+}
+
+.cat-vector-svg {
+    width: 17px;
+    height: 17px;
+    fill: currentColor;
+}
+
+.cat-menu-icon-box {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.cat-item-svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.cat-icon-all {
+    background: #fef2f2;
+    color: #ef4444;
+}
+
+.cat-icon-dev {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.cat-icon-sec {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.cat-icon-data {
+    background: #f0f9ff;
+    color: #0284c7;
+}
+
+.cat-icon-bank {
+    background: #f5f3ff;
+    color: #7c3aed;
+}
+
+.cat-icon-cbr {
+    background: #fffbeb;
+    color: #d97706;
+}
+
+.tab-icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+}
+
+.tab-svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+}
+
+.search-svg {
+    width: 15px;
+    height: 15px;
+    fill: #64748b;
+}
+
+.btn-icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.write-btn-svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+}
+
+.stat-icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    transition: color 0.15s ease;
+}
+
+.stat-svg {
+    width: 15px;
+    height: 15px;
+    fill: currentColor;
+}
+
+.habr-stat-btn:hover .stat-icon-wrap {
+    color: #0f172a;
+}
+
+.btn-bookmark.is-active .stat-icon-wrap {
+    color: #d97706;
+}
+
+.btn-score-arrow {
+    font-size: 0.70rem;
+    line-height: 1;
+}
+
+.block-title-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #0284c7;
+    margin-right: 4px;
+}
+
+.block-title-svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.company-logo-badge {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: #f1f5f9;
+    color: #0284c7;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.75rem;
+}
+
+.comp-badge-svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.panel-svg-icon,
+.canvas-node-svg,
+.audit-header-svg,
+.cert-svg-icon,
+.warning-svg-icon,
+.modal-head-svg,
+.info-svg-icon {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}

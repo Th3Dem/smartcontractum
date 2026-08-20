@@ -782,3 +782,90 @@ ul {
         gap: 32px;
     }
 }
+
+
+.nav-icon-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    color: #94a3b8;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.nav-svg-icon {
+    width: 17px;
+    height: 17px;
+    fill: currentColor;
+}
+
+.nav-link:hover .nav-icon-box {
+    color: #38bdf8;
+    transform: translateY(-1px);
+}
+
+.nav-link.active .nav-icon-box {
+    color: #38bdf8;
+}
+
+.umbrella-icon-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    flex-shrink: 0;
+}
+
+.umbrella-svg-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Modal & Role SVG Icons */
+.modal-icon-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    color: #38bdf8;
+    flex-shrink: 0;
+}
+
+.modal-svg-icon {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}
+
+.role-chip-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    color: #38bdf8;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.role-chip-card:hover .role-chip-icon {
+    background: rgba(56, 189, 248, 0.2);
+    color: #ffffff;
+    border-color: #38bdf8;
+    transform: scale(1.06);
+}
+
+.role-svg-icon {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}

@@ -27,7 +27,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="/static/css/main.css?v=3.0.0">
+    <link rel="stylesheet" href="/static/css/main.css?v=3.1.0">
     {% block extra_css %}{% endblock %}
 </head>
 <body class="app-body">
@@ -66,30 +66,46 @@
                 <span class="hamburger-bar"></span>
             </button>
 
-            <!-- Navigation Links -->
+            <!-- Navigation Links with Sleek Vector Icons -->
             <nav class="header-nav" id="headerNav" aria-label="Основная навигация">
                 <ul class="nav-list">
                     <li class="nav-item">
                         <a href="/feed" class="nav-link {% if active_nav == 'feed' %}active{% endif %}">
-                            <span class="nav-icon">📰</span>
+                            <span class="nav-icon-box">
+                                <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.25 1a.75.75 0 00-.75.75v.5c0 .414.336.75.75.75h9.5a.75.75 0 00.75-.75v-.5a.75.75 0 00-.75-.75h-9.5zm0 4a.75.75 0 000 1.5h9.5a.75.75 0 000-1.5h-9.5zm0 3.5a.75.75 0 000 1.5h5.5a.75.75 0 000-1.5h-5.5z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
                             <span class="nav-text">Комьюнити</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="/passport" class="nav-link {% if active_nav == 'passport' %}active{% endif %}">
-                            <span class="nav-icon">📑</span>
+                            <span class="nav-icon-box">
+                                <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
                             <span class="nav-text">Паспорт Контракта</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="/builder" class="nav-link {% if active_nav == 'builder' %}active{% endif %}">
-                            <span class="nav-icon">🌳</span>
+                            <span class="nav-icon-box">
+                                <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM3 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2A1 1 0 003 9.236z" />
+                                </svg>
+                            </span>
                             <span class="nav-text">Конструктор</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="/sources" class="nav-link {% if active_nav == 'sources' %}active{% endif %}">
-                            <span class="nav-icon">🌐</span>
+                            <span class="nav-icon-box">
+                                <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-.2c0-1.546-.616-3.029-1.713-4.123l-.174-.174A2 2 0 006.7 11H5a1 1 0 00-1 1v.077c-.426-.91-.668-1.928-.668-3.077 0-.342.029-.677.083-1.003l.917.03z" clip-rule="evenodd" />
+                                </svg>
+                            </span>
                             <span class="nav-text">Оракулы</span>
                         </a>
                     </li>
@@ -164,7 +180,12 @@
                 <div class="footer-col">
                     <h4 class="footer-heading">Umbrella-Security</h4>
                     <div class="umbrella-badge-box">
-                        <span class="umbrella-icon">🛡️</span>
+                        <div class="umbrella-icon-box">
+                            <svg class="umbrella-svg-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L3 6V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V6L12 2Z" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.8" stroke-linejoin="round"/>
+                                <path d="M9 12L11 14L15 9" stroke="#16c784" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
                         <div class="umbrella-info">
                             <span class="umbrella-title">Umbrella Trust Protocol</span>
                             <span class="umbrella-sub">Верифицированная среда исполнения</span>

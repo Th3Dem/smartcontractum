@@ -487,9 +487,18 @@
                                 ${newPost.code_snippet ? `
                                 <div class="habr-code-block">
                                     <div class="habr-code-header">
-                                        <span class="code-lang">🔷 SOLIDITY</span>
+                                        <span class="code-lang">
+                                            <svg class="code-badge-svg" viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
+                                                <path fill-rule="evenodd" d="M4.72 3.22a.75.75 0 011.06 1.06L2.06 8l3.72 3.72a.75.75 0 11-1.06 1.06L.47 8.53a.75.75 0 010-1.06l4.25-4.25zm6.56 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L13.94 8l-3.72-3.72a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                                            </svg>
+                                            SOLIDITY
+                                        </span>
                                         <button type="button" class="btn-copy-code" title="Скопировать код">
-                                            <span class="copy-icon">📋</span> <span>Скопировать</span>
+                                            <svg class="copy-svg-icon" viewBox="0 0 20 20" fill="currentColor" width="13" height="13">
+                                                <path d="M7 3.5A1.5 1.5 0 018.5 2h3.879a1.5 1.5 0 011.06.44l3.122 3.12a1.5 1.5 0 01.439 1.061V14.5A1.5 1.5 0 0115.5 16h-7A1.5 1.5 0 017 14.5v-11z" />
+                                                <path d="M5 6a1.5 1.5 0 00-1.5 1.5v8A1.5 1.5 0 005 17h7a1.5 1.5 0 001.5-1.5v-.5H8.5A2.5 2.5 0 016 12.5V6H5z" />
+                                            </svg>
+                                            <span>Скопировать</span>
                                         </button>
                                     </div>
                                     <pre class="code-pre"><code class="code-content">${newPost.code_snippet}</code></pre>
@@ -509,12 +518,40 @@
                                         <span class="habr-score-val is-positive">+1</span>
                                         <button type="button" class="btn-score-arrow btn-score-down" data-action="downvote" data-post-id="${newPost.id}">▼</button>
                                     </div>
-                                    <div class="habr-stat-item"><span class="stat-icon">👁</span> <span class="stat-val">1</span></div>
-                                    <button type="button" class="habr-stat-btn btn-bookmark" data-action="bookmark" data-post-id="${newPost.id}"><span class="stat-icon">🔖</span> <span class="stat-val">0</span></button>
-                                    <button type="button" class="habr-stat-btn btn-comments-toggle" data-action="toggle-comments" data-post-id="${newPost.id}"><span class="stat-icon">💬</span> <span class="stat-val">0</span></button>
+                                    <div class="habr-stat-item" title="Количество просмотров">
+                                        <span class="stat-icon-wrap" aria-hidden="true">
+                                            <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+                                                <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                            </svg>
+                                        </span>
+                                        <span class="stat-val">1</span>
+                                    </div>
+                                    <button type="button" class="habr-stat-btn btn-bookmark" data-action="bookmark" data-post-id="${newPost.id}" title="Добавить в закладки">
+                                        <span class="stat-icon-wrap" aria-hidden="true">
+                                            <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-3.125L5 18V4z" />
+                                            </svg>
+                                        </span>
+                                        <span class="stat-val">0</span>
+                                    </button>
+                                    <button type="button" class="habr-stat-btn btn-comments-toggle" data-action="toggle-comments" data-post-id="${newPost.id}" title="Комментарии">
+                                        <span class="stat-icon-wrap" aria-hidden="true">
+                                            <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zm-4 0H9v2h2V9z" clip-rule="evenodd" />
+                                            </svg>
+                                        </span>
+                                        <span class="stat-val">0</span>
+                                    </button>
                                 </div>
                                 <div class="habr-footer-right">
-                                    <button type="button" class="habr-stat-btn btn-share" data-action="share" data-post-id="${newPost.id}"><span class="stat-icon">🔗</span></button>
+                                    <button type="button" class="habr-stat-btn btn-share" data-action="share" data-post-id="${newPost.id}" title="Поделиться">
+                                        <span class="stat-icon-wrap" aria-hidden="true">
+                                            <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+                                            </svg>
+                                        </span>
+                                    </button>
                                 </div>
                             </div>
                             <div class="habr-comments-section" id="comments-${newPost.id}" style="display: none;">
