@@ -598,6 +598,32 @@
     letter-spacing: -0.025em;
 }
 
+
+/* Option 4: Pure White -> Deep Electric Blue -> Sky-to-Mint Emerald Flow */
+.hero-title-opt4-white {
+    color: #ffffff;
+    font-weight: 800;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.85);
+}
+
+.hero-title-opt4-electric {
+    background: linear-gradient(90deg, #ffffff 0%, #e0f2fe 22%, #60a5fa 52%, #2563eb 76%, #1d4ed8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    filter: drop-shadow(0 2px 16px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 24px rgba(37, 99, 235, 0.45));
+    letter-spacing: -0.025em;
+}
+
+.hero-title-opt4-emerald {
+    background: linear-gradient(90deg, #38bdf8 0%, #60a5fa 28%, #2dd4bf 62%, #10b981 84%, #059669 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    filter: drop-shadow(0 2px 16px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 24px rgba(56, 189, 248, 0.4)) drop-shadow(0 0 20px rgba(16, 185, 129, 0.35));
+    letter-spacing: -0.025em;
+}
+
 .hero-description {
     font-size: 1.2rem;
     font-weight: 500;
@@ -1018,6 +1044,32 @@
     -webkit-text-fill-color: transparent;
     font-weight: 800;
     filter: drop-shadow(0 2px 16px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 28px rgba(56, 97, 251, 0.5));
+    letter-spacing: -0.025em;
+}
+
+
+/* Option 4: Pure White -> Deep Electric Blue -> Sky-to-Mint Emerald Flow */
+.hero-title-opt4-white {
+    color: #ffffff;
+    font-weight: 800;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.85);
+}
+
+.hero-title-opt4-electric {
+    background: linear-gradient(90deg, #ffffff 0%, #e0f2fe 22%, #60a5fa 52%, #2563eb 76%, #1d4ed8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    filter: drop-shadow(0 2px 16px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 24px rgba(37, 99, 235, 0.45));
+    letter-spacing: -0.025em;
+}
+
+.hero-title-opt4-emerald {
+    background: linear-gradient(90deg, #38bdf8 0%, #60a5fa 28%, #2dd4bf 62%, #10b981 84%, #059669 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    filter: drop-shadow(0 2px 16px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 24px rgba(56, 189, 248, 0.4)) drop-shadow(0 0 20px rgba(16, 185, 129, 0.35));
     letter-spacing: -0.025em;
 }
 
