@@ -429,16 +429,19 @@ document.addEventListener('DOMContentLoaded', () => {
         let surgeTimer = null;
 
         function resizeMottoCanvas() {
-            if (!heroBanner) return;
-            const rect = heroBanner.getBoundingClientRect();
-            mWidth = Math.max(300, rect.width);
-            mHeight = Math.max(300, rect.height);
-            mottoCanvas.width = mWidth;
-            mottoCanvas.height = mHeight;
+            const hBanner = document.getElementById('heroBanner') || document.querySelector('.hero-3d-banner');
+            if (hBanner && mottoCanvas) {
+                const rect = hBanner.getBoundingClientRect();
+                mWidth = Math.max(window.innerWidth, Math.round(rect.width));
+                mHeight = Math.max(window.innerHeight, Math.round(rect.height));
+                mottoCanvas.width = mWidth;
+                mottoCanvas.height = mHeight;
+            }
         }
 
         resizeMottoCanvas();
         window.addEventListener('resize', resizeMottoCanvas, { passive: true });
+        window.addEventListener('load', resizeMottoCanvas, { passive: true });
 
         // Helper: create fractal lightning path via recursive midpoint displacement
         function createLightningPath(x1, y1, x2, y2, displace, iterations) {
@@ -453,7 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const normalX = -(p2.y - p1.y);
                     const normalY = (p2.x - p1.x);
                     const len = Math.hypot(normalX, normalY) || 1;
-                    const offset = (Math.random() - 0.5) * displace * Math.pow(0.6, i);
+                    const offset = (Math.random() - 0.5) * displace * Math.pow(0.58, i);
                     newPoints.push(p1);
                     newPoints.push({
                         x: midX + (normalX / len) * offset,
@@ -471,23 +474,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.color = color || '#38bdf8';
                 this.tier = tier;
                 const iterations = tier === 0 ? 6 : (tier === 1 ? 5 : 4);
-                const displace = tier === 0 ? 55 : (tier === 1 ? 32 : 18);
+                const displace = tier === 0 ? 65 : (tier === 1 ? 38 : 20);
                 this.path = createLightningPath(startX, startY, endX, endY, displace, iterations);
                 this.life = 1.0;
-                this.decay = Math.random() * 0.11 + 0.07;
-                this.width = tier === 0 ? (Math.random() * 2.5 + 2.0) : (tier === 1 ? (Math.random() * 1.6 + 1.0) : 0.8);
+                this.decay = Math.random() * 0.10 + 0.06;
+                this.width = tier === 0 ? (Math.random() * 3.0 + 2.2) : (tier === 1 ? (Math.random() * 1.8 + 1.2) : 0.9);
                 this.branches = [];
 
                 // Sub-branches
-                if (tier < 2 && Math.random() > 0.25 && this.path.length > 6) {
+                if (tier < 2 && Math.random() > 0.20 && this.path.length > 5) {
                     const branchCount = Math.floor(Math.random() * 2) + 1;
                     for (let b = 0; b < branchCount; b++) {
                         const branchIdx = Math.floor(Math.random() * (this.path.length - 4)) + 2;
                         const bp = this.path[branchIdx];
                         const baseAngle = Math.atan2(endY - startY, endX - startX);
-                        const angle = baseAngle + (Math.random() - 0.5) * 1.5;
+                        const angle = baseAngle + (Math.random() - 0.5) * 1.6;
                         const fullDist = Math.hypot(endX - startX, endY - startY);
-                        const branchLen = fullDist * (Math.random() * 0.5 + 0.25);
+                        const branchLen = fullDist * (Math.random() * 0.55 + 0.3);
                         const bx2 = bp.x + Math.cos(angle) * branchLen;
                         const by2 = bp.y + Math.sin(angle) * branchLen;
                         this.branches.push(new LightningBolt(bp.x, bp.y, bx2, by2, this.color, tier + 1));
@@ -510,10 +513,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Layer 1: Wide Outer Atmospheric Neon Bloom
                 ctx.strokeStyle = this.color;
-                ctx.lineWidth = this.width * 5.0;
-                ctx.globalAlpha = this.life * 0.35;
+                ctx.lineWidth = this.width * 5.5;
+                ctx.globalAlpha = Math.max(0, this.life * 0.4);
                 ctx.shadowColor = this.color;
-                ctx.shadowBlur = 28;
+                ctx.shadowBlur = 24;
                 ctx.beginPath();
                 ctx.moveTo(this.path[0].x, this.path[0].y);
                 for (let i = 1; i < this.path.length; i++) {
@@ -521,17 +524,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 ctx.stroke();
 
-                // Layer 2: Main Plasma Channel
+                // Layer 2: Main Plasma Body Channel
                 ctx.strokeStyle = this.color;
-                ctx.lineWidth = this.width * 2.2;
-                ctx.globalAlpha = this.life * 0.85;
-                ctx.shadowBlur = 14;
+                ctx.lineWidth = this.width * 2.4;
+                ctx.globalAlpha = Math.max(0, this.life * 0.88);
+                ctx.shadowBlur = 12;
                 ctx.stroke();
 
-                // Layer 3: Hot Blinding White Core
+                // Layer 3: Hot Blinding White-Cyan Core
                 ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = Math.max(1.2, this.width * 0.75);
-                ctx.globalAlpha = this.life * 0.98;
+                ctx.lineWidth = Math.max(1.4, this.width * 0.8);
+                ctx.globalAlpha = Math.max(0, this.life * 0.98);
                 ctx.shadowBlur = 6;
                 ctx.stroke();
 
@@ -551,12 +554,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.lastY = y;
                 this.color = color || '#38bdf8';
                 const angle = Math.random() * Math.PI * 2;
-                const speed = highSpeed ? (Math.random() * 16 + 8) : (Math.random() * 9 + 3.5);
+                const speed = highSpeed ? (Math.random() * 18 + 8) : (Math.random() * 11 + 4.5);
                 this.vx = Math.cos(angle) * speed;
-                this.vy = Math.sin(angle) * speed - (Math.random() * 2.5);
+                this.vy = Math.sin(angle) * speed - (Math.random() * 2.8);
                 this.life = 1.0;
-                this.decay = Math.random() * 0.035 + 0.02;
-                this.size = Math.random() * 2.8 + 1.2;
+                this.decay = Math.random() * 0.03 + 0.018;
+                this.size = Math.random() * 3.2 + 1.4;
                 this.gravity = 0.12;
             }
 
@@ -579,9 +582,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.strokeStyle = this.color;
                 ctx.lineWidth = this.size;
                 ctx.lineCap = 'round';
-                ctx.globalAlpha = this.life * 0.85;
+                ctx.globalAlpha = Math.max(0, this.life * 0.9);
                 ctx.shadowColor = this.color;
-                ctx.shadowBlur = 12;
+                ctx.shadowBlur = 14;
                 ctx.beginPath();
                 ctx.moveTo(this.lastX, this.lastY);
                 ctx.lineTo(this.x, this.y);
@@ -589,9 +592,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Spark Head Glow
                 ctx.fillStyle = '#ffffff';
-                ctx.globalAlpha = this.life * 0.95;
+                ctx.globalAlpha = Math.max(0, this.life * 0.98);
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size * 0.5, 0, Math.PI * 2);
+                ctx.arc(this.x, this.y, this.size * 0.55, 0, Math.PI * 2);
                 ctx.fill();
 
                 ctx.restore();
@@ -603,10 +606,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.x = x;
                 this.y = y;
                 this.color = color;
-                this.radius = 10;
-                this.maxRadius = Math.random() * 260 + 200;
+                this.radius = 12;
+                this.maxRadius = Math.random() * 280 + 220;
                 this.life = 1.0;
-                this.decay = 0.045;
+                this.decay = 0.04;
             }
 
             update() {
@@ -618,10 +621,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (this.life <= 0) return;
                 ctx.save();
                 ctx.strokeStyle = this.color;
-                ctx.lineWidth = 2.5 * this.life;
-                ctx.globalAlpha = this.life * 0.6;
+                ctx.lineWidth = 3.0 * this.life;
+                ctx.globalAlpha = Math.max(0, this.life * 0.7);
                 ctx.shadowColor = this.color;
-                ctx.shadowBlur = 18;
+                ctx.shadowBlur = 20;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                 ctx.stroke();
@@ -630,8 +633,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function triggerScreenStorm(wordElem, isBurst = false) {
-            if (!wordElem || !heroBanner) return;
-            const bRect = heroBanner.getBoundingClientRect();
+            const hBanner = document.getElementById('heroBanner') || document.querySelector('.hero-3d-banner');
+            if (!wordElem || !hBanner) return;
+
+            const bRect = hBanner.getBoundingClientRect();
             const wRect = wordElem.getBoundingClientRect();
             const color = wordElem.getAttribute('data-color') || '#38bdf8';
 
@@ -644,28 +649,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 shockwaves.push(new PlasmaShockwave(startX, startY, color));
             }
 
-            // 1. Screen-Wide Sky & Ground Lightning Bolts (Lengths 300px - 1000px)
-            const boltCount = isBurst ? (Math.floor(Math.random() * 4) + 6) : (Math.floor(Math.random() * 3) + 2);
+            // 1. Screen-Wide Sky & Ground Lightning Bolts (Lengths 350px - 1100px)
+            const boltCount = isBurst ? (Math.floor(Math.random() * 4) + 6) : (Math.floor(Math.random() * 3) + 3);
             for (let i = 0; i < boltCount; i++) {
                 let targetX, targetY;
                 const mode = Math.random();
 
-                if (mode > 0.70) {
-                    // Strike towards 3D Cube Core
-                    const cubeJitterX = (Math.random() - 0.5) * 160;
-                    const cubeJitterY = (Math.random() - 0.5) * 160;
+                if (mode > 0.65) {
+                    // Strike towards 3D Cube Core in center
+                    const cubeJitterX = (Math.random() - 0.5) * 180;
+                    const cubeJitterY = (Math.random() - 0.5) * 180;
                     targetX = cubeCenterX + cubeJitterX;
                     targetY = cubeCenterY + cubeJitterY;
-                } else if (mode > 0.40) {
+                } else if (mode > 0.35) {
                     // Strike towards screen edges / corners
                     const angle = Math.random() * Math.PI * 2;
-                    const dist = Math.random() * (mWidth * 0.55) + 300;
+                    const dist = Math.random() * (mWidth * 0.6) + 320;
                     targetX = startX + Math.cos(angle) * dist;
                     targetY = startY + Math.sin(angle) * dist;
                 } else {
                     // Skyward or downward sweeping arc
                     const angle = (Math.random() > 0.5 ? -Math.PI / 2 : Math.PI / 2) + (Math.random() - 0.5) * 1.8;
-                    const dist = Math.random() * 480 + 260;
+                    const dist = Math.random() * 520 + 280;
                     targetX = startX + Math.cos(angle) * dist;
                     targetY = startY + Math.sin(angle) * dist;
                 }
@@ -673,8 +678,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 bolts.push(new LightningBolt(startX, startY, targetX, targetY, color));
             }
 
-            // 2. High-Velocity Sparks Exploding Across Screen (15 - 35 particles)
-            const sparkCount = isBurst ? (Math.floor(Math.random() * 20) + 25) : (Math.floor(Math.random() * 8) + 10);
+            // 2. High-Velocity Sparks Exploding Across Screen (20 - 45 particles)
+            const sparkCount = isBurst ? (Math.floor(Math.random() * 25) + 30) : (Math.floor(Math.random() * 10) + 12);
             for (let i = 0; i < sparkCount; i++) {
                 const sx = startX + (Math.random() - 0.5) * wRect.width;
                 const sy = startY + (Math.random() - 0.5) * wRect.height;
@@ -683,15 +688,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function renderLightning() {
-            if (!isHeroVisible) {
-                isEngineRunning = false;
-                return;
-            }
-
             mCtx.clearRect(0, 0, mWidth, mHeight);
 
-            // Continuously spawn lightning storm if word is active
-            if (activeWord && Math.random() > 0.32) {
+            // Continuously spawn lightning storm if word is actively hovered
+            if (activeWord) {
                 triggerScreenStorm(activeWord, false);
             }
 
@@ -739,6 +739,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         wordItems.forEach((item) => {
             item.addEventListener('mouseenter', () => {
+                resizeMottoCanvas();
                 activeWord = item;
                 triggerScreenStorm(item, true);
                 startEngine();
@@ -749,6 +750,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const normX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
                 const normY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
                 item.style.transform = `translateZ(28px) scale(1.15) rotateX(${(-normY * 18).toFixed(1)}deg) rotateY(${(normX * 22).toFixed(1)}deg)`;
+                if (!isEngineRunning) {
+                    startEngine();
+                }
             });
 
             item.addEventListener('mouseleave', () => {
@@ -759,6 +763,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             item.addEventListener('focus', () => {
+                resizeMottoCanvas();
                 activeWord = item;
                 triggerScreenStorm(item, true);
                 startEngine();
@@ -771,6 +776,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             item.addEventListener('touchstart', () => {
+                resizeMottoCanvas();
                 activeWord = item;
                 item.classList.add('active-surge');
                 triggerScreenStorm(item, true);

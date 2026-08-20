@@ -437,6 +437,11 @@
                 border-color 0.22s ease;
     will-change: transform;
     outline: none;
+    pointer-events: auto !important;
+}
+
+.eyebrow-word-item * {
+    pointer-events: none !important;
 }
 
 .word-card-3d {
@@ -446,6 +451,7 @@
     justify-content: center;
     transform-style: preserve-3d;
     will-change: transform;
+    pointer-events: none;
 }
 
 .word-text {
