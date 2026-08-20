@@ -9,54 +9,35 @@
    1. GLOBAL PAGE & WRAPPER LIGHT THEME OVERRIDES
 ----------------------------------------------------------------------- */
 body:has(.habr-feed-wrapper),
-body:has(.habr-feed-layout),
 body.app-body:has(.habr-feed-wrapper),
-body.app-body:has(.habr-feed-layout),
 body.light-theme-feed {
     background-color: #f8fafc !important;
     color: #1e293b !important;
 }
 
-.habr-feed-wrapper,
-.habr-feed-layout {
+.habr-feed-wrapper {
     max-width: 1240px;
     margin: 20px auto 50px auto;
     padding: 0 16px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     color: #1e293b;
     background-color: transparent;
-    box-sizing: border-box;
 }
 
 /* ----------------------------------------------------------------------
    2. HABR MAIN 2-COLUMN GRID (Feed + Sidebar)
 ----------------------------------------------------------------------- */
-.habr-main-grid,
-.habr-feed-grid {
+.habr-main-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 340px;
-    gap: 24px;
+    grid-template-columns: minmax(0, 1fr) 350px;
+    gap: 28px;
     align-items: start;
 }
 
 /* ----------------------------------------------------------------------
    3. SORTING BAR, CATEGORIES DROPDOWN & SEARCH
 ----------------------------------------------------------------------- */
-.habr-articles-stream,
-.habr-feed-main {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    min-width: 0;
-}
-
-.habr-sidebar-right,
-.habr-feed-sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    min-width: 0;
-}
+.habr-articles-stream {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -284,14 +265,10 @@ body.light-theme-feed {
 ----------------------------------------------------------------------- */
 .habr-sort-tabs {
     display: flex;
-    align-items: center;
     gap: 6px;
 }
 
 .sort-tab-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
     padding: 6px 12px;
     border-radius: 6px;
     font-size: 0.84rem;
@@ -300,7 +277,6 @@ body.light-theme-feed {
     color: #64748b;
     background: transparent;
     transition: all 0.2s ease;
-    white-space: nowrap;
 }
 
 .sort-tab-btn:hover {
@@ -313,137 +289,12 @@ body.light-theme-feed {
     background: #e0f2fe;
 }
 
-/* Period Dropdown for 'Лучшие' */
-.best-tab-wrapper {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-}
-
-.best-tab-wrapper .sort-tab-btn {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    padding-right: 6px;
-}
-
-.btn-period-dropdown {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6px 8px;
-    border-radius: 0 6px 6px 0;
-    border: none;
-    background: transparent;
-    color: #64748b;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 0.75rem;
-    line-height: 1;
-}
-
-.btn-period-dropdown:hover,
-.btn-period-dropdown.is-open,
-.best-tab-wrapper:hover .btn-period-dropdown {
-    color: #0f172a;
-    background: #f1f5f9;
-}
-
-.btn-period-dropdown.is-active,
-.best-tab-wrapper .sort-tab-btn.is-active + .btn-period-dropdown {
-    color: #0284c7;
-    background: #e0f2fe;
-}
-
-.period-active-pill {
-    font-size: 0.70rem;
-    padding: 1px 5px;
-    border-radius: 4px;
-    background: #bae6fd;
-    color: #0369a1;
-    font-weight: 700;
-    margin-left: 4px;
-    text-transform: lowercase;
-}
-
-.period-dropdown-arrow {
-    transition: transform 0.2s ease;
-}
-
-.btn-period-dropdown[aria-expanded="true"] .period-dropdown-arrow,
-.period-dropdown-menu.is-open ~ .btn-period-dropdown .period-dropdown-arrow,
-.best-tab-wrapper:hover .btn-period-dropdown .period-dropdown-arrow {
-    transform: rotate(180deg);
-}
-
-.period-dropdown-menu {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
-    min-width: 170px;
-    padding: 6px 0;
-    z-index: 100;
-    display: none;
-    flex-direction: column;
-    animation: fadeInDropdown 0.15s ease-out;
-}
-
-.period-dropdown-menu.is-open,
-.best-tab-wrapper:hover .period-dropdown-menu {
-    display: flex;
-}
-
-.period-menu-header {
-    padding: 6px 14px 4px 14px;
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #94a3b8;
-    border-bottom: 1px solid #f1f5f9;
-    margin-bottom: 4px;
-}
-
-.period-menu-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 7px 14px;
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: #334155;
-    text-decoration: none;
-    transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-.period-menu-item:hover {
-    background-color: #f0f9ff;
-    color: #0284c7;
-}
-
-.period-menu-item.is-active {
-    font-weight: 700;
-    color: #0284c7;
-    background-color: #f8fafc;
-}
-
-.period-check {
-    font-size: 0.85rem;
-    font-weight: 800;
-    color: #0284c7;
-}
-
-/* Right Actions (Write Button + Search Box) */
+/* Right Actions (Search + Write Button) */
 .habr-actions-right {
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex: 1 1 auto;
-    justify-content: flex-end;
-    min-width: 0;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 /* Habr Search Box */
@@ -451,9 +302,7 @@ body.light-theme-feed {
     position: relative;
     display: flex;
     align-items: center;
-    flex: 1 1 auto;
-    width: 100%;
-    min-width: 160px;
+    min-width: 240px;
 }
 
 .search-icon {
@@ -505,7 +354,6 @@ body.light-theme-feed {
 .btn-habr-write {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 6px;
     padding: 7px 14px;
     background: #0284c7;
@@ -518,8 +366,6 @@ body.light-theme-feed {
     white-space: nowrap;
     box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
     transition: all 0.2s ease;
-    flex-shrink: 0;
-    text-decoration: none;
 }
 
 .btn-habr-write:hover {
@@ -1485,64 +1331,12 @@ body.light-theme-feed {
    9. RESPONSIVE BREAKPOINTS
 ----------------------------------------------------------------------- */
 @media (max-width: 980px) {
-    .habr-main-grid,
-    .habr-feed-grid {
+    .habr-main-grid {
         grid-template-columns: 1fr;
     }
-    .habr-sidebar-right,
-    .habr-feed-sidebar {
+    .habr-sidebar-right {
         order: 2;
     }
-    .form-row-2 {
-        grid-template-columns: 1fr;
-    }
-    .habr-sorting-bar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-    }
-    .habr-sort-left-group {
-        width: 100%;
-        justify-content: flex-start;
-    }
-    .habr-actions-right {
-        width: 100%;
-        justify-content: space-between;
-    }
-    .habr-search-box {
-        flex: 1 1 auto;
-        width: 100%;
-        min-width: 160px;
-    }
-}
-
-@media (max-width: 640px) {
-    .habr-feed-wrapper,
-    .habr-feed-layout {
-        padding: 0 12px;
-        margin: 12px auto 40px auto;
-    }
-    .habr-article-card {
-        padding: 16px 14px;
-    }
-    .habr-sort-left-group {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .habr-sort-tabs {
-        overflow-x: auto;
-        padding-bottom: 4px;
-    }
-    .habr-actions-right {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-    }
-    .btn-habr-write {
-        width: 100%;
-        justify-content: center;
-    }
-}
     .form-row-2 {
         grid-template-columns: 1fr;
     }
@@ -1730,4 +1524,151 @@ body.light-theme-feed {
     width: 18px;
     height: 18px;
     fill: currentColor;
+}
+
+
+/* ----------------------------------------------------------------------
+   RICH CONTENT BLOCKS IN FEED POSTS (Video, Tables, Math, Spoilers, etc.)
+----------------------------------------------------------------------- */
+.habr-body-content .habr-embed-video-wrapper {
+    margin: 18px 0;
+    background: #0f172a;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.habr-body-content .video-responsive-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+}
+
+.habr-body-content .video-responsive-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.habr-body-content .video-caption {
+    background: #1e293b;
+    color: #94a3b8;
+    padding: 6px 14px;
+    font-size: 0.78rem;
+    border-top: 1px solid #334155;
+}
+
+.habr-body-content .video-caption .video-title {
+    color: #f1f5f9;
+    font-weight: 600;
+}
+
+.habr-body-content .habr-table-wrapper {
+    margin: 16px 0;
+    overflow-x: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+.habr-body-content .habr-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+    text-align: left;
+}
+
+.habr-body-content .habr-table th {
+    background: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+    padding: 8px 12px;
+    border-bottom: 2px solid #cbd5e1;
+    border-right: 1px solid #e2e8f0;
+}
+
+.habr-body-content .habr-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+    color: #334155;
+}
+
+.habr-body-content .habr-math-formula {
+    margin: 16px 0;
+    padding: 10px 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    text-align: center;
+    font-family: "Cambria Math", serif;
+    font-size: 1.15rem;
+    color: #0f172a;
+}
+
+.habr-body-content .habr-spoiler {
+    margin: 16px 0;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f8fafc;
+}
+
+.habr-body-content .habr-spoiler-title {
+    padding: 10px 14px;
+    background: #f1f5f9;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: #0284c7;
+    cursor: pointer;
+    user-select: none;
+}
+
+.habr-body-content .habr-spoiler[open] .habr-spoiler-title {
+    border-bottom: 1px solid #cbd5e1;
+    background: #e2e8f0;
+}
+
+.habr-body-content .habr-spoiler-content {
+    padding: 12px 16px;
+    background: #ffffff;
+}
+
+.habr-body-content .habr-image-wrapper {
+    margin: 18px 0;
+    text-align: center;
+}
+
+.habr-body-content .habr-article-img {
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.habr-body-content .habr-img-caption {
+    font-size: 0.78rem;
+    color: #64748b;
+    margin-top: 6px;
+    font-style: italic;
+}
+
+.habr-body-content .habr-divider {
+    border: none;
+    border-top: 2px dashed #cbd5e1;
+    margin: 24px 0;
+}
+
+.habr-body-content .habr-anchor-point {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-family: monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
 }

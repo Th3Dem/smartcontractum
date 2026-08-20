@@ -12,15 +12,15 @@
 {% endblock %}
 
 {% block content %}
-<div class="habr-feed-wrapper habr-feed-layout">
+<div class="habr-feed-wrapper">
 
     <!-- ================================================================
          1. HABR MAIN 2-COLUMN GRID (Feed + Sidebar)
     ================================================================= -->
-    <div class="habr-main-grid habr-feed-grid">
+    <div class="habr-main-grid">
 
         <!-- 1.1 MAIN CONTENT STREAM -->
-        <main class="habr-articles-stream habr-feed-main">
+        <main class="habr-articles-stream">
 
             <!-- Habr Categories Dropdown, Sorting & Filter Bar with Search -->
             <div class="habr-sorting-bar">
@@ -172,61 +172,14 @@
 
                     <!-- Sort Tabs with Vector Icons -->
                     <div class="habr-sort-tabs">
-                        <!-- 'Лучшие' Tab with 6-item Period dropdown -->
-                        <div class="best-tab-wrapper" id="bestTabWrapper">
-                            <a href="/feed?stream={{ active_stream }}&sort=best{% if active_period and active_period != 'all' %}&period={{ active_period }}{% endif %}{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'best' %}is-active{% endif %}" data-sort="best">
-                                <span class="tab-icon-wrap">
-                                    <svg class="tab-svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.17 1.998-1.528 2.87-.367.893-.595 1.583-.595 1.832 0 .043.01.127.058.21.05.087.147.19.34.257.377.13 1.01.13 1.637-.123.636-.257 1.258-.753 1.66-1.37.054-.083.1-.167.141-.25.041.134.062.278.062.426 0 1.268-.696 2.457-1.634 3.19-.948.74-2.148 1.15-3.218 1.15-1.282 0-2.522-.524-3.39-1.47-.86-.938-1.29-2.222-1.29-3.568 0-.46.06-.91.17-1.34.085-.333-.14-.666-.48-.718a.67.67 0 00-.77.46C2.24 7.6 2 8.78 2 10c0 4.418 3.582 8 8 8s8-3.582 8-8c0-3.34-1.92-6.17-4.605-7.447z" clip-rule="evenodd" />
-                                    </svg>
-                                </span>
-                                <span>Лучшие</span>
-                                {% if active_sort == 'best' and active_period and active_period != 'all' %}
-                                <span class="period-active-pill">
-                                    {% if active_period == 'today' or active_period == 'day' %}сегодня
-                                    {% elif active_period == 'yesterday' %}вчера
-                                    {% elif active_period == 'week' %}неделя
-                                    {% elif active_period == 'month' %}месяц
-                                    {% elif active_period == 'year' %}год
-                                    {% endif %}
-                                </span>
-                                {% endif %}
-                            </a>
-                            <button type="button" class="btn-period-dropdown {% if active_sort == 'best' %}is-active{% endif %}" id="btnPeriodDropdown" aria-label="Выбрать период" aria-haspopup="true" aria-expanded="false" title="Выбрать период">
-                                <svg class="period-dropdown-arrow" viewBox="0 0 16 16" fill="currentColor" width="10" height="10" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 011.06 0L8 8.94l2.72-2.72a.75.75 0 111.06 1.06l-3.25 3.25a.75.75 0 01-1.06 0L4.22 7.28a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                        <a href="/feed?stream={{ active_stream }}&sort=best{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'best' %}is-active{% endif %}" data-sort="best">
+                            <span class="tab-icon-wrap">
+                                <svg class="tab-svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.17 1.998-1.528 2.87-.367.893-.595 1.583-.595 1.832 0 .043.01.127.058.21.05.087.147.19.34.257.377.13 1.01.13 1.637-.123.636-.257 1.258-.753 1.66-1.37.054-.083.1-.167.141-.25.041.134.062.278.062.426 0 1.268-.696 2.457-1.634 3.19-.948.74-2.148 1.15-3.218 1.15-1.282 0-2.522-.524-3.39-1.47-.86-.938-1.29-2.222-1.29-3.568 0-.46.06-.91.17-1.34.085-.333-.14-.666-.48-.718a.67.67 0 00-.77.46C2.24 7.6 2 8.78 2 10c0 4.418 3.582 8 8 8s8-3.582 8-8c0-3.34-1.92-6.17-4.605-7.447z" clip-rule="evenodd" />
                                 </svg>
-                            </button>
-
-                            <div class="period-dropdown-menu" id="periodDropdownMenu" role="menu">
-                                <div class="period-menu-header">Период:</div>
-                                <a href="/feed?stream={{ active_stream }}&sort=best&period=all{% if active_query %}&q={{ active_query }}{% endif %}" class="period-menu-item {% if active_period == 'all' or not active_period %}is-active{% endif %}" role="menuitem">
-                                    <span>Все время</span>
-                                    {% if active_period == 'all' or not active_period %}<span class="period-check">✓</span>{% endif %}
-                                </a>
-                                <a href="/feed?stream={{ active_stream }}&sort=best&period=today{% if active_query %}&q={{ active_query }}{% endif %}" class="period-menu-item {% if active_period == 'today' or active_period == 'day' %}is-active{% endif %}" role="menuitem">
-                                    <span>За сегодня</span>
-                                    {% if active_period == 'today' or active_period == 'day' %}<span class="period-check">✓</span>{% endif %}
-                                </a>
-                                <a href="/feed?stream={{ active_stream }}&sort=best&period=yesterday{% if active_query %}&q={{ active_query }}{% endif %}" class="period-menu-item {% if active_period == 'yesterday' %}is-active{% endif %}" role="menuitem">
-                                    <span>За вчера</span>
-                                    {% if active_period == 'yesterday' %}<span class="period-check">✓</span>{% endif %}
-                                </a>
-                                <a href="/feed?stream={{ active_stream }}&sort=best&period=week{% if active_query %}&q={{ active_query }}{% endif %}" class="period-menu-item {% if active_period == 'week' %}is-active{% endif %}" role="menuitem">
-                                    <span>За неделю</span>
-                                    {% if active_period == 'week' %}<span class="period-check">✓</span>{% endif %}
-                                </a>
-                                <a href="/feed?stream={{ active_stream }}&sort=best&period=month{% if active_query %}&q={{ active_query }}{% endif %}" class="period-menu-item {% if active_period == 'month' %}is-active{% endif %}" role="menuitem">
-                                    <span>За месяц</span>
-                                    {% if active_period == 'month' %}<span class="period-check">✓</span>{% endif %}
-                                </a>
-                                <a href="/feed?stream={{ active_stream }}&sort=best&period=year{% if active_query %}&q={{ active_query }}{% endif %}" class="period-menu-item {% if active_period == 'year' %}is-active{% endif %}" role="menuitem">
-                                    <span>За год</span>
-                                    {% if active_period == 'year' %}<span class="period-check">✓</span>{% endif %}
-                                </a>
-                            </div>
-                        </div>
-
+                            </span>
+                            <span>Лучшие</span>
+                        </a>
                         <a href="/feed?stream={{ active_stream }}&sort=new{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'new' %}is-active{% endif %}" data-sort="new">
                             <span class="tab-icon-wrap">
                                 <svg class="tab-svg" viewBox="0 0 20 20" fill="currentColor">
@@ -246,17 +199,8 @@
                     </div>
                 </div>
 
-                <!-- Right Actions: Write Article Button (Left) + Search Box (Right) -->
+                <!-- Right Actions: Search Box + Write Article Button -->
                 <div class="habr-actions-right">
-                    <a href="/feed/create" class="btn-habr-write" id="btnOpenWriteModal">
-                        <span class="btn-icon-wrap" aria-hidden="true">
-                            <svg class="write-btn-svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                            </svg>
-                        </span>
-                        <span>Написать статью</span>
-                    </a>
-
                     <div class="habr-search-box">
                         <span class="search-icon" aria-hidden="true">
                             <svg class="search-svg" viewBox="0 0 20 20" fill="currentColor">
@@ -269,6 +213,15 @@
                                aria-label="Поиск по статьям и коду">
                         <button type="button" class="btn-clear-search" id="btnClearSearch" title="Очистить поиск" style="{% if not active_query %}display: none;{% endif %}">✕</button>
                     </div>
+
+                    <a href="/feed/create" class="btn-habr-write" id="btnOpenWriteModal">
+                        <span class="btn-icon-wrap" aria-hidden="true">
+                            <svg class="write-btn-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                            </svg>
+                        </span>
+                        <span>Написать статью</span>
+                    </a>
                 </div>
             </div>
 
@@ -472,7 +425,7 @@
         </main>
 
         <!-- 1.2 HABR RIGHT SIDEBAR (Читают сейчас, Хабы, Компании) -->
-        <aside class="habr-sidebar-right habr-feed-sidebar">
+        <aside class="habr-sidebar-right">
 
             <!-- Sidebar Block 1: ЧИТАЮТ СЕЙЧАС (Trending Articles) -->
             <div class="habr-sidebar-block trending-block">
