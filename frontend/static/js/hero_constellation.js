@@ -1,5 +1,5 @@
 ﻿/**
- * SmartContractum — Volumetric 3D Waves & Node Constellation Controller
+ * SmartContractum — Volumetric Plasma Funnel Waves & Node Constellation Controller
  * File: frontend/static/js/hero_constellation.js
  */
 
@@ -21,12 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Ambient floating particles
     const ambientParticles = [];
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 14; i++) {
         ambientParticles.push({
             cardIndex: i % 6,
             progress: Math.random(),
-            speed: 0.0018 + Math.random() * 0.0015,
-            size: 2.2 + Math.random() * 1.2
+            speed: 0.0016 + Math.random() * 0.0012,
+            size: 2.4 + Math.random() * 1.4
         });
     }
 
@@ -35,8 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < 5; i++) {
         wavePackets.push({
             progress: i * 0.2,
-            speed: 0.0042,
-            size: 4.8
+            speed: 0.0038,
+            size: 5.5
         });
     }
 
@@ -65,60 +65,65 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function getCardAnchor(card, containerRect, coreCenter) {
+    function getCardEdgeData(card, containerRect, coreCenter) {
         const rect = card.getBoundingClientRect();
         const cardCenter = {
             x: rect.left - containerRect.left + rect.width / 2,
             y: rect.top - containerRect.top + rect.height / 2
         };
 
-        let anchorX = cardCenter.x;
-        let anchorY = cardCenter.y;
+        const cardH = rect.height;
+        let edgeX = cardCenter.x;
+        let isLeft = true;
 
-        if (cardCenter.x < coreCenter.x - 60) {
-            anchorX = rect.right - containerRect.left;
-        } else if (cardCenter.x > coreCenter.x + 60) {
-            anchorX = rect.left - containerRect.left;
+        if (cardCenter.x < coreCenter.x) {
+            edgeX = rect.right - containerRect.left;
+            isLeft = true;
+        } else {
+            edgeX = rect.left - containerRect.left;
+            isLeft = false;
         }
 
-        if (cardCenter.y < coreCenter.y - 40) {
-            anchorY = rect.bottom - containerRect.top - 12;
-        } else if (cardCenter.y > coreCenter.y + 40) {
-            anchorY = rect.top - containerRect.top + 12;
-        }
-
-        return { x: anchorX, y: anchorY, center: cardCenter };
+        return {
+            x: edgeX,
+            y: cardCenter.y,
+            height: cardH,
+            isLeft: isLeft
+        };
     }
 
-    function getCoreAnchor(coreRect, containerRect, targetPos) {
+    function getCoreEdgeData(coreRect, containerRect, cardEdge) {
         const coreCenter = {
             x: coreRect.left - containerRect.left + coreRect.width / 2,
             y: coreRect.top - containerRect.top + coreRect.height / 2
         };
 
-        let anchorX = coreCenter.x;
-        let anchorY = coreCenter.y;
+        let edgeX = cardEdge.isLeft ? (coreRect.left - containerRect.left + 15) : (coreRect.right - containerRect.left - 15);
+        let edgeY = coreCenter.y + (cardEdge.y - coreCenter.y) * 0.35;
 
-        if (targetPos.x < coreCenter.x - 40) {
-            anchorX = coreRect.left - containerRect.left + 20;
-        } else if (targetPos.x > coreCenter.x + 40) {
-            anchorX = coreRect.right - containerRect.left - 20;
+        return {
+            x: edgeX,
+            y: edgeY,
+            height: 64
+        };
+    }
+
+    function hexToRgba(hex, alpha) {
+        hex = hex.replace('#', '');
+        if (hex.length === 3) {
+            hex = hex.split('').map(c => c + c).join('');
         }
-
-        if (targetPos.y < coreCenter.y - 30) {
-            anchorY = coreRect.top - containerRect.top + 10;
-        } else if (targetPos.y > coreCenter.y + 30) {
-            anchorY = coreRect.bottom - containerRect.top - 10;
-        }
-
-        return { x: anchorX, y: anchorY, center: coreCenter };
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+        return gba(, , , );
     }
 
     function render() {
         if (window.innerWidth <= 1080) return;
 
         ctx.clearRect(0, 0, width, height);
-        waveTime += 0.032;
+        waveTime += 0.028;
 
         const containerRect = container.getBoundingClientRect();
         const coreRect = core.getBoundingClientRect();
@@ -131,22 +136,22 @@ document.addEventListener('DOMContentLoaded', () => {
         cards.forEach((card) => {
             const id = card.getAttribute('data-node-id');
             const accent = card.getAttribute('data-accent') || '#38bdf8';
-            const cardAnchor = getCardAnchor(card, containerRect, rawCoreCenter);
-            const coreAnchor = getCoreAnchor(coreRect, containerRect, cardAnchor);
+            const cardEdge = getCardEdgeData(card, containerRect, rawCoreCenter);
+            const coreEdge = getCoreEdgeData(coreRect, containerRect, cardEdge);
 
             nodeDataList.push({
                 id,
                 accent,
-                cardAnchor,
-                coreAnchor,
+                cardEdge,
+                coreEdge,
                 isHovered: (hoveredNodeId === id) || isCoreHovered
             });
         });
 
-        // 1. Draw Volumetric 3D Waves and Subtle Idle Wave Connections
+        // Draw Funnel Waves (Starts at button height, narrows in middle, widens at core)
         nodeDataList.forEach((node) => {
-            const start = node.cardAnchor;
-            const end = node.coreAnchor;
+            const start = node.cardEdge;
+            const end = node.coreEdge;
             const isHovered = node.isHovered;
             const anyHovered = (hoveredNodeId !== null) || isCoreHovered;
 
@@ -155,104 +160,129 @@ document.addEventListener('DOMContentLoaded', () => {
             const dist = Math.hypot(dx, dy);
             const normalX = -dy / dist;
             const normalY = dx / dist;
-            const steps = 64;
+            const steps = 60;
+
+            const cardHalfH = start.height * 0.48; // Full button height match
+            const coreHalfH = end.height * 0.45;
+
+            // Generate Top & Bottom Contour Points
+            const topPoints = [];
+            const botPoints = [];
+            const centerPoints = [];
+
+            for (let i = 0; i <= steps; i++) {
+                const t = i / steps;
+                const lx = start.x + dx * t;
+                const ly = start.y + dy * t;
+                const envelope = Math.sin(t * Math.PI);
+
+                // Hourglass / Funnel width formula: Wide at start, narrow in middle, widens at core
+                const baseHalfW = (cardHalfH * (1 - t) + coreHalfH * t) * (1 - 0.76 * envelope) + 8;
+
+                // Wave undulation
+                const waveFreq = isHovered ? 7.5 : 5.5;
+                const waveSpeed = isHovered ? 2.4 : 1.0;
+                const waveAmp = isHovered ? (10 * envelope) : (4 * envelope);
+                const waveOffset = Math.sin(t * waveFreq - waveTime * waveSpeed) * waveAmp;
+
+                const cx = lx + normalX * waveOffset;
+                const cy = ly + normalY * waveOffset;
+
+                centerPoints.push({ x: cx, y: cy, t: t, halfW: baseHalfW });
+
+                topPoints.push({
+                    x: cx + normalX * baseHalfW,
+                    y: cy + normalY * baseHalfW
+                });
+
+                botPoints.push({
+                    x: cx - normalX * baseHalfW,
+                    y: cy - normalY * baseHalfW
+                });
+            }
 
             if (isHovered) {
                 // ==========================================================
-                // ACTIVE HOVER: Volumetric 3D Undulating Neon Plasma Wave
+                // ACTIVE HOVER: Volumetric Glowing Plasma Funnel Ribbon
                 // ==========================================================
 
-                // Layer 1: Volumetric Deep Ambient Glow Underlay
+                // 1. Fill Funnel Mesh with Gradient
                 ctx.beginPath();
-                for (let i = 0; i <= steps; i++) {
-                    const t = i / steps;
-                    const lx = start.x + dx * t;
-                    const ly = start.y + dy * t;
-                    const envelope = Math.sin(t * Math.PI);
-                    const waveOffset = Math.sin(t * 8 - waveTime * 2.8) * (11 * envelope);
-
-                    const px = lx + normalX * waveOffset;
-                    const py = ly + normalY * waveOffset;
-
-                    if (i === 0) ctx.moveTo(px, py);
-                    else ctx.lineTo(px, py);
+                ctx.moveTo(topPoints[0].x, topPoints[0].y);
+                for (let i = 1; i <= steps; i++) {
+                    ctx.lineTo(topPoints[i].x, topPoints[i].y);
                 }
-                ctx.strokeStyle = node.accent;
-                ctx.lineWidth = 8.0;
+                for (let i = steps; i >= 0; i--) {
+                    ctx.lineTo(botPoints[i].x, botPoints[i].y);
+                }
+                ctx.closePath();
+
+                const grad = ctx.createLinearGradient(start.x, start.y, end.x, end.y);
+                grad.addColorStop(0, hexToRgba(node.accent, 0.55));
+                grad.addColorStop(0.5, hexToRgba(node.accent, 0.35));
+                grad.addColorStop(1, hexToRgba('#38bdf8', 0.65));
+
+                ctx.fillStyle = grad;
                 ctx.shadowColor = node.accent;
                 ctx.shadowBlur = 28;
-                ctx.globalAlpha = 0.35;
-                ctx.stroke();
-                ctx.globalAlpha = 1.0;
+                ctx.fill();
 
-                // Layer 2: Main Vibrant Saturated Wave Beam
+                // 2. Top & Bottom Glowing Outer Boundary Lines
                 ctx.beginPath();
-                for (let i = 0; i <= steps; i++) {
-                    const t = i / steps;
-                    const lx = start.x + dx * t;
-                    const ly = start.y + dy * t;
-                    const envelope = Math.sin(t * Math.PI);
-                    const waveOffset = Math.sin(t * 8 - waveTime * 2.8) * (11 * envelope);
-
-                    const px = lx + normalX * waveOffset;
-                    const py = ly + normalY * waveOffset;
-
-                    if (i === 0) ctx.moveTo(px, py);
-                    else ctx.lineTo(px, py);
+                ctx.moveTo(topPoints[0].x, topPoints[0].y);
+                for (let i = 1; i <= steps; i++) {
+                    ctx.lineTo(topPoints[i].x, topPoints[i].y);
                 }
-                ctx.strokeStyle = node.accent;
-                ctx.lineWidth = 3.6;
-                ctx.shadowColor = node.accent;
+                ctx.strokeStyle = hexToRgba(node.accent, 0.85);
+                ctx.lineWidth = 2.2;
                 ctx.shadowBlur = 18;
                 ctx.stroke();
 
-                // Layer 3: 3D Volumetric Specular White Core Filament
                 ctx.beginPath();
-                for (let i = 0; i <= steps; i++) {
-                    const t = i / steps;
-                    const lx = start.x + dx * t;
-                    const ly = start.y + dy * t;
-                    const envelope = Math.sin(t * Math.PI);
-                    const waveOffset = Math.sin(t * 8 - waveTime * 2.8) * (11 * envelope);
+                ctx.moveTo(botPoints[0].x, botPoints[0].y);
+                for (let i = 1; i <= steps; i++) {
+                    ctx.lineTo(botPoints[i].x, botPoints[i].y);
+                }
+                ctx.strokeStyle = hexToRgba(node.accent, 0.85);
+                ctx.lineWidth = 2.2;
+                ctx.shadowBlur = 18;
+                ctx.stroke();
 
-                    const px = lx + normalX * waveOffset;
-                    const py = ly + normalY * waveOffset;
-
-                    if (i === 0) ctx.moveTo(px, py);
-                    else ctx.lineTo(px, py);
+                // 3. Central Specular Fiber Core Line
+                ctx.beginPath();
+                ctx.moveTo(centerPoints[0].x, centerPoints[0].y);
+                for (let i = 1; i <= steps; i++) {
+                    ctx.lineTo(centerPoints[i].x, centerPoints[i].y);
                 }
                 ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 1.6;
+                ctx.lineWidth = 2.0;
                 ctx.shadowColor = '#ffffff';
-                ctx.shadowBlur = 8;
+                ctx.shadowBlur = 12;
                 ctx.stroke();
                 ctx.shadowBlur = 0;
 
-                // Layer 4: Volumetric Traveling Energy Wave Packets
+                // 4. Volumetric Flowing Wave Energy Packets
                 wavePackets.forEach((p) => {
                     p.progress += p.speed;
                     if (p.progress > 1) p.progress = 0;
 
-                    const t = p.progress;
-                    const lx = start.x + dx * t;
-                    const ly = start.y + dy * t;
-                    const envelope = Math.sin(t * Math.PI);
-                    const waveOffset = Math.sin(t * 8 - waveTime * 2.8) * (11 * envelope);
+                    const idx = Math.min(Math.floor(p.progress * steps), steps);
+                    const pt = centerPoints[idx];
+                    if (!pt) return;
 
-                    const px = lx + normalX * waveOffset;
-                    const py = ly + normalY * waveOffset;
+                    const scaleW = 1 + (pt.halfW / cardHalfH) * 0.4;
 
-                    // Outer Halo
+                    // Volumetric Glow Halo
                     ctx.beginPath();
-                    ctx.arc(px, py, p.size * (1 + envelope * 0.5), 0, Math.PI * 2);
+                    ctx.arc(pt.x, pt.y, p.size * scaleW, 0, Math.PI * 2);
                     ctx.fillStyle = node.accent;
                     ctx.shadowColor = node.accent;
-                    ctx.shadowBlur = 20;
+                    ctx.shadowBlur = 22;
                     ctx.fill();
 
-                    // Inner White Hot Core
+                    // Hot White Core
                     ctx.beginPath();
-                    ctx.arc(px, py, (p.size * 0.5) * (1 + envelope * 0.3), 0, Math.PI * 2);
+                    ctx.arc(pt.x, pt.y, p.size * 0.45, 0, Math.PI * 2);
                     ctx.fillStyle = '#ffffff';
                     ctx.fill();
                     ctx.shadowBlur = 0;
@@ -260,32 +290,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } else {
                 // ==========================================================
-                // IDLE STATE: Stylish, Faint, Subtle Undulating Sine Wave
+                // IDLE STATE: Subtle, Faint, Elegant Plasma Funnel Ribbon
                 // ==========================================================
                 ctx.beginPath();
-                for (let i = 0; i <= steps; i++) {
-                    const t = i / steps;
-                    const lx = start.x + dx * t;
-                    const ly = start.y + dy * t;
-                    const envelope = Math.sin(t * Math.PI);
-                    // Gentle, subtle, slow sine undulation
-                    const idleWave = Math.sin(t * 6 + waveTime * 0.9) * (4 * envelope);
-
-                    const px = lx + normalX * idleWave;
-                    const py = ly + normalY * idleWave;
-
-                    if (i === 0) ctx.moveTo(px, py);
-                    else ctx.lineTo(px, py);
+                ctx.moveTo(topPoints[0].x, topPoints[0].y);
+                for (let i = 1; i <= steps; i++) {
+                    ctx.lineTo(topPoints[i].x, topPoints[i].y);
                 }
+                for (let i = steps; i >= 0; i--) {
+                    ctx.lineTo(botPoints[i].x, botPoints[i].y);
+                }
+                ctx.closePath();
 
-                ctx.strokeStyle = anyHovered ? 'rgba(56, 189, 248, 0.05)' : 'rgba(56, 189, 248, 0.18)';
-                ctx.lineWidth = 1.6;
+                const grad = ctx.createLinearGradient(start.x, start.y, end.x, end.y);
+                const alpha = anyHovered ? 0.02 : 0.08;
+                grad.addColorStop(0, hexToRgba(node.accent, alpha * 1.5));
+                grad.addColorStop(0.5, hexToRgba(node.accent, alpha * 0.8));
+                grad.addColorStop(1, hexToRgba('#38bdf8', alpha * 1.2));
+
+                ctx.fillStyle = grad;
                 ctx.shadowBlur = 0;
+                ctx.fill();
+
+                // Faint center guideline
+                ctx.beginPath();
+                ctx.moveTo(centerPoints[0].x, centerPoints[0].y);
+                for (let i = 1; i <= steps; i++) {
+                    ctx.lineTo(centerPoints[i].x, centerPoints[i].y);
+                }
+                ctx.strokeStyle = anyHovered ? 'rgba(56, 189, 248, 0.04)' : 'rgba(56, 189, 248, 0.16)';
+                ctx.lineWidth = 1.4;
                 ctx.stroke();
             }
         });
 
-        // 2. Ambient Particles in Idle
+        // Ambient particles in idle
         if (hoveredNodeId === null && !isCoreHovered) {
             ambientParticles.forEach((p) => {
                 const node = nodeDataList[p.cardIndex];
@@ -294,8 +333,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 p.progress += p.speed;
                 if (p.progress > 1) p.progress = 0;
 
-                const start = node.cardAnchor;
-                const end = node.coreAnchor;
+                const start = node.cardEdge;
+                const end = node.coreEdge;
                 const dx = end.x - start.x;
                 const dy = end.y - start.y;
                 const dist = Math.hypot(dx, dy);
@@ -304,12 +343,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const t = p.progress;
                 const envelope = Math.sin(t * Math.PI);
-                const idleWave = Math.sin(t * 6 + waveTime * 0.9) * (4 * envelope);
+                const waveOffset = Math.sin(t * 5.5 - waveTime * 1.0) * (4 * envelope);
 
                 const lx = start.x + dx * t;
                 const ly = start.y + dy * t;
-                const px = lx + normalX * idleWave;
-                const py = ly + normalY * idleWave;
+                const px = lx + normalX * waveOffset;
+                const py = ly + normalY * waveOffset;
 
                 ctx.beginPath();
                 ctx.arc(px, py, p.size, 0, Math.PI * 2);
@@ -380,7 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Window Resize with Debounce
+    // Debounced Resize
     let resizeTimer = null;
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
