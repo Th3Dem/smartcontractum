@@ -475,6 +475,60 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
+    // 8. Roadmap & Gantt Chart View Switcher
+    const btnViewPipeline = document.getElementById('btnViewPipeline');
+    const btnViewGantt = document.getElementById('btnViewGantt');
+    const pipelineView = document.getElementById('pkscPipelineView');
+    const ganttView = document.getElementById('pkscGanttView');
+
+    function switchTimelineView(mode) {
+        if (mode === 'gantt') {
+            if (btnViewPipeline) {
+                btnViewPipeline.classList.remove('active');
+                btnViewPipeline.setAttribute('aria-selected', 'false');
+            }
+            if (btnViewGantt) {
+                btnViewGantt.classList.add('active');
+                btnViewGantt.setAttribute('aria-selected', 'true');
+            }
+            if (pipelineView) pipelineView.style.display = 'none';
+            if (ganttView) {
+                ganttView.style.display = 'block';
+                ganttView.style.opacity = '0';
+                setTimeout(() => {
+                    ganttView.style.transition = 'opacity 0.25s ease';
+                    ganttView.style.opacity = '1';
+                }, 10);
+            }
+        } else {
+            if (btnViewGantt) {
+                btnViewGantt.classList.remove('active');
+                btnViewGantt.setAttribute('aria-selected', 'false');
+            }
+            if (btnViewPipeline) {
+                btnViewPipeline.classList.add('active');
+                btnViewPipeline.setAttribute('aria-selected', 'true');
+            }
+            if (ganttView) ganttView.style.display = 'none';
+            if (pipelineView) {
+                pipelineView.style.display = 'block';
+                pipelineView.style.opacity = '0';
+                setTimeout(() => {
+                    pipelineView.style.transition = 'opacity 0.25s ease';
+                    pipelineView.style.opacity = '1';
+                }, 10);
+            }
+        }
+    }
+
+    if (btnViewPipeline) {
+        btnViewPipeline.addEventListener('click', () => switchTimelineView('pipeline'));
+    }
+    if (btnViewGantt) {
+        btnViewGantt.addEventListener('click', () => switchTimelineView('gantt'));
+    }
+
     // Initialize stats
     updateSystemStats();
 });

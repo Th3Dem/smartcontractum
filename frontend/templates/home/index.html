@@ -3,7 +3,7 @@
 {% block title %}SmartContractum — Здесь рождаются российские смарт-контракты | ПКСК Банка России{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/hero.css?v=3.22.0">
+<link rel="stylesheet" href="/static/css/hero.css?v=3.23.0">
 {% endblock %}
 
 {% block content %}
@@ -157,26 +157,41 @@
     ================================================================= -->
     <section class="task-router-section" id="taskRouterSection">
         <!-- ================================================================
-             ГОРИЗОНТАЛЬНАЯ ДОРОЖНАЯ КАРТА & ТАЙМЛАЙН ПКСК БАНКА РОССИИ
+             ГОРИЗОНТАЛЬНАЯ ДОРОЖНАЯ КАРТА & ДИАГРАММА ГАНТА ПКСК БАНКА РОССИИ
         ================================================================= -->
         <div class="pksc-horizontal-timeline-container" id="pkscTimeline">
-            <!-- Timeline Header Bar -->
+            <!-- Modern Timeline & Gantt Header Bar with Interactive Switcher -->
             <div class="timeline-header-bar">
                 <div class="timeline-header-left">
                     <span class="timeline-radar-icon">⏱️</span>
                     <h3 class="timeline-main-title">Дорожная карта создания ПКСК Банка России</h3>
                 </div>
+
+                <!-- Modern View Switcher (Дорожная карта vs Диаграмма Ганта) -->
+                <div class="timeline-view-switcher" role="tablist" aria-label="Переключение вида таймлайна">
+                    <button type="button" class="view-switch-btn active" id="btnViewPipeline" role="tab" aria-selected="true" data-view="pipeline">
+                        <span class="switch-icon">🚀</span>
+                        <span class="switch-label">Дорожная карта</span>
+                    </button>
+                    <button type="button" class="view-switch-btn" id="btnViewGantt" role="tab" aria-selected="false" data-view="gantt">
+                        <span class="switch-icon">📊</span>
+                        <span class="switch-label">Диаграмма Ганта</span>
+                    </button>
+                </div>
+
                 <div class="timeline-header-right">
                     <span class="timeline-pulse-dot"></span>
                     <span class="timeline-nir-badge">Фаза НИР ЦБ РФ (до 31.03.2027)</span>
                 </div>
             </div>
 
-            <!-- Horizontal Track & Steps -->
-            <div class="pksc-timeline-track-wrapper">
-                <!-- Connecting Gradient Progress Line -->
+            <!-- View 1: Horizontal Pipeline Track & Steps -->
+            <div class="pksc-timeline-track-wrapper" id="pkscPipelineView">
+                <!-- Connecting Gradient Progress Line with Laser Beam -->
                 <div class="pksc-connecting-line" aria-hidden="true">
-                    <div class="line-progress-fill"></div>
+                    <div class="line-progress-fill">
+                        <span class="bar-laser-glow"></span>
+                    </div>
                 </div>
 
                 <div class="pksc-timeline-steps-grid">
@@ -251,6 +266,105 @@
                             <p class="step-card-desc">Ввод платформы в промышленный пилот и запуск B2B сделок в контуре Банка России.</p>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- View 2: High-Tech Interactive Gantt Chart Container -->
+            <div class="pksc-gantt-chart-wrapper" id="pkscGanttView" style="display: none;">
+                <!-- Gantt Time Axis (Q2 2026 -> Q4 2027) -->
+                <div class="gantt-time-axis">
+                    <div class="gantt-axis-col">II кв. 2026</div>
+                    <div class="gantt-axis-col current-quarter">
+                        <span>III кв. 2026</span>
+                        <span class="now-badge">СЕЙЧАС</span>
+                    </div>
+                    <div class="gantt-axis-col">IV кв. 2026</div>
+                    <div class="gantt-axis-col">I кв. 2027</div>
+                    <div class="gantt-axis-col">II кв. 2027</div>
+                    <div class="gantt-axis-col">III-IV кв. 2027</div>
+                </div>
+
+                <!-- Gantt Streams / Bars -->
+                <div class="gantt-streams-list">
+                    <!-- Stream 1: Концепция и нормативная база ЦБ РФ -->
+                    <div class="gantt-stream-row" data-stream="concept">
+                        <div class="stream-info">
+                            <span class="stream-icon">📜</span>
+                            <div class="stream-meta">
+                                <span class="stream-name">Концепция & Консультации ЦБ РФ</span>
+                                <span class="stream-sub">Доклад Банка России для консультаций</span>
+                            </div>
+                        </div>
+                        <div class="gantt-track-area">
+                            <div class="gantt-bar-fill bar-completed" style="--bar-start: 0%; --bar-width: 25%;" title="100% Завершено: Доклад ЦБ РФ опубликован 18.06.2026">
+                                <span class="bar-laser-glow"></span>
+                                <span class="bar-label">18.06.2026 • Утверждено</span>
+                                <span class="bar-percent">100%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stream 2: Сбор предложений, пилотов и оракулов -->
+                    <div class="gantt-stream-row active-stream-highlight" data-stream="feedback">
+                        <div class="stream-info">
+                            <span class="stream-icon">⚡</span>
+                            <div class="stream-meta">
+                                <span class="stream-name">Сбор пилотов & Реестр оракулов</span>
+                                <span class="stream-sub">Сбор предложений и аудит сценариев</span>
+                            </div>
+                        </div>
+                        <div class="gantt-track-area">
+                            <div class="gantt-bar-fill bar-active" style="--bar-start: 16%; --bar-width: 32%;" title="В процессе (78%): Сбор предложений до 30.09.2026">
+                                <span class="bar-laser-glow"></span>
+                                <span class="bar-label">До 30.09.2026 • Активный спринт</span>
+                                <span class="bar-percent">78%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stream 3: НИР ЦБ РФ и архитектурный прототип -->
+                    <div class="gantt-stream-row" data-stream="nir">
+                        <div class="stream-info">
+                            <span class="stream-icon">🔬</span>
+                            <div class="stream-meta">
+                                <span class="stream-name">НИР ЦБ РФ & Стандарты ИБ</span>
+                                <span class="stream-sub">Архитектурная модель и ГОСТ-прототип</span>
+                            </div>
+                        </div>
+                        <div class="gantt-track-area">
+                            <div class="gantt-bar-fill bar-planned" style="--bar-start: 35%; --bar-width: 33%;" title="Проектирование (25%): IV кв. 2026 - I кв. 2027">
+                                <span class="bar-laser-glow"></span>
+                                <span class="bar-label">IV кв. 2026 – I кв. 2027 • НИР</span>
+                                <span class="bar-percent">25%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stream 4: Запуск пилотного контура и расчеты ЦФА -->
+                    <div class="gantt-stream-row" data-stream="rollout">
+                        <div class="stream-info">
+                            <span class="stream-icon">🚀</span>
+                            <div class="stream-meta">
+                                <span class="stream-name">Промышленный пилотный контур</span>
+                                <span class="stream-sub">Запуск реальных B2B смарт-контрактов</span>
+                            </div>
+                        </div>
+                        <div class="gantt-track-area">
+                            <div class="gantt-bar-fill bar-future" style="--bar-start: 68%; --bar-width: 32%;" title="В плане: Старт с 31.03.2027">
+                                <span class="bar-laser-glow"></span>
+                                <span class="bar-label">С 31.03.2027 • Пилотирование</span>
+                                <span class="bar-percent">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gantt Milestones Legend Bar -->
+                <div class="gantt-legend-bar">
+                    <div class="legend-item"><span class="legend-dot dot-completed"></span> Завершено (100%)</div>
+                    <div class="legend-item"><span class="legend-dot dot-active"></span> Текущий активный спринт (78%)</div>
+                    <div class="legend-item"><span class="legend-dot dot-planned"></span> Проектирование & НИР (25%)</div>
+                    <div class="legend-item"><span class="legend-dot dot-future"></span> Пилотный контур (2027)</div>
                 </div>
             </div>
         </div>
@@ -518,5 +632,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/hero.js?v=3.22.0" defer></script>
+<script src="/static/js/hero.js?v=3.23.0" defer></script>
 {% endblock %}

@@ -175,3 +175,24 @@ def test_home_page_contains_horizontal_pksc_timeline() -> None:
     assert "Сбор обратной связи & пилотов" in html
     assert "Разработка целевой модели" in html
     assert "Запуск пилотных расчетов" in html
+
+
+def test_home_page_contains_gantt_chart_and_switcher() -> None:
+    """Verify dual-mode view switcher and Gantt chart markup in home HTML."""
+    response = client.get("/")
+    assert response.status_code == 200
+    html = response.text
+
+    # View Switcher
+    assert "btnViewPipeline" in html
+    assert "btnViewGantt" in html
+    assert "Дорожная карта" in html
+    assert "Диаграмма Ганта" in html
+
+    # Gantt Elements
+    assert "pkscGanttView" in html
+    assert "gantt-time-axis" in html
+    assert "II кв. 2026" in html
+    assert "III кв. 2026" in html
+    assert "bar-completed" in html
+    assert "bar-active" in html
