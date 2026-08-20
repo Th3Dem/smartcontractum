@@ -1,67 +1,36 @@
 {% extends "base.html" %}
 
-{% block title %}{{ page_title or 'База знаний и лента статей Habr 2.0 — SmartContractum' }}{% endblock %}
+{% block title %}Моя лента / Хабр-ПКСК — SmartContractum | Сообщество разработчиков смарт-контрактов{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_social.css?v=2.1.0">
-<!-- Schema.org JSON-LD Collection Markup -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://smartcontractum.ru/#organization",
-      "name": "SmartContractum",
-      "url": "https://smartcontractum.ru",
-      "logo": "https://smartcontractum.ru/static/img/logo.png"
-    },
-    {
-      "@type": "CollectionPage",
-      "@id": "https://smartcontractum.ru/feed#webpage",
-      "url": "https://smartcontractum.ru/feed",
-      "name": "{{ page_title or 'База знаний и лента статей — SmartContractum' }}",
-      "description": "Технические статьи, спецификации, аудит безопасности и архитектурные паттерны смарт-контрактов.",
-      "breadcrumb": {
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Главная",
-            "item": "https://smartcontractum.ru"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Лента публикаций",
-            "item": "https://smartcontractum.ru/feed"
-          }
-        ]
-      }
-    }
-  ]
-}
+<link rel="stylesheet" href="/static/css/forum_social.css?v=9.5.0">
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('light-theme-feed');
+    });
 </script>
 {% endblock %}
 
 {% block content %}
-<div class="habr-feed-wrapper light-theme-feed">
+<div class="habr-feed-wrapper habr-feed-layout">
 
-    <!-- HABR 2.0 MAIN 2-COLUMN GRID (Left: Stream, Right: Sidebar) -->
-    <div class="habr-main-grid">
+    <!-- ================================================================
+         1. HABR MAIN 2-COLUMN GRID (Feed + Sidebar)
+    ================================================================= -->
+    <div class="habr-main-grid habr-feed-grid">
 
-        <!-- 1.1 LEFT: ARTICLES STREAM -->
-        <main class="habr-articles-stream">
+        <!-- 1.1 MAIN CONTENT STREAM -->
+        <main class="habr-articles-stream habr-feed-main">
 
-            <!-- 1. STREAM NAVIGATION & SORTING BAR -->
+            <!-- Habr Categories Dropdown, Sorting & Filter Bar with Search -->
             <div class="habr-sorting-bar">
                 <div class="habr-sort-left-group">
-                    <!-- Categories Dropdown with persistent hover & bridge -->
+                    
+                    <!-- Dropdown: КАТЕГОРИИ (Выпадающий список при наведении курсора) -->
                     <div class="categories-dropdown-wrapper" id="categoriesDropdownWrap">
-                        <button type="button" class="btn-categories-dropdown" id="btnCategoriesDropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="cat-btn-icon" aria-hidden="true">
-                                <svg class="cat-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <button type="button" class="btn-categories-dropdown {% if active_stream and active_stream != 'all' %}is-filtered{% endif %}" id="btnCategoriesDropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="cat-btn-icon-wrap" aria-hidden="true">
+                                <svg class="cat-vector-svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M2 4.75C2 3.784 2.784 3 3.75 3h4.836c.464 0 .909.184 1.237.513l1.414 1.414a.25.25 0 00.177.073h4.836c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0116.25 17H3.75A1.75 1.75 0 012 15.25V4.75z" clip-rule="evenodd" />
                                 </svg>
                             </span>
@@ -81,7 +50,7 @@
                             
                             <!-- 1. Все потоки -->
                             <a href="/feed?stream=all{% if active_query %}&q={{ active_query }}{% endif %}{% if active_sort %}&sort={{ active_sort }}{% endif %}" 
-                               class="cat-menu-item {% if active_stream == 'all' or not active_stream %}is-active{% endif %}" role="menuitem">
+                               class="cat-menu-item {% if active_stream == 'all' %}is-active{% endif %}" role="menuitem">
                                 <span class="cat-menu-icon-box cat-icon-all">
                                     <svg class="cat-item-svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.17 1.998-1.528 2.87-.367.893-.595 1.583-.595 1.832 0 .043.01.127.058.21.05.087.147.19.34.257.377.13 1.01.13 1.637-.123.636-.257 1.258-.753 1.66-1.37.054-.083.1-.167.141-.25.041.134.062.278.062.426 0 1.268-.696 2.457-1.634 3.19-.948.74-2.148 1.15-3.218 1.15-1.282 0-2.522-.524-3.39-1.47-.86-.938-1.29-2.222-1.29-3.568 0-.46.06-.91.17-1.34.085-.333-.14-.666-.48-.718a.67.67 0 00-.77.46C2.24 7.6 2 8.78 2 10c0 4.418 3.582 8 8 8s8-3.582 8-8c0-3.34-1.92-6.17-4.605-7.447z" clip-rule="evenodd" />
@@ -94,7 +63,7 @@
                                     </div>
                                     <span class="cat-menu-subs">18.4k читателей</span>
                                 </div>
-                                {% if active_stream == 'all' or not active_stream %}
+                                {% if active_stream == 'all' %}
                                 <span class="cat-menu-check">✓</span>
                                 {% endif %}
                             </a>
@@ -159,32 +128,12 @@
                                 {% endif %}
                             </a>
 
-                            <!-- 5. Регуляторика & ЦБ РФ -->
-                            <a href="/feed?stream=safe-deals{% if active_query %}&q={{ active_query }}{% endif %}{% if active_sort %}&sort={{ active_sort }}{% endif %}" 
-                               class="cat-menu-item {% if active_stream == 'safe-deals' %}is-active{% endif %}" role="menuitem">
-                                <span class="cat-menu-icon-box cat-icon-gov">
-                                    <svg class="cat-item-svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 2a1 1 0 01.7.3l7 7a1 1 0 01-1.4 1.4L16 10.4V17a1 1 0 01-1 1h-3a1 1 0 01-1-1v-4H9v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-6.6l-.3.3a1 1 0 01-1.4-1.4l7-7A1 1 0 0110 2z" clip-rule="evenodd" />
-                                    </svg>
-                                </span>
-                                <div class="cat-menu-text-wrap">
-                                    <div class="cat-menu-top-line">
-                                        <span class="cat-menu-name">Регуляторика & ЦБ РФ</span>
-                                        <span class="cat-menu-count">1 тема</span>
-                                    </div>
-                                    <span class="cat-menu-subs">8.9k читателей</span>
-                                </div>
-                                {% if active_stream == 'safe-deals' %}
-                                <span class="cat-menu-check">✓</span>
-                                {% endif %}
-                            </a>
-
-                            <!-- 6. Казначейство & B2B -->
+                            <!-- 5. Казначейство & B2B -->
                             <a href="/feed?stream=treasury-b2b{% if active_query %}&q={{ active_query }}{% endif %}{% if active_sort %}&sort={{ active_sort }}{% endif %}" 
                                class="cat-menu-item {% if active_stream == 'treasury-b2b' %}is-active{% endif %}" role="menuitem">
-                                <span class="cat-menu-icon-box cat-icon-b2b">
+                                <span class="cat-menu-icon-box cat-icon-bank">
                                     <svg class="cat-item-svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zm14 5H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h3a1 1 0 100-2H9z" clip-rule="evenodd" />
+                                        <path fill-rule="evenodd" d="M10.496 2.132a1 1 0 00-.992 0l-7 4A1 1 0 002 7v1a1 1 0 001 1h14a1 1 0 001-1V7a1 1 0 00-.504-.868l-7-4zM3 11a1 1 0 011-1h1a1 1 0 011 1v4a1 1 0 01-1 1H4a1 1 0 01-1-1v-4zm5 0a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1H9a1 1 0 01-1-1v-4zm6-1a1 1 0 00-1 1v4a1 1 0 001 1h1a1 1 0 001-1v-4a1 1 0 00-1-1h-1zM2 17a1 1 0 011-1h14a1 1 0 110 2H3a1 1 0 01-1-1z" clip-rule="evenodd" />
                                     </svg>
                                 </span>
                                 <div class="cat-menu-text-wrap">
@@ -198,107 +147,98 @@
                                 <span class="cat-menu-check">✓</span>
                                 {% endif %}
                             </a>
+
+                            <!-- 6. Регуляторика & ЦБ РФ -->
+                            <a href="/feed?stream=safe-deals{% if active_query %}&q={{ active_query }}{% endif %}{% if active_sort %}&sort={{ active_sort }}{% endif %}" 
+                               class="cat-menu-item {% if active_stream == 'safe-deals' %}is-active{% endif %}" role="menuitem">
+                                <span class="cat-menu-icon-box cat-icon-cbr">
+                                    <svg class="cat-item-svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 2a1 1 0 01.707.293l6 6a1 1 0 01-1.414 1.414L15 9.414V16a2 2 0 01-2 2H7a2 2 0 01-2-2V9.414l-.293.293a1 1 0 01-1.414-1.414l6-6A1 1 0 0110 2zm0 3.414L6 9.414V16h8V9.414l-4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+                                <div class="cat-menu-text-wrap">
+                                    <div class="cat-menu-top-line">
+                                        <span class="cat-menu-name">Регуляторика & ЦБ РФ</span>
+                                        <span class="cat-menu-count">1 тема</span>
+                                    </div>
+                                    <span class="cat-menu-subs">8.9k читателей</span>
+                                </div>
+                                {% if active_stream == 'safe-deals' %}
+                                <span class="cat-menu-check">✓</span>
+                                {% endif %}
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Sorting Tabs Switcher -->
-                    <div class="habr-tabs-group" role="tablist">
-                        <!-- 1. Моя лента -->
-                        <a href="/feed?stream={{ active_stream }}&sort=my_feed{% if active_query %}&q={{ active_query }}{% endif %}" 
-                           class="sort-tab-btn {% if active_sort == 'my_feed' %}is-active{% endif %}" 
-                           data-sort="my_feed" role="tab" aria-selected="{% if active_sort == 'my_feed' %}true{% else %}false{% endif %}">
-                            <span class="tab-icon-wrap">
-                                <svg class="tab-svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                                </svg>
-                            </span>
-                            <span>Моя лента</span>
-                        </a>
-
-                        <!-- 2. Лучшие with Period Dropdown -->
-                        <div class="best-tab-wrapper {% if active_sort == 'best' %}is-active{% endif %}" id="bestTabWrapper">
-                            <a href="/feed?stream={{ active_stream }}&sort=best&period={{ active_period }}{% if active_query %}&q={{ active_query }}{% endif %}" 
-                               class="sort-tab-btn {% if active_sort == 'best' %}is-active{% endif %}" 
-                               data-sort="best" role="tab" aria-selected="{% if active_sort == 'best' %}true{% else %}false{% endif %}">
+                    <!-- Sort Tabs with Vector Icons -->
+                    <div class="habr-sort-tabs">
+                        <!-- 'Лучшие' Tab with 6-item Period dropdown -->
+                        <div class="best-tab-wrapper" id="bestTabWrapper">
+                            <a href="/feed?stream={{ active_stream }}&sort=best{% if active_period and active_period != 'all' %}&period={{ active_period }}{% endif %}{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'best' %}is-active{% endif %}" data-sort="best">
                                 <span class="tab-icon-wrap">
                                     <svg class="tab-svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.17 1.998-1.528 2.87-.367.893-.595 1.583-.595 1.832 0 .043.01.127.058.21.05.087.147.19.34.257.377.13 1.01.13 1.637-.123.636-.257 1.258-.753 1.66-1.37.054-.083.1-.167.141-.25.041.134.062.278.062.426 0 1.268-.696 2.457-1.634 3.19-.948.74-2.148 1.15-3.218 1.15-1.282 0-2.522-.524-3.39-1.47-.86-.938-1.29-2.222-1.29-3.568 0-.46.06-.91.17-1.34.085-.333-.14-.666-.48-.718a.67.67 0 00-.77.46C2.24 7.6 2 8.78 2 10c0 4.418 3.582 8 8 8s8-3.582 8-8c0-3.34-1.92-6.17-4.605-7.447z" clip-rule="evenodd" />
                                     </svg>
                                 </span>
                                 <span>Лучшие</span>
-                            </a>
-
-                            <!-- Period Selector Trigger -->
-                            <button type="button" class="btn-period-select" id="btnPeriodDropdown" aria-haspopup="true" aria-expanded="false" title="Выбрать период для лучших статей">
-                                <span class="current-period-text">
-                                    {% if active_period == 'today' or active_period == 'day' %}За сегодня
-                                    {% elif active_period == 'yesterday' %}За вчера
-                                    {% elif active_period == 'week' %}За неделю
-                                    {% elif active_period == 'month' %}За месяц
-                                    {% elif active_period == 'year' %}За год
-                                    {% else %}Все время{% endif %}
+                                {% if active_sort == 'best' and active_period and active_period != 'all' %}
+                                <span class="period-active-pill">
+                                    {% if active_period == 'today' or active_period == 'day' %}сегодня
+                                    {% elif active_period == 'yesterday' %}вчера
+                                    {% elif active_period == 'week' %}неделя
+                                    {% elif active_period == 'month' %}месяц
+                                    {% elif active_period == 'year' %}год
+                                    {% endif %}
                                 </span>
-                                <svg class="period-arrow-svg" viewBox="0 0 16 16" fill="currentColor" width="10" height="10">
+                                {% endif %}
+                            </a>
+                            <button type="button" class="btn-period-dropdown {% if active_sort == 'best' %}is-active{% endif %}" id="btnPeriodDropdown" aria-label="Выбрать период" aria-haspopup="true" aria-expanded="false" title="Выбрать период">
+                                <svg class="period-dropdown-arrow" viewBox="0 0 16 16" fill="currentColor" width="10" height="10" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 011.06 0L8 8.94l2.72-2.72a.75.75 0 111.06 1.06l-3.25 3.25a.75.75 0 01-1.06 0L4.22 7.28a.75.75 0 010-1.06z" clip-rule="evenodd" />
                                 </svg>
                             </button>
 
-                            <!-- Period Dropdown Menu -->
                             <div class="period-dropdown-menu" id="periodDropdownMenu" role="menu">
-                                <a href="/feed?stream={{ active_stream }}&sort=best&period=all{% if active_query %}&q={{ active_query }}{% endif %}" 
-                                   class="period-menu-item {% if active_period == 'all' or not active_period %}is-active{% endif %}" role="menuitem">
+                                <div class="period-menu-header">Период:</div>
+                                <a href="/feed?stream={{ active_stream }}&sort=best&period=all{% if active_query %}&q={{ active_query }}{% endif %}" class="period-menu-item {% if active_period == 'all' or not active_period %}is-active{% endif %}" role="menuitem">
                                     <span>Все время</span>
-                                    {% if active_period == 'all' or not active_period %}<span class="menu-check">✓</span>{% endif %}
+                                    {% if active_period == 'all' or not active_period %}<span class="period-check">✓</span>{% endif %}
                                 </a>
-                                <a href="/feed?stream={{ active_stream }}&sort=best&period=today{% if active_query %}&q={{ active_query }}{% endif %}" 
-                                   class="period-menu-item {% if active_period == 'today' or active_period == 'day' %}is-active{% endif %}" role="menuitem">
+                                <a href="/feed?stream={{ active_stream }}&sort=best&period=today{% if active_query %}&q={{ active_query }}{% endif %}" class="period-menu-item {% if active_period == 'today' or active_period == 'day' %}is-active{% endif %}" role="menuitem">
                                     <span>За сегодня</span>
-                                    {% if active_period == 'today' or active_period == 'day' %}<span class="menu-check">✓</span>{% endif %}
+                                    {% if active_period == 'today' or active_period == 'day' %}<span class="period-check">✓</span>{% endif %}
                                 </a>
-                                <a href="/feed?stream={{ active_stream }}&sort=best&period=yesterday{% if active_query %}&q={{ active_query }}{% endif %}" 
-                                   class="period-menu-item {% if active_period == 'yesterday' %}is-active{% endif %}" role="menuitem">
+                                <a href="/feed?stream={{ active_stream }}&sort=best&period=yesterday{% if active_query %}&q={{ active_query }}{% endif %}" class="period-menu-item {% if active_period == 'yesterday' %}is-active{% endif %}" role="menuitem">
                                     <span>За вчера</span>
-                                    {% if active_period == 'yesterday' %}<span class="menu-check">✓</span>{% endif %}
+                                    {% if active_period == 'yesterday' %}<span class="period-check">✓</span>{% endif %}
                                 </a>
-                                <a href="/feed?stream={{ active_stream }}&sort=best&period=week{% if active_query %}&q={{ active_query }}{% endif %}" 
-                                   class="period-menu-item {% if active_period == 'week' %}is-active{% endif %}" role="menuitem">
+                                <a href="/feed?stream={{ active_stream }}&sort=best&period=week{% if active_query %}&q={{ active_query }}{% endif %}" class="period-menu-item {% if active_period == 'week' %}is-active{% endif %}" role="menuitem">
                                     <span>За неделю</span>
-                                    {% if active_period == 'week' %}<span class="menu-check">✓</span>{% endif %}
+                                    {% if active_period == 'week' %}<span class="period-check">✓</span>{% endif %}
                                 </a>
-                                <a href="/feed?stream={{ active_stream }}&sort=best&period=month{% if active_query %}&q={{ active_query }}{% endif %}" 
-                                   class="period-menu-item {% if active_period == 'month' %}is-active{% endif %}" role="menuitem">
+                                <a href="/feed?stream={{ active_stream }}&sort=best&period=month{% if active_query %}&q={{ active_query }}{% endif %}" class="period-menu-item {% if active_period == 'month' %}is-active{% endif %}" role="menuitem">
                                     <span>За месяц</span>
-                                    {% if active_period == 'month' %}<span class="menu-check">✓</span>{% endif %}
+                                    {% if active_period == 'month' %}<span class="period-check">✓</span>{% endif %}
                                 </a>
-                                <a href="/feed?stream={{ active_stream }}&sort=best&period=year{% if active_query %}&q={{ active_query }}{% endif %}" 
-                                   class="period-menu-item {% if active_period == 'year' %}is-active{% endif %}" role="menuitem">
+                                <a href="/feed?stream={{ active_stream }}&sort=best&period=year{% if active_query %}&q={{ active_query }}{% endif %}" class="period-menu-item {% if active_period == 'year' %}is-active{% endif %}" role="menuitem">
                                     <span>За год</span>
-                                    {% if active_period == 'year' %}<span class="menu-check">✓</span>{% endif %}
+                                    {% if active_period == 'year' %}<span class="period-check">✓</span>{% endif %}
                                 </a>
                             </div>
                         </div>
 
-                        <!-- 3. Свежее (Новые) -->
-                        <a href="/feed?stream={{ active_stream }}&sort=new{% if active_query %}&q={{ active_query }}{% endif %}" 
-                           class="sort-tab-btn {% if active_sort == 'new' %}is-active{% endif %}" 
-                           data-sort="new" role="tab" aria-selected="{% if active_sort == 'new' %}true{% else %}false{% endif %}">
+                        <a href="/feed?stream={{ active_stream }}&sort=new{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'new' %}is-active{% endif %}" data-sort="new">
                             <span class="tab-icon-wrap">
                                 <svg class="tab-svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
                                 </svg>
                             </span>
-                            <span>Свежее</span>
-                            <!-- Alias for test assertion -->
-                            <span class="sr-only">Новые</span>
+                            <span>Новые</span>
                         </a>
-
-                        <!-- 4. Обсуждаемые -->
-                        <a href="/feed?stream={{ active_stream }}&sort=discussed{% if active_query %}&q={{ active_query }}{% endif %}" 
-                           class="sort-tab-btn {% if active_sort == 'discussed' %}is-active{% endif %}" 
-                           data-sort="discussed" role="tab" aria-selected="{% if active_sort == 'discussed' %}true{% else %}false{% endif %}">
+                        <a href="/feed?stream={{ active_stream }}&sort=discussed{% if active_query %}&q={{ active_query }}{% endif %}" class="sort-tab-btn {% if active_sort == 'discussed' %}is-active{% endif %}" data-sort="discussed">
                             <span class="tab-icon-wrap">
                                 <svg class="tab-svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zm-4 0H9v2h2V9z" clip-rule="evenodd" />
+                                    <path fill-rule="evenodd" d="M10 2c-4.418 0-8 3.134-8 7 0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-1.093 3.024-.206.27-.018.65.313.626 2.016-.145 3.655-.956 4.604-1.636C8.47 15.845 9.22 16 10 16c4.418 0 8-3.134 8-7s-3.582-7-8-7z" clip-rule="evenodd" />
                                 </svg>
                             </span>
                             <span>Обсуждаемые</span>
@@ -353,45 +293,27 @@
                 {% for post in topics %}
                 <article class="habr-article-card" id="post-{{ post.id }}" data-post-id="{{ post.id }}" data-post-type="{{ post.post_type }}" data-category="{{ post.category_slug }}">
                     
-                    <!-- 1. Header: Author line & Metadata -->
+                    <!-- 1. Header: Author line & Timestamp -->
                     <div class="habr-card-header">
                         <div class="habr-author-box">
-                            <div class="habr-author-avatar {{ post.author_role_class or 'ring-dev' }}" title="{{ post.author_name }}">
-                                {{ post.author_avatar }}
-                            </div>
+                            <div class="habr-author-avatar">{{ post.author_avatar }}</div>
                             <div class="habr-author-meta">
-                                <div class="author-name-line">
-                                    <span class="habr-author-name">{{ post.author_name }}</span>
-                                    <span class="verified-shield-icon" title="Верифицированный эксперт платформы">
-                                        <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
-                                            <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.268 4.66-1.597 8-6.043 8-11.268 0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM13.707 8.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                        </svg>
-                                    </span>
-                                    <span class="habr-author-handle">@{{ post.author_username }}</span>
-                                </div>
-                                <div class="author-badges-line">
-                                    {% if post.official_badge %}
-                                    <span class="habr-company-badge">{{ post.official_badge }}</span>
-                                    {% endif %}
-                                    <span class="habr-role-badge {{ post.author_role_class }}">{{ post.author_role_badge or post.author_role }}</span>
-                                </div>
+                                <span class="habr-author-name">{{ post.author_name }}</span>
+                                <span class="habr-author-handle">@{{ post.author_username }}</span>
+                                {% if post.official_badge %}
+                                <span class="habr-company-badge">{{ post.official_badge }}</span>
+                                {% endif %}
                             </div>
                         </div>
-                        <div class="habr-card-top-right">
-                            <span class="difficulty-pill {% if post.difficulty == 'Сложный' %}diff-hard{% elif post.difficulty == 'Простой' %}diff-easy{% else %}diff-medium{% endif %}">
-                                ● {{ post.difficulty or 'Средний' }}
-                            </span>
-                            <span class="reading-time-pill">⏱️ {{ post.reading_time or '3 мин' }}</span>
-                            <span class="habr-post-time">{{ post.created_at }}</span>
-                        </div>
+                        <div class="habr-post-time">{{ post.created_at }}</div>
                     </div>
 
                     <!-- 2. Article Title -->
                     <h2 class="habr-article-title">
-                        <a href="#post-{{ post.id }}" class="habr-title-link" data-action="toggle-body" data-post-id="{{ post.id }}">{{ post.title }}</a>
+                        <a href="#post-{{ post.id }}" class="habr-title-link">{{ post.title }}</a>
                     </h2>
 
-                    <!-- 3. Hubs & Tags line -->
+                    <!-- 3. Hubs & Tags line (Habr style with asterisks) -->
                     <div class="habr-hubs-line">
                         {% for hub in post.hubs %}
                         <a href="/feed?tag={{ hub | replace('*', '') }}" class="habr-hub-link">{{ hub }}</a>{% if not loop.last %}, {% endif %}
@@ -403,94 +325,57 @@
                         <p class="habr-snippet-text">{{ post.snippet }}</p>
                     </div>
 
-                    <!-- 5. Code Snippet Preview (if present) -->
-                    {% if post.code_snippet %}
-                    <div class="habr-code-block">
-                        <div class="habr-code-header">
-                            <div class="code-header-left">
-                                <span class="code-lang">
-                                    <svg class="code-badge-svg" viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
-                                        <path fill-rule="evenodd" d="M4.72 3.22a.75.75 0 011.06 1.06L2.06 8l3.72 3.72a.75.75 0 11-1.06 1.06L.47 8.53a.75.75 0 010-1.06l4.25-4.25zm6.56 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L13.94 8l-3.72-3.72a.75.75 0 010-1.06z" clip-rule="evenodd" />
-                                    </svg>
-                                    {{ post.code_language | upper }}
-                                </span>
-                                <span class="gas-estimate-badge" title="Расчетное потребление газа в EVM">⛽ Gas: ~{{ '42.5k' if post.id == 1 else ('34.2k' if post.id == 4 else '28.0k') }}</span>
-                            </div>
-                            <button type="button" class="btn-copy-code" title="Скопировать код">
-                                <svg class="copy-svg-icon" viewBox="0 0 20 20" fill="currentColor" width="13" height="13">
-                                    <path d="M7 3.5A1.5 1.5 0 018.5 2h3.879a1.5 1.5 0 011.06.44l3.122 3.12a1.5 1.5 0 01.439 1.061V14.5A1.5 1.5 0 0115.5 16h-7A1.5 1.5 0 017 14.5v-11z" />
-                                    <path d="M5 6a1.5 1.5 0 00-1.5 1.5v8A1.5 1.5 0 005 17h7a1.5 1.5 0 001.5-1.5v-.5H8.5A2.5 2.5 0 016 12.5V6H5z" />
-                                </svg>
-                                <span>Скопировать</span>
-                            </button>
-                        </div>
-                        <pre class="code-pre"><code class="code-content">{{ post.code_snippet }}</code></pre>
-                    </div>
-                    {% endif %}
-
-                    <!-- 6. Full Body (Expandable) -->
+                    <!-- 5. Full Body (Expandable) -->
                     <div class="habr-full-body" id="body-{{ post.id }}" style="display: none;">
                         <div class="habr-body-content">
                             {{ post.body | replace('
 ', '<br>') | safe }}
                         </div>
 
-                        <!-- Rich Benchmark Preview for Data/Code Topics -->
-                        {% if post.id == 4 or post.id == 1 %}
-                        <div class="habr-table-preview-wrap">
-                            <h4 class="preview-subheading">📊 Бенчмарки производительности и расхода газа (Solidity 0.8.26)</h4>
-                            <table class="habr-data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Метод исполнения</th>
-                                        <th>Размер вызова (Bytes)</th>
-                                        <th>Расход Gas</th>
-                                        <th>Экономия</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Обычный цикл вызовов</td>
-                                        <td>3,200 B</td>
-                                        <td>142,500 gas</td>
-                                        <td>Базовый</td>
-                                    </tr>
-                                    <tr class="highlight-row">
-                                        <td>Битовая упаковка (1 слот/выплата)</td>
-                                        <td>1,024 B</td>
-                                        <td><strong>42,500 gas</strong></td>
-                                        <td><span class="economy-badge">-70.1%</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <!-- Code Snippet Box (Light Code Block) -->
+                        {% if post.code_snippet %}
+                        <div class="habr-code-block">
+                            <div class="habr-code-header">
+                                <span class="code-lang">
+                                    <svg class="code-badge-svg" viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
+                                        <path fill-rule="evenodd" d="M4.72 3.22a.75.75 0 011.06 1.06L2.06 8l3.72 3.72a.75.75 0 11-1.06 1.06L.47 8.53a.75.75 0 010-1.06l4.25-4.25zm6.56 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L13.94 8l-3.72-3.72a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                                    </svg>
+                                    {{ post.code_language | upper }}
+                                </span>
+                                <button type="button" class="btn-copy-code" title="Скопировать код">
+                                    <svg class="copy-svg-icon" viewBox="0 0 20 20" fill="currentColor" width="13" height="13">
+                                        <path d="M7 3.5A1.5 1.5 0 018.5 2h3.879a1.5 1.5 0 011.06.44l3.122 3.12a1.5 1.5 0 01.439 1.061V14.5A1.5 1.5 0 0115.5 16h-7A1.5 1.5 0 017 14.5v-11z" />
+                                        <path d="M5 6a1.5 1.5 0 00-1.5 1.5v8A1.5 1.5 0 005 17h7a1.5 1.5 0 001.5-1.5v-.5H8.5A2.5 2.5 0 016 12.5V6H5z" />
+                                    </svg>
+                                    <span>Скопировать</span>
+                                </button>
+                            </div>
+                            <pre class="code-pre"><code class="code-content">{{ post.code_snippet }}</code></pre>
                         </div>
                         {% endif %}
                     </div>
 
-                    <!-- 7. Read More Trigger -->
+                    <!-- Read More Toggle Link -->
                     <div class="habr-readmore-row">
                         <button type="button" class="btn-habr-readmore" data-action="toggle-body" data-post-id="{{ post.id }}">
                             <span class="readmore-text">Читать далее</span>
                             <span class="readmore-arrow">↓</span>
                         </button>
+                        <span class="habr-meta-reading">⏱️ {{ post.reading_time }} • Сложность: {{ post.difficulty }}</span>
                     </div>
 
-                    <!-- 8. Interactive Card Footer -->
+                    <!-- 6. Habr Stats & Rating Footer -->
                     <div class="habr-card-footer">
                         <div class="habr-footer-left">
-                            <!-- Karma Lever (▲ Score ▼) -->
-                            <div class="habr-score-box karma-lever" data-post-id="{{ post.id }}">
-                                <button type="button" class="btn-score-arrow btn-score-up {% if post.is_upvoted %}is-active{% endif %}" 
-                                        data-action="upvote" data-post-id="{{ post.id }}" aria-label="Повысить рейтинг">▲</button>
-                                <span class="habr-score-val {% if post.score > 0 %}is-positive{% elif post.score < 0 %}is-negative{% endif %}" data-score-raw="{{ post.score }}">
-                                    {{ post.score_formatted }}
-                                </span>
-                                <button type="button" class="btn-score-arrow btn-score-down {% if post.is_downvoted %}is-active{% endif %}" 
-                                        data-action="downvote" data-post-id="{{ post.id }}" aria-label="Понизить рейтинг">▼</button>
+                            <!-- Rating / Score Pill -->
+                            <div class="habr-score-box">
+                                <button type="button" class="btn-score-arrow btn-score-up {% if post.is_upvoted %}is-active{% endif %}" data-action="upvote" data-post-id="{{ post.id }}" title="Нравится">▲</button>
+                                <span class="habr-score-val {% if post.score > 0 %}is-positive{% endif %}">{{ post.score_formatted }}</span>
+                                <button type="button" class="btn-score-arrow btn-score-down" data-action="downvote" data-post-id="{{ post.id }}" title="Не нравится">▼</button>
                             </div>
 
                             <!-- Views Counter -->
-                            <div class="habr-stat-item stat-views" title="Просмотры">
+                            <div class="habr-stat-item" title="Количество просмотров">
                                 <span class="stat-icon-wrap" aria-hidden="true">
                                     <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
@@ -500,43 +385,71 @@
                                 <span class="stat-val">{{ post.views_formatted }}</span>
                             </div>
 
-                            <!-- Bookmarks Button -->
-                            <button type="button" class="habr-stat-btn btn-bookmark {% if post.is_bookmarked %}is-active{% endif %}" 
-                                    data-action="bookmark" data-post-id="{{ post.id }}" title="Добавить в закладки">
+                            <!-- Bookmarks Counter -->
+                            <button type="button" class="habr-stat-btn btn-bookmark {% if post.is_bookmarked %}is-active{% endif %}" data-action="bookmark" data-post-id="{{ post.id }}" title="Добавить в закладки">
                                 <span class="stat-icon-wrap" aria-hidden="true">
                                     <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-3.125L5 18V4z" />
                                     </svg>
                                 </span>
-                                <span class="stat-val bookmarks-count-val">{{ post.bookmarks_count }}</span>
+                                <span class="stat-val">{{ post.bookmarks_count }}</span>
                             </button>
 
-                            <!-- Comments Button -> Opens Comments Drawer -->
-                            <button type="button" class="habr-stat-btn btn-comments-toggle btn-open-drawer" 
-                                    data-action="open-drawer" data-post-id="{{ post.id }}" title="Открыть обсуждение статьи">
+                            <!-- Comments Counter & Toggle -->
+                            <button type="button" class="habr-stat-btn btn-comments-toggle" data-action="toggle-comments" data-post-id="{{ post.id }}" title="Комментарии">
                                 <span class="stat-icon-wrap" aria-hidden="true">
                                     <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zm-4 0H9v2h2V9z" clip-rule="evenodd" />
                                     </svg>
                                 </span>
-                                <span class="stat-val comments-count-val">{{ post.replies_count }}</span>
+                                <span class="stat-val">{{ post.replies_count }}</span>
                             </button>
                         </div>
 
                         <div class="habr-footer-right">
-                            <!-- Share Popover Button -->
-                            <button type="button" class="habr-stat-btn btn-share btn-share-trigger" 
-                                    data-action="share-popover" 
-                                    data-post-id="{{ post.id }}" 
-                                    data-post-title="{{ post.title }}" 
-                                    title="Поделиться статьей">
+                            <!-- Share Button -->
+                            <button type="button" class="habr-stat-btn btn-share" data-action="share" data-post-id="{{ post.id }}" title="Поделиться">
                                 <span class="stat-icon-wrap" aria-hidden="true">
                                     <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
                                     </svg>
                                 </span>
-                                <span class="stat-val shares-count-val">{{ post.shares_count or 4 }}</span>
                             </button>
+                        </div>
+                    </div>
+
+                    <!-- 7. Habr Comments Tree Accordion -->
+                    <div class="habr-comments-section" id="comments-{{ post.id }}" style="display: none;">
+                        <div class="habr-comments-header">
+                            <h4 class="comments-title">Комментарии ({{ post.replies_count }})</h4>
+                        </div>
+
+                        <!-- Write Comment Form -->
+                        <form class="habr-comment-form" data-post-id="{{ post.id }}">
+                            <div class="comment-input-wrap">
+                                <textarea class="habr-comment-textarea" placeholder="Написать комментарий..." rows="3" required minlength="3"></textarea>
+                                <div class="comment-form-footer">
+                                    <span class="comment-hint">Поддерживается Markdown</span>
+                                    <button type="submit" class="btn-habr-submit-comment">Отправить</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Comments List -->
+                        <div class="habr-comments-list" id="comments-list-{{ post.id }}">
+                            {% for comment in post.comments %}
+                            <div class="habr-comment-item">
+                                <div class="comment-header-line">
+                                    <div class="comment-avatar">{{ comment.author_avatar }}</div>
+                                    <span class="comment-author-name">{{ comment.author_name }}</span>
+                                    <span class="comment-author-handle">@{{ comment.author_username }}</span>
+                                    <span class="comment-time">{{ comment.created_at }}</span>
+                                </div>
+                                <div class="comment-text-body">
+                                    <p>{{ comment.body }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
 
@@ -558,28 +471,44 @@
             </div>
         </main>
 
-        <!-- 1.2 HABR RIGHT SIDEBAR (Widgets) -->
-        <aside class="habr-sidebar-right">
+        <!-- 1.2 HABR RIGHT SIDEBAR (Читают сейчас, Хабы, Компании) -->
+        <aside class="habr-sidebar-right habr-feed-sidebar">
 
-            <!-- Sidebar Block 1: 🔥 ЧИТАЮТ СЕЙЧАС (Trending Articles with Live Pulse) -->
+            <!-- Sidebar Block 1: ЧИТАЮТ СЕЙЧАС (Trending Articles) -->
             <div class="habr-sidebar-block trending-block">
                 <div class="sidebar-block-head">
                     <h3 class="block-title">
-                        <span class="live-pulse-dot" title="Онлайн метрика"></span>
-                        <span class="block-title-icon">🔥</span>
+                        <span class="block-title-icon">
+                            <svg class="block-title-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.527.82-1.17 1.998-1.528 2.87-.367.893-.595 1.583-.595 1.832 0 .043.01.127.058.21.05.087.147.19.34.257.377.13 1.01.13 1.637-.123.636-.257 1.258-.753 1.66-1.37.054-.083.1-.167.141-.25.041.134.062.278.062.426 0 1.268-.696 2.457-1.634 3.19-.948.74-2.148 1.15-3.218 1.15-1.282 0-2.522-.524-3.39-1.47-.86-.938-1.29-2.222-1.29-3.568 0-.46.06-.91.17-1.34.085-.333-.14-.666-.48-.718a.67.67 0 00-.77.46C2.24 7.6 2 8.78 2 10c0 4.418 3.582 8 8 8s8-3.582 8-8c0-3.34-1.92-6.17-4.605-7.447z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
                         Читают сейчас
                     </h3>
                 </div>
                 <div class="trending-articles-list">
-                    {% for article in read_now_trending %}
+                    {% for article in trending_articles %}
                     <a href="#post-{{ article.id }}" class="trending-article-row">
                         <span class="trending-rank">{{ loop.index }}</span>
                         <div class="trending-content">
                             <h4 class="trending-title">{{ article.title }}</h4>
                             <div class="trending-meta">
-                                <span class="readers-pill">⚡ {{ article.readers }} читают</span>
+                                <span class="meta-score">{{ article.score_formatted }}</span>
                                 <span class="meta-dot">•</span>
-                                <span class="trending-tag">#{{ article.tag }}</span>
+                                <span class="meta-views">
+                                    <svg class="mini-stat-svg" viewBox="0 0 20 20" fill="currentColor" width="12" height="12">
+                                        <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+                                        <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                    </svg>
+                                    {{ article.views_formatted }}
+                                </span>
+                                <span class="meta-dot">•</span>
+                                <span class="meta-comments">
+                                    <svg class="mini-stat-svg" viewBox="0 0 20 20" fill="currentColor" width="12" height="12">
+                                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zm-4 0H9v2h2V9z" clip-rule="evenodd" />
+                                    </svg>
+                                    {{ article.replies_count }}
+                                </span>
                             </div>
                         </div>
                     </a>
@@ -587,78 +516,96 @@
                 </div>
             </div>
 
-            <!-- Sidebar Block 2: 🏛️ ТОП КОМПАНИЙ И ЭКСПЕРТОВ НЕДЕЛИ -->
+            <!-- Sidebar Block 2: ПОПУЛЯРНЫЕ ХАБЫ (Popular Hubs) -->
+            <div class="habr-sidebar-block hubs-block">
+                <div class="sidebar-block-head">
+                    <h3 class="block-title">
+                        <span class="block-title-icon">
+                            <svg class="block-title-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.068 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.83-4.401z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                        Популярные хабы
+                    </h3>
+                </div>
+                <div class="popular-hubs-list">
+                    {% for hub in popular_hubs %}
+                    <div class="hub-sidebar-row">
+                        <div class="hub-info">
+                            <a href="/feed?stream={{ hub.slug }}" class="hub-name">{{ hub.name }}</a>
+                            <span class="hub-subs">{{ hub.subs }} подписчиков</span>
+                        </div>
+                        <button type="button" class="btn-hub-follow" data-hub="{{ hub.slug }}">+ Подписаться</button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Sidebar Block 3: КОМПАНИИ ЭКОСИСТЕМЫ (Leading Teams) -->
             <div class="habr-sidebar-block companies-block">
                 <div class="sidebar-block-head">
                     <h3 class="block-title">
-                        <span class="block-title-icon">🏛️</span>
-                        Топ компаний и экспертов
+                        <span class="block-title-icon">
+                            <svg class="block-title-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                        Компании недели
                     </h3>
                 </div>
-                <div class="popular-companies-list">
-                    {% for company in top_companies %}
+                <div class="companies-list">
+                    {% for comp in top_companies %}
                     <div class="company-sidebar-row">
-                        <div class="company-logo-wrap">
-                            <span class="company-logo-badge">{{ company.logo }}</span>
+                        <div class="company-logo-badge">
+                            <svg class="comp-badge-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" />
+                            </svg>
                         </div>
                         <div class="company-info">
-                            <h4 class="company-name">{{ company.name }}</h4>
-                            <span class="company-posts">{{ company.posts }} • Рейтинг {{ company.rating }}</span>
+                            <span class="company-name">{{ comp.name }}</span>
+                            <span class="company-stats">{{ comp.posts }}</span>
                         </div>
-                        <button type="button" 
-                                class="btn-company-follow btn-hub-follow {% if company.is_subscribed %}is-following{% endif %}" 
-                                data-company="{{ company.name }}" 
-                                data-hub="{{ company.name | lower | replace(' ', '-') }}">
-                            {{ '✓ Вы подписаны' if company.is_subscribed else '+ Подписаться' }}
-                        </button>
+                        <span class="company-rating">{{ comp.rating }}</span>
                     </div>
                     {% endfor %}
                 </div>
             </div>
 
-            <!-- Sidebar Block 3: 📅 КАЛЕНДАРЬ МИТАПОВ & АМА-СЕССИЙ ПКСК 2026 -->
-            <div class="habr-sidebar-block events-block">
+            <!-- Sidebar Block 4: КАЛЕНДАРЬ НИР ЦБ РФ -->
+            <div class="habr-sidebar-block nir-block">
                 <div class="sidebar-block-head">
                     <h3 class="block-title">
-                        <span class="block-title-icon">📅</span>
-                        Календарь митапов & АМА
+                        <span class="block-title-icon">
+                            <svg class="block-title-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                        Календарь ПКСК & НИР
                     </h3>
                 </div>
-                <div class="events-list">
-                    {% for ev in upcoming_events %}
-                    <div class="event-sidebar-row">
-                        <div class="event-date-box">
-                            <span class="event-day">{{ ev.day }}</span>
-                            <span class="event-month">{{ ev.month }}</span>
-                        </div>
-                        <div class="event-content">
-                            <div class="event-top-line">
-                                <h5 class="event-title">{{ ev.title }}</h5>
-                                <span class="event-status-pill {% if ev.badge == 'Live' %}badge-live{% elif ev.badge == 'Официально' %}badge-cbr{% else %}badge-webinar{% endif %}">
-                                    {{ ev.badge }}
-                                </span>
-                            </div>
-                            <span class="event-format">{{ ev.type }}</span>
+                <div class="nir-timeline-box">
+                    <div class="nir-step is-passed">
+                        <div class="step-marker"></div>
+                        <div class="step-text">
+                            <span class="step-date">18 июня 2026</span>
+                            <h5 class="step-heading">Публикация Концепции</h5>
                         </div>
                     </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Sidebar Block 4: 🏷️ ОБЛАКО ПОПУЛЯРНЫХ ТЕГОВ -->
-            <div class="habr-sidebar-block tags-block">
-                <div class="sidebar-block-head">
-                    <h3 class="block-title">
-                        <span class="block-title-icon">🏷️</span>
-                        Популярные теги
-                    </h3>
-                </div>
-                <div class="tags-cloud-wrap">
-                    {% for tag in popular_tags %}
-                    <a href="/feed?tag={{ tag.name }}" class="tag-cloud-chip {% if active_tag == tag.name %}is-active{% endif %}">
-                        #{{ tag.name }} <span class="tag-count">({{ tag.count }})</span>
-                    </a>
-                    {% endfor %}
+                    <div class="nir-step is-active">
+                        <div class="step-marker is-pulse"></div>
+                        <div class="step-text">
+                            <span class="step-badge">Активная фаза</span>
+                            <span class="step-date">До 30 сентября 2026</span>
+                            <h5 class="step-heading">Сбор замечаний и предложений</h5>
+                        </div>
+                    </div>
+                    <div class="nir-step">
+                        <div class="step-marker"></div>
+                        <div class="step-text">
+                            <span class="step-date">До 31 марта 2027</span>
+                            <h5 class="step-heading">Пилотирование целевой архитектуры</h5>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -667,98 +614,7 @@
 </div>
 
 <!-- ====================================================================
-     2. OFF-CANVAS COMMENTS DRAWER (#commentsDrawer 540px slide-in)
-==================================================================== -->
-<div class="comments-drawer-overlay" id="commentsDrawerOverlay" aria-hidden="true">
-    <div class="comments-drawer-panel" id="commentsDrawer" role="dialog" aria-modal="true" aria-labelledby="drawerArticleTitle">
-        
-        <!-- Drawer Header -->
-        <div class="drawer-header">
-            <div class="drawer-title-group">
-                <span class="drawer-header-icon">💬</span>
-                <div class="drawer-title-wrap">
-                    <h3 class="drawer-title" id="drawerArticleTitle">Обсуждение публикации</h3>
-                    <span class="drawer-subtitle">Ветка комментариев & Реплаи экспертов</span>
-                </div>
-            </div>
-            <button type="button" class="btn-close-drawer" id="btnCloseCommentsDrawer" aria-label="Закрыть комментарии">✕</button>
-        </div>
-
-        <!-- Drawer Content Scroll Area -->
-        <div class="drawer-scroll-body">
-
-            <!-- Markdown Comment Composer -->
-            <div class="drawer-composer-card">
-                <div class="composer-author-row">
-                    <div class="composer-avatar">{{ user_avatar or 'SC' }}</div>
-                    <div class="composer-meta">
-                        <span class="composer-name">{{ user_name or 'developer' }}</span>
-                        <span class="composer-role-badge">[👨‍💻 Разработчик]</span>
-                    </div>
-                </div>
-
-                <div class="drawer-composer-box">
-                    <div class="composer-format-toolbar">
-                        <button type="button" class="btn-md-fmt" data-fmt="bold" title="Жирный"><strong>B</strong></button>
-                        <button type="button" class="btn-md-fmt" data-fmt="italic" title="Курсив"><em>I</em></button>
-                        <button type="button" class="btn-md-fmt" data-fmt="code" title="Код"><code>&lt;&gt;</code></button>
-                        <button type="button" class="btn-md-fmt" data-fmt="quote" title="Цитата">”</button>
-                        <button type="button" class="btn-md-fmt" data-fmt="list" title="Список">• List</button>
-                    </div>
-                    <textarea class="drawer-comment-textarea" id="drawerCommentInput" 
-                              placeholder="Написать экспертный комментарий... Поддерживается Markdown" rows="3"></textarea>
-                    <div class="drawer-composer-footer">
-                        <span class="composer-hint">Shift+Enter — новая строка</span>
-                        <button type="button" class="btn-submit-drawer-comment" id="btnSubmitDrawerComment">
-                            <span>Отправить комментарий</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Comments Tree -->
-            <div class="drawer-threads-container">
-                <div class="drawer-threads-header">
-                    <h4 class="threads-title">Все комментарии (<span id="drawerTotalCount">0</span>)</h4>
-                </div>
-                <div class="drawer-comments-tree" id="drawerCommentsList">
-                    <!-- Populated dynamically via JS -->
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</div>
-
-<!-- ====================================================================
-     3. SHARE POPOVER (#sharePopover)
-==================================================================== -->
-<div class="share-popover-card" id="sharePopover" style="display: none;" role="dialog" aria-label="Поделиться статьей">
-    <div class="popover-header">
-        <span class="popover-title">Поделиться статьей</span>
-        <button type="button" class="btn-close-popover" id="btnCloseSharePopover" aria-label="Закрыть">✕</button>
-    </div>
-    <div class="popover-body">
-        <div class="share-social-grid">
-            <a href="#" target="_blank" rel="noopener noreferrer" class="share-social-btn btn-share-tg" id="shareTgLink">
-                <span class="social-icon">✈️</span>
-                <span>Telegram</span>
-            </a>
-            <a href="#" target="_blank" rel="noopener noreferrer" class="share-social-btn btn-share-vk" id="shareVkLink">
-                <span class="social-icon">🔷</span>
-                <span>ВКонтакте</span>
-            </a>
-        </div>
-        <div class="share-copy-row">
-            <input type="text" class="share-url-input" id="shareUrlInput" readonly value="">
-            <button type="button" class="btn-copy-share-url" id="btnCopyShareUrl">Скопировать</button>
-        </div>
-    </div>
-</div>
-
-<!-- ====================================================================
-     4. LEGACY / QUICK WRITE MODAL (#habrWriteModal)
+     2. HABR MODAL: НАПИСАТЬ СТАТЬЮ / ПУБЛИКАЦИЮ
 ==================================================================== -->
 <div class="modal-overlay" id="habrWriteModal" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="modal-card habr-modal-card">
@@ -844,14 +700,11 @@
 
             <!-- Modal Footer -->
             <div class="modal-footer">
-                <a href="/feed/create" class="btn-full-editor-link">Перейти в расширенный редактор ↗</a>
-                <div class="modal-footer-right">
-                    <button type="button" class="btn-cancel" id="btnCancelWriteModal">Отмена</button>
-                    <button type="submit" class="btn-submit" id="btnSubmitArticle">
-                        <span class="spinner-icon" id="submitSpinner" style="display: none;">⏳</span>
-                        <span>Опубликовать</span>
-                    </button>
-                </div>
+                <button type="button" class="btn-cancel" id="btnCancelWriteModal">Отмена</button>
+                <button type="submit" class="btn-submit" id="btnSubmitArticle">
+                    <span class="spinner-icon" id="submitSpinner" style="display: none;">⏳</span>
+                    <span>Опубликовать на Хабре</span>
+                </button>
             </div>
         </form>
     </div>
@@ -865,5 +718,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_social.js?v=2.1.0" defer></script>
+<script src="/static/js/forum_social.js?v=9.5.0" defer></script>
 {% endblock %}
