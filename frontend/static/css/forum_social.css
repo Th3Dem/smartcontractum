@@ -1936,3 +1936,37 @@ body.light-theme-feed {
     white-space: nowrap;
     border: 0;
 }
+
+
+/* ----------------------------------------------------------------------
+   SEARCH BOX STRETCH & BUTTON REORDER
+---------------------------------------------------------------------- */
+.habr-actions-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    justify-content: flex-start !important;
+}
+
+.habr-actions-right .btn-habr-write {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+}
+
+.habr-actions-right .habr-search-box {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-width: 160px !important;
+}
+
+.habr-actions-right .habr-search-input {
+    width: 100% !important;
+    min-width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 7px 28px 7px 32px !important;
+}
