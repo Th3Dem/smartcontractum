@@ -1,0 +1,377 @@
+{% extends "base.html" %}
+
+{% block title %}Создание статьи / Хабр-ПКСК — SmartContractum{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/forum_editor.css?v=1.0.0">
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('light-theme-feed');
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="habr-editor-page-wrapper">
+
+    <!-- ================================================================
+         1. SUB-HEADER / TOP TOOLBAR (Создание статьи, WYSIWYG, Автосохранение)
+    ================================================================= -->
+    <header class="habr-editor-topbar">
+        <div class="editor-topbar-inner">
+            <div class="editor-topbar-left">
+                <a href="/feed" class="btn-back-feed" title="Вернуться в ленту">
+                    <svg class="back-svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                        <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
+                    </svg>
+                    <span>В ленту</span>
+                </a>
+                <div class="topbar-divider"></div>
+                <h1 class="editor-page-title">Создание статьи</h1>
+                
+                <!-- Switcher Control: WYSIWYG / Markdown -->
+                <div class="editor-mode-switcher">
+                    <button type="button" class="mode-switch-btn is-active" id="btnModeWysiwyg" data-mode="wysiwyg" title="Визуальный редактор">
+                        <svg class="mode-svg" viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
+                            <path d="M4 2a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H4zm0 1h8a1 1 0 011 1v8a1 1 0 01-1 1H4a1 1 0 01-1-1V4a1 1 0 011-1z" />
+                        </svg>
+                        <span>WYSIWYG</span>
+                    </button>
+                    <button type="button" class="mode-switch-btn" id="btnModeMarkdown" data-mode="markdown" title="Режим разметки Markdown">
+                        <svg class="mode-svg" viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
+                            <path fill-rule="evenodd" d="M14.85 3H1.15C.52 3 0 3.52 0 4.15v7.69C0 12.48.52 13 1.15 13h13.7c.63 0 1.15-.52 1.15-1.15V4.15C16 3.52 15.48 3 14.85 3zM9 11H7V8L5.5 9.5 4 8v3H2V5h2l1.5 2L7 5h2v6zm2.99.5L9.5 8H11V5h2v3h1.5l-2.51 3.5z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>Markdown</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="editor-topbar-right">
+                <!-- User / Draft status info -->
+                <div class="draft-status-box">
+                    <span class="author-handle">@SmartContractum</span>
+                    <span class="status-dot">•</span>
+                    <span class="draft-save-indicator" id="draftStatusIndicator">
+                        <svg class="save-check-svg" viewBox="0 0 16 16" fill="currentColor" width="12" height="12">
+                            <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 01.208 1.04l-5 7.5a.75.75 0 01-1.154.114l-3-3a.75.75 0 011.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 011.04-.207z" clip-rule="evenodd" />
+                        </svg>
+                        <span id="draftStatusText">Сохранено в черновиках</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================================================================
+         2. MAIN 2-COLUMN GRID (Editor Canvas + Sidebar)
+    ================================================================= -->
+    <div class="habr-editor-main-grid">
+
+        <!-- 2.1 MAIN WRITING COLUMN -->
+        <main class="habr-editor-main-column">
+
+            <!-- STEP 1: РЕДАКТИРОВАНИЕ ТЕКСТА СТАТЬИ -->
+            <div class="editor-step-panel" id="editorStepText">
+                
+                <!-- Article Title Input Area -->
+                <div class="editor-title-container">
+                    <textarea class="habr-title-textarea" id="articleTitleInput" 
+                              placeholder="Заголовок" 
+                              rows="1" 
+                              maxlength="250" 
+                              aria-label="Заголовок публикации"></textarea>
+                </div>
+
+                <!-- Floating / Sticky Formatting Toolbar -->
+                <div class="habr-format-toolbar" id="formatToolbar">
+                    <button type="button" class="toolbar-btn" data-cmd="bold" title="Жирный текст (Ctrl+B)">
+                        <strong>B</strong>
+                    </button>
+                    <button type="button" class="toolbar-btn" data-cmd="italic" title="Курсив (Ctrl+I)">
+                        <em>I</em>
+                    </button>
+                    <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="h2" title="Заголовок H2">
+                        <strong>H2</strong>
+                    </button>
+                    <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="h3" title="Заголовок H3">
+                        <strong>H3</strong>
+                    </button>
+                    <div class="toolbar-sep"></div>
+
+                    <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="blockquote" title="Цитата">
+                        <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                            <path d="M12 12a1 1 0 001-1V8.558a1 1 0 00-1-1h-1.388c0-.351.021-.703.064-1.054.062-.515.163-.995.302-1.44.14-.447.317-.842.53-1.185a.75.75 0 00-1.276-.79c-.318.513-.574 1.077-.768 1.692a8.614 8.614 0 00-.414 2.215A4.54 4.54 0 009 8.558V11a1 1 0 001 1h2zm-6 0a1 1 0 001-1V8.558a1 1 0 00-1-1H4.612c0-.351.021-.703.064-1.054.062-.515.163-.995.302-1.44.14-.447.317-.842.53-1.185a.75.75 0 00-1.276-.79c-.318.513-.574 1.077-.768 1.692a8.614 8.614 0 00-.414 2.215A4.54 4.54 0 003 8.558V11a1 1 0 001 1h2z"/>
+                        </svg>
+                    </button>
+
+                    <button type="button" class="toolbar-btn" data-action="insert-code" title="Вставить блок кода (Solidity / Python / Rust)">
+                        <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                            <path fill-rule="evenodd" d="M4.72 3.22a.75.75 0 011.06 1.06L2.06 8l3.72 3.72a.75.75 0 11-1.06 1.06L.47 8.53a.75.75 0 010-1.06l4.25-4.25zm6.56 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L13.94 8l-3.72-3.72a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="code-btn-text">&lt;/&gt; Код</span>
+                    </button>
+
+                    <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList" title="Маркированный список">
+                        <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                            <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM2 9a1 1 0 100-2 1 1 0 000 2zm1 4a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+
+                    <button type="button" class="toolbar-btn" data-action="insert-spoiler" title="Вставить спойлер">
+                        <span class="spoiler-icon">▼ Спойлер</span>
+                    </button>
+
+                    <button type="button" class="toolbar-btn btn-apply-typograf-inline" id="btnApplyTypografInline" title="Применить авто-типограф к тексту">
+                        <span>« » Типограф</span>
+                    </button>
+                </div>
+
+                <!-- WYSIWYG Editable Canvas -->
+                <div class="habr-editor-canvas" id="editorCanvas" contenteditable="true" 
+                     data-placeholder="Введите текст... Нажмите '/' для вызова меню">
+                </div>
+
+                <!-- Raw Markdown Textarea (for Markdown mode) -->
+                <textarea class="habr-editor-raw-markdown" id="rawMarkdownEditor" 
+                          placeholder="Введите текст статьи в формате Markdown (поддерживаются заголовки ##, списки, блоки кода ```solidity)..." 
+                          style="display: none;"></textarea>
+
+                <!-- Optional Attached Code Box -->
+                <div class="editor-code-snippet-box" id="attachedCodeBox" style="display: none;">
+                    <div class="code-box-header">
+                        <div class="code-lang-selector-wrap">
+                            <label for="codeLangSelect" class="code-lang-label">Язык кода:</label>
+                            <select id="codeLangSelect" class="code-lang-select">
+                                <option value="solidity">Solidity (.sol)</option>
+                                <option value="rust">Rust (.rs)</option>
+                                <option value="python">Python (.py)</option>
+                                <option value="typescript">TypeScript (.ts)</option>
+                                <option value="json">JSON / ABI</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn-remove-code" id="btnRemoveCodeBox" title="Удалить блок кода">✕ Удалить блок</button>
+                    </div>
+                    <textarea class="code-box-textarea" id="articleCodeInput" rows="6" placeholder="// Вставьте фрагмент смарт-контракта или теста..."></textarea>
+                </div>
+
+                <!-- Bottom Action Row Step 1 -->
+                <div class="editor-bottom-bar">
+                    <div class="editor-counters-box">
+                        <span id="charCountLabel">0 символов</span>
+                        <span class="count-dot">•</span>
+                        <span id="wordCountLabel">0 слов</span>
+                        <span class="count-dot">•</span>
+                        <span id="readingTimeEstimate">1 мин чтения</span>
+                    </div>
+
+                    <div class="editor-action-buttons">
+                        <button type="button" class="btn-step-next" id="btnGoToSettings">
+                            <span>Далее к настройкам</span>
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                                <path fill-rule="evenodd" d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: НАСТРОЙКИ ПУБЛИКАЦИИ (Хабы, Теги, Сложность, Регуляторика) -->
+            <div class="editor-step-panel" id="editorStepSettings" style="display: none;">
+                <div class="settings-step-header">
+                    <button type="button" class="btn-back-to-text" id="btnBackToText">
+                        <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                            <path fill-rule="evenodd" d="M9.78 12.78a.75.75 0 01-1.06 0L4.47 8.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 1.06L6.06 8l3.72 3.72a.75.75 0 010 1.06z" clip-rule="evenodd" />
+                        </svg>
+                        <span>Назад к тексту</span>
+                    </button>
+                    <h2 class="settings-title">Настройки публикации</h2>
+                </div>
+
+                <form class="publication-settings-form" id="publicationForm">
+                    <!-- Form Error Notice -->
+                    <div class="form-alert-notice" id="publishAlert" style="display: none;"></div>
+
+                    <!-- 1. Select Main Hub / Category -->
+                    <div class="settings-field-group">
+                        <label class="settings-label">
+                            Основной поток / Хаб <span class="required-star">*</span>
+                            <span class="label-hint">Выберите раздел, наиболее подходящий тематике публикации</span>
+                        </label>
+                        <div class="hubs-chip-selector" id="hubsSelector">
+                            <label class="hub-chip is-selected">
+                                <input type="radio" name="category_slug" value="smart-contracts" checked>
+                                <span class="chip-title">💻 Разработка смарт-контрактов</span>
+                            </label>
+                            <label class="hub-chip">
+                                <input type="radio" name="category_slug" value="infosec-audit">
+                                <span class="chip-title">🛡️ Информационная безопасность</span>
+                            </label>
+                            <label class="hub-chip">
+                                <input type="radio" name="category_slug" value="safe-deals">
+                                <span class="chip-title">🏛️ Регуляторика & ЦБ РФ</span>
+                            </label>
+                            <label class="hub-chip">
+                                <input type="radio" name="category_slug" value="oracles">
+                                <span class="chip-title">🌐 Оракулы & Данные</span>
+                            </label>
+                            <label class="hub-chip">
+                                <input type="radio" name="category_slug" value="treasury-b2b">
+                                <span class="chip-title">🏦 Казначейство & B2B</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 2. Tags Input with Suggested Quick Chips -->
+                    <div class="settings-field-group">
+                        <label for="tagsInput" class="settings-label">
+                            Теги статьи <span class="required-star">*</span>
+                            <span class="label-hint">(через запятую, от 1 до 8 тегов)</span>
+                        </label>
+                        <input type="text" id="tagsInput" name="tags" class="settings-text-input" 
+                               placeholder="Solidity, GasOptimization, ПКСК_2026, ЦБ_РФ, Оракулы" 
+                               value="Solidity, ПКСК_2026">
+                        <div class="quick-tags-line">
+                            <span class="quick-tags-hint">Популярные теги:</span>
+                            <button type="button" class="btn-quick-tag" data-tag="Solidity">+ Solidity</button>
+                            <button type="button" class="btn-quick-tag" data-tag="ПКСК_2026">+ ПКСК_2026</button>
+                            <button type="button" class="btn-quick-tag" data-tag="ЦБ_РФ">+ ЦБ_РФ</button>
+                            <button type="button" class="btn-quick-tag" data-tag="АудитИБ">+ АудитИБ</button>
+                            <button type="button" class="btn-quick-tag" data-tag="Оракулы">+ Оракулы</button>
+                            <button type="button" class="btn-quick-tag" data-tag="ЦифровойРубль">+ ЦифровойРубль</button>
+                        </div>
+                    </div>
+
+                    <!-- 3. Author Role & Difficulty -->
+                    <div class="settings-row-2">
+                        <div class="settings-field-group">
+                            <label for="authorRoleSelect" class="settings-label">Роль автора в экосистеме</label>
+                            <select id="authorRoleSelect" name="author_role" class="settings-select-input">
+                                <option value="Разработчик">Разработчик смарт-контрактов</option>
+                                <option value="ИБ-Аудитор">ИБ-Аудитор & Безопасность</option>
+                                <option value="ЦБ/АБР Эксперт">ЦБ / Ассоциация ФинТех Эксперт</option>
+                                <option value="Поставщик данных">Поставщик данных (Оракул / ГИС)</option>
+                                <option value="Заказчик">Корпоративный заказчик / B2B</option>
+                            </select>
+                        </div>
+
+                        <div class="settings-field-group">
+                            <label for="difficultySelect" class="settings-label">Уровень сложности статьи</label>
+                            <select id="difficultySelect" name="difficulty" class="settings-select-input">
+                                <option value="Простой">Простой (для широкой аудитории)</option>
+                                <option value="Средний" selected>Средний (для разработчиков и аналитиков)</option>
+                                <option value="Сложный">Сложный (глубокий технический хардкор / байткод)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 4. Publishing Destination (Песочница / Хаб) -->
+                    <div class="settings-field-group">
+                        <div class="sandbox-option-box">
+                            <input type="checkbox" id="sandboxCheckbox" name="is_sandbox" checked class="sandbox-checkbox">
+                            <div class="sandbox-text">
+                                <label for="sandboxCheckbox" class="sandbox-label">Опубликовать в Песочнице (Sandbox) для открытого обсуждения</label>
+                                <p class="sandbox-desc">Публикация сразу появится в общей ленте сообщества и будет доступна для голосования и комментариев других участников.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Action Step 2 -->
+                    <div class="settings-action-bar">
+                        <button type="button" class="btn-back-editor" id="btnCancelSettings">Назад к тексту</button>
+                        <button type="submit" class="btn-publish-final" id="btnPublishFinal">
+                            <span class="spinner-icon" id="publishSpinner" style="display: none;">⏳</span>
+                            <span>Опубликовать на Хабре</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </main>
+
+        <!-- 2.2 HABR HELP & UTILITY SIDEBAR (Точно как в эталоне Хабра) -->
+        <aside class="habr-editor-sidebar">
+
+            <!-- Sidebar Block 1: О ПЕСОЧНИЦЕ -->
+            <div class="editor-sidebar-card">
+                <h3 class="sidebar-card-title">
+                    <span class="card-title-icon">📌</span>
+                    О песочнице
+                </h3>
+                <p class="sidebar-card-text">
+                    Это <strong>«Песочница»</strong> сообщества SmartContractum. Если ваша статья наберёт положительный рейтинг и пройдёт первичное обсуждение, она получит официальный бейдж верификации ПКСК Банка России.
+                </p>
+                <div class="sidebar-link-wrap">
+                    <a href="/feed?tag=Правила" class="sidebar-link">Правила сообщества →</a>
+                </div>
+            </div>
+
+            <!-- Sidebar Block 2: ТИПОГРАФ -->
+            <div class="editor-sidebar-card">
+                <h3 class="sidebar-card-title">
+                    <span class="card-title-icon">✍️</span>
+                    Типограф
+                </h3>
+                <p class="sidebar-card-text">
+                    Мы автоматически улучшаем типографику текста: исправляем кавычки на «ёлочки», дефисы на длинные тире (—) и привязываем неразрывные пробелы к коротким предлогам.
+                </p>
+                <button type="button" class="btn-sidebar-typograf" id="btnApplyTypografSidebar">
+                    <span>⚡ Запустить типограф</span>
+                </button>
+            </div>
+
+            <!-- Sidebar Block 3: ПАМЯТКА АВТОРУ -->
+            <div class="editor-sidebar-card">
+                <h3 class="sidebar-card-title">
+                    <span class="card-title-icon">💡</span>
+                    Памятка автору
+                </h3>
+                <ul class="sidebar-guidelines-list">
+                    <li class="guideline-item">
+                        <span class="guideline-bullet">✓</span>
+                        <span>Соблюдайте правила платформы и техническую терминологию.</span>
+                    </li>
+                    <li class="guideline-item">
+                        <span class="guideline-bullet">✓</span>
+                        <span>Используйте блок кода <code>&lt;/&gt;</code> для Solidity/Rust смарт-контрактов.</span>
+                    </li>
+                    <li class="guideline-item">
+                        <span class="guideline-bullet">✓</span>
+                        <span>Загружайте картинки и диаграммы меньше 8 МБ.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Sidebar Block 4: О МОДЕРАЦИИ -->
+            <div class="editor-sidebar-card">
+                <h3 class="sidebar-card-title">
+                    <span class="card-title-icon">🛡️</span>
+                    О модерации
+                </h3>
+                <div class="moderation-rules-box">
+                    <div class="moderation-group">
+                        <span class="moderation-badge pass">Рекомендуется</span>
+                        <p class="moderation-desc">Архитектура смарт-контрактов, тесты безопасности, интеграции с оракулами, анализ НИР ЦБ РФ.</p>
+                    </div>
+                    <div class="moderation-group">
+                        <span class="moderation-badge fail">Не пройдёт</span>
+                        <p class="moderation-desc">Прямая реклама без технической сути, скопированный чужой код без указания авторства, спам.</p>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+    </div>
+
+</div>
+
+<!-- Floating Toast Notification -->
+<div class="habr-editor-toast" id="editorToast" style="display: none;">
+    <span class="toast-icon">✨</span>
+    <span class="toast-message" id="editorToastMessage">Черновик успешно сохранен!</span>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/forum_editor.js?v=1.0.0" defer></script>
+{% endblock %}

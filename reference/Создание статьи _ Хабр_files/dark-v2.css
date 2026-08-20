@@ -1,0 +1,49 @@
+:root {
+  --text-main: hsl(0, 0%, 87%);
+  --text-secondary: hsl(0, 0%, 67%);
+  --text-inactive: hsl(0, 0%, 67%);
+  --icon-primary: hsl(0, 0%, 40%);
+  --icon-secondary: hsl(201, 16%, 50%);
+  --background-primary: hsl(0, 0%, 9%);
+  --background-secondary: hsl(0, 0%, 15%);
+  --background-gray: hsl(0, 0%, 3%);
+  --background-orange: hsl(356, 41%, 16%);
+  --background-green: hsl(78, 51%, 16%);
+  --background-blue: hsl(201, 21%, 13%);
+  --other-disabled-elements: hsl(0, 0%, 30%);
+  --other-overlay-shadows: hsl(0, 0%, 100%);
+  --accent-primary: hsl(200, 80%, 61%);
+  --accent-primary-hover: hsl(199, 100%, 75%);
+  --accent-positive: hsl(76, 100%, 35%);
+  --accent-positive-hover: hsl(89, 45%, 56%);
+  --accent-danger: hsl(0, 100%, 73%);
+  --comments-author: hsl(88, 39%, 13%);
+  --comments-new: hsl(211, 50%, 20%);
+  --comments-moderation: hsl(352, 31%, 29%);
+  --comments-user: hsl(36, 88%, 13%);
+  --complexity-low: hsl(140, 45%, 42%);
+  --complexity-medium: hsl(200, 60%, 48%);
+  --complexity-high: hsl(350, 50%, 58%);
+  --label-dodger-blue: hsl(210, 100%, 68%);
+  --label-pelorous: hsl(185, 100%, 48%);
+  --label-deluge: hsl(239, 41%, 74%);
+  --label-apple: hsl(134, 74%, 71%);
+  --label-sorbus: hsl(30, 100%, 63%);
+  --label-mulberry: hsl(320, 67%, 64%);
+  --label-scarlet: hsl(0, 85%, 71%);
+  --label-dark-orchid: hsl(285, 100%, 68%);
+  --header-text: hsl(0, 0%, 100%);
+  --header-background: hsl(0, 0%, 5%);
+  --header-secondary-background: hsl(0, 0%, 3%);
+  --header-megapost-anakiwa: hsl(200, 75%, 74%);
+  --header-megapost-mint-green: hsl(128, 57%, 66%);
+  --header-megapost-pale-canary: hsl(60, 65%, 70%);
+  --header-megapost-mona-lisa: hsl(5, 100%, 76%);
+  --header-megapost-lavender-rose: hsl(305, 79%, 72%);
+
+  /* code */
+  --cm-name: var(--accent-primary-hover);
+
+  /* formula */
+  --formula-filter: invert(1);
+}

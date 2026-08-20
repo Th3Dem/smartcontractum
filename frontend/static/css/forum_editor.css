@@ -1,0 +1,872 @@
+/* ======================================================================
+   SmartContractum — Habr-Style Article Creation & Editor Styles
+   File: frontend/static/css/forum_editor.css (v1.0.0)
+======================================================================= */
+
+.habr-editor-page-wrapper {
+    background: #f8fafc !important;
+    min-height: calc(100vh - 70px);
+    color: #0f172a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    padding-bottom: 60px;
+}
+
+/* ======================================================================
+   1. SUB-HEADER / TOP TOOLBAR
+====================================================================== */
+.habr-editor-topbar {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    position: sticky;
+    top: 70px;
+    z-index: 90;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.editor-topbar-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.editor-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.btn-back-feed {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-back-feed:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+.topbar-divider {
+    width: 1px;
+    height: 22px;
+    background: #cbd5e1;
+}
+
+.editor-page-title {
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+/* Switcher Control: WYSIWYG / Markdown */
+.editor-mode-switcher {
+    display: inline-flex;
+    background: #f1f5f9;
+    padding: 3px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    gap: 2px;
+    margin-left: 8px;
+}
+
+.mode-switch-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: none;
+    background: transparent;
+    color: #64748b;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mode-switch-btn:hover {
+    color: #0f172a;
+}
+
+.mode-switch-btn.is-active {
+    background: #ffffff;
+    color: #0284c7;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.editor-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.draft-status-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: #64748b;
+}
+
+.author-handle {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.draft-save-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #10b981;
+    font-weight: 500;
+    font-size: 0.78rem;
+}
+
+/* ======================================================================
+   2. MAIN 2-COLUMN GRID (Editor Canvas + Sidebar)
+====================================================================== */
+.habr-editor-main-grid {
+    max-width: 1240px;
+    margin: 24px auto 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 28px;
+    align-items: start;
+}
+
+/* 2.1 MAIN WRITING COLUMN */
+.habr-editor-main-column {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 32px 36px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* Title Input */
+.editor-title-container {
+    margin-bottom: 20px;
+}
+
+.habr-title-textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 2.1rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: #0f172a;
+    resize: none;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    font-family: inherit;
+    letter-spacing: -0.5px;
+}
+
+.habr-title-textarea::placeholder {
+    color: #94a3b8;
+}
+
+/* Format Toolbar */
+.habr-format-toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 6px 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    position: sticky;
+    top: 130px;
+    z-index: 10;
+}
+
+.toolbar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px;
+    min-width: 32px;
+    height: 32px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    background: transparent;
+    color: #475569;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.toolbar-btn:hover {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+
+.toolbar-btn strong {
+    font-weight: 800;
+}
+
+.toolbar-sep {
+    width: 1px;
+    height: 20px;
+    background: #cbd5e1;
+    margin: 0 4px;
+}
+
+.code-btn-text {
+    font-family: "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 0.80rem;
+    font-weight: 600;
+}
+
+.btn-apply-typograf-inline {
+    margin-left: auto;
+    background: #eff6ff;
+    color: #0284c7;
+    font-weight: 600;
+    font-size: 0.78rem;
+    border-color: rgba(2, 132, 199, 0.25);
+}
+
+.btn-apply-typograf-inline:hover {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #0284c7;
+}
+
+/* Editable Canvas */
+.habr-editor-canvas {
+    min-height: 380px;
+    outline: none;
+    font-size: 1.08rem;
+    line-height: 1.75;
+    color: #1e293b;
+    padding: 8px 0;
+    word-break: break-word;
+}
+
+.habr-editor-canvas:empty:before {
+    content: attr(data-placeholder);
+    color: #94a3b8;
+    pointer-events: none;
+    display: block;
+}
+
+.habr-editor-canvas h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 28px 0 12px 0;
+    letter-spacing: -0.3px;
+}
+
+.habr-editor-canvas h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 22px 0 10px 0;
+}
+
+.habr-editor-canvas p {
+    margin: 0 0 16px 0;
+}
+
+.habr-editor-canvas blockquote {
+    margin: 20px 0;
+    padding: 12px 20px;
+    border-left: 4px solid #0284c7;
+    background: #f0f9ff;
+    color: #334155;
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+}
+
+.habr-editor-canvas ul, .habr-editor-canvas ol {
+    margin: 12px 0 18px 24px;
+}
+
+.habr-editor-canvas li {
+    margin-bottom: 6px;
+}
+
+/* Raw Markdown Textarea */
+.habr-editor-raw-markdown {
+    width: 100%;
+    min-height: 380px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    font-family: "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: #0f172a;
+    background: #f8fafc;
+    resize: vertical;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.habr-editor-raw-markdown:focus {
+    border-color: #0284c7;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+}
+
+/* Attached Code Box */
+.editor-code-snippet-box {
+    margin: 24px 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #0f172a;
+}
+
+.code-box-header {
+    background: #1e293b;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #334155;
+}
+
+.code-lang-selector-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.code-lang-label {
+    color: #94a3b8;
+    font-size: 0.80rem;
+}
+
+.code-lang-select {
+    background: #0f172a;
+    color: #38bdf8;
+    border: 1px solid #475569;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 0.80rem;
+    font-family: monospace;
+    outline: none;
+}
+
+.btn-remove-code {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    font-size: 0.78rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.btn-remove-code:hover {
+    background: rgba(239, 68, 68, 0.15);
+}
+
+.code-box-textarea {
+    width: 100%;
+    background: #0f172a;
+    color: #f8fafc;
+    font-family: "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: 0.90rem;
+    line-height: 1.6;
+    border: none;
+    outline: none;
+    padding: 16px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+/* Bottom Action Row */
+.editor-bottom-bar {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.editor-counters-box {
+    font-size: 0.82rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-step-next {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 24px;
+    border-radius: 8px;
+    background: #0284c7;
+    color: #ffffff;
+    font-size: 0.92rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+}
+
+.btn-step-next:hover {
+    background: #0369a1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+}
+
+/* STEP 2: SETTINGS STEP */
+.settings-step-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.btn-back-to-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid #cbd5e1;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-back-to-text:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+.settings-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+.settings-field-group {
+    margin-bottom: 26px;
+}
+
+.settings-label {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.label-hint {
+    font-size: 0.80rem;
+    font-weight: 400;
+    color: #64748b;
+    margin-left: 6px;
+}
+
+.required-star {
+    color: #ef4444;
+}
+
+/* Hubs Chip Selector */
+.hubs-chip-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+}
+
+.hub-chip {
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    background: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.hub-chip input[type="radio"] {
+    margin-right: 8px;
+    accent-color: #0284c7;
+}
+
+.hub-chip .chip-title {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+.hub-chip:hover {
+    border-color: #cbd5e1;
+    background: #ffffff;
+}
+
+.hub-chip.is-selected {
+    border-color: #0284c7;
+    background: #f0f9ff;
+}
+
+.hub-chip.is-selected .chip-title {
+    color: #0284c7;
+}
+
+.settings-text-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    color: #0f172a;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+.settings-text-input:focus {
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.quick-tags-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.quick-tags-hint {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.btn-quick-tag {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-quick-tag:hover {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #0284c7;
+}
+
+.settings-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.settings-select-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.90rem;
+    color: #0f172a;
+    background: #ffffff;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.sandbox-option-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+}
+
+.sandbox-checkbox {
+    margin-top: 3px;
+    accent-color: #0284c7;
+    width: 16px;
+    height: 16px;
+}
+
+.sandbox-label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #0369a1;
+    cursor: pointer;
+}
+
+.sandbox-desc {
+    font-size: 0.80rem;
+    color: #475569;
+    margin: 4px 0 0 0;
+    line-height: 1.4;
+}
+
+.settings-action-bar {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+}
+
+.btn-back-editor {
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 0.90rem;
+    font-weight: 600;
+    border: 1px solid #cbd5e1;
+    cursor: pointer;
+}
+
+.btn-publish-final {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 28px;
+    border-radius: 8px;
+    background: #10b981;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);
+}
+
+.btn-publish-final:hover {
+    background: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+.form-alert-notice {
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    font-size: 0.88rem;
+    margin-bottom: 20px;
+}
+
+/* ======================================================================
+   2.2 HABR HELP & UTILITY SIDEBAR
+====================================================================== */
+.habr-editor-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.editor-sidebar-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.sidebar-card-title {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-title-icon {
+    font-size: 1.05rem;
+}
+
+.sidebar-card-text {
+    font-size: 0.84rem;
+    color: #475569;
+    line-height: 1.5;
+    margin: 0 0 12px 0;
+}
+
+.sidebar-link-wrap {
+    margin-top: 8px;
+}
+
+.sidebar-link {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #0284c7;
+    text-decoration: none;
+}
+
+.sidebar-link:hover {
+    text-decoration: underline;
+}
+
+.btn-sidebar-typograf {
+    width: 100%;
+    padding: 9px 14px;
+    border-radius: 6px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #15803d;
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-sidebar-typograf:hover {
+    background: #16a34a;
+    border-color: #16a34a;
+    color: #ffffff;
+}
+
+.sidebar-guidelines-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.guideline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: #475569;
+    line-height: 1.45;
+}
+
+.guideline-bullet {
+    color: #10b981;
+    font-weight: 800;
+}
+
+.guideline-item code {
+    background: #f1f5f9;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+    color: #0284c7;
+}
+
+.moderation-rules-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.moderation-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.moderation-badge {
+    align-self: flex-start;
+    font-size: 0.70rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.moderation-badge.pass {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.moderation-badge.fail {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.moderation-desc {
+    font-size: 0.80rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Floating Toast */
+.habr-editor-toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: #0f172a;
+    color: #ffffff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    z-index: 9999;
+    animation: toastSlideUp 0.3s ease;
+}
+
+@keyframes toastSlideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+    .habr-editor-main-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .habr-editor-sidebar {
+        order: 2;
+    }
+    
+    .habr-editor-main-column {
+        padding: 20px;
+    }
+}

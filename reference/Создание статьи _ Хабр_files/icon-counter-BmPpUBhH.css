@@ -1,0 +1,1 @@
+.tm-icon-counter{align-items:center;height:1em;display:flex}.tm-icon-counter__icon{color:var(--icon-secondary);width:24px;height:24px}.tm-icon-counter__icon+.tm-icon-counter__value{margin-left:2px}.tm-icon-counter__value{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;color:var(--icon-primary);font-size:.8125rem;font-weight:700;line-height:1}

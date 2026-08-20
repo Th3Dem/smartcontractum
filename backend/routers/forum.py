@@ -798,3 +798,22 @@ async def render_forum_page(
         name="forum/index.html",
         context=context,
     )
+
+
+@router.get("/feed/create", summary="Habr-Style Article Creation & Editor Page")
+@router.get("/articles/create", summary="Alias for Habr Article Editor Page")
+async def render_article_editor_page(request: Request) -> Response:
+    """Render the full Habr Article Editor page for drafting and publishing articles."""
+    _recalculate_category_counts()
+
+    context: dict[str, Any] = {
+        "active_nav": "feed",
+        "categories": CATEGORIES_DB,
+        "user_name": "developer",
+        "user_avatar": "SC",
+    }
+    return templates.TemplateResponse(
+        request=request,
+        name="forum/editor.html",
+        context=context,
+    )

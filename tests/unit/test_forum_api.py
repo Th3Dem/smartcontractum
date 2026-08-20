@@ -238,3 +238,34 @@ def test_render_habr_feed_html_page_with_categories_dropdown() -> None:
     assert stream_resp.status_code == 200
     stream_html = stream_resp.text
     assert "Информационная безопасность" in stream_html
+
+
+def test_render_habr_article_editor_page() -> None:
+    """Verify GET /feed/create renders the full Habr Article Editor page."""
+    response = client.get("/feed/create")
+    assert response.status_code == 200
+    assert "text/html" in response.headers.get("content-type", "")
+
+    html = response.text
+    # 1. Header & Title
+    assert "Создание статьи" in html
+    assert "WYSIWYG" in html
+    assert "Markdown" in html
+    assert "Сохранено в черновиках" in html
+
+    # 2. Main Writing Area
+    assert "articleTitleInput" in html
+    assert "editorCanvas" in html
+    assert "rawMarkdownEditor" in html
+    assert "formatToolbar" in html
+
+    # 3. Sidebar Widgets
+    assert "О песочнице" in html
+    assert "Типограф" in html
+    assert "Памятка автору" in html
+    assert "О модерации" in html
+
+    # 4. Alias Route /articles/create
+    alias_resp = client.get("/articles/create")
+    assert alias_resp.status_code == 200
+    assert "Создание статьи" in alias_resp.text
