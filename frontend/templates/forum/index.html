@@ -3,7 +3,7 @@
 {% block title %}{{ page_title or 'База знаний и лента статей Habr 2.0 — SmartContractum' }}{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_social.css?v=2.7.0">
+<link rel="stylesheet" href="/static/css/forum_social.css?v=2.8.0">
 <!-- Schema.org JSON-LD Collection Markup -->
 <script type="application/ld+json">
 {
@@ -466,11 +466,22 @@
                             <button type="button" class="habr-stat-btn btn-contract-like {% if post.is_upvoted or post.score > 0 %}is-active{% endif %}" 
                                     data-action="like" data-post-id="{{ post.id }}" title="Одобрить смарт-контракт (Лайк)" aria-label="Лайк смарт-контракта">
                                 <span class="stat-icon-wrap" aria-hidden="true">
-                                    <svg class="stat-svg contract-icon-svg cube-icon-svg" viewBox="0 0 24 24" fill="currentColor">
-                                        <!-- 3D Isometric Cube Facets -->
-                                        <polygon points="12,2 22,7.5 12,13 2,7.5" fill="currentColor" fill-opacity="0.38" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                                        <polygon points="2,7.5 12,13 12,22 2,16.5" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                                        <polygon points="12,13 22,7.5 22,16.5 12,22" fill="currentColor" fill-opacity="0.28" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                    <svg class="stat-svg contract-icon-svg cube-heart-svg" viewBox="0 0 24 24" fill="currentColor">
+                                        <!-- 3D Volumetric Cube Heart (Isometric Voxel Facets) -->
+                                        <!-- Left Lobe Cube -->
+                                        <polygon points="7,3 11.5,5.5 7,8.5 2.5,6" fill="currentColor" fill-opacity="0.42" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                                        <polygon points="2.5,6 7,8.5 7,13 2.5,10.5" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                                        <polygon points="7,8.5 11.5,5.5 11.5,10 7,13" fill="currentColor" fill-opacity="0.32" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+
+                                        <!-- Right Lobe Cube -->
+                                        <polygon points="17,3 21.5,6 17,8.5 12.5,5.5" fill="currentColor" fill-opacity="0.42" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                                        <polygon points="12.5,5.5 17,8.5 17,13 12.5,10" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                                        <polygon points="17,8.5 21.5,6 21.5,10.5 17,13" fill="currentColor" fill-opacity="0.32" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+
+                                        <!-- Center & Lower 3D Isometric V-Shape -->
+                                        <polygon points="12,8 16.5,10.5 12,13.5 7.5,10.5" fill="currentColor" fill-opacity="0.48" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                                        <polygon points="7.5,10.5 12,13.5 12,21.5 7.5,15.5" fill="currentColor" fill-opacity="0.24" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                                        <polygon points="12,13.5 16.5,10.5 16.5,15.5 12,21.5" fill="currentColor" fill-opacity="0.36" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
                                     </svg>
                                 </span>
                                 <span class="stat-val likes-count-val">{{ post.score if post.score > 0 else 0 }}</span>
@@ -842,5 +853,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_social.js?v=2.7.0" defer></script>
+<script src="/static/js/forum_social.js?v=2.8.0" defer></script>
 {% endblock %}

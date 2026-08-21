@@ -287,7 +287,7 @@
                             void iconWrap.offsetWidth;
                             iconWrap.classList.add("bounce-spring");
                         }
-                        showToast("🧊 3D Смарт-блок одобрен!");
+                        showToast("💖 3D Куб-сердце одобрено!");
                     }
 
                     try {

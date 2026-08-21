@@ -2177,19 +2177,38 @@ body.light-theme-feed {
     transform: translateY(-1px);
 }
 
-/* 3D Cube Icon Specifics */
-.cube-icon-svg {
-    width: 18px;
-    height: 18px;
+/* ======================================================================
+   3D VOLUMETRIC CUBE HEART (v2.8.0)
+====================================================================== */
+.cube-heart-svg {
+    width: 19px;
+    height: 19px;
     transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.btn-contract-like:hover .cube-icon-svg {
-    transform: scale(1.22) rotate(-8deg) !important;
+.btn-contract-like:hover {
+    background: rgba(244, 63, 94, 0.08) !important;
+    color: #e11d48 !important;
+    transform: translateY(-1px);
 }
 
-.btn-contract-like.is-active .cube-icon-svg {
-    color: #0ea5e9 !important;
-    filter: drop-shadow(0 0 7px rgba(14, 165, 233, 0.75)) !important;
+.btn-contract-like:hover .cube-heart-svg {
+    transform: scale(1.22) rotate(-6deg) !important;
+}
+
+.btn-contract-like.is-active {
+    background: rgba(244, 63, 94, 0.14) !important;
+    color: #e11d48 !important;
+    box-shadow: 0 0 14px rgba(244, 63, 94, 0.35) !important;
+}
+
+.btn-contract-like.is-active .cube-heart-svg {
+    color: #f43f5e !important;
+    filter: drop-shadow(0 0 7px rgba(244, 63, 94, 0.8)) !important;
     transform: scale(1.15) !important;
+}
+
+.btn-contract-like.is-active .likes-count-val {
+    color: #e11d48 !important;
+    font-weight: 800 !important;
 }
