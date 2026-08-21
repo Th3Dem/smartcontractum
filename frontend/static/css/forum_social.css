@@ -300,14 +300,15 @@ body.light-theme-feed {
 
 .period-dropdown-menu {
     position: absolute;
-    top: calc(100% + 4px);
-    left: 0;
+    top: calc(100% + 6px);
+    left: auto;
+    right: 0;
     background: #ffffff;
     border: 1px solid #cbd5e1;
     border-radius: 8px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-    min-width: 130px;
-    padding: 4px;
+    min-width: 140px;
+    padding: 5px;
     z-index: 60;
     display: none;
 }
