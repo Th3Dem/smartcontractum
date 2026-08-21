@@ -1663,8 +1663,6 @@ gba(30, 41, 59, 0.7)), анимациями орбит (orbitSpin) и неоно
 
 ---
 
----
-
 ### 2026-08-21 02:16 | FEED_PERIOD_DROPDOWN_RIGHT_ALIGNMENT: Precision Menu Positioning Under Trigger & Arrow
 * **`pm_bot` (Paula)**: Скоординировала микроправку позиционирования выпадающего списка фильтра временных интервалов:
   * **`ui_bot`**: Переместил меню `.period-dropdown-menu` вправо (`left: auto; right: 0;`), расположив его точно под селектором «Все время» и стрелочкой вниз.
