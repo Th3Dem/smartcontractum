@@ -2212,3 +2212,69 @@ body.light-theme-feed {
     color: #e11d48 !important;
     font-weight: 800 !important;
 }
+
+
+/* ======================================================================
+   BRAND DESIGN SYSTEM ICONOGRAPHY (v2.9.0)
+====================================================================== */
+.block-title-icon-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.sidebar-head-svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
+.text-amber {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.12);
+}
+
+.text-blue {
+    color: #0284c7;
+    background: rgba(2, 132, 199, 0.12);
+}
+
+.text-emerald {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.12);
+}
+
+.text-indigo {
+    color: #6366f1;
+    background: rgba(99, 102, 241, 0.12);
+}
+
+.drawer-header-icon-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(2, 132, 199, 0.12);
+    color: #0284c7;
+    flex-shrink: 0;
+    margin-right: 10px;
+}
+
+.drawer-header-svg {
+    width: 18px;
+    height: 18px;
+}
+
+.social-svg-icon {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    vertical-align: middle;
+}
