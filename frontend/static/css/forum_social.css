@@ -2278,3 +2278,221 @@ body.light-theme-feed {
     display: inline-block;
     vertical-align: middle;
 }
+
+
+/* ======================================================================
+   FRAMELESS ICONS & REFINED SIDEBAR WIDGETS (v3.0.0)
+====================================================================== */
+
+/* Remove background boxes and frames from icons */
+.block-title-icon-box,
+.cat-menu-icon-box,
+.drawer-header-icon-box {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    margin-right: 6px !important;
+}
+
+.sidebar-head-svg {
+    width: 18px !important;
+    height: 18px !important;
+    display: inline-block !important;
+    vertical-align: -2px !important;
+    margin-right: 6px !important;
+    flex-shrink: 0 !important;
+}
+
+.sidebar-head-svg.text-amber { color: #f59e0b !important; }
+.sidebar-head-svg.text-blue { color: #0284c7 !important; }
+.sidebar-head-svg.text-emerald { color: #10b981 !important; }
+.sidebar-head-svg.text-indigo { color: #6366f1 !important; }
+
+/* 1. Читают сейчас Widget */
+.popular-posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.popular-post-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: background 0.15s ease;
+}
+
+.popular-post-row:hover {
+    background: #f8fafc;
+}
+
+.popular-rank {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    background: #eff6ff;
+    color: #0284c7;
+    font-size: 0.76rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.popular-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.popular-title-link {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.35;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 3px;
+    transition: color 0.15s ease;
+}
+
+.popular-title-link:hover {
+    color: #0284c7;
+    text-decoration: underline;
+}
+
+.popular-meta {
+    font-size: 0.74rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pop-readers {
+    color: #059669;
+    font-weight: 600;
+}
+
+.pop-dot {
+    color: #cbd5e1;
+}
+
+.pop-comments,
+.pop-score {
+    color: #64748b;
+    font-weight: 600;
+}
+
+/* 2. Топ экспертов и компаний Widget */
+.companies-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.company-sidebar-card {
+    padding: 12px 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.company-sidebar-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.company-brand-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.company-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.82rem;
+    color: #ffffff;
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.company-avatar.avatar-cbr { background: linear-gradient(135deg, #0284c7, #0369a1); }
+.company-avatar.avatar-bizone { background: linear-gradient(135deg, #6366f1, #4338ca); }
+.company-avatar.avatar-fintech { background: linear-gradient(135deg, #10b981, #047857); }
+.company-avatar.avatar-zerno { background: linear-gradient(135deg, #f59e0b, #b45309); }
+
+.company-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.company-name {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.25;
+}
+
+.company-rating {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #059669;
+    display: block;
+    line-height: 1;
+}
+
+.company-description {
+    font-size: 0.78rem;
+    color: #475569;
+    line-height: 1.35;
+    margin: 0;
+}
+
+.btn-company-follow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 30px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #334155;
+    font-size: 0.80rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-company-follow:hover {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #0284c7;
+}
+
+.btn-company-follow.is-active {
+    background: #e0f2fe;
+    color: #0284c7;
+    border-color: #bae6fd;
+}

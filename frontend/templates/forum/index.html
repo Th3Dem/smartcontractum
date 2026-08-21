@@ -3,7 +3,7 @@
 {% block title %}{{ page_title or 'База знаний и лента статей Habr 2.0 — SmartContractum' }}{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_social.css?v=2.9.0">
+<link rel="stylesheet" href="/static/css/forum_social.css?v=3.0.0">
 <!-- Schema.org JSON-LD Collection Markup -->
 <script type="application/ld+json">
 {
@@ -565,16 +565,14 @@
         <!-- 1.2 HABR RIGHT SIDEBAR (Widgets) -->
         <aside class="habr-sidebar-right">
 
-            <!-- Sidebar Block 1: Читают сейчас -->
+            <!-- Sidebar Block 1: Читают сейчас (5 статей) -->
             <div class="habr-sidebar-block popular-block">
                 <div class="sidebar-block-head">
                     <h3 class="block-title">
-                        <span class="block-title-icon-box text-amber">
-                            <svg class="sidebar-head-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="17.5 5 11 11.5 7.5 8 2.5 13"/>
-                                <polyline points="13 5 17.5 5 17.5 9.5"/>
-                            </svg>
-                        </span>
+                        <svg class="sidebar-head-svg text-amber" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="17.5 5 11 11.5 7.5 8 2.5 13"/>
+                            <polyline points="13 5 17.5 5 17.5 9.5"/>
+                        </svg>
                         <span>Читают сейчас</span>
                     </h3>
                 </div>
@@ -585,6 +583,8 @@
                         <div class="popular-info">
                             <a href="#post-{{ p.id }}" class="popular-title-link" data-action="toggle-body" data-post-id="{{ p.id }}">{{ p.title }}</a>
                             <div class="popular-meta">
+                                <span class="pop-readers">{{ p.readers }}</span>
+                                <span class="pop-dot">•</span>
                                 <span class="pop-comments">💬 {{ p.replies_count }}</span>
                                 <span class="pop-score">💖 {{ p.score_formatted }}</span>
                             </div>
@@ -598,12 +598,10 @@
             <div class="habr-sidebar-block companies-block">
                 <div class="sidebar-block-head">
                     <h3 class="block-title">
-                        <span class="block-title-icon-box text-blue">
-                            <svg class="sidebar-head-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M10 2L3 5.5v4.5c0 4.5 3 8.7 7 9.8 4-1.1 7-5.3 7-9.8V5.5L10 2z"/>
-                                <polyline points="7.5 10 9.2 11.7 12.8 8.1"/>
-                            </svg>
-                        </span>
+                        <svg class="sidebar-head-svg text-blue" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10 2L3 5.5v4.5c0 4.5 3 8.7 7 9.8 4-1.1 7-5.3 7-9.8V5.5L10 2z"/>
+                            <polyline points="7.5 10 9.2 11.7 12.8 8.1"/>
+                        </svg>
                         <span>Топ экспертов & Компаний</span>
                     </h3>
                 </div>
@@ -612,11 +610,11 @@
                     <div class="company-sidebar-card">
                         <div class="company-brand-row">
                             <div class="company-avatar {{ company.avatar_class }}">
-                                {{ company.name[:2] | upper }}
+                                {{ company.avatar or company.name[:2] | upper }}
                             </div>
                             <div class="company-text">
-                                <h5 class="company-name">{{ company.name }}</h5>
-                                <span class="company-rating">★ Рейтинг {{ company.rating }}</span>
+                                <h5 class="company-name" title="{{ company.name }}">{{ company.name }}</h5>
+                                <span class="company-rating">★ Рейтинг +{{ company.rating }}</span>
                             </div>
                         </div>
                         <p class="company-description">{{ company.description }}</p>
@@ -905,5 +903,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_social.js?v=2.9.0" defer></script>
+<script src="/static/js/forum_social.js?v=3.0.0" defer></script>
 {% endblock %}

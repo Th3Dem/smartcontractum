@@ -805,12 +805,15 @@ async def render_forum_page(
     else:
         filtered_topics.sort(key=lambda t: t.score, reverse=True)
 
-    # Trending Now widget with Live Reader metrics
-    read_now_trending = [
-        {"title": "Архитектура детерминированного исполнения ПКСК 2026", "id": 1, "readers": 342, "tag": "Solidity"},
-        {"title": "Аудит безопасности пулов ликвидности цифрового рубля", "id": 2, "readers": 218, "tag": "АудитИБ"},
-        {"title": "Интеграция оракулов ГИС «Зерно» в смарт-контракты", "id": 4, "readers": 145, "tag": "Оракулы"},
+    # Trending Now widget (5 Articles)
+    popular_topics = [
+        {"id": 1, "title": "Архитектура детерминированного исполнения ПКСК 2026", "readers": "342 читают", "score_formatted": "+42", "replies_count": 18, "tag": "Solidity"},
+        {"id": 2, "title": "Аудит безопасности пулов ликвидности цифрового рубля", "readers": "218 читают", "score_formatted": "+38", "replies_count": 12, "tag": "АудитИБ"},
+        {"id": 3, "title": "Оптимизация EVM-байткода и структуры слотов хранения", "readers": "189 читают", "score_formatted": "+29", "replies_count": 9, "tag": "Gas"},
+        {"id": 4, "title": "Интеграция оракулов ГИС «Зерно» в смарт-контракты", "readers": "145 читают", "score_formatted": "+24", "replies_count": 7, "tag": "Оракулы"},
+        {"id": 5, "title": "Правовой статус смарт-контрактов в арбитраже РФ", "readers": "112 читают", "score_formatted": "+19", "replies_count": 5, "tag": "Регуляторика"},
     ]
+    read_now_trending = popular_topics
 
     # Popular Hubs with live subscription state
     popular_hubs = [
@@ -823,10 +826,10 @@ async def render_forum_page(
 
     # Top Authors / Companies of the Week
     top_companies = [
-        {"name": "BI.ZONE AppSec", "logo": "🛡️", "posts": "24 публикации", "rating": "+1,420", "is_subscribed": False},
-        {"name": "Банк России (НИР)", "logo": "🏛️", "posts": "18 публикаций", "rating": "+2,890", "is_subscribed": True},
-        {"name": "ФинтехИнтегратор", "logo": "⚡", "posts": "31 публикация", "rating": "+940", "is_subscribed": False},
-        {"name": "ГИС «Зерно» Партнер", "logo": "🌾", "posts": "12 публикаций", "rating": "+630", "is_subscribed": False},
+        {"name": "Банк России (НИР)", "avatar": "ЦБ", "avatar_class": "avatar-cbr", "description": "Центр исследований и разработки цифрового рубля и стандартов ПКСК", "rating": "2,890", "is_subscribed": True},
+        {"name": "BI.ZONE AppSec", "avatar": "BZ", "avatar_class": "avatar-bizone", "description": "Аудит смарт-контрактов, верификация байткода и DevSecOps", "rating": "1,420", "is_subscribed": False},
+        {"name": "ФинтехИнтегратор", "avatar": "ФИ", "avatar_class": "avatar-fintech", "description": "Корпоративные блокчейн-шлюзы и B2B казначейство", "rating": "940", "is_subscribed": False},
+        {"name": "ГИС «Зерно» Data", "avatar": "ГЗ", "avatar_class": "avatar-zerno", "description": "Провайдер верифицированных товарных оракулов агросектора", "rating": "630", "is_subscribed": False},
     ]
 
     # Upcoming PKSC Community Meetups & AMAs
@@ -861,6 +864,7 @@ async def render_forum_page(
         "active_tag": tag,
         "active_query": q or "",
         "read_now_trending": read_now_trending,
+        "popular_topics": popular_topics,
         "trending_articles": read_now_trending,
         "popular_hubs": popular_hubs,
         "top_companies": top_companies,
