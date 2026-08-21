@@ -3,7 +3,7 @@
 {% block title %}{{ page_title or 'База знаний и лента статей Habr 2.0 — SmartContractum' }}{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_social.css?v=2.5.0">
+<link rel="stylesheet" href="/static/css/forum_social.css?v=2.6.0">
 <!-- Schema.org JSON-LD Collection Markup -->
 <script type="application/ld+json">
 {
@@ -459,19 +459,18 @@
                         </button>
                     </div>
 
-                    <!-- 8. Interactive Card Footer: Smart Contract Like, Bookmarks, Comments -->
+                    <!-- 8. Interactive Card Footer: Smart Contract Like, Bookmarks, Comments, Share -->
                     <div class="habr-card-footer">
                         <div class="habr-footer-left">
                             <!-- Smart Contract Like Button -->
                             <button type="button" class="habr-stat-btn btn-contract-like {% if post.is_upvoted or post.score > 0 %}is-active{% endif %}" 
-                                    data-action="like" data-post-id="{{ post.id }}" title="Одобрить смарт-контракт (Лайк)">
+                                    data-action="like" data-post-id="{{ post.id }}" title="Одобрить смарт-контракт (Лайк)" aria-label="Лайк смарт-контракта">
                                 <span class="stat-icon-wrap" aria-hidden="true">
-                                    <svg class="stat-svg contract-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                        <polyline points="14 2 14 8 20 8"></polyline>
-                                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                    <svg class="stat-svg contract-icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                        <path d="M14 2V8H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M8 12H16M8 16H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                        <circle cx="16.5" cy="16.5" r="2.5" fill="currentColor" stroke="currentColor" stroke-width="1"/>
                                     </svg>
                                 </span>
                                 <span class="stat-val likes-count-val">{{ post.score if post.score > 0 else 0 }}</span>
@@ -479,10 +478,10 @@
 
                             <!-- Bookmarks Button -->
                             <button type="button" class="habr-stat-btn btn-bookmark {% if post.is_bookmarked %}is-active{% endif %}" 
-                                    data-action="bookmark" data-post-id="{{ post.id }}" title="Добавить в закладки">
+                                    data-action="bookmark" data-post-id="{{ post.id }}" title="Добавить в закладки" aria-label="Закладки">
                                 <span class="stat-icon-wrap" aria-hidden="true">
-                                    <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-3.125L5 18V4z" />
+                                    <svg class="stat-svg bookmark-icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M5 4C5 2.89543 5.89543 2 7 2H17C18.1046 2 19 2.89543 19 4V21L12 17.5L5 21V4Z" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
                                     </svg>
                                 </span>
                                 <span class="stat-val bookmarks-count-val">{{ post.bookmarks_count }}</span>
@@ -490,10 +489,11 @@
 
                             <!-- Comments Button -> Opens Comments Drawer -->
                             <button type="button" class="habr-stat-btn btn-comments-toggle btn-open-drawer" 
-                                    data-action="open-drawer" data-post-id="{{ post.id }}" title="Открыть обсуждение статьи">
+                                    data-action="open-drawer" data-post-id="{{ post.id }}" title="Открыть обсуждение статьи" aria-label="Комментарии">
                                 <span class="stat-icon-wrap" aria-hidden="true">
-                                    <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zm-4 0H9v2h2V9z" clip-rule="evenodd" />
+                                    <svg class="stat-svg comment-icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M21 11.5C21 16.1944 16.9706 20 12 20C10.4284 20 8.94827 19.6158 7.67493 18.9416L3 20L4.35417 16.4866C3.49842 15.0604 3 13.3444 3 11.5C3 6.80558 7.02944 3 12 3C16.9706 3 21 6.80558 21 11.5Z" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                        <path d="M8 11.5H8.01M12 11.5H12.01M16 11.5H16.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
                                     </svg>
                                 </span>
                                 <span class="stat-val comments-count-val">{{ post.replies_count }}</span>
@@ -506,10 +506,11 @@
                                     data-action="share-popover" 
                                     data-post-id="{{ post.id }}" 
                                     data-post-title="{{ post.title }}" 
-                                    title="Поделиться статьей">
+                                    title="Поделиться статьей" 
+                                    aria-label="Поделиться">
                                 <span class="stat-icon-wrap" aria-hidden="true">
-                                    <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+                                    <svg class="stat-svg share-icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 5.25368 15.0315 5.49989 15.0909 5.73453L8.85764 9.17083C8.28387 8.44857 7.39701 8 6 8C4.34315 8 3 9.34315 3 11C3 12.6569 4.34315 14 6 14C7.39701 14 8.28387 13.5514 8.85764 12.8292L15.0909 16.2655C15.0315 16.5001 15 16.7463 15 17C15 18.6569 16.3431 20 18 20C19.6569 20 21 18.6569 21 17C21 15.3431 19.6569 14 18 14C16.603 14 15.7161 14.4486 15.1424 15.1708L8.9091 11.7345C8.9685 11.4999 9 11.2537 9 11C9 10.7463 8.9685 10.5001 8.9091 10.2655L15.1424 6.82917C15.7161 7.55143 16.603 8 18 8Z" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
                                     </svg>
                                 </span>
                                 <span class="stat-val shares-count-val">{{ post.shares_count or 4 }}</span>
@@ -841,5 +842,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_social.js?v=2.5.0" defer></script>
+<script src="/static/js/forum_social.js?v=2.6.0" defer></script>
 {% endblock %}

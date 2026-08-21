@@ -2047,76 +2047,132 @@ body.light-theme-feed {
 }
 
 /* ======================================================================
-   SMART CONTRACT LIKE BUTTON (v2.5.0)
+   CARD FOOTER ACTION BUTTONS & SMART CONTRACT LIKE (v2.6.0)
 ====================================================================== */
-.btn-contract-like {
+.habr-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid #f1f5f9;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.habr-footer-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.habr-footer-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Unified Stat Buttons */
+.habr-stat-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    height: 38px !important;
+    padding: 0 12px !important;
+    border-radius: 8px !important;
+    border: none !important;
+    background: transparent !important;
+    color: #64748b !important;
+    font-size: 0.88rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    user-select: none !important;
+    box-sizing: border-box !important;
+    outline: none !important;
+}
+
+.habr-stat-btn .stat-icon-wrap {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 5px 12px;
-    border-radius: 8px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    color: #475569;
-    font-size: 0.82rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+}
+
+.habr-stat-btn .stat-svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.habr-stat-btn:hover .stat-svg {
+    transform: scale(1.15);
+}
+
+/* 1. Smart Contract Like Button (Border-free, Glow on Active) */
+.btn-contract-like {
+    border: none !important;
+    background: transparent !important;
+    color: #64748b !important;
 }
 
 .btn-contract-like:hover {
-    background: #eff6ff;
-    color: #0284c7;
-    border-color: #bae6fd;
+    background: rgba(14, 165, 233, 0.08) !important;
+    color: #0284c7 !important;
     transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.12);
-}
-
-.btn-contract-like.is-active {
-    background: #e0f2fe;
-    color: #0284c7;
-    border-color: #7dd3fc;
-    box-shadow: 0 0 10px rgba(2, 132, 199, 0.18);
-}
-
-.btn-contract-like .contract-icon-svg {
-    width: 15px;
-    height: 15px;
-    stroke: currentColor;
-    stroke-width: 2;
-    transition: transform 0.2s ease;
 }
 
 .btn-contract-like:hover .contract-icon-svg {
-    transform: scale(1.15) rotate(-6deg);
+    transform: scale(1.22) rotate(-6deg) !important;
 }
 
-.habr-author-meta {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+.btn-contract-like.is-active {
+    background: rgba(14, 165, 233, 0.14) !important;
+    color: #0284c7 !important;
+    box-shadow: 0 0 12px rgba(14, 165, 233, 0.35) !important;
 }
 
-.author-name-line {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
+.btn-contract-like.is-active .contract-icon-svg {
+    color: #0ea5e9 !important;
+    filter: drop-shadow(0 0 6px rgba(14, 165, 233, 0.65)) !important;
+    transform: scale(1.12);
 }
 
-.habr-author-name {
-    font-size: 0.92rem;
-    font-weight: 700;
-    color: #0f172a;
+.btn-contract-like.is-active .likes-count-val {
+    color: #0284c7 !important;
+    font-weight: 800 !important;
 }
 
-.habr-author-handle {
-    font-size: 0.78rem;
-    color: #64748b;
-    font-weight: 500;
+/* 2. Bookmarks Button */
+.btn-bookmark:hover {
+    background: rgba(245, 158, 11, 0.08) !important;
+    color: #d97706 !important;
+    transform: translateY(-1px);
 }
 
-.habr-post-time {
-    font-size: 0.78rem;
-    color: #94a3b8;
-    font-weight: 500;
+.btn-bookmark.is-active {
+    background: rgba(245, 158, 11, 0.14) !important;
+    color: #d97706 !important;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.25) !important;
+}
+
+.btn-bookmark.is-active .bookmark-icon-svg {
+    color: #f59e0b !important;
+    filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.5)) !important;
+}
+
+/* 3. Comments Button */
+.btn-comments-toggle:hover {
+    background: rgba(99, 102, 241, 0.08) !important;
+    color: #4f46e5 !important;
+    transform: translateY(-1px);
+}
+
+/* 4. Share / Repost Button */
+.btn-share:hover {
+    background: rgba(16, 185, 129, 0.08) !important;
+    color: #059669 !important;
+    transform: translateY(-1px);
 }
