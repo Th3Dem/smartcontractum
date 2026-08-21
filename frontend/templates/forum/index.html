@@ -3,7 +3,7 @@
 {% block title %}{{ page_title or 'База знаний и лента статей Habr 2.0 — SmartContractum' }}{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_social.css?v=3.2.0">
+<link rel="stylesheet" href="/static/css/forum_social.css?v=3.3.0">
 <!-- Schema.org JSON-LD Collection Markup -->
 <script type="application/ld+json">
 {
@@ -564,6 +564,54 @@
             </div>
         </main>
 
+        <!-- 1.2 RIGHT SIDEBAR: САМЫЕ ОБСУЖДАЕМЫЕ (5 СТАТЕЙ) -->
+        <aside class="habr-sidebar-right">
+            <div class="habr-sidebar-block discussed-widget-block">
+                <div class="sidebar-block-head">
+                    <h3 class="block-title">
+                        <svg class="sidebar-head-svg text-indigo" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 11.5A6.5 6.5 0 0 1 10.5 18H4l1.5-3.5A6.5 6.5 0 1 1 17 11.5z"/>
+                            <path d="M7.5 10h.01M10.5 10h.01M13.5 10h.01"/>
+                        </svg>
+                        <span>Самые обсуждаемые</span>
+                    </h3>
+                </div>
+                <div class="discussed-posts-list">
+                    {% for p in most_discussed_topics %}
+                    <div class="discussed-post-card">
+                        <div class="discussed-card-top">
+                            <span class="discussed-rank">{{ loop.index }}</span>
+                            <a href="#post-{{ p.id }}" class="discussed-title-link" data-action="toggle-body" data-post-id="{{ p.id }}">{{ p.title }}</a>
+                        </div>
+                        <div class="discussed-card-meta">
+                            <div class="meta-left">
+                                <span class="discussed-tag">#{{ p.tag }}</span>
+                                <span class="meta-dot">•</span>
+                                <span class="discussed-author">{{ p.author_name }}</span>
+                            </div>
+                            <div class="meta-stats">
+                                <!-- Likes / Score -->
+                                <span class="stat-badge stat-likes" title="Рейтинг и одобрения">
+                                    <svg class="badge-svg badge-heart-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="currentColor" fill-opacity="0.18"/>
+                                    </svg>
+                                    <span>{{ p.score_formatted }}</span>
+                                </span>
+                                <!-- Comments -->
+                                <span class="stat-badge stat-comments" title="Обсуждения и комментарии">
+                                    <svg class="badge-svg badge-chat-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M17 10.5a6.5 6.5 0 0 1-6.5 6.5H4l1.5-3.5A6.5 6.5 0 1 1 17 10.5z"/>
+                                    </svg>
+                                    <span>{{ p.replies_count }}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </aside>
+
         
     </div>
 </div>
@@ -780,5 +828,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_social.js?v=3.2.0" defer></script>
+<script src="/static/js/forum_social.js?v=3.3.0" defer></script>
 {% endblock %}

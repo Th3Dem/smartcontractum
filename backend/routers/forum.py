@@ -851,10 +851,70 @@ async def render_forum_page(
         {"name": "GasOptimization", "count": 7},
     ]
 
+    # Top 5 Most Discussed Articles
+    most_discussed_topics = [
+        {
+            "id": 1,
+            "title": "Разбор уязвимости Reentrancy при асинхронном вызове оракулов в контуре ПКСК",
+            "author_name": "Алексей Смирнов",
+            "author_avatar": "АС",
+            "tag": "Solidity",
+            "score": 68,
+            "score_formatted": "+68",
+            "replies_count": 28,
+            "created_at": "сегодня в 18:20",
+        },
+        {
+            "id": 4,
+            "title": "Массовые B2B-выплаты в ЦФА: битовая упаковка calldata против стандартных циклов",
+            "author_name": "Сергей Белов",
+            "author_avatar": "СБ",
+            "tag": "GasOptimization",
+            "score": 52,
+            "score_formatted": "+52",
+            "replies_count": 24,
+            "created_at": "вчера в 14:10",
+        },
+        {
+            "id": 2,
+            "title": "Как мы защитили эскроу-пулы на 120 млн рублей от фронтраннинга в приватной сети",
+            "author_name": "Михаил Романов",
+            "author_avatar": "МР",
+            "tag": "АудитИБ",
+            "score": 45,
+            "score_formatted": "+45",
+            "replies_count": 19,
+            "created_at": "вчера в 11:30",
+        },
+        {
+            "id": 3,
+            "title": "Интеграция оракула Росстандарта: паттерн Pull vs Push для сырьевых смарт-контрактов",
+            "author_name": "Елена Григорьева",
+            "author_avatar": "ЕГ",
+            "tag": "Оракулы",
+            "score": 39,
+            "score_formatted": "+39",
+            "replies_count": 16,
+            "created_at": "2 дня назад",
+        },
+        {
+            "id": 5,
+            "title": "Параметрическое страхование грузов: архитектура оракулов и арбитраж в судах РФ",
+            "author_name": "ПАО Логистика & Трейд",
+            "author_avatar": "ЛТ",
+            "tag": "B2B",
+            "score": 34,
+            "score_formatted": "+34",
+            "replies_count": 14,
+            "created_at": "3 дня назад",
+        },
+    ]
+
     context: dict[str, Any] = {
         "active_nav": "feed",
         "categories": CATEGORIES_DB,
         "topics": filtered_topics,
+        "most_discussed_topics": most_discussed_topics,
         "active_stream": active_stream,
         "active_category": active_stream,
         "active_category_name": active_category_name,
@@ -907,6 +967,65 @@ async def unsubscribe_from_hub(slug: str) -> Dict[str, Any]:
 async def render_article_editor_page(request: Request) -> Response:
     """Render the full Habr Article Editor page for drafting and publishing articles."""
     _recalculate_category_counts()
+
+    # Top 5 Most Discussed Articles
+    most_discussed_topics = [
+        {
+            "id": 1,
+            "title": "Разбор уязвимости Reentrancy при асинхронном вызове оракулов в контуре ПКСК",
+            "author_name": "Алексей Смирнов",
+            "author_avatar": "АС",
+            "tag": "Solidity",
+            "score": 68,
+            "score_formatted": "+68",
+            "replies_count": 28,
+            "created_at": "сегодня в 18:20",
+        },
+        {
+            "id": 4,
+            "title": "Массовые B2B-выплаты в ЦФА: битовая упаковка calldata против стандартных циклов",
+            "author_name": "Сергей Белов",
+            "author_avatar": "СБ",
+            "tag": "GasOptimization",
+            "score": 52,
+            "score_formatted": "+52",
+            "replies_count": 24,
+            "created_at": "вчера в 14:10",
+        },
+        {
+            "id": 2,
+            "title": "Как мы защитили эскроу-пулы на 120 млн рублей от фронтраннинга в приватной сети",
+            "author_name": "Михаил Романов",
+            "author_avatar": "МР",
+            "tag": "АудитИБ",
+            "score": 45,
+            "score_formatted": "+45",
+            "replies_count": 19,
+            "created_at": "вчера в 11:30",
+        },
+        {
+            "id": 3,
+            "title": "Интеграция оракула Росстандарта: паттерн Pull vs Push для сырьевых смарт-контрактов",
+            "author_name": "Елена Григорьева",
+            "author_avatar": "ЕГ",
+            "tag": "Оракулы",
+            "score": 39,
+            "score_formatted": "+39",
+            "replies_count": 16,
+            "created_at": "2 дня назад",
+        },
+        {
+            "id": 5,
+            "title": "Параметрическое страхование грузов: архитектура оракулов и арбитраж в судах РФ",
+            "author_name": "ПАО Логистика & Трейд",
+            "author_avatar": "ЛТ",
+            "tag": "B2B",
+            "score": 34,
+            "score_formatted": "+34",
+            "replies_count": 14,
+            "created_at": "3 дня назад",
+        },
+    ]
 
     context: dict[str, Any] = {
         "active_nav": "feed",
