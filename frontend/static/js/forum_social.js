@@ -287,7 +287,7 @@
                             void iconWrap.offsetWidth;
                             iconWrap.classList.add("bounce-spring");
                         }
-                        showToast("📜 Смарт-контракт одобрен!");
+                        showToast("🧊 3D Смарт-блок одобрен!");
                     }
 
                     try {

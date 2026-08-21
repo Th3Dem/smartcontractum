@@ -3,7 +3,7 @@
 {% block title %}{{ page_title or 'База знаний и лента статей Habr 2.0 — SmartContractum' }}{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_social.css?v=2.6.0">
+<link rel="stylesheet" href="/static/css/forum_social.css?v=2.7.0">
 <!-- Schema.org JSON-LD Collection Markup -->
 <script type="application/ld+json">
 {
@@ -466,11 +466,11 @@
                             <button type="button" class="habr-stat-btn btn-contract-like {% if post.is_upvoted or post.score > 0 %}is-active{% endif %}" 
                                     data-action="like" data-post-id="{{ post.id }}" title="Одобрить смарт-контракт (Лайк)" aria-label="Лайк смарт-контракта">
                                 <span class="stat-icon-wrap" aria-hidden="true">
-                                    <svg class="stat-svg contract-icon-svg" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-                                        <path d="M14 2V8H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M8 12H16M8 16H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                                        <circle cx="16.5" cy="16.5" r="2.5" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+                                    <svg class="stat-svg contract-icon-svg cube-icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                                        <!-- 3D Isometric Cube Facets -->
+                                        <polygon points="12,2 22,7.5 12,13 2,7.5" fill="currentColor" fill-opacity="0.38" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                        <polygon points="2,7.5 12,13 12,22 2,16.5" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                        <polygon points="12,13 22,7.5 22,16.5 12,22" fill="currentColor" fill-opacity="0.28" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
                                     </svg>
                                 </span>
                                 <span class="stat-val likes-count-val">{{ post.score if post.score > 0 else 0 }}</span>
@@ -842,5 +842,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_social.js?v=2.6.0" defer></script>
+<script src="/static/js/forum_social.js?v=2.7.0" defer></script>
 {% endblock %}
