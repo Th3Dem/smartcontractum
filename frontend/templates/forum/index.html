@@ -3,7 +3,7 @@
 {% block title %}{{ page_title or 'База знаний и лента статей Habr 2.0 — SmartContractum' }}{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_social.css?v=3.0.0">
+<link rel="stylesheet" href="/static/css/forum_social.css?v=3.1.0">
 <!-- Schema.org JSON-LD Collection Markup -->
 <script type="application/ld+json">
 {
@@ -562,132 +562,7 @@
             </div>
         </main>
 
-        <!-- 1.2 HABR RIGHT SIDEBAR (Widgets) -->
-        <aside class="habr-sidebar-right">
-
-            <!-- Sidebar Block 1: Читают сейчас (5 статей) -->
-            <div class="habr-sidebar-block popular-block">
-                <div class="sidebar-block-head">
-                    <h3 class="block-title">
-                        <svg class="sidebar-head-svg text-amber" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="17.5 5 11 11.5 7.5 8 2.5 13"/>
-                            <polyline points="13 5 17.5 5 17.5 9.5"/>
-                        </svg>
-                        <span>Читают сейчас</span>
-                    </h3>
-                </div>
-                <div class="popular-posts-list">
-                    {% for p in popular_topics %}
-                    <div class="popular-post-row">
-                        <span class="popular-rank">{{ loop.index }}</span>
-                        <div class="popular-info">
-                            <a href="#post-{{ p.id }}" class="popular-title-link" data-action="toggle-body" data-post-id="{{ p.id }}">{{ p.title }}</a>
-                            <div class="popular-meta">
-                                <span class="pop-readers">{{ p.readers }}</span>
-                                <span class="pop-dot">•</span>
-                                <span class="pop-comments">💬 {{ p.replies_count }}</span>
-                                <span class="pop-score">💖 {{ p.score_formatted }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Sidebar Block 2: Топ компаний и экспертов -->
-            <div class="habr-sidebar-block companies-block">
-                <div class="sidebar-block-head">
-                    <h3 class="block-title">
-                        <svg class="sidebar-head-svg text-blue" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M10 2L3 5.5v4.5c0 4.5 3 8.7 7 9.8 4-1.1 7-5.3 7-9.8V5.5L10 2z"/>
-                            <polyline points="7.5 10 9.2 11.7 12.8 8.1"/>
-                        </svg>
-                        <span>Топ экспертов & Компаний</span>
-                    </h3>
-                </div>
-                <div class="companies-list">
-                    {% for company in top_companies %}
-                    <div class="company-sidebar-card">
-                        <div class="company-brand-row">
-                            <div class="company-avatar {{ company.avatar_class }}">
-                                {{ company.avatar or company.name[:2] | upper }}
-                            </div>
-                            <div class="company-text">
-                                <h5 class="company-name" title="{{ company.name }}">{{ company.name }}</h5>
-                                <span class="company-rating">★ Рейтинг +{{ company.rating }}</span>
-                            </div>
-                        </div>
-                        <p class="company-description">{{ company.description }}</p>
-                        <button type="button" class="btn-company-follow {% if company.is_subscribed %}is-active{% endif %}" 
-                                data-action="follow-company" 
-                                data-company="{{ company.name }}" 
-                                data-hub="{{ company.name | lower | replace(' ', '-') }}">
-                            {{ '✓ Вы подписаны' if company.is_subscribed else '+ Подписаться' }}
-                        </button>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Sidebar Block 3: Календарь митапов & АМА-сессий -->
-            <div class="habr-sidebar-block events-block">
-                <div class="sidebar-block-head">
-                    <h3 class="block-title">
-                        <span class="block-title-icon-box text-emerald">
-                            <svg class="sidebar-head-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="4" width="14" height="13" rx="2"/>
-                                <line x1="13.5" y1="2" x2="13.5" y2="5"/>
-                                <line x1="6.5" y1="2" x2="6.5" y2="5"/>
-                                <line x1="3" y1="8.5" x2="17" y2="8.5"/>
-                            </svg>
-                        </span>
-                        <span>Календарь митапов & АМА</span>
-                    </h3>
-                </div>
-                <div class="events-list">
-                    {% for ev in upcoming_events %}
-                    <div class="event-sidebar-row">
-                        <div class="event-date-box">
-                            <span class="event-day">{{ ev.day }}</span>
-                            <span class="event-month">{{ ev.month }}</span>
-                        </div>
-                        <div class="event-content">
-                            <div class="event-top-line">
-                                <h5 class="event-title">{{ ev.title }}</h5>
-                                <span class="event-status-pill {% if ev.badge == 'Live' %}badge-live{% elif ev.badge == 'Официально' %}badge-cbr{% else %}badge-webinar{% endif %}">
-                                    {{ ev.badge }}
-                                </span>
-                            </div>
-                            <span class="event-format">{{ ev.type }}</span>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Sidebar Block 4: Популярные теги -->
-            <div class="habr-sidebar-block tags-block">
-                <div class="sidebar-block-head">
-                    <h3 class="block-title">
-                        <span class="block-title-icon-box text-indigo">
-                            <svg class="sidebar-head-svg" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3.5 10.5L10 4h6.5v6.5L10 17 3.5 10.5z"/>
-                                <circle cx="13.5" cy="7" r="1.2" fill="currentColor"/>
-                            </svg>
-                        </span>
-                        <span>Популярные теги</span>
-                    </h3>
-                </div>
-                <div class="tags-cloud-wrap">
-                    {% for tag in popular_tags %}
-                    <a href="/feed?tag={{ tag.name }}" class="tag-cloud-chip {% if active_tag == tag.name %}is-active{% endif %}">
-                        #{{ tag.name }} <span class="tag-count">({{ tag.count }})</span>
-                    </a>
-                    {% endfor %}
-                </div>
-            </div>
-
-        </aside>
+        
     </div>
 </div>
 
@@ -903,5 +778,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_social.js?v=3.0.0" defer></script>
+<script src="/static/js/forum_social.js?v=3.1.0" defer></script>
 {% endblock %}
