@@ -36,7 +36,7 @@
 }
 </script>
 
-<link rel="stylesheet" href="/static/css/forum_editor.css?v=2.2.0">
+<link rel="stylesheet" href="/static/css/forum_editor.css?v=2.3.0">
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.add('light-theme-editor'); document.body.style.backgroundColor = '#ffffff';
@@ -138,66 +138,66 @@
                               aria-label="Заголовок публикации"></textarea>
                 </div>
 
-                <!-- ALL 12 TOOLS: Comprehensive Formatting Toolbar -->
+                <!-- ALL 12 TOOLS: Comprehensive Formatting Toolbar (Dark UI / Glassmorphism) -->
                 <div class="habr-format-toolbar" id="formatToolbar" role="toolbar" aria-label="Панель инструментов редактирования">
                     
-                    <!-- 1. Text & Headings -->
+                    <!-- Группа 1 (Типографика): [ B ] [ / ] [ H2 ] [ H3 ] -->
                     <div class="toolbar-group">
-                        <button type="button" class="toolbar-btn" data-cmd="bold" title="Жирный текст (Ctrl+B)">
+                        <button type="button" class="toolbar-btn" data-cmd="bold" title="Жирный текст (Ctrl+B)" aria-label="Жирный">
                             <strong>B</strong>
                         </button>
-                        <button type="button" class="toolbar-btn" data-cmd="italic" title="Курсив (Ctrl+I)">
-                            <em>I</em>
+                        <button type="button" class="toolbar-btn" data-cmd="italic" title="Курсив (Ctrl+I)" aria-label="Курсив">
+                            <em>/</em>
                         </button>
-                        <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="h2" title="Заголовок H2 (Ctrl+2)">
+                        <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="h2" title="Заголовок H2 (Ctrl+2)" aria-label="Заголовок H2">
                             <strong>H2</strong>
                         </button>
-                        <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="h3" title="Заголовок H3 (Ctrl+3)">
+                        <button type="button" class="toolbar-btn" data-cmd="formatBlock" data-val="h3" title="Заголовок H3 (Ctrl+3)" aria-label="Заголовок H3">
                             <strong>H3</strong>
                         </button>
                     </div>
 
                     <div class="toolbar-sep"></div>
 
-                    <!-- 2. Quotes & Lists -->
+                    <!-- Группа 2 (Списки и Цитаты): [ ❝ Цитата ] [ ≡ Список ] [ 1. Нумерованный ] -->
                     <div class="toolbar-group">
                         <button type="button" class="toolbar-btn" data-action="insert-quote" title="Цитата (Quote)">
-                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14" aria-hidden="true">
                                 <path d="M12 12a1 1 0 001-1V8.558a1 1 0 00-1-1h-1.388c0-.351.021-.703.064-1.054.062-.515.163-.995.302-1.44.14-.447.317-.842.53-1.185a.75.75 0 00-1.276-.79c-.318.513-.574 1.077-.768 1.692a8.614 8.614 0 00-.414 2.215A4.54 4.54 0 009 8.558V11a1 1 0 001 1h2zm-6 0a1 1 0 001-1V8.558a1 1 0 00-1-1H4.612c0-.351.021-.703.064-1.054.062-.515.163-.995.302-1.44.14-.447.317-.842.53-1.185a.75.75 0 00-1.276-.79c-.318.513-.574 1.077-.768 1.692a8.614 8.614 0 00-.414 2.215A4.54 4.54 0 003 8.558V11a1 1 0 001 1h2z"/>
                             </svg>
                             <span>Цитата</span>
                         </button>
 
                         <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList" title="Маркированный список">
-                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M2 4a1 1 0 100-2 1 1 0 000 2zm3.75-1.5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zM2 9a1 1 0 100-2 1 1 0 000 2zm1 4a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd" />
                             </svg>
                             <span>Список</span>
                         </button>
 
                         <button type="button" class="toolbar-btn" data-cmd="insertOrderedList" title="Нумерованный список">
-                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14" aria-hidden="true">
                                 <path d="M2.003 2.5a.5.5 0 00-.723-.447l-1.003.5a.5.5 0 00.446.894l.28-.14V6.5a.5.5 0 001 0V2.5zm3.747 0a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5zm0 5a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5z"/>
                             </svg>
-                            <span>1. Нумерованный</span>
+                            <span>Нумерованный</span>
                         </button>
                     </div>
 
                     <div class="toolbar-sep"></div>
 
-                    <!-- 3. Media, Code, Table, Formula, Spoiler, Divider, Anchor -->
+                    <!-- Группа 3 (Медиа и Код): [ 🎬 Видео ] [ 🖼️ Изображение ] [ ⎯ Разделитель ] [ ▦ Таблица ] [ </> Код ] [ ∑ Формула ] -->
                     <div class="toolbar-group">
                         <!-- Media: Video Player (YouTube, Vimeo, VK, Rutube) -->
-                        <button type="button" class="toolbar-btn btn-highlight" data-action="open-video-modal" title="Вставить видеоплеер (YouTube, Vimeo, VK, Rutube)">
-                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                        <button type="button" class="toolbar-btn" data-action="open-video-modal" title="Вставить видеоплеер (YouTube, Vimeo, VK, Rutube)">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14" aria-hidden="true">
                                 <path d="M8 15A7 7 0 118 1a7 7 0 010 14zm-.8-9.4v4.8l3.8-2.4-3.8-2.4z"/>
                             </svg>
-                            <span>▶ Видео</span>
+                            <span>Видео</span>
                         </button>
 
                         <!-- Image -->
                         <button type="button" class="toolbar-btn" data-action="open-image-modal" title="Вставить изображение с подписью">
-                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M1.75 2.5a.75.75 0 00-.75.75v9.5c0 .414.336.75.75.75h12.5a.75.75 0 00.75-.75v-9.5a.75.75 0 00-.75-.75H1.75zM2.5 12V4h11v8H2.5zm8.5-5.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm-7 4.5l2.5-3 2 2 3-4 2.5 5H4z" clip-rule="evenodd" />
                             </svg>
                             <span>Изображение</span>
@@ -205,26 +205,26 @@
 
                         <!-- Divider -->
                         <button type="button" class="toolbar-btn" data-action="insert-divider" title="Разделитель (Horizontal Rule)">
-                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M1 8a.75.75 0 01.75-.75h12.5a.75.75 0 010 1.5H1.75A.75.75 0 011 8z" clip-rule="evenodd" />
                             </svg>
-                            <span>— Разделитель</span>
+                            <span>Разделитель</span>
                         </button>
 
                         <!-- Table Generator -->
                         <button type="button" class="toolbar-btn" data-action="open-table-modal" title="Вставить интерактивную таблицу">
-                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0114.25 14H1.75A1.75 1.75 0 010 12.25v-8.5zm1.5.75v2.5h5.75V4.5H1.5zm7.25 0v2.5h5.75V4.5H8.75zM1.5 8.5v3.75c0 .138.112.25.25.25h5.5V8.5H1.5zm7.25 0v3.75h5.5a.25.25 0 00.25-.25V8.5H8.75z" clip-rule="evenodd"/>
                             </svg>
-                            <span>▦ Таблица</span>
+                            <span>Таблица</span>
                         </button>
 
                         <!-- Code Block -->
                         <button type="button" class="toolbar-btn" data-action="open-code-modal" title="Вставить блок кода с подсветкой синтаксиса">
-                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M4.72 3.22a.75.75 0 011.06 1.06L2.06 8l3.72 3.72a.75.75 0 11-1.06 1.06L.47 8.53a.75.75 0 010-1.06l4.25-4.25zm6.56 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L13.94 8l-3.72-3.72a.75.75 0 010-1.06z" clip-rule="evenodd" />
                             </svg>
-                            <span>&lt;/&gt; Код</span>
+                            <span>Код</span>
                         </button>
 
                         <!-- Math Formula (LaTeX) -->
@@ -232,30 +232,36 @@
                             <span class="math-sigma-icon">∑</span>
                             <span>Формула</span>
                         </button>
-
-                        <!-- Spoiler -->
-                        <button type="button" class="toolbar-btn" data-action="open-spoiler-modal" title="Вставить сворачиваемый спойлер">
-                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
-                                <path fill-rule="evenodd" d="M1.75 3a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h12.5a.75.75 0 00.75-.75v-8.5a.75.75 0 00-.75-.75H1.75zm3.47 3.97a.75.75 0 011.06 0L8 8.69l1.72-1.72a.75.75 0 111.06 1.06l-2.25 2.25a.75.75 0 01-1.06 0L5.22 8.03a.75.75 0 010-1.06z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>▼ Спойлер</span>
-                        </button>
-
-                        <!-- Anchor -->
-                        <button type="button" class="toolbar-btn" data-action="open-anchor-modal" title="Вставить якорную закладку (Anchor #)">
-                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
-                                <path d="M8 1a2.5 2.5 0 00-.5 4.95V7.5H5.75a.75.75 0 000 1.5h1.75v4.95A4.502 4.502 0 012 9.5a.75.75 0 00-1.5 0 6.002 6.002 0 007 5.917V15.5a.75.75 0 001.5 0v-.083a6.002 6.002 0 007-5.917.75.75 0 00-1.5 0 4.502 4.502 0 01-5.5 4.45V9H11a.75.75 0 000-1.5H9.25V5.95A2.5 2.5 0 008 1zm0 1.5a1 1 0 110 2 1 1 0 010-2z"/>
-                            </svg>
-                            <span>⚓ Якорь</span>
-                        </button>
                     </div>
 
                     <div class="toolbar-sep"></div>
 
-                    <!-- Typographer Engine Button -->
-                    <button type="button" class="toolbar-btn btn-apply-typograf-inline" id="btnApplyTypografInline" title="Авто-типограф: исправление кавычек «», тире — и неразрывных пробелов">
-                        <span>« » Типограф</span>
-                    </button>
+                    <!-- Группа 4 (Спецэлементы): [ 👁️ Спойлер ] [ ⚓ Якорь ] [ 🔠 Типограф ] -->
+                    <div class="toolbar-group">
+                        <!-- Spoiler -->
+                        <button type="button" class="toolbar-btn" data-action="open-spoiler-modal" title="Вставить сворачиваемый спойлер">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M1.75 3a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h12.5a.75.75 0 00.75-.75v-8.5a.75.75 0 00-.75-.75H1.75zm3.47 3.97a.75.75 0 011.06 0L8 8.69l1.72-1.72a.75.75 0 111.06 1.06l-2.25 2.25a.75.75 0 01-1.06 0L5.22 8.03a.75.75 0 010-1.06z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>Спойлер</span>
+                        </button>
+
+                        <!-- Anchor -->
+                        <button type="button" class="toolbar-btn" data-action="open-anchor-modal" title="Вставить якорную закладку (Anchor #)">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14" aria-hidden="true">
+                                <path d="M8 1a2.5 2.5 0 00-.5 4.95V7.5H5.75a.75.75 0 000 1.5h1.75v4.95A4.502 4.502 0 012 9.5a.75.75 0 00-1.5 0 6.002 6.002 0 007 5.917V15.5a.75.75 0 001.5 0v-.083a6.002 6.002 0 007-5.917.75.75 0 00-1.5 0 4.502 4.502 0 01-5.5 4.45V9H11a.75.75 0 000-1.5H9.25V5.95A2.5 2.5 0 008 1zm0 1.5a1 1 0 110 2 1 1 0 010-2z"/>
+                            </svg>
+                            <span>Якорь</span>
+                        </button>
+
+                        <!-- Typographer Engine Button -->
+                        <button type="button" class="toolbar-btn btn-apply-typograf-inline" id="btnApplyTypografInline" title="Авто-типограф: исправление кавычек «», тире — и неразрывных пробелов">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14" aria-hidden="true">
+                                <path d="M4 2a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H4zm1 3.5h6a.5.5 0 010 1H8.5V11a.5.5 0 01-1 0V6.5H5a.5.5 0 010-1z"/>
+                            </svg>
+                            <span>Типограф</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- WYSIWYG Editable Canvas Area -->
