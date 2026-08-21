@@ -265,94 +265,35 @@
                     return;
                 }
 
-                // 4.2 Karma Lever (▲ Upvote)
-                const btnUpvote = e.target.closest(".btn-score-up");
-                if (btnUpvote) {
-                    const postId = btnUpvote.getAttribute("data-post-id");
-                    const scoreBox = btnUpvote.closest(".karma-lever") || btnUpvote.closest(".habr-score-box");
-                    const scoreVal = scoreBox ? scoreBox.querySelector(".habr-score-val") : null;
-                    const btnDown = scoreBox ? scoreBox.querySelector(".btn-score-down") : null;
-                    const isUp = btnUpvote.classList.contains("is-active");
+                // 4.2 Smart Contract Like Button Toggle
+                const btnContractLike = e.target.closest(".btn-contract-like") || e.target.closest("[data-action='like']");
+                if (btnContractLike) {
+                    const postId = btnContractLike.getAttribute("data-post-id");
+                    const countEl = btnContractLike.querySelector(".likes-count-val") || btnContractLike.querySelector(".stat-val");
+                    const isActive = btnContractLike.classList.contains("is-active");
 
-                    let curScore = parseInt((scoreVal ? scoreVal.textContent : "0").replace("+", ""), 10) || 0;
-
-                    if (isUp) {
-                        // Undo upvote
-                        btnUpvote.classList.remove("is-active");
-                        curScore -= 1;
+                    let count = parseInt(countEl ? countEl.textContent : "0", 10) || 0;
+                    if (isActive) {
+                        btnContractLike.classList.remove("is-active");
+                        if (countEl) countEl.textContent = Math.max(0, count - 1);
+                        showToast("Лайк смарт-контракта отозван");
                     } else {
-                        // Activate upvote
-                        btnUpvote.classList.add("is-active");
-                        if (btnDown && btnDown.classList.contains("is-active")) {
-                            btnDown.classList.remove("is-active");
-                            curScore += 2;
-                        } else {
-                            curScore += 1;
+                        btnContractLike.classList.add("is-active");
+                        if (countEl) countEl.textContent = count + 1;
+
+                        const iconWrap = btnContractLike.querySelector(".stat-icon-wrap");
+                        if (iconWrap) {
+                            iconWrap.classList.remove("bounce-spring");
+                            void iconWrap.offsetWidth;
+                            iconWrap.classList.add("bounce-spring");
                         }
-                    }
-
-                    if (scoreVal) {
-                        scoreVal.textContent = curScore > 0 ? "+" + curScore : "" + curScore;
-                        scoreVal.classList.remove("is-positive", "is-negative");
-                        if (curScore > 0) scoreVal.classList.add("is-positive");
-                        else if (curScore < 0) scoreVal.classList.add("is-negative");
-
-                        // Spring animation
-                        scoreVal.classList.remove("bounce-spring");
-                        void scoreVal.offsetWidth;
-                        scoreVal.classList.add("bounce-spring");
+                        showToast("📜 Смарт-контракт одобрен!");
                     }
 
                     try {
                         await fetch("/api/v1/forum/posts/" + postId + "/upvote", { method: "POST" });
                     } catch (err) {
-                        console.error("Failed to sync upvote:", err);
-                    }
-                    return;
-                }
-
-                // 4.3 Karma Lever (▼ Downvote)
-                const btnDownvote = e.target.closest(".btn-score-down");
-                if (btnDownvote) {
-                    const postId = btnDownvote.getAttribute("data-post-id");
-                    const scoreBox = btnDownvote.closest(".karma-lever") || btnDownvote.closest(".habr-score-box");
-                    const scoreVal = scoreBox ? scoreBox.querySelector(".habr-score-val") : null;
-                    const btnUp = scoreBox ? scoreBox.querySelector(".btn-score-up") : null;
-                    const isDown = btnDownvote.classList.contains("is-active");
-
-                    let curScore = parseInt((scoreVal ? scoreVal.textContent : "0").replace("+", ""), 10) || 0;
-
-                    if (isDown) {
-                        // Undo downvote
-                        btnDownvote.classList.remove("is-active");
-                        curScore += 1;
-                    } else {
-                        // Activate downvote
-                        btnDownvote.classList.add("is-active");
-                        if (btnUp && btnUp.classList.contains("is-active")) {
-                            btnUp.classList.remove("is-active");
-                            curScore -= 2;
-                        } else {
-                            curScore -= 1;
-                        }
-                    }
-
-                    if (scoreVal) {
-                        scoreVal.textContent = curScore > 0 ? "+" + curScore : "" + curScore;
-                        scoreVal.classList.remove("is-positive", "is-negative");
-                        if (curScore > 0) scoreVal.classList.add("is-positive");
-                        else if (curScore < 0) scoreVal.classList.add("is-negative");
-
-                        // Spring animation
-                        scoreVal.classList.remove("bounce-spring");
-                        void scoreVal.offsetWidth;
-                        scoreVal.classList.add("bounce-spring");
-                    }
-
-                    try {
-                        await fetch("/api/v1/forum/posts/" + postId + "/downvote", { method: "POST" });
-                    } catch (err) {
-                        console.error("Failed to sync downvote:", err);
+                        console.error("Failed to sync contract like:", err);
                     }
                     return;
                 }

@@ -3,7 +3,7 @@
 {% block title %}{{ page_title or 'База знаний и лента статей Habr 2.0 — SmartContractum' }}{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="/static/css/forum_social.css?v=2.2.4">
+<link rel="stylesheet" href="/static/css/forum_social.css?v=2.5.0">
 <!-- Schema.org JSON-LD Collection Markup -->
 <script type="application/ld+json">
 {
@@ -353,7 +353,7 @@
                 {% for post in topics %}
                 <article class="habr-article-card" id="post-{{ post.id }}" data-post-id="{{ post.id }}" data-post-type="{{ post.post_type }}" data-category="{{ post.category_slug }}">
                     
-                    <!-- 1. Header: Author line & Metadata -->
+                    <!-- 1. Header: Author Name, Avatar & Publication Time -->
                     <div class="habr-card-header">
                         <div class="habr-author-box">
                             <div class="habr-author-avatar {{ post.author_role_class or 'ring-dev' }}" title="{{ post.author_name }}">
@@ -362,26 +362,11 @@
                             <div class="habr-author-meta">
                                 <div class="author-name-line">
                                     <span class="habr-author-name">{{ post.author_name }}</span>
-                                    <span class="verified-shield-icon" title="Верифицированный эксперт платформы">
-                                        <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
-                                            <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.268 4.66-1.597 8-6.043 8-11.268 0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM13.707 8.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                        </svg>
-                                    </span>
                                     <span class="habr-author-handle">@{{ post.author_username }}</span>
-                                </div>
-                                <div class="author-badges-line">
-                                    {% if post.official_badge %}
-                                    <span class="habr-company-badge">{{ post.official_badge }}</span>
-                                    {% endif %}
-                                    <span class="habr-role-badge {{ post.author_role_class }}">{{ post.author_role_badge or post.author_role }}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="habr-card-top-right">
-                            <span class="difficulty-pill {% if post.difficulty == 'Сложный' %}diff-hard{% elif post.difficulty == 'Простой' %}diff-easy{% else %}diff-medium{% endif %}">
-                                ● {{ post.difficulty or 'Средний' }}
-                            </span>
-                            <span class="reading-time-pill">⏱️ {{ post.reading_time or '3 мин' }}</span>
                             <span class="habr-post-time">{{ post.created_at }}</span>
                         </div>
                     </div>
@@ -391,14 +376,14 @@
                         <a href="#post-{{ post.id }}" class="habr-title-link" data-action="toggle-body" data-post-id="{{ post.id }}">{{ post.title }}</a>
                     </h2>
 
-                    <!-- 3. Hubs & Tags line -->
+                    <!-- 3. Hashtags line -->
                     <div class="habr-hubs-line">
                         {% for hub in post.hubs %}
-                        <a href="/feed?tag={{ hub | replace('*', '') }}" class="habr-hub-link">{{ hub }}</a>{% if not loop.last %}, {% endif %}
+                        <a href="/feed?tag={{ hub | replace('*', '') }}" class="habr-hub-link">#{{ hub | replace('*', '') }}</a>
                         {% endfor %}
                     </div>
 
-                    <!-- 4. Snippet / Lead text -->
+                    <!-- 4. Text Snippet / Content -->
                     <div class="habr-lead-snippet">
                         <p class="habr-snippet-text">{{ post.snippet }}</p>
                     </div>
@@ -428,11 +413,10 @@
                     </div>
                     {% endif %}
 
-                    <!-- 6. Full Body (Expandable) -->
+                    <!-- 6. Full Body (Expandable with Read More) -->
                     <div class="habr-full-body" id="body-{{ post.id }}" style="display: none;">
                         <div class="habr-body-content">
-                            {{ post.body | replace('
-', '<br>') | safe }}
+                            {{ post.body | replace('\n', '<br>') | safe }}
                         </div>
 
                         <!-- Rich Benchmark Preview for Data/Code Topics -->
@@ -475,30 +459,23 @@
                         </button>
                     </div>
 
-                    <!-- 8. Interactive Card Footer -->
+                    <!-- 8. Interactive Card Footer: Smart Contract Like, Bookmarks, Comments -->
                     <div class="habr-card-footer">
                         <div class="habr-footer-left">
-                            <!-- Karma Lever (▲ Score ▼) -->
-                            <div class="habr-score-box karma-lever" data-post-id="{{ post.id }}">
-                                <button type="button" class="btn-score-arrow btn-score-up {% if post.is_upvoted %}is-active{% endif %}" 
-                                        data-action="upvote" data-post-id="{{ post.id }}" aria-label="Повысить рейтинг">▲</button>
-                                <span class="habr-score-val {% if post.score > 0 %}is-positive{% elif post.score < 0 %}is-negative{% endif %}" data-score-raw="{{ post.score }}">
-                                    {{ post.score_formatted }}
-                                </span>
-                                <button type="button" class="btn-score-arrow btn-score-down {% if post.is_downvoted %}is-active{% endif %}" 
-                                        data-action="downvote" data-post-id="{{ post.id }}" aria-label="Понизить рейтинг">▼</button>
-                            </div>
-
-                            <!-- Views Counter -->
-                            <div class="habr-stat-item stat-views" title="Просмотры">
+                            <!-- Smart Contract Like Button -->
+                            <button type="button" class="habr-stat-btn btn-contract-like {% if post.is_upvoted or post.score > 0 %}is-active{% endif %}" 
+                                    data-action="like" data-post-id="{{ post.id }}" title="Одобрить смарт-контракт (Лайк)">
                                 <span class="stat-icon-wrap" aria-hidden="true">
-                                    <svg class="stat-svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
-                                        <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                                    <svg class="stat-svg contract-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <polyline points="10 9 9 9 8 9"></polyline>
                                     </svg>
                                 </span>
-                                <span class="stat-val">{{ post.views_formatted }}</span>
-                            </div>
+                                <span class="stat-val likes-count-val">{{ post.score if post.score > 0 else 0 }}</span>
+                            </button>
 
                             <!-- Bookmarks Button -->
                             <button type="button" class="habr-stat-btn btn-bookmark {% if post.is_bookmarked %}is-active{% endif %}" 
@@ -539,7 +516,6 @@
                             </button>
                         </div>
                     </div>
-
                 </article>
                 {% endfor %}
             </div>
@@ -865,5 +841,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/forum_social.js?v=2.2.1" defer></script>
+<script src="/static/js/forum_social.js?v=2.5.0" defer></script>
 {% endblock %}

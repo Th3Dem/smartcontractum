@@ -2045,3 +2045,78 @@ body.light-theme-feed {
     color: #0284c7 !important;
     line-height: 1 !important;
 }
+
+/* ======================================================================
+   SMART CONTRACT LIKE BUTTON (v2.5.0)
+====================================================================== */
+.btn-contract-like {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-contract-like:hover {
+    background: #eff6ff;
+    color: #0284c7;
+    border-color: #bae6fd;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.12);
+}
+
+.btn-contract-like.is-active {
+    background: #e0f2fe;
+    color: #0284c7;
+    border-color: #7dd3fc;
+    box-shadow: 0 0 10px rgba(2, 132, 199, 0.18);
+}
+
+.btn-contract-like .contract-icon-svg {
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+    stroke-width: 2;
+    transition: transform 0.2s ease;
+}
+
+.btn-contract-like:hover .contract-icon-svg {
+    transform: scale(1.15) rotate(-6deg);
+}
+
+.habr-author-meta {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.author-name-line {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.habr-author-name {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.habr-author-handle {
+    font-size: 0.78rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.habr-post-time {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    font-weight: 500;
+}
