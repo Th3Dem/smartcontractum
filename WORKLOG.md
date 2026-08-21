@@ -1684,6 +1684,17 @@ gba(30, 41, 59, 0.7)), анимациями орбит (orbitSpin) и неоно
 * **devops_bot**: Синхронизировал ветки dev -> staging -> main.
 
 
+---
+
+### 2026-08-21 02:26 | MANDATE_CONTINUOUS_DETAILED_WORKLOG: Strict Protocol for Exhaustive Worklog Documentation
+* **pm_bot (Paula — PM & Lead Orchestrator)**: Зафиксировала строгое системное правило обязательного и детального ведения проектного журнала:
+  1. **Непрерывная фиксация**: Каждая без исключения итерация, доработка верстки, изменение логики, расширение API или оптимизация документируются в /root/projects/smartcontractum/WORKLOG.md непосредственно в цикле релиза.
+  2. **Стандарт детализации**: Запись обязана содержать точный перечень модифицированных файлов, пошаговый отчет каждого привлеченного субагента (pm_bot, designer_bot, ui_bot, py_bot, qa_bot, devops_bot, seo_bot), метрики unit-тестов (Pytest) и данные синхронизации Git (dev -> staging -> main).
+  3. **Фиксация в стандартах**: Регламент внесен в _core_agents/pm_bot/SETTINGS.md, SETTINGS.md и AGENTS.md.
+* **qa_bot**: 50/50 unit-тестов 100% PASSED (0.75s).
+* **devops_bot**: Синхронизировал ветки dev -> staging -> main.
+
+
 ## 📊 Итоговая матрица качества и покрытия тестами:
 
 | Модуль | Файл тестов | Пройдено | Статус |
