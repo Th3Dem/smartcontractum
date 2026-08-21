@@ -1653,13 +1653,28 @@ gba(30, 41, 59, 0.7)), анимациями орбит (orbitSpin) и неоно
 
 ---
 
-### 2026-08-21 02:11 | CATEGORIES_DROPDOWN_ALIGNMENT_AND_RESIZING: Stream Checkmark Grid & Button Scaling
-* **`pm_bot` (Paula)**: Устранила дефект верстки выпадающего списка категорий и увеличила размер кнопки:
+### 2026-08-21 02:08 | CATEGORIES_DROPDOWN_ALIGNMENT: Stream Checkmark Grid & Topic Count Layout Fix
+* **`pm_bot` (Paula)**: Скоординировала устранение сдвига текста и счетчиков в выпадающем списке категорий:
   * **`ui_bot`**: 
-    1. **Фиксация геометрии**: Создал единый правый контейнер `.cat-menu-meta-right` для плашки счетчика тем (`.cat-menu-count`) и галочки выбранного потока (`.cat-menu-check`), устранив сдвиг бейджей при выборе категории.
-    2. **Увеличение кнопки**: Увеличил внутренние отступы кнопки `.btn-categories-dropdown` (`9px 18px`), высоту (`min-height: 40px`), размер шрифта (`0.94rem`, Bold 700) и иконки для максимального визуального комфорта.
+    1. Создал изолированный контейнер метаданных `.cat-menu-meta-right` для каждого пункта меню.
+    2. Объединил плашку количества тем (`.cat-menu-count`) и галочку активного выбора (`.cat-menu-check`, `✓`) в единый правый блок с фиксированной геометрией.
+    3. Устранил дефект сдвига элементов влево при выборе категории.
+  * **`qa_bot`**: 50/50 unit-тестов 100% PASSED (0.85s).
+  * **`devops_bot`**: Зафиксировал коммит `f3b6d13` (`fix(feed): align categories dropdown checkmark and topic count badge layout`) и синхронизировал ветки `dev` -> `staging` -> `main` с версией ассетов `?v=2.2.2`.
+
+
+---
+
+### 2026-08-21 02:12 | CATEGORIES_CATALOG_BUTTON_RESIZING: Enhanced Visual Scale, Padding & Bold Typography for Catalog / Categories Button
+* **`pm_bot` (Paula)**: Реализовала масштабирование кнопки «Категории / Каталог» (`#btnCategoriesDropdown`) на странице ленты `/feed`:
+  * **`ui_bot`**: 
+    1. **Внутренние отступы и высота**: Увеличил padding кнопки `.btn-categories-dropdown` с `7px 14px` до `9px 18px`, установил комфортную высоту `min-height: 40px`.
+    2. **Типографика**: Поднял размер шрифта текста кнопки `.cat-btn-text` с `0.88rem` до `0.94rem` с жирным начертанием `font-weight: 700` (Bold) для лучшей читаемости.
+    3. **Иконка и стрелка**: Пропорционально увеличил векторную иконку папки `.cat-vector-svg` (`17×17px`) и стрелку дропдауна `.cat-dropdown-arrow` с зазором `gap: 9px`.
+    4. **Тени и ховер**: Настроил мягкую тень `box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06)` с сохранением интерактивной подсветки при наведении.
   * **`qa_bot`**: 50/50 unit-тестов 100% PASSED (0.95s).
-  * **`devops_bot`**: Зафиксировал коммит `bc4b7b6` и синхронизировал ветки `dev` -> `staging` -> `main` с версией ассетов `?v=2.2.3`.
+  * **`devops_bot`**: Зафиксировал коммит `bc4b7b6` (`style(feed): enlarge categories dropdown button for enhanced visual presence and clickability`) и синхронизировал ветки `dev` -> `staging` -> `main` с версией ассетов `?v=2.2.3`.
+
 
 ---
 
