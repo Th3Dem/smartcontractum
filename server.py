@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-SmartContractum — Local Development Server with Live EGRUL/EGRIP Proxy & SMS Verification Service
+SmartContractum — Local Development Server with Live EGRUL/EGRIP Proxy & Real SMS Gateway
+Поддержка реальной отправки СМС через шлюзы SMS.RU, SMSC.RU, SMS-Aero
 """
 
 import os
@@ -16,6 +17,19 @@ PORT = int(sys.argv[1]) if len(sys.argv) > 1 and sys.argv[1].isdigit() else 3000
 PUBLIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "public")
 
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
+# Автозагрузка переменных окружения из .env
+def load_env_file():
+    env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+    if os.path.exists(env_path):
+        with open(env_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    k, v = line.split("=", 1)
+                    os.environ[k.strip()] = v.strip().strip("'").strip('"')
+
+load_env_file()
 
 # Хранилище сессий СМС-верификации: clean_phone -> {"code": "1234", "expires": timestamp}
 SMS_SESSIONS = {}
@@ -42,7 +56,7 @@ def validate_inn_checksum(inn: str) -> bool:
 
 def parse_ip_fio(name_str: str):
     """
-    Извлекает Фамилию, Имя и Отчество из строки ЕГРИП (например, ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ ИВАНОВ АЛЕКСАНДР СЕРГЕЕВИЧ)
+    Извлекает Фамилию, Имя и Отчество из строки ЕГРИП
     """
     clean = name_str.upper()
     prefixes = [
@@ -64,9 +78,7 @@ def parse_ip_fio(name_str: str):
 
 def query_egrul_nalog_ru(inn: str):
     """
-    Выполняет реальный двухэтапный запрос к API ФНС России (egrul.nalog.ru) для ЕГРЮЛ и ЕГРИП:
-    1. POST https://egrul.nalog.ru/ с телом query=<inn> для получения токена t
-    2. GET https://egrul.nalog.ru/search-result/<token> для получения строк реестра
+    Выполняет реальный двухэтапный запрос к API ФНС России (egrul.nalog.ru) для ЕГРЮЛ и ЕГРИП
     """
     clean_inn = "".join(filter(str.isdigit, inn))
     if len(clean_inn) not in (10, 12):
@@ -84,7 +96,6 @@ def query_egrul_nalog_ru(inn: str):
     }
 
     try:
-        # Шаг 1: Инициализация поиска и получение токена
         post_data = urllib.parse.urlencode({"query": clean_inn}).encode("utf-8")
         req1 = urllib.request.Request(
             "https://egrul.nalog.ru/",
@@ -102,7 +113,6 @@ def query_egrul_nalog_ru(inn: str):
                 "error": "Сервис ФНС не вернул идентификатор сессии поиска"
             }
 
-        # Шаг 2: Получение результатов поиска по токену
         time.sleep(0.4)
         ts = int(time.time() * 1000)
         res_url = f"https://egrul.nalog.ru/search-result/{token}?r={ts}&_={ts}"
@@ -118,7 +128,6 @@ def query_egrul_nalog_ru(inn: str):
                 "error": f"Субъект с ИНН {clean_inn} не найден в реестре ЕГРЮЛ/ЕГРИП ФНС России"
             }
 
-        # Проверяем точное совпадение ИНН/ОГРН в строках ответа ФНС
         matching_rows = [r for r in rows if r.get("i") == clean_inn or r.get("o") == clean_inn]
         if not matching_rows:
             return {
@@ -137,7 +146,6 @@ def query_egrul_nalog_ru(inn: str):
         ceo_raw = row.get("g", "").strip()
         is_ip = (len(clean_inn) == 12) or (row.get("k") == "ip") or ("ПРЕДПРИНИМАТЕЛЬ" in full_name.upper())
 
-        # Определение статуса прекращения деятельности / ликвидации / ликвидатора
         is_liquidator = any(term in ceo_raw.upper() for term in ["ЛИКВИДАТОР", "ЛИКВИДАЦИОНН", "КОНКУРСНЫЙ УПРАВЛЯЮЩИЙ", "ВНЕШНИЙ УПРАВЛЯЮЩИЙ", "АРБИТРАЖНЫЙ УПРАВЛЯЮЩИЙ"])
         is_liquidated = (
             bool(termination_date)
@@ -161,7 +169,6 @@ def query_egrul_nalog_ru(inn: str):
             status_text = "Действующий предприниматель (ЕГРИП)" if is_ip else "Действующая организация (ЕГРЮЛ)"
             status_type = "ACTIVE"
 
-        # Извлечение ФИО
         if is_ip:
             ip_last, ip_first, ip_middle = parse_ip_fio(full_name)
             ceo_lastname = ip_last
@@ -210,6 +217,97 @@ def query_egrul_nalog_ru(inn: str):
             "success": False,
             "error": f"Ошибка связи с egrul.nalog.ru: {str(exc)}"
         }
+
+def send_real_sms(phone: str, code: str) -> dict:
+    """
+    Отправляет РЕАЛЬНОЕ СМС-сообщение на номер абонента через официальный СМС-шлюз.
+    Поддерживает провайдеры: SMS.RU, SMSC.RU (СМС-Центр), SMS-Aero.
+    """
+    load_env_file()
+    clean_phone = "".join(filter(str.isdigit, phone))
+    if clean_phone.startswith("8") and len(clean_phone) == 11:
+        clean_phone = "7" + clean_phone[1:]
+    elif len(clean_phone) == 10:
+        clean_phone = "7" + clean_phone
+
+    text = f"SmartContractum: код подтверждения {code}. Никому не сообщайте его."
+    provider = os.getenv("SMS_PROVIDER", "sms_ru").lower()
+    sms_api_key = os.getenv("SMS_API_KEY") or os.getenv("SMSRU_API_KEY", "")
+
+    # 1. Реальная отправка через SMS.RU
+    if (provider == "sms_ru" or sms_api_key) and sms_api_key:
+        try:
+            params = urllib.parse.urlencode({
+                "api_id": sms_api_key,
+                "to": clean_phone,
+                "msg": text,
+                "json": 1
+            })
+            url = f"https://sms.ru/sms/send?{params}"
+            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+            
+            if data.get("status") == "OK" and data.get("status_code") == 100:
+                sms_info = data.get("sms", {}).get(clean_phone, {})
+                if sms_info.get("status") == "OK" or sms_info.get("status_code") == 100:
+                    return {
+                        "success": True,
+                        "realSent": True,
+                        "provider": "SMS.RU",
+                        "balance": data.get("balance"),
+                        "message": f"СМС успешно отправлено на номер +{clean_phone}"
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "error": f"SMS.RU: {sms_info.get('status_text', 'Ошибка доставки оператором')}"
+                    }
+            else:
+                return {
+                    "success": False,
+                    "error": f"Ошибка сервиса SMS.RU (код {data.get('status_code')}): {data.get('status_text', 'Проверьте API-ключ')}"
+                }
+        except Exception as exc:
+            return {"success": False, "error": f"Ошибка шлюза SMS.RU: {str(exc)}"}
+
+    # 2. Реальная отправка через SMSC.RU (СМС-Центр)
+    smsc_login = os.getenv("SMSC_LOGIN")
+    smsc_psw = os.getenv("SMSC_PASSWORD")
+    if (provider == "smsc" or smsc_login) and smsc_login and smsc_psw:
+        try:
+            params = urllib.parse.urlencode({
+                "login": smsc_login,
+                "psw": smsc_psw,
+                "phones": clean_phone,
+                "mes": text,
+                "fmt": 3
+            })
+            url = f"https://smsc.ru/sys/send.php?{params}"
+            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+            if "error" in data:
+                return {"success": False, "error": f"SMSC.RU: {data.get('error')}"}
+            return {
+                "success": True,
+                "realSent": True,
+                "provider": "SMSC.RU",
+                "message": f"СМС успешно отправлено на номер +{clean_phone}",
+                "smsId": data.get("id")
+            }
+        except Exception as exc:
+            return {"success": False, "error": f"Ошибка шлюза SMSC.RU: {str(exc)}"}
+
+    # 3. Режим ожидания ключа (Dev-шлюз с подсказкой)
+    return {
+        "success": True,
+        "realSent": False,
+        "provider": "DEV_GATEWAY",
+        "demoCode": code,
+        "message": f"Для реальной отправки СМС укажите API-ключ провайдера (SMS.RU или SMSC.RU) в файле .env",
+        "consoleLog": f"[SMS OUTBOUND] Номер: +{clean_phone} | Сообщение: {text}"
+    }
 
 class SmartContractumHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -261,13 +359,24 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
                     "code": code,
                     "expires": time.time() + 300 # Срок действия 5 минут
                 }
-                print(f"[SMS GATEWAY DEMO] Отправка СМС на номер {raw_phone}: Ваш код подтверждения {code}")
-                result = {
-                    "success": True,
-                    "message": f"СМС с кодом подтверждения направлено на номер {raw_phone}",
-                    "demoCode": code,
-                    "cooldown": 60
-                }
+                
+                # Реальная отправка через СМС-шлюз
+                send_result = send_real_sms(raw_phone, code)
+                
+                if send_result.get("success"):
+                    result = {
+                        "success": True,
+                        "realSent": send_result.get("realSent", False),
+                        "provider": send_result.get("provider"),
+                        "message": f"СМС с кодом подтверждения направлено на номер {raw_phone}",
+                        "demoCode": send_result.get("demoCode"),
+                        "cooldown": 60
+                    }
+                else:
+                    result = {
+                        "success": False,
+                        "error": send_result.get("error", "Не удалось отправить СМС через шлюз оператора")
+                    }
 
             response_bytes = json.dumps(result, ensure_ascii=False).encode("utf-8")
             self.send_response(200)
@@ -292,7 +401,6 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
             elif session["code"] != code:
                 result = {"success": False, "error": "Введен неверный код подтверждения из СМС"}
             else:
-                # Код верен
                 result = {"success": True, "verified": True, "message": "Номер телефона успешно подтвержден"}
 
             response_bytes = json.dumps(result, ensure_ascii=False).encode("utf-8")
