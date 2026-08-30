@@ -416,9 +416,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Автоформатирование телефонов (+7 (XXX) XXX-XX-XX) с плавным удалением
+  // Автоформатирование телефонов (+7 (XXX) XXX-XX-XX) с плавным удалением без застреваний
   function formatPhone(input) {
-    input.addEventListener('input', () => {
+    function applyFormat() {
       let raw = input.value;
       if (!raw) return;
 
@@ -454,15 +454,60 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       input.value = formatted;
-    });
+    }
+
+    input.addEventListener('input', applyFormat);
 
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Backspace') {
-        const digits = input.value.replace(/\D/g, '');
-        // Если осталась только одна цифра или только код страны, очищаем поле
-        if (digits.length <= 1 || (digits.startsWith('7') && digits.length <= 2)) {
-          input.value = '';
+        let curPos = input.selectionStart;
+        let endPos = input.selectionEnd;
+
+        // Если выделен диапазон символов — позволяем браузеру удалить его и переформатировать
+        if (curPos !== endPos) return;
+
+        let val = input.value;
+        let charBefore = val[curPos - 1];
+
+        // Если символ перед курсором — разделитель (дефис, скобка, пробел, плюс)
+        if (charBefore && /\D/.test(charBefore)) {
           e.preventDefault();
+
+          // Находим ближайшую предшествующую цифру
+          let left = val.substring(0, curPos);
+          let right = val.substring(curPos);
+
+          let lastDigitIdx = -1;
+          for (let i = left.length - 1; i >= 0; i--) {
+            if (/\d/.test(left[i])) {
+              lastDigitIdx = i;
+              break;
+            }
+          }
+
+          if (lastDigitIdx !== -1) {
+            let digitsOnly = val.replace(/\D/g, '');
+            // Если осталась только одна цифра после кода +7 — очищаем всё поле
+            if (digitsOnly.length <= 2) {
+              input.value = '';
+              return;
+            }
+            // Удаляем эту цифру
+            left = left.substring(0, lastDigitIdx) + left.substring(lastDigitIdx + 1);
+          } else {
+            input.value = '';
+            return;
+          }
+
+          input.value = left + right;
+          applyFormat();
+        } else {
+          // Если перед курсором обычная цифра, но после её удаления останется только +7
+          let digitsOnly = val.replace(/\D/g, '');
+          if (digitsOnly.length <= 2) {
+            e.preventDefault();
+            input.value = '';
+          }
         }
       }
     });
