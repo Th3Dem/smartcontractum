@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-SmartContractum — Local Development Server with Live EGRUL & EGRIP / FNS Proxy API
+SmartContractum — Local Development Server with Live EGRUL/EGRIP Proxy & SMS Verification Service
 """
 
 import os
 import sys
 import json
 import time
+import random
 import urllib.request
 import urllib.parse
 from http.server import HTTPServer, SimpleHTTPRequestHandler
@@ -15,6 +16,9 @@ PORT = int(sys.argv[1]) if len(sys.argv) > 1 and sys.argv[1].isdigit() else 3000
 PUBLIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "public")
 
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
+# Хранилище сессий СМС-верификации: clean_phone -> {"code": "1234", "expires": timestamp}
+SMS_SESSIONS = {}
 
 def validate_inn_checksum(inn: str) -> bool:
     """
@@ -133,7 +137,7 @@ def query_egrul_nalog_ru(inn: str):
         ceo_raw = row.get("g", "").strip()
         is_ip = (len(clean_inn) == 12) or (row.get("k") == "ip") or ("ПРЕДПРИНИМАТЕЛЬ" in full_name.upper())
 
-        # Определение статуса прекращения деятельности / ликвидации по реестру ФНС
+        # Определение статуса прекращения деятельности / ликвидации / ликвидатора
         is_liquidator = any(term in ceo_raw.upper() for term in ["ЛИКВИДАТОР", "ЛИКВИДАЦИОНН", "КОНКУРСНЫЙ УПРАВЛЯЮЩИЙ", "ВНЕШНИЙ УПРАВЛЯЮЩИЙ", "АРБИТРАЖНЫЙ УПРАВЛЯЮЩИЙ"])
         is_liquidated = (
             bool(termination_date)
@@ -232,6 +236,77 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
 
         # Стандартная раздача статики
         super().do_GET()
+
+    def do_POST(self):
+        parsed = urllib.parse.urlparse(self.path)
+        content_length = int(self.headers.get('Content-Length', 0))
+        post_body = self.rfile.read(content_length).decode('utf-8')
+        
+        try:
+            payload = json.loads(post_body) if post_body else {}
+        except Exception:
+            payload = {}
+
+        # 1. Эндпоинт отправки СМС-кода
+        if parsed.path == "/api/auth/send-sms":
+            raw_phone = payload.get("phone", "")
+            clean_phone = "".join(filter(str.isdigit, raw_phone))
+            
+            if len(clean_phone) < 10:
+                result = {"success": False, "error": "Пожалуйста, укажите полный номер телефона для отправки СМС"}
+            else:
+                # Генерация 4-значного защитного кода
+                code = f"{random.randint(1000, 9999)}"
+                SMS_SESSIONS[clean_phone] = {
+                    "code": code,
+                    "expires": time.time() + 300 # Срок действия 5 минут
+                }
+                print(f"[SMS GATEWAY DEMO] Отправка СМС на номер {raw_phone}: Ваш код подтверждения {code}")
+                result = {
+                    "success": True,
+                    "message": f"СМС с кодом подтверждения направлено на номер {raw_phone}",
+                    "demoCode": code,
+                    "cooldown": 60
+                }
+
+            response_bytes = json.dumps(result, ensure_ascii=False).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(response_bytes)))
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(response_bytes)
+            return
+
+        # 2. Эндпоинт проверки СМС-кода
+        if parsed.path == "/api/auth/verify-sms":
+            raw_phone = payload.get("phone", "")
+            code = payload.get("code", "").strip()
+            clean_phone = "".join(filter(str.isdigit, raw_phone))
+            
+            session = SMS_SESSIONS.get(clean_phone)
+            if not session:
+                result = {"success": False, "error": "Код для данного номера не запрашивался или срок его действия истек"}
+            elif time.time() > session["expires"]:
+                result = {"success": False, "error": "Срок действия СМС-кода истек. Пожалуйста, запросите новый код"}
+            elif session["code"] != code:
+                result = {"success": False, "error": "Введен неверный код подтверждения из СМС"}
+            else:
+                # Код верен
+                result = {"success": True, "verified": True, "message": "Номер телефона успешно подтвержден"}
+
+            response_bytes = json.dumps(result, ensure_ascii=False).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(response_bytes)))
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(response_bytes)
+            return
+
+        # 404 для других POST-запросов
+        self.send_response(404)
+        self.end_headers()
 
 def run():
     server_address = ("", PORT)

@@ -1,7 +1,7 @@
 /**
  * SmartContractum — Интерактивная логика авторизации и регистрации
  * Интеграция с реестрами ЕГРЮЛ/ЕГРИП ФНС РФ (egrul.nalog.ru),
- * Защитная графическая капча (Canvas Security CAPTCHA) и валидация
+ * СМС-верификация номеров телефонов, Защитная Canvas-капча
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,6 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Флаги ликвидации / прекращения деятельности
   let isOrgLiquidated = false;
   let isIPLiquidated = false;
+
+  // Статусы СМС-верификации телефонов
+  const verifiedPhones = {
+    individual: false,
+    ip: false,
+    organization: false
+  };
 
   // Активные коды капчи
   let regCaptchaCode = '';
@@ -60,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const matchMsg = document.getElementById('password-match-msg');
 
   // ===============================================================
-  // 0. Генерация защитной графической капчи (Canvas CAPTCHA)
+  // 0. Защитная графическая капча (Canvas CAPTCHA)
   // ===============================================================
   const CAPTCHA_CHARS = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
   const CAPTCHA_COLORS = ['#2f6fce', '#2f9cad', '#173e6d', '#278565', '#c77c32', '#6366f1'];
@@ -74,18 +81,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const height = canvas.height;
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
-    // 1. Очистка и заливка фона
+    // 1. Заливка фона
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = isDark ? '#0b1b30' : '#f8fafc';
     ctx.fillRect(0, 0, width, height);
 
-    // 2. Генерация случайного кода (5 знаков)
+    // 2. Код (5 знаков)
     let code = '';
     for (let i = 0; i < 5; i++) {
       code += CAPTCHA_CHARS.charAt(Math.floor(Math.random() * CAPTCHA_CHARS.length));
     }
 
-    // 3. Добавление фонового шума (точки)
+    // 3. Точечный шум
     for (let i = 0; i < 25; i++) {
       ctx.fillStyle = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.08)';
       ctx.beginPath();
@@ -93,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.fill();
     }
 
-    // 4. Добавление фонового шума (кривые линии)
+    // 4. Линейный шум
     for (let i = 0; i < 3; i++) {
       ctx.strokeStyle = CAPTCHA_COLORS[Math.floor(Math.random() * CAPTCHA_COLORS.length)];
       ctx.globalAlpha = 0.4;
@@ -109,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.globalAlpha = 1.0;
     }
 
-    // 5. Отрисовка символов с поворотом и смещением
+    // 5. Отрисовка символов
     ctx.font = 'bold 20px Manrope, Inter, sans-serif';
     ctx.textBaseline = 'middle';
 
@@ -118,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const char = code[i];
       const x = 12 + i * charSpacing + Math.random() * 4;
       const y = height / 2 + (Math.random() - 0.5) * 6;
-      const angle = (Math.random() - 0.5) * 0.45; // -13° to +13°
+      const angle = (Math.random() - 0.5) * 0.45;
 
       ctx.save();
       ctx.translate(x, y);
@@ -143,7 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (input) input.value = '';
   }
 
-  // Слушатели обновления капчи
   const regCaptchaRefreshBtn = document.getElementById('reg-captcha-refresh');
   const regCaptchaCanvas = document.getElementById('reg-captcha-canvas');
   if (regCaptchaRefreshBtn) regCaptchaRefreshBtn.addEventListener('click', refreshRegCaptcha);
@@ -154,11 +160,173 @@ document.addEventListener('DOMContentLoaded', () => {
   if (forgotCaptchaRefreshBtn) forgotCaptchaRefreshBtn.addEventListener('click', refreshForgotCaptcha);
   if (forgotCaptchaCanvas) forgotCaptchaCanvas.addEventListener('click', refreshForgotCaptcha);
 
-  // Инициализация капчи при старте
   refreshRegCaptcha();
   refreshForgotCaptcha();
 
-  // Переключение режимов (Вход / Регистрация / Восстановление)
+  // ===============================================================
+  // 1. СМС-верификация номеров телефонов (SMS Verification Flow)
+  // ===============================================================
+  function setupSmsVerification(typeKey, phoneInputId, sendBtnId, blockId, codeInputId, verifyBtnId, timerId, resendBtnId, badgeId) {
+    const phoneInput = document.getElementById(phoneInputId);
+    const sendBtn = document.getElementById(sendBtnId);
+    const block = document.getElementById(blockId);
+    const codeInput = document.getElementById(codeInputId);
+    const verifyBtn = document.getElementById(verifyBtnId);
+    const timerText = document.getElementById(timerId);
+    const resendBtn = document.getElementById(resendBtnId);
+    const badge = document.getElementById(badgeId);
+
+    let countdownInterval = null;
+
+    if (!phoneInput || !sendBtn) return;
+
+    function startTimer(seconds = 60) {
+      clearInterval(countdownInterval);
+      let remaining = seconds;
+      timerText.style.display = 'inline';
+      resendBtn.style.display = 'none';
+      timerText.innerText = `Повторный запрос через ${remaining} сек.`;
+
+      countdownInterval = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearInterval(countdownInterval);
+          timerText.style.display = 'none';
+          resendBtn.style.display = 'inline-block';
+        } else {
+          timerText.innerText = `Повторный запрос через ${remaining} сек.`;
+        }
+      }, 1000);
+    }
+
+    async function sendSms() {
+      hideAlert();
+      clearValidationErrors();
+
+      const rawPhone = phoneInput.value.trim();
+      const cleanDigits = rawPhone.replace(/\D/g, '');
+
+      if (cleanDigits.length < 10) {
+        phoneInput.classList.add('is-invalid');
+        showAlert('Пожалуйста, введите полный номер телефона для получения СМС');
+        return;
+      }
+
+      phoneInput.classList.remove('is-invalid');
+      const originalText = sendBtn.innerHTML;
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = '<span class="spinner-small"></span> Отправка...';
+
+      try {
+        const response = await fetch('/api/auth/send-sms', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: rawPhone })
+        });
+        const data = await response.json();
+
+        sendBtn.disabled = false;
+        sendBtn.innerHTML = originalText;
+
+        if (!data.success) {
+          showAlert(data.error || 'Ошибка при отправке СМС');
+          return;
+        }
+
+        // Успешная отправка
+        block.style.display = 'block';
+        badge.style.display = 'none';
+        codeInput.value = '';
+        codeInput.focus();
+        startTimer(data.cooldown || 60);
+
+        showAlert(`✓ СМС с кодом подтверждения направлено на номер ${rawPhone} ${data.demoCode ? `(Тестовый код: <strong>${data.demoCode}</strong>)` : ''}`, 'success');
+
+      } catch (err) {
+        sendBtn.disabled = false;
+        sendBtn.innerHTML = originalText;
+        showAlert('Ошибка связи с сервисом СМС-верификации');
+      }
+    }
+
+    async function verifySms() {
+      hideAlert();
+      clearValidationErrors();
+
+      const rawPhone = phoneInput.value.trim();
+      const code = codeInput.value.trim();
+
+      if (!code || code.length < 4) {
+        codeInput.classList.add('is-invalid');
+        showAlert('Пожалуйста, введите 4-значный код из СМС');
+        return;
+      }
+
+      codeInput.classList.remove('is-invalid');
+      const originalText = verifyBtn.innerHTML;
+      verifyBtn.disabled = true;
+      verifyBtn.innerHTML = '<span class="spinner-small"></span> Проверка...';
+
+      try {
+        const response = await fetch('/api/auth/verify-sms', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: rawPhone, code: code })
+        });
+        const data = await response.json();
+
+        verifyBtn.disabled = false;
+        verifyBtn.innerHTML = originalText;
+
+        if (!data.success || !data.verified) {
+          codeInput.classList.add('is-invalid');
+          showAlert(data.error || 'Введен неверный код из СМС');
+          return;
+        }
+
+        // Успешная верификация!
+        clearInterval(countdownInterval);
+        verifiedPhones[typeKey] = true;
+        block.style.display = 'none';
+        sendBtn.style.display = 'none';
+        phoneInput.readOnly = true;
+        badge.style.display = 'flex';
+        showAlert('✓ Номер телефона успешно подтвержден!', 'success');
+
+      } catch (err) {
+        verifyBtn.disabled = false;
+        verifyBtn.innerHTML = originalText;
+        showAlert('Ошибка связи при проверке СМС-кода');
+      }
+    }
+
+    sendBtn.addEventListener('click', sendSms);
+    resendBtn.addEventListener('click', sendSms);
+    verifyBtn.addEventListener('click', verifySms);
+
+    codeInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        verifySms();
+      }
+    });
+
+    // При изменении номера сбрасываем статус
+    phoneInput.addEventListener('input', () => {
+      verifiedPhones[typeKey] = false;
+      badge.style.display = 'none';
+      sendBtn.style.display = 'inline-flex';
+    });
+  }
+
+  // Подключение СМС-верификации для всех трех типов субъектов
+  setupSmsVerification('individual', 'reg-phone', 'btn-send-sms-ind', 'sms-block-ind', 'sms-code-ind', 'btn-verify-sms-ind', 'sms-timer-ind', 'btn-resend-sms-ind', 'sms-badge-ind');
+  setupSmsVerification('ip', 'reg-ip-phone', 'btn-send-sms-ip', 'sms-block-ip', 'sms-code-ip', 'btn-verify-sms-ip', 'sms-timer-ip', 'btn-resend-sms-ip', 'sms-badge-ip');
+  setupSmsVerification('organization', 'reg-org-phone', 'btn-send-sms-org', 'sms-block-org', 'sms-code-org', 'btn-verify-sms-org', 'sms-timer-org', 'btn-resend-sms-org', 'sms-badge-org');
+
+  // ===============================================================
+  // 2. Переключение режимов (Вход / Регистрация / Восстановление)
+  // ===============================================================
   function setMode(mode) {
     currentMode = mode;
     hideAlert();
@@ -253,8 +421,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===============================================================
-  // 1. Поиск Юр. лица в ЕГРЮЛ ФНС России (egrul.nalog.ru)
-  // С ПРОВЕРКОЙ ПРЕКРАЩЕНИЯ ДЕЯТЕЛЬНОСТИ / ЛИКВИДАТОРА
+  // 3. Поиск Юр. лица в ЕГРЮЛ ФНС России (egrul.nalog.ru)
   // ===============================================================
   async function fetchEgrulData() {
     const cleanInn = innInput.value.trim().replace(/\D/g, '');
@@ -291,7 +458,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const company = data.company;
 
-      // ПРОВЕРКА: Деятельность прекращена / ликвидатор / организация ликвидирована
       if (company.isLiquidated || company.statusType === 'LIQUIDATED' || company.terminationDate) {
         isOrgLiquidated = true;
         innInput.classList.add('is-invalid');
@@ -300,7 +466,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (ogrnInput) ogrnInput.value = company.ogrn || '';
         if (kppInput) kppInput.value = company.kpp || '';
 
-        // КРАСНОЕ ОКНО ПРЕДУПРЕЖДЕНИЯ
         egrulStatus.className = 'egrul-status-box error';
         egrulStatus.innerHTML = `
           <div><strong>✕ Деятельность прекращена / стадия ликвидации:</strong> ${escapeHtml(company.fullName)}</div>
@@ -314,7 +479,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Если организация ДЕЙСТВУЮЩАЯ — автозаполнение и зеленая плашка
       companyInput.value = company.fullName || '';
       companyInput.classList.remove('is-invalid');
 
@@ -342,8 +506,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===============================================================
-  // 2. Поиск Индивидуального предпринимателя (ИП) в ЕГРИП ФНС РФ
-  // С ПРОВЕРКОЙ ПРЕКРАЩЕНИЯ ДЕЯТЕЛЬНОСТИ ИП
+  // 4. Поиск Индивидуального предпринимателя (ИП) в ЕГРИП ФНС РФ
   // ===============================================================
   async function fetchEgripData() {
     const cleanInn = ipInnInput.value.trim().replace(/\D/g, '');
@@ -380,7 +543,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const company = data.company;
 
-      // Автозаполнение ОГРНИП и ФИО
       if (ipOgrnipInput) {
         ipOgrnipInput.value = company.ogrnip || company.ogrn || '';
         ipOgrnipInput.classList.remove('is-invalid');
@@ -404,12 +566,10 @@ document.addEventListener('DOMContentLoaded', () => {
         ipMiddleNameInput.classList.remove('is-invalid');
       }
 
-      // ПРОВЕРКА: Деятельность ИП прекращена
       if (company.isLiquidated || company.statusType === 'LIQUIDATED' || company.terminationDate) {
         isIPLiquidated = true;
         ipInnInput.classList.add('is-invalid');
 
-        // КРАСНОЕ ОКНО ПРЕДУПРЕЖДЕНИЯ
         egripStatus.className = 'egrul-status-box error';
         egripStatus.innerHTML = `
           <div><strong>✕ Деятельность индивидуального предпринимателя прекращена${company.terminationDate ? ` (дата: ${escapeHtml(company.terminationDate)})` : ''}:</strong> ${escapeHtml(company.fullName)}</div>
@@ -421,7 +581,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Если ИП ДЕЙСТВУЮЩИЙ — зеленая подтверждающая карточка
       egripStatus.className = 'egrul-status-box success';
       egripStatus.innerHTML = `
         <div><strong>✓ Найдено в ЕГРИП (ФНС России):</strong> ${escapeHtml(company.fullName)}</div>
@@ -516,7 +675,7 @@ document.addEventListener('DOMContentLoaded', () => {
     label.innerText = `Сложность: ${current.text}`;
   }
 
-  // Проверка совпадения паролей в реальном времени
+  // Проверка совпадения паролей
   function validatePasswordMatch() {
     const p1 = regPwd.value;
     const p2 = regPwdConfirm.value;
@@ -553,7 +712,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Удаляем префикс 7 или 8 в начале
       if (digits.startsWith('8') || digits.startsWith('7')) {
         digits = digits.substring(1);
       }
@@ -588,17 +746,14 @@ document.addEventListener('DOMContentLoaded', () => {
         let curPos = input.selectionStart;
         let endPos = input.selectionEnd;
 
-        // Если выделен диапазон символов — позволяем браузеру удалить его и переформатировать
         if (curPos !== endPos) return;
 
         let val = input.value;
         let charBefore = val[curPos - 1];
 
-        // Если символ перед курсором — разделитель (дефис, скобка, пробел, плюс)
         if (charBefore && /\D/.test(charBefore)) {
           e.preventDefault();
 
-          // Находим ближайшую предшествующую цифру
           let left = val.substring(0, curPos);
           let right = val.substring(curPos);
 
@@ -612,12 +767,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
           if (lastDigitIdx !== -1) {
             let digitsOnly = val.replace(/\D/g, '');
-            // Если осталась только одна цифра после кода +7 — очищаем всё поле
             if (digitsOnly.length <= 2) {
               input.value = '';
               return;
             }
-            // Удаляем эту цифру
             left = left.substring(0, lastDigitIdx) + left.substring(lastDigitIdx + 1);
           } else {
             input.value = '';
@@ -627,7 +780,6 @@ document.addEventListener('DOMContentLoaded', () => {
           input.value = left + right;
           applyFormat();
         } else {
-          // Если перед курсором обычная цифра, но после её удаления останется только +7
           let digitsOnly = val.replace(/\D/g, '');
           if (digitsOnly.length <= 2) {
             e.preventDefault();
@@ -675,7 +827,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setMode('login');
   });
 
-  // Обработка кликов по ссылкам Условий и Согласия
   document.querySelectorAll('.checkbox-label a.link-btn').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
@@ -684,12 +835,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Переключение типа субъекта
   btnTypeIndividual.addEventListener('click', () => setAccountType('individual'));
   btnTypeIP.addEventListener('click', () => setAccountType('ip'));
   btnTypeOrg.addEventListener('click', () => setAccountType('organization'));
 
-  // Показ / скрытие пароля (👁)
   document.querySelectorAll('.btn-toggle-pwd').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -779,6 +928,11 @@ document.addEventListener('DOMContentLoaded', () => {
         showAlert('Пожалуйста, укажите контактный номер телефона');
         return;
       }
+      if (!verifiedPhones.individual) {
+        markInvalid('reg-phone');
+        showAlert('Пожалуйста, подтвердите номер телефона с помощью СМС-кода (нажмите кнопку «Выслать СМС»)');
+        return;
+      }
     }
 
     // 2. Проверка для ИП
@@ -807,6 +961,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!ipPhone || ipPhone.length < 10) {
         markInvalid('reg-ip-phone');
         showAlert('Пожалуйста, укажите контактный номер телефона предпринимателя');
+        return;
+      }
+      if (!verifiedPhones.ip) {
+        markInvalid('reg-ip-phone');
+        showAlert('Пожалуйста, подтвердите номер телефона предпринимателя с помощью СМС-кода (нажмите кнопку «Выслать СМС»)');
         return;
       }
     }
@@ -848,6 +1007,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!orgPhone || orgPhone.length < 10) {
         markInvalid('reg-org-phone');
         showAlert('Пожалуйста, укажите контактный телефон представителя');
+        return;
+      }
+      if (!verifiedPhones.organization) {
+        markInvalid('reg-org-phone');
+        showAlert('Пожалуйста, подтвердите номер телефона представителя с помощью СМС-кода (нажмите кнопку «Выслать СМС»)');
         return;
       }
     }
@@ -944,7 +1108,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', newTheme);
     themeToggle.innerHTML = newTheme === 'dark' ? '🌙' : '☀️';
-    // Перерисовываем капчу под цвета новой темы
     refreshRegCaptcha();
     refreshForgotCaptcha();
   });

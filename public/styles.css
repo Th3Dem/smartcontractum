@@ -737,3 +737,73 @@ body {
     justify-content: space-between;
   }
 }
+
+/* ===============================================================
+   Стили для СМС-верификации номера телефона (SMS Phone Verification)
+   =============================================================== */
+.btn-sms-action {
+  white-space: nowrap;
+  font-size: 12.5px;
+  padding: 0 12px;
+}
+
+.sms-verify-panel {
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: var(--bg-hover);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+.sms-input-wrap {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.sms-code-input {
+  max-width: 170px;
+  text-align: center;
+  font-family: monospace, var(--font-main);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 4px;
+}
+
+.btn-sm {
+  padding: 8px 14px;
+  font-size: 12.5px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.sms-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.sms-verified-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(39, 133, 101, 0.12);
+  border: 1px solid rgba(39, 133, 101, 0.35);
+  border-radius: var(--radius-sm);
+  color: #10b981;
+  font-size: 12.5px;
+  font-weight: 600;
+  animation: fadeIn 0.3s ease;
+}
+
+[data-theme="light"] .sms-verified-badge {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
