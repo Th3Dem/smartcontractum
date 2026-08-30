@@ -198,9 +198,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // КРАСНОЕ ОКНО ПРЕДУПРЕЖДЕНИЯ
         egrulStatus.className = 'egrul-status-box error';
         egrulStatus.innerHTML = `
-          <div><strong>✕ Деятельность организации прекращена${company.terminationDate ? ` (дата: ${escapeHtml(company.terminationDate)})` : ''}:</strong> ${escapeHtml(company.fullName)}</div>
+          <div><strong>✕ Деятельность прекращена / стадия ликвидации:</strong> ${escapeHtml(company.fullName)}</div>
           <div class="egrul-company-meta" style="color: #ef4444; font-weight: 700; margin-top: 5px;">
-            ⚠️ Регистрация ликвидированных организаций на платформе запрещена.
+            ⚠️ Статус в ЕГРЮЛ: <strong>${escapeHtml(company.statusText)}</strong>.
+            ${company.ceoRaw ? `<br>Руководитель / Ликвидатор: ${escapeHtml(company.ceoRaw)}` : ''}
+            <br>Регистрация организаций на стадии ликвидации или прекративших деятельность запрещена.
           </div>
         `;
         egrulStatus.style.display = 'block';

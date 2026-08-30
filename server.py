@@ -134,9 +134,24 @@ def query_egrul_nalog_ru(inn: str):
         is_ip = (len(clean_inn) == 12) or (row.get("k") == "ip") or ("ПРЕДПРИНИМАТЕЛЬ" in full_name.upper())
 
         # Определение статуса прекращения деятельности / ликвидации по реестру ФНС
-        is_liquidated = bool(termination_date) or "ликвидирован" in full_name.lower() or "прекратил" in full_name.lower() or "прекративший" in full_name.lower() or "недействующ" in full_name.lower()
+        is_liquidator = any(term in ceo_raw.upper() for term in ["ЛИКВИДАТОР", "ЛИКВИДАЦИОНН", "КОНКУРСНЫЙ УПРАВЛЯЮЩИЙ", "ВНЕШНИЙ УПРАВЛЯЮЩИЙ", "АРБИТРАЖНЫЙ УПРАВЛЯЮЩИЙ"])
+        is_liquidated = (
+            bool(termination_date)
+            or "ликвидирован" in full_name.lower()
+            or "прекратил" in full_name.lower()
+            or "прекративший" in full_name.lower()
+            or "недействующ" in full_name.lower()
+            or "в процессе ликвидации" in full_name.lower()
+            or is_liquidator
+        )
         if is_liquidated:
-            status_text = f"Деятельность прекращена (дата: {termination_date})" if termination_date else "Ликвидирована / Прекратила деятельность"
+            if is_liquidator and not termination_date:
+                liquidator_role = ceo_raw.split(":")[0].strip() if ":" in ceo_raw else "Ликвидатор"
+                status_text = f"Стадия ликвидации (в реестре указан: {liquidator_role})"
+            elif termination_date:
+                status_text = f"Деятельность прекращена (дата: {termination_date})"
+            else:
+                status_text = "Ликвидирована / Прекратила деятельность"
             status_type = "LIQUIDATED"
         else:
             status_text = "Действующий предприниматель (ЕГРИП)" if is_ip else "Действующая организация (ЕГРЮЛ)"
