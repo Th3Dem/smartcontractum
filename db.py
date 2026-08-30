@@ -313,7 +313,7 @@ def sanitize_user_dict(user: dict) -> dict:
     acc_type = safe.get("account_type", "individual")
     if acc_type == "individual":
         safe["displayName"] = f"{safe.get('last_name', '')} {safe.get('first_name', '')} {safe.get('middle_name', '')}".strip()
-        safe["typeLabel"] = "Физическое лицо (Эксперт)"
+        safe["typeLabel"] = "Физическое лицо"
     elif acc_type == "ip":
         safe["displayName"] = f"ИП {safe.get('ip_last_name', '')} {safe.get('ip_first_name', '')} {safe.get('ip_middle_name', '')}".strip()
         safe["typeLabel"] = "Индивидуальный предприниматель"
