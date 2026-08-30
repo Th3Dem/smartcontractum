@@ -22,328 +22,123 @@
          ВЕРХНЯЯ ШАПКА (HEADER)
          =============================================================== -->
     <header class="dash-header">
-      <div class="dash-header-left">
-        <a href="dashboard.html" class="dash-logo">
-          <svg class="brand-shield" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <path d="M9 12l2 2 4-4"/>
-          </svg>
-          <span class="logo-title">SMARTCONTRACTUM</span>
-        </a>
-        <div class="security-badge-top" title="Соответствие требованиям 152-ФЗ РФ">
-          <span class="status-dot"></span> 152-ФЗ Защищено
-        </div>
-      </div>
-
-      <div class="dash-header-right">
-        <button id="theme-toggle-dash" class="theme-toggle" title="Сменить тему оформления" aria-label="Сменить тему">
-          🌙
-        </button>
-
-        <div class="user-profile-widget">
-          <div class="user-avatar" id="header-avatar">У</div>
-          <div class="user-info-text">
-            <div class="user-display-name" id="header-user-name">Пользователь</div>
-            <div class="user-account-badge" id="header-account-type">Физическое лицо</div>
+      <div class="dash-header-inner">
+        <div class="dash-header-left">
+          <a href="dashboard.html" class="dash-logo" title="SmartContractum Главная">
+            <svg class="brand-shield" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+            <span class="logo-title">SMARTCONTRACTUM</span>
+          </a>
+          <div class="security-badge-top" title="Соответствие требованиям 152-ФЗ РФ">
+            <span class="status-dot"></span>
+            <span>152-ФЗ Защищено</span>
           </div>
         </div>
 
-        <button id="btn-logout" class="btn-logout" title="Выйти из учетной записи">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-            <polyline points="16 17 21 12 16 7"/>
-            <line x1="21" y1="12" x2="9" y2="12"/>
-          </svg>
-          <span>Выйти</span>
-        </button>
+        <div class="dash-header-right">
+          <!-- Кнопка Профиль -->
+          <button class="nav-btn-profile active" title="Профиль учетной записи">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span>Профиль</span>
+          </button>
+
+          <!-- Переключатель темы (Темная / Светлая) -->
+          <button id="theme-toggle-dash" class="theme-toggle" title="Переключить тему оформления" aria-label="Сменить тему">
+            🌙
+          </button>
+
+          <!-- Кнопка Выход -->
+          <button id="btn-logout" class="btn-logout" title="Выйти из учетной записи">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Выход</span>
+          </button>
+        </div>
       </div>
     </header>
 
     <!-- ===============================================================
-         ОСНОВНОЙ КОНТЕНТ (SIDEBAR + MAIN)
+         ОСНОВНОЙ КОНТЕНТ: ПРОФИЛЬ И РЕКВИЗИТЫ
          =============================================================== -->
-    <div class="dash-container">
-      <!-- САЙДБАР НАВИГАЦИИ -->
-      <aside class="dash-sidebar">
-        <nav class="dash-nav">
-          <button class="nav-item active" data-tab="overview">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="7" height="7"></rect>
-              <rect x="14" y="3" width="7" height="7"></rect>
-              <rect x="14" y="14" width="7" height="7"></rect>
-              <rect x="3" y="14" width="7" height="7"></rect>
-            </svg>
-            <span>Сводка и метрики</span>
-          </button>
-
-          <button class="nav-item" data-tab="contracts">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-              <polyline points="10 9 9 9 8 9"></polyline>
-            </svg>
-            <span>Смарт-контракты</span>
-            <span class="badge-count" id="contracts-count-badge">3</span>
-          </button>
-
-          <button class="nav-item" data-tab="profile">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <span>Реквизиты и профиль</span>
-          </button>
-
-          <button class="nav-item" data-tab="security">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-            <span>Безопасность (152-ФЗ)</span>
-          </button>
-        </nav>
-
-        <div class="sidebar-footer-card">
-          <div class="shield-mini">🛡️</div>
-          <div class="sfc-title">Госреестры ФНС</div>
-          <div class="sfc-desc">Данные синхронизированы с ЕГРЮЛ / ЕГРИП</div>
+    <main class="dash-main-center">
+      <div class="dash-content-container">
+        <!-- Заголовок страницы -->
+        <div class="dash-page-header">
+          <div>
+            <h1 class="dash-page-title">Профиль пользователя</h1>
+            <p class="dash-page-subtitle">Регистрационные данные и реквизиты субъекта (152-ФЗ РФ)</p>
+          </div>
+          <div class="status-pill success">
+            <span>✓ Данные верифицированы</span>
+          </div>
         </div>
-      </aside>
 
-      <!-- ОСНОВНАЯ РАБОЧАЯ ОБЛАСТЬ -->
-      <main class="dash-main">
-        <!-- 1. ВКЛАДКА: СВОДКА И МЕТРИКИ -->
-        <section id="tab-overview" class="tab-content active">
-          <div class="dash-page-header">
-            <div>
-              <h1 class="dash-page-title">Сводка по смарт-контрактам</h1>
-              <p class="dash-page-subtitle">Добро пожаловать в рабочее пространство SmartContractum</p>
-            </div>
-            <button class="btn-primary btn-action" id="btn-create-contract">
-              <span>+ Новый смарт-контракт</span>
-            </button>
-          </div>
-
-          <!-- КАРТОЧКИ МЕТРИК -->
-          <div class="metrics-grid">
-            <div class="metric-card">
-              <div class="metric-icon-wrap blue">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                  <polyline points="14 2 14 8 20 8"></polyline>
-                </svg>
-              </div>
-              <div class="metric-data">
-                <div class="metric-val" id="metric-total-contracts">3</div>
-                <div class="metric-label">Всего смарт-контрактов</div>
-              </div>
-            </div>
-
-            <div class="metric-card">
-              <div class="metric-icon-wrap emerald">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                </svg>
-              </div>
-              <div class="metric-data">
-                <div class="metric-val" id="metric-active-contracts">2</div>
-                <div class="metric-label">Активны в исполнении</div>
-              </div>
-            </div>
-
-            <div class="metric-card">
-              <div class="metric-icon-wrap amber">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-              </div>
-              <div class="metric-data">
-                <div class="metric-val" id="metric-negotiation-contracts">1</div>
-                <div class="metric-label">На согласовании</div>
-              </div>
-            </div>
-
-            <div class="metric-card">
-              <div class="metric-icon-wrap indigo">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                </svg>
-              </div>
-              <div class="metric-data">
-                <div class="metric-val">1 590 000 ₽</div>
-                <div class="metric-label">Объем сделок в эскроу</div>
-              </div>
+        <!-- КАРТОЧКА 1: ОСНОВНЫЕ РЕКВИЗИТЫ СУБЪЕКТА -->
+        <div class="dash-card">
+          <div class="profile-header-box">
+            <div class="profile-large-avatar" id="prof-avatar">У</div>
+            <div class="profile-header-meta">
+              <h2 class="prof-name" id="prof-display-name">Загрузка...</h2>
+              <div class="prof-type-badge" id="prof-type-badge">Физическое лицо</div>
             </div>
           </div>
 
-          <!-- БЫСТРЫЙ РЕЕСТР КОНТРАКТОВ -->
-          <div class="dash-card">
-            <div class="card-header-row">
-              <h2 class="card-title">Текущие смарт-контракты</h2>
-              <button class="link-btn" id="btn-view-all-contracts">Смотреть все →</button>
-            </div>
-            <div class="table-responsive">
-              <table class="contracts-table">
-                <thead>
-                  <tr>
-                    <th>№ Контракта</th>
-                    <th>Наименование документа</th>
-                    <th>Контрагент</th>
-                    <th>Сумма сделки</th>
-                    <th>Статус</th>
-                    <th>Действие</th>
-                  </tr>
-                </thead>
-                <tbody id="overview-contracts-tbody">
-                  <!-- Рендерится через JS -->
-                </tbody>
-              </table>
-            </div>
+          <div class="details-list" id="prof-details-list">
+            <!-- Заполняется динамически через JS -->
           </div>
-        </section>
+        </div>
 
-        <!-- 2. ВКЛАДКА: ПОЛНЫЙ РЕЕСТР СМАРТ-КОНТРАКТОВ -->
-        <section id="tab-contracts" class="tab-content" style="display: none;">
-          <div class="dash-page-header">
-            <div>
-              <h1 class="dash-page-title">Реестр смарт-контрактов</h1>
-              <p class="dash-page-subtitle">Юридически значимые договоры с защищенным исполнением</p>
-            </div>
-            <button class="btn-primary btn-action" onclick="alert('Модуль конструктора смарт-контрактов готов к формированию шаблона.')">
-              <span>+ Создать договор</span>
-            </button>
+        <!-- КАРТОЧКА 2: БЕЗОПАСНОСТЬ И ЗАЩИТА ДАННЫХ (152-ФЗ) -->
+        <div class="dash-card">
+          <div class="card-header-row">
+            <h3 class="card-title">Безопасность и защита персональных данных</h3>
+            <span class="badge-status-sec">152-ФЗ РФ</span>
           </div>
 
-          <div class="dash-card">
-            <div class="table-responsive">
-              <table class="contracts-table">
-                <thead>
-                  <tr>
-                    <th>№ Контракта</th>
-                    <th>Наименование документа</th>
-                    <th>Контрагент</th>
-                    <th>Сумма сделки</th>
-                    <th>Статус исполнения</th>
-                    <th>Дата создания</th>
-                    <th>Управление</th>
-                  </tr>
-                </thead>
-                <tbody id="full-contracts-tbody">
-                  <!-- Рендерится через JS -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <!-- 3. ВКЛАДКА: РЕКВИЗИТЫ И ПРОФИЛЬ -->
-        <section id="tab-profile" class="tab-content" style="display: none;">
-          <div class="dash-page-header">
-            <div>
-              <h1 class="dash-page-title">Реквизиты субъекта и профиль</h1>
-              <p class="dash-page-subtitle">Данные проверены и защищены в соответствии с 152-ФЗ РФ</p>
-            </div>
-            <div class="status-pill success">
-              <span>✓ Проверен ФНС России</span>
-            </div>
-          </div>
-
-          <div class="profile-grid">
-            <!-- КАРТОЧКА ОСНОВНЫХ ДАННЫХ -->
-            <div class="dash-card profile-main-card">
-              <div class="profile-header-box">
-                <div class="profile-large-avatar" id="prof-avatar">У</div>
-                <div>
-                  <h3 class="prof-name" id="prof-display-name">Загрузка...</h3>
-                  <div class="prof-type-badge" id="prof-type-badge">Физическое лицо</div>
-                </div>
-              </div>
-
-              <div class="details-list" id="prof-details-list">
-                <!-- Заполняется динамически для Физлица / ИП / Юрлица -->
+          <div class="security-features-grid">
+            <div class="sec-feature-item">
+              <div class="sfi-icon">🔐</div>
+              <div class="sfi-text">
+                <strong>Хеширование PBKDF2-HMAC-SHA256</strong>
+                <p>100 000 итераций с криптографической солью. Пароли не хранятся в открытом виде.</p>
               </div>
             </div>
 
-            <!-- КАРТОЧКА БЕЗОПАСНОСТИ РЕКВИЗИТОВ -->
-            <div class="dash-card">
-              <h3 class="card-title">Статус в государственных реестрах</h3>
-              <div class="registry-status-box success">
-                <div class="rs-icon">✓</div>
-                <div>
-                  <div class="rs-title" id="prof-reg-status-title">Субъект активен и верифицирован</div>
-                  <div class="rs-desc" id="prof-reg-status-desc">Все регистрационные данные подтверждены записями ФНС России. Ликвидационные ограничения отсутствуют.</div>
-                </div>
+            <div class="sec-feature-item">
+              <div class="sfi-icon">✉️</div>
+              <div class="sfi-text">
+                <strong>E-mail верификация</strong>
+                <p>Адрес подтвержден через официальный SMTP-шлюз одноразовым кодом.</p>
               </div>
+            </div>
 
-              <div class="info-block" style="margin-top: 18px;">
-                <div class="info-row">
-                  <span class="info-label">E-mail учетной записи:</span>
-                  <strong class="info-val" id="prof-email">-</strong>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">Контактный телефон:</span>
-                  <strong class="info-val" id="prof-phone">-</strong>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">Дата регистрации:</span>
-                  <span class="info-val" id="prof-created-at">-</span>
-                </div>
+            <div class="sec-feature-item">
+              <div class="sfi-icon">🏛️</div>
+              <div class="sfi-text">
+                <strong>Сверка с реестрами ФНС</strong>
+                <p>Реквизиты проверены в автоматическом режиме через сервисы ЕГРЮЛ / ЕГРИП.</p>
+              </div>
+            </div>
+
+            <div class="sec-feature-item">
+              <div class="sfi-icon">🛡️</div>
+              <div class="sfi-text">
+                <strong>256-битная защищенная сессия</strong>
+                <p>Контроль времени активности и изоляция сессионных токенов.</p>
               </div>
             </div>
           </div>
-        </section>
-
-        <!-- 4. ВКЛАДКА: БЕЗОПАСНОСТЬ И 152-ФЗ -->
-        <section id="tab-security" class="tab-content" style="display: none;">
-          <div class="dash-page-header">
-            <div>
-              <h1 class="dash-page-title">Безопасность и защита данных (152-ФЗ)</h1>
-              <p class="dash-page-subtitle">Стандарты криптографической защиты и аудит учетной записи</p>
-            </div>
-          </div>
-
-          <div class="dash-card">
-            <h3 class="card-title">Применяемые стандарты безопасности</h3>
-            <div class="security-features-grid">
-              <div class="sec-feature-item">
-                <div class="sfi-icon">🔐</div>
-                <div class="sfi-text">
-                  <strong>Хеширование паролей PBKDF2-HMAC-SHA256</strong>
-                  <p>100 000 раундов хеширования с индивидуальной криптографической солью (Salt) для каждого пользователя.</p>
-                </div>
-              </div>
-
-              <div class="sec-feature-item">
-                <div class="sfi-icon">🛡️</div>
-                <div class="sfi-text">
-                  <strong>Соответствие 152-ФЗ РФ</strong>
-                  <p>Персональные данные хранятся на защищенных серверах в изолированной базе данных с разделением уровней доступа.</p>
-                </div>
-              </div>
-
-              <div class="sec-feature-item">
-                <div class="sfi-icon">✉️</div>
-                <div class="sfi-text">
-                  <strong>Двухфакторная верификация по E-mail</strong>
-                  <p>Каждая учетная запись подтверждена уникальным одноразовым кодом по протоколу SSL SMTP.</p>
-                </div>
-              </div>
-
-              <div class="sec-feature-item">
-                <div class="sfi-icon">🔑</div>
-                <div class="sfi-text">
-                  <strong>256-битные защищенные сессии</strong>
-                  <p>Каждое подключение защищено сессионным токеном с ограниченным временем жизни и контролем активности.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
+        </div>
+      </div>
+    </main>
   </div>
 
   <script src="dashboard.js"></script>

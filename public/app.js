@@ -5,9 +5,17 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Синхронизация темы
+  const savedTheme = localStorage.getItem('app_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  const themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    themeToggle.innerHTML = savedTheme === 'dark' ? '🌙' : '☀️';
+  }
+
   // Проверяем: если пользователь уже авторизован, можно сразу перейти в личный кабинет
   const existingToken = localStorage.getItem('auth_token');
-  if (existingToken && window.location.pathname.endsWith('index.html')) {
+  if (existingToken && (window.location.pathname.endsWith('index.html') || window.location.pathname === '/')) {
     fetch('/api/auth/me', {
       headers: { 'Authorization': `Bearer ${existingToken}` }
     }).then(res => res.json()).then(data => {
@@ -41,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const formForgot = document.getElementById('form-forgot');
   const formVerifyEmail = document.getElementById('form-verify-email');
   const alertBox = document.getElementById('auth-alert');
-  const themeToggle = document.getElementById('theme-toggle');
 
   // Выбор типа субъекта (Физлицо, ИП, Юрлицо)
   const btnTypeIndividual = document.getElementById('type-individual');
@@ -1150,12 +1157,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Переключатель тем
-  themeToggle.addEventListener('click', () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    themeToggle.innerHTML = newTheme === 'dark' ? '🌙' : '☀️';
-    refreshRegCaptcha();
-    refreshForgotCaptcha();
-  });
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('app_theme', newTheme);
+      themeToggle.innerHTML = newTheme === 'dark' ? '🌙' : '☀️';
+      refreshRegCaptcha();
+      refreshForgotCaptcha();
+    });
+  }
 });
