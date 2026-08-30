@@ -1,7 +1,7 @@
 /**
  * SmartContractum — Интерактивная логика авторизации и регистрации
- * Интеграция с официальными реестрами ЕГРЮЛ и ЕГРИП ФНС России (egrul.nalog.ru)
- * Проверка статуса прекращения деятельности / ликвидации
+ * Интеграция с реестрами ЕГРЮЛ/ЕГРИП ФНС РФ (egrul.nalog.ru),
+ * Защитная графическая капча (Canvas Security CAPTCHA) и валидация
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Флаги ликвидации / прекращения деятельности
   let isOrgLiquidated = false;
   let isIPLiquidated = false;
+
+  // Активные коды капчи
+  let regCaptchaCode = '';
+  let forgotCaptchaCode = '';
 
   // DOM Элементы навигации
   const tabsContainer = document.getElementById('auth-tabs');
@@ -55,6 +59,105 @@ document.addEventListener('DOMContentLoaded', () => {
   const regPwdConfirm = document.getElementById('reg-password-confirm');
   const matchMsg = document.getElementById('password-match-msg');
 
+  // ===============================================================
+  // 0. Генерация защитной графической капчи (Canvas CAPTCHA)
+  // ===============================================================
+  const CAPTCHA_CHARS = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+  const CAPTCHA_COLORS = ['#2f6fce', '#2f9cad', '#173e6d', '#278565', '#c77c32', '#6366f1'];
+
+  function createCaptcha(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return '';
+
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+    // 1. Очистка и заливка фона
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = isDark ? '#0b1b30' : '#f8fafc';
+    ctx.fillRect(0, 0, width, height);
+
+    // 2. Генерация случайного кода (5 знаков)
+    let code = '';
+    for (let i = 0; i < 5; i++) {
+      code += CAPTCHA_CHARS.charAt(Math.floor(Math.random() * CAPTCHA_CHARS.length));
+    }
+
+    // 3. Добавление фонового шума (точки)
+    for (let i = 0; i < 25; i++) {
+      ctx.fillStyle = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.08)';
+      ctx.beginPath();
+      ctx.arc(Math.random() * width, Math.random() * height, Math.random() * 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // 4. Добавление фонового шума (кривые линии)
+    for (let i = 0; i < 3; i++) {
+      ctx.strokeStyle = CAPTCHA_COLORS[Math.floor(Math.random() * CAPTCHA_COLORS.length)];
+      ctx.globalAlpha = 0.4;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(Math.random() * width, Math.random() * height);
+      ctx.bezierCurveTo(
+        Math.random() * width, Math.random() * height,
+        Math.random() * width, Math.random() * height,
+        Math.random() * width, Math.random() * height
+      );
+      ctx.stroke();
+      ctx.globalAlpha = 1.0;
+    }
+
+    // 5. Отрисовка символов с поворотом и смещением
+    ctx.font = 'bold 20px Manrope, Inter, sans-serif';
+    ctx.textBaseline = 'middle';
+
+    const charSpacing = (width - 24) / 5;
+    for (let i = 0; i < code.length; i++) {
+      const char = code[i];
+      const x = 12 + i * charSpacing + Math.random() * 4;
+      const y = height / 2 + (Math.random() - 0.5) * 6;
+      const angle = (Math.random() - 0.5) * 0.45; // -13° to +13°
+
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.fillStyle = isDark ? (Math.random() > 0.5 ? '#93c5fd' : '#38bdf8') : CAPTCHA_COLORS[Math.floor(Math.random() * CAPTCHA_COLORS.length)];
+      ctx.fillText(char, 0, 0);
+      ctx.restore();
+    }
+
+    return code;
+  }
+
+  function refreshRegCaptcha() {
+    regCaptchaCode = createCaptcha('reg-captcha-canvas');
+    const input = document.getElementById('reg-captcha-input');
+    if (input) input.value = '';
+  }
+
+  function refreshForgotCaptcha() {
+    forgotCaptchaCode = createCaptcha('forgot-captcha-canvas');
+    const input = document.getElementById('forgot-captcha-input');
+    if (input) input.value = '';
+  }
+
+  // Слушатели обновления капчи
+  const regCaptchaRefreshBtn = document.getElementById('reg-captcha-refresh');
+  const regCaptchaCanvas = document.getElementById('reg-captcha-canvas');
+  if (regCaptchaRefreshBtn) regCaptchaRefreshBtn.addEventListener('click', refreshRegCaptcha);
+  if (regCaptchaCanvas) regCaptchaCanvas.addEventListener('click', refreshRegCaptcha);
+
+  const forgotCaptchaRefreshBtn = document.getElementById('forgot-captcha-refresh');
+  const forgotCaptchaCanvas = document.getElementById('forgot-captcha-canvas');
+  if (forgotCaptchaRefreshBtn) forgotCaptchaRefreshBtn.addEventListener('click', refreshForgotCaptcha);
+  if (forgotCaptchaCanvas) forgotCaptchaCanvas.addEventListener('click', refreshForgotCaptcha);
+
+  // Инициализация капчи при старте
+  refreshRegCaptcha();
+  refreshForgotCaptcha();
+
   // Переключение режимов (Вход / Регистрация / Восстановление)
   function setMode(mode) {
     currentMode = mode;
@@ -79,6 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
       formForgot.style.display = 'none';
       document.getElementById('auth-title').innerText = 'Регистрация аккаунта';
       document.getElementById('auth-subtitle').innerText = 'Присоединяйтесь к профессиональному сообществу';
+      refreshRegCaptcha();
     } else if (mode === 'forgot') {
       tabsContainer.style.display = 'none';
       formLogin.style.display = 'none';
@@ -86,6 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
       formForgot.style.display = 'block';
       document.getElementById('auth-title').innerText = 'Восстановление доступа';
       document.getElementById('auth-subtitle').innerText = 'Введите E-mail, указанный при регистрации';
+      refreshForgotCaptcha();
     }
   }
 
@@ -149,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===============================================================
   // 1. Поиск Юр. лица в ЕГРЮЛ ФНС России (egrul.nalog.ru)
-  // С ПРОВЕРКОЙ ПРЕКРАЩЕНИЯ ДЕЯТЕЛЬНОСТИ / ЛИКВИДАЦИИ
+  // С ПРОВЕРКОЙ ПРЕКРАЩЕНИЯ ДЕЯТЕЛЬНОСТИ / ЛИКВИДАТОРА
   // ===============================================================
   async function fetchEgrulData() {
     const cleanInn = innInput.value.trim().replace(/\D/g, '');
@@ -186,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const company = data.company;
 
-      // ПРОВЕРКА: Деятельность прекращена / организация ликвидирована
+      // ПРОВЕРКА: Деятельность прекращена / ликвидатор / организация ликвидирована
       if (company.isLiquidated || company.statusType === 'LIQUIDATED' || company.terminationDate) {
         isOrgLiquidated = true;
         innInput.classList.add('is-invalid');
@@ -649,6 +754,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const email = document.getElementById('reg-email').value.trim();
     const password = regPwd.value;
     const passwordConfirm = regPwdConfirm.value;
+    const captchaInput = document.getElementById('reg-captcha-input');
+    const captchaVal = captchaInput ? captchaInput.value.trim().toUpperCase() : '';
     const agreement = document.getElementById('reg-agreement').checked;
 
     // 1. Проверка для физ. лица
@@ -766,7 +873,15 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // 7. Проверка согласия с 152-ФЗ
+    // 7. Проверка капчи
+    if (!captchaVal || captchaVal !== regCaptchaCode) {
+      markInvalid('reg-captcha-input');
+      showAlert('Неверно указан защитный код с картинки (капча). Мы обновили код, попробуйте еще раз');
+      refreshRegCaptcha();
+      return;
+    }
+
+    // 8. Проверка согласия с 152-ФЗ
     if (!agreement) {
       showAlert('Для завершения регистрации необходимо подтвердить согласие с Условиями использования и 152-ФЗ');
       return;
@@ -783,6 +898,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.disabled = false;
       btn.innerHTML = originalText;
       showAlert(`Учетная запись для ${accountTypeLabel} успешно создана! На адрес ${email} направлено письмо для подтверждения регистрации.`, 'success');
+      refreshRegCaptcha();
     }, 800);
   });
 
@@ -793,9 +909,19 @@ document.addEventListener('DOMContentLoaded', () => {
     clearValidationErrors();
 
     const email = document.getElementById('forgot-email').value.trim();
+    const captchaInput = document.getElementById('forgot-captcha-input');
+    const captchaVal = captchaInput ? captchaInput.value.trim().toUpperCase() : '';
+
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       markInvalid('forgot-email');
       showAlert('Пожалуйста, укажите корректный адрес электронной почты (E-mail)');
+      return;
+    }
+
+    if (!captchaVal || captchaVal !== forgotCaptchaCode) {
+      markInvalid('forgot-captcha-input');
+      showAlert('Неверно указан защитный код с картинки (капча). Мы обновили код, попробуйте еще раз');
+      refreshForgotCaptcha();
       return;
     }
 
@@ -808,6 +934,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.disabled = false;
       btn.innerHTML = originalText;
       showAlert(`Инструкции и ссылка для сброса пароля направлены на адрес ${email}`, 'success');
+      refreshForgotCaptcha();
     }, 600);
   });
 
@@ -817,5 +944,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', newTheme);
     themeToggle.innerHTML = newTheme === 'dark' ? '🌙' : '☀️';
+    // Перерисовываем капчу под цвета новой темы
+    refreshRegCaptcha();
+    refreshForgotCaptcha();
   });
 });
