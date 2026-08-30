@@ -1,7 +1,7 @@
 /**
  * SmartContractum — Интерактивная логика авторизации и регистрации
  * Интеграция с реестрами ЕГРЮЛ/ЕГРИП ФНС РФ (egrul.nalog.ru),
- * СМС-верификация номеров телефонов, Защитная Canvas-капча
+ * Защитная Canvas-капча и валидация форм
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,13 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Флаги ликвидации / прекращения деятельности
   let isOrgLiquidated = false;
   let isIPLiquidated = false;
-
-  // Статусы СМС-верификации телефонов
-  const verifiedPhones = {
-    individual: false,
-    ip: false,
-    organization: false
-  };
 
   // Активные коды капчи
   let regCaptchaCode = '';
@@ -164,168 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
   refreshForgotCaptcha();
 
   // ===============================================================
-  // 1. СМС-верификация номеров телефонов (SMS Verification Flow)
-  // ===============================================================
-  function setupSmsVerification(typeKey, phoneInputId, sendBtnId, blockId, codeInputId, verifyBtnId, timerId, resendBtnId, badgeId) {
-    const phoneInput = document.getElementById(phoneInputId);
-    const sendBtn = document.getElementById(sendBtnId);
-    const block = document.getElementById(blockId);
-    const codeInput = document.getElementById(codeInputId);
-    const verifyBtn = document.getElementById(verifyBtnId);
-    const timerText = document.getElementById(timerId);
-    const resendBtn = document.getElementById(resendBtnId);
-    const badge = document.getElementById(badgeId);
-
-    let countdownInterval = null;
-
-    if (!phoneInput || !sendBtn) return;
-
-    function startTimer(seconds = 60) {
-      clearInterval(countdownInterval);
-      let remaining = seconds;
-      timerText.style.display = 'inline';
-      resendBtn.style.display = 'none';
-      timerText.innerText = `Повторный запрос через ${remaining} сек.`;
-
-      countdownInterval = setInterval(() => {
-        remaining--;
-        if (remaining <= 0) {
-          clearInterval(countdownInterval);
-          timerText.style.display = 'none';
-          resendBtn.style.display = 'inline-block';
-        } else {
-          timerText.innerText = `Повторный запрос через ${remaining} сек.`;
-        }
-      }, 1000);
-    }
-
-    async function sendSms() {
-      hideAlert();
-      clearValidationErrors();
-
-      const rawPhone = phoneInput.value.trim();
-      const cleanDigits = rawPhone.replace(/\D/g, '');
-
-      if (cleanDigits.length < 10) {
-        phoneInput.classList.add('is-invalid');
-        showAlert('Пожалуйста, введите полный номер телефона для получения СМС');
-        return;
-      }
-
-      phoneInput.classList.remove('is-invalid');
-      const originalText = sendBtn.innerHTML;
-      sendBtn.disabled = true;
-      sendBtn.innerHTML = '<span class="spinner-small"></span> Отправка...';
-
-      try {
-        const response = await fetch('/api/auth/send-sms', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: rawPhone })
-        });
-        const data = await response.json();
-
-        sendBtn.disabled = false;
-        sendBtn.innerHTML = originalText;
-
-        if (!data.success) {
-          showAlert(data.error || 'Ошибка при отправке СМС');
-          return;
-        }
-
-        // Успешная отправка
-        block.style.display = 'block';
-        badge.style.display = 'none';
-        codeInput.value = '';
-        codeInput.focus();
-        startTimer(data.cooldown || 60);
-
-        showAlert(`✓ СМС с кодом подтверждения направлено на номер ${rawPhone} ${data.demoCode ? `(Тестовый код: <strong>${data.demoCode}</strong>)` : ''}`, 'success');
-
-      } catch (err) {
-        sendBtn.disabled = false;
-        sendBtn.innerHTML = originalText;
-        showAlert('Ошибка связи с сервисом СМС-верификации');
-      }
-    }
-
-    async function verifySms() {
-      hideAlert();
-      clearValidationErrors();
-
-      const rawPhone = phoneInput.value.trim();
-      const code = codeInput.value.trim();
-
-      if (!code || code.length < 4) {
-        codeInput.classList.add('is-invalid');
-        showAlert('Пожалуйста, введите 4-значный код из СМС');
-        return;
-      }
-
-      codeInput.classList.remove('is-invalid');
-      const originalText = verifyBtn.innerHTML;
-      verifyBtn.disabled = true;
-      verifyBtn.innerHTML = '<span class="spinner-small"></span> Проверка...';
-
-      try {
-        const response = await fetch('/api/auth/verify-sms', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: rawPhone, code: code })
-        });
-        const data = await response.json();
-
-        verifyBtn.disabled = false;
-        verifyBtn.innerHTML = originalText;
-
-        if (!data.success || !data.verified) {
-          codeInput.classList.add('is-invalid');
-          showAlert(data.error || 'Введен неверный код из СМС');
-          return;
-        }
-
-        // Успешная верификация!
-        clearInterval(countdownInterval);
-        verifiedPhones[typeKey] = true;
-        block.style.display = 'none';
-        sendBtn.style.display = 'none';
-        phoneInput.readOnly = true;
-        badge.style.display = 'flex';
-        showAlert('✓ Номер телефона успешно подтвержден!', 'success');
-
-      } catch (err) {
-        verifyBtn.disabled = false;
-        verifyBtn.innerHTML = originalText;
-        showAlert('Ошибка связи при проверке СМС-кода');
-      }
-    }
-
-    sendBtn.addEventListener('click', sendSms);
-    resendBtn.addEventListener('click', sendSms);
-    verifyBtn.addEventListener('click', verifySms);
-
-    codeInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        verifySms();
-      }
-    });
-
-    // При изменении номера сбрасываем статус
-    phoneInput.addEventListener('input', () => {
-      verifiedPhones[typeKey] = false;
-      badge.style.display = 'none';
-      sendBtn.style.display = 'inline-flex';
-    });
-  }
-
-  // Подключение СМС-верификации для всех трех типов субъектов
-  setupSmsVerification('individual', 'reg-phone', 'btn-send-sms-ind', 'sms-block-ind', 'sms-code-ind', 'btn-verify-sms-ind', 'sms-timer-ind', 'btn-resend-sms-ind', 'sms-badge-ind');
-  setupSmsVerification('ip', 'reg-ip-phone', 'btn-send-sms-ip', 'sms-block-ip', 'sms-code-ip', 'btn-verify-sms-ip', 'sms-timer-ip', 'btn-resend-sms-ip', 'sms-badge-ip');
-  setupSmsVerification('organization', 'reg-org-phone', 'btn-send-sms-org', 'sms-block-org', 'sms-code-org', 'btn-verify-sms-org', 'sms-timer-org', 'btn-resend-sms-org', 'sms-badge-org');
-
-  // ===============================================================
-  // 2. Переключение режимов (Вход / Регистрация / Восстановление)
+  // 1. Переключение режимов (Вход / Регистрация / Восстановление)
   // ===============================================================
   function setMode(mode) {
     currentMode = mode;
@@ -421,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===============================================================
-  // 3. Поиск Юр. лица в ЕГРЮЛ ФНС России (egrul.nalog.ru)
+  // 2. Поиск Юр. лица в ЕГРЮЛ ФНС России (egrul.nalog.ru)
   // ===============================================================
   async function fetchEgrulData() {
     const cleanInn = innInput.value.trim().replace(/\D/g, '');
@@ -506,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===============================================================
-  // 4. Поиск Индивидуального предпринимателя (ИП) в ЕГРИП ФНС РФ
+  // 3. Поиск Индивидуального предпринимателя (ИП) в ЕГРИП ФНС РФ
   // ===============================================================
   async function fetchEgripData() {
     const cleanInn = ipInnInput.value.trim().replace(/\D/g, '');
@@ -928,11 +760,6 @@ document.addEventListener('DOMContentLoaded', () => {
         showAlert('Пожалуйста, укажите контактный номер телефона');
         return;
       }
-      if (!verifiedPhones.individual) {
-        markInvalid('reg-phone');
-        showAlert('Пожалуйста, подтвердите номер телефона с помощью СМС-кода (нажмите кнопку «Выслать СМС»)');
-        return;
-      }
     }
 
     // 2. Проверка для ИП
@@ -961,11 +788,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!ipPhone || ipPhone.length < 10) {
         markInvalid('reg-ip-phone');
         showAlert('Пожалуйста, укажите контактный номер телефона предпринимателя');
-        return;
-      }
-      if (!verifiedPhones.ip) {
-        markInvalid('reg-ip-phone');
-        showAlert('Пожалуйста, подтвердите номер телефона предпринимателя с помощью СМС-кода (нажмите кнопку «Выслать СМС»)');
         return;
       }
     }
@@ -1007,11 +829,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!orgPhone || orgPhone.length < 10) {
         markInvalid('reg-org-phone');
         showAlert('Пожалуйста, укажите контактный телефон представителя');
-        return;
-      }
-      if (!verifiedPhones.organization) {
-        markInvalid('reg-org-phone');
-        showAlert('Пожалуйста, подтвердите номер телефона представителя с помощью СМС-кода (нажмите кнопку «Выслать СМС»)');
         return;
       }
     }
