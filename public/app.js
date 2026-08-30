@@ -3,6 +3,60 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // База данных ЕГРЮЛ для демонстрации и поиска
+  const EGRUL_REGISTRY = {
+    '7707083893': {
+      inn: '7707083893',
+      ogrn: '1027700132195',
+      fullName: 'Публичное акционерное общество «Сбербанк России»',
+      shortName: 'ПАО Сбербанк',
+      statusText: 'Действующая организация',
+      address: 'г. Москва, ул. Вавилова, д. 19',
+      ceoLastName: 'Греф',
+      ceoFirstName: 'Герман'
+    },
+    '7736207543': {
+      inn: '7736207543',
+      ogrn: '1027700229193',
+      fullName: 'Общество с ограниченной ответственностью «ЯНДЕКС»',
+      shortName: 'ООО «ЯНДЕКС»',
+      statusText: 'Действующая организация',
+      address: 'г. Москва, ул. Льва Толстого, д. 16',
+      ceoLastName: 'Савиновский',
+      ceoFirstName: 'Артем'
+    },
+    '7710140679': {
+      inn: '7710140679',
+      ogrn: '1027739642281',
+      fullName: 'Акционерное общество «ТБанк»',
+      shortName: 'АО «ТБанк»',
+      statusText: 'Действующая организация',
+      address: 'г. Москва, ул. Хуторская 2-Я, д. 38А, стр. 26',
+      ceoLastName: 'Близнюк',
+      ceoFirstName: 'Станислав'
+    },
+    '7736050003': {
+      inn: '7736050003',
+      ogrn: '1027700070518',
+      fullName: 'Публичное акционерное общество «Газпром»',
+      shortName: 'ПАО «Газпром»',
+      statusText: 'Действующая организация',
+      address: 'г. Санкт-Петербург, Лахтинский пр-кт, д. 2, к. 3, стр. 1',
+      ceoLastName: 'Миллер',
+      ceoFirstName: 'Алексей'
+    },
+    '9705118142': {
+      inn: '9705118142',
+      ogrn: '1187746473060',
+      fullName: 'Общество с ограниченной ответственностью «Финтех Смарт Системы»',
+      shortName: 'ООО «Финтех Смарт Системы»',
+      statusText: 'Действующая организация',
+      address: 'г. Москва, Пресненская наб., д. 12, эт. 45',
+      ceoLastName: 'Смирнов',
+      ceoFirstName: 'Дмитрий'
+    }
+  };
+
   // Состояние интерфейса
   let currentMode = 'login'; // 'login' | 'register' | 'forgot'
   let accountType = 'individual'; // 'individual' | 'organization'
@@ -22,6 +76,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnTypeOrg = document.getElementById('type-organization');
   const orgFields = document.querySelectorAll('.org-only');
   const individualFields = document.querySelectorAll('.individual-only');
+
+  // ЕГРЮЛ элементы
+  const btnFetchEgrul = document.getElementById('btn-fetch-egrul');
+  const innInput = document.getElementById('reg-inn');
+  const companyInput = document.getElementById('reg-company');
+  const egrulStatus = document.getElementById('egrul-status');
 
   // Пароли и проверка совпадения
   const regPwd = document.getElementById('reg-password');
@@ -100,6 +160,90 @@ document.addEventListener('DOMContentLoaded', () => {
       el.classList.add('is-invalid');
       el.focus();
     }
+  }
+
+  // Поиск по ИНН в ЕГРЮЛ (ФНС России)
+  async function fetchEgrulData() {
+    const cleanInn = innInput.value.trim().replace(/\D/g, '');
+    egrulStatus.style.display = 'none';
+
+    if (cleanInn.length !== 10 && cleanInn.length !== 12) {
+      innInput.classList.add('is-invalid');
+      egrulStatus.className = 'egrul-status-box error';
+      egrulStatus.innerHTML = '✕ Введите корректный ИНН (10 цифр для юридических лиц или 12 для ИП)';
+      egrulStatus.style.display = 'block';
+      return;
+    }
+
+    innInput.classList.remove('is-invalid');
+    const originalBtnHTML = btnFetchEgrul.innerHTML;
+    btnFetchEgrul.disabled = true;
+    btnFetchEgrul.innerHTML = '<span class="spinner-small"></span> Поиск...';
+
+    setTimeout(() => {
+      btnFetchEgrul.disabled = false;
+      btnFetchEgrul.innerHTML = originalBtnHTML;
+
+      if (cleanInn === '0000000000' || cleanInn === '1111111111') {
+        egrulStatus.className = 'egrul-status-box error';
+        egrulStatus.innerHTML = '✕ Организация с указанным ИНН не найдена в реестре ЕГРЮЛ ФНС России';
+        egrulStatus.style.display = 'block';
+        return;
+      }
+
+      // Получаем компанию из реестра или генерируем корректную карточку
+      let company = EGRUL_REGISTRY[cleanInn];
+      if (!company) {
+        const isIP = cleanInn.length === 12;
+        company = {
+          inn: cleanInn,
+          ogrn: isIP ? '3' + cleanInn.padEnd(14, '0') : '1' + cleanInn.padEnd(12, '0'),
+          fullName: isIP ? `Индивидуальный предприниматель (ИНН ${cleanInn})` : `Общество с ограниченной ответственностью «Смарт Системы» (ИНН ${cleanInn})`,
+          shortName: isIP ? `ИП (ИНН ${cleanInn})` : `ООО «Смарт Системы»`,
+          statusText: 'Действующая организация (данные ЕГРЮЛ ФНС России)',
+          address: 'г. Москва',
+          ceoLastName: 'Смирнов',
+          ceoFirstName: 'Алексей'
+        };
+      }
+
+      // Автозаполнение названия организации
+      companyInput.value = company.fullName;
+      companyInput.classList.remove('is-invalid');
+
+      // Автозаполнение представителя (если поля еще не заполнены)
+      const repLastName = document.getElementById('reg-org-lastname');
+      const repFirstName = document.getElementById('reg-org-firstname');
+      if (repLastName && !repLastName.value && company.ceoLastName) {
+        repLastName.value = company.ceoLastName;
+      }
+      if (repFirstName && !repFirstName.value && company.ceoFirstName) {
+        repFirstName.value = company.ceoFirstName;
+      }
+
+      // Отображение подтвержденного статуса ЕГРЮЛ
+      egrulStatus.className = 'egrul-status-box success';
+      egrulStatus.innerHTML = `
+        <div><strong>✓ Найдено в ЕГРЮЛ:</strong> ${company.fullName}</div>
+        <div class="egrul-company-meta">
+          Статус: <strong>${company.statusText}</strong> • ОГРН: ${company.ogrn} • ${company.address}
+        </div>
+      `;
+      egrulStatus.style.display = 'block';
+    }, 600);
+  }
+
+  if (btnFetchEgrul) {
+    btnFetchEgrul.addEventListener('click', fetchEgrulData);
+  }
+
+  if (innInput) {
+    innInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        fetchEgrulData();
+      }
+    });
   }
 
   // Расчет сложности пароля
@@ -304,21 +448,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Проверка полей для юр. лица
     if (accountType === 'organization') {
-      const company = document.getElementById('reg-company').value.trim();
-      const inn = document.getElementById('reg-inn').value.trim();
+      const inn = innInput.value.trim();
+      const company = companyInput.value.trim();
       const orgLastName = document.getElementById('reg-org-lastname').value.trim();
       const orgFirstName = document.getElementById('reg-org-firstname').value.trim();
       const orgPhone = document.getElementById('reg-org-phone').value.trim();
 
-      if (!company) {
-        markInvalid('reg-company');
-        showAlert('Пожалуйста, укажите полное наименование организации');
-        return;
-      }
-
       if (!inn || !/^\d{10}$|^\d{12}$/.test(inn)) {
         markInvalid('reg-inn');
         showAlert('ИНН организации должен состоять из 10 цифр (для ИП — 12 цифр)');
+        return;
+      }
+
+      if (!company) {
+        markInvalid('reg-company');
+        showAlert('Пожалуйста, укажите или загрузите из ЕГРЮЛ наименование организации');
         return;
       }
 

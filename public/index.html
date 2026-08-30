@@ -125,13 +125,23 @@
       <!-- 2. ПОЛЯ ДЛЯ ЮР. ЛИЦА / ОРГАНИЗАЦИИ -->
       <div class="org-only" style="display: none;">
         <div class="form-group">
-          <label for="reg-company" class="form-label">Полное наименование организации <span class="required-star">*</span></label>
-          <input type="text" id="reg-company" class="form-input" placeholder="ООО «Финтех Смарт Системы»">
+          <label for="reg-inn" class="form-label">ИНН организации <span class="required-star">*</span></label>
+          <div class="input-with-button">
+            <input type="text" id="reg-inn" class="form-input" placeholder="7707083893" maxlength="12" autocomplete="off">
+            <button type="button" id="btn-fetch-egrul" class="btn-secondary" title="Заполнить реквизиты из ЕГРЮЛ ФНС России">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+              </svg>
+              <span>Найти в ЕГРЮЛ</span>
+            </button>
+          </div>
+          <div id="egrul-status" class="egrul-status-box" style="display: none;"></div>
         </div>
 
         <div class="form-group">
-          <label for="reg-inn" class="form-label">ИНН организации <span class="required-star">*</span></label>
-          <input type="text" id="reg-inn" class="form-input" placeholder="7707083893" maxlength="12">
+          <label for="reg-company" class="form-label">Полное наименование организации <span class="required-star">*</span></label>
+          <input type="text" id="reg-company" class="form-input" placeholder="ООО «Финтех Смарт Системы»">
         </div>
 
         <div class="sub-section-title">Данные представителя организации</div>
