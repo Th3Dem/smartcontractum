@@ -35,17 +35,19 @@
     <!-- Системные алерты -->
     <div id="auth-alert" class="auth-alert" style="display: none;" role="alert"></div>
 
-    <!-- ФОРМА 1: ВХОД (LOGIN) -->
+    <!-- ========================================== -->
+    <!-- ФОРМА 1: ВХОД (LOGIN)                      -->
+    <!-- ========================================== -->
     <form id="form-login" novalidate>
       <div class="form-group">
-        <label for="login-email" class="form-label">E-mail или логин</label>
+        <label for="login-email" class="form-label">E-mail или логин <span class="required-star">*</span></label>
         <div class="input-wrapper">
           <input type="email" id="login-email" class="form-input" placeholder="alexander@smartcontractum.ru" required autocomplete="email">
         </div>
       </div>
 
       <div class="form-group">
-        <label for="login-password" class="form-label">Пароль</label>
+        <label for="login-password" class="form-label">Пароль <span class="required-star">*</span></label>
         <div class="input-wrapper">
           <input type="password" id="login-password" class="form-input" placeholder="Введите пароль" required autocomplete="current-password">
           <button type="button" class="input-suffix-btn btn-toggle-pwd" aria-label="Показать пароль">👁</button>
@@ -73,7 +75,9 @@
       </div>
     </form>
 
-    <!-- ФОРМА 2: РЕГИСТРАЦИЯ (REGISTER) -->
+    <!-- ========================================== -->
+    <!-- ФОРМА 2: РЕГИСТРАЦИЯ (REGISTER)            -->
+    <!-- ========================================== -->
     <form id="form-register" style="display: none;" novalidate>
       <!-- Выбор субъекта -->
       <div class="account-type-group">
@@ -94,32 +98,71 @@
         </button>
       </div>
 
-      <!-- Поля для физ. лица -->
-      <div class="form-group individual-only">
-        <label for="reg-fullname" class="form-label">Фамилия, имя и отчество</label>
-        <input type="text" id="reg-fullname" class="form-input" placeholder="Иванов Александр Сергеевич">
+      <!-- 1. ПОЛЯ ДЛЯ ФИЗ. ЛИЦА / ЭКСПЕРТА -->
+      <div class="individual-only">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reg-lastname" class="form-label">Фамилия <span class="required-star">*</span></label>
+            <input type="text" id="reg-lastname" class="form-input" placeholder="Иванов" required>
+          </div>
+          <div class="form-group">
+            <label for="reg-firstname" class="form-label">Имя <span class="required-star">*</span></label>
+            <input type="text" id="reg-firstname" class="form-input" placeholder="Александр" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-middlename" class="form-label">Отчество <span style="font-weight: 400; color: var(--text-muted);">(при наличии)</span></label>
+          <input type="text" id="reg-middlename" class="form-input" placeholder="Сергеевич">
+        </div>
+
+        <div class="form-group">
+          <label for="reg-phone" class="form-label">Номер телефона <span class="required-star">*</span></label>
+          <input type="tel" id="reg-phone" class="form-input" placeholder="+7 (999) 000-00-00" required>
+        </div>
       </div>
 
-      <!-- Поля для юр. лица -->
-      <div class="form-group org-only" style="display: none;">
-        <label for="reg-company" class="form-label">Полное наименование организации</label>
-        <input type="text" id="reg-company" class="form-input" placeholder="ООО «Финтех Смарт Системы»">
+      <!-- 2. ПОЛЯ ДЛЯ ЮР. ЛИЦА / ОРГАНИЗАЦИИ -->
+      <div class="org-only" style="display: none;">
+        <div class="form-group">
+          <label for="reg-company" class="form-label">Полное наименование организации <span class="required-star">*</span></label>
+          <input type="text" id="reg-company" class="form-input" placeholder="ООО «Финтех Смарт Системы»">
+        </div>
+
+        <div class="form-group">
+          <label for="reg-inn" class="form-label">ИНН организации <span class="required-star">*</span></label>
+          <input type="text" id="reg-inn" class="form-input" placeholder="7707083893" maxlength="12">
+        </div>
+
+        <div class="sub-section-title">Данные представителя организации</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reg-org-lastname" class="form-label">Фамилия <span class="required-star">*</span></label>
+            <input type="text" id="reg-org-lastname" class="form-input" placeholder="Смирнов">
+          </div>
+          <div class="form-group">
+            <label for="reg-org-firstname" class="form-label">Имя <span class="required-star">*</span></label>
+            <input type="text" id="reg-org-firstname" class="form-input" placeholder="Дмитрий">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-org-phone" class="form-label">Контактный номер телефона <span class="required-star">*</span></label>
+          <input type="tel" id="reg-org-phone" class="form-input" placeholder="+7 (999) 111-22-33">
+        </div>
       </div>
 
-      <div class="form-group org-only" style="display: none;">
-        <label for="reg-inn" class="form-label">ИНН организации</label>
-        <input type="text" id="reg-inn" class="form-input" placeholder="7707083893" maxlength="12">
+      <!-- 3. ОБЩИЕ ПОЛЯ: E-MAIL И ДВОЙНОЙ ВВОД ПАРОЛЯ -->
+      <div class="form-group">
+        <label for="reg-email" class="form-label">Адрес электронной почты (E-mail) <span class="required-star">*</span></label>
+        <input type="email" id="reg-email" class="form-input" placeholder="alexander@company.ru" required autocomplete="email">
       </div>
 
       <div class="form-group">
-        <label for="reg-email" class="form-label">Корпоративный или личный E-mail</label>
-        <input type="email" id="reg-email" class="form-input" placeholder="alexander@company.ru" required>
-      </div>
-
-      <div class="form-group">
-        <label for="reg-password" class="form-label">Пароль для учетной записи</label>
+        <label for="reg-password" class="form-label">Пароль учетной записи <span class="required-star">*</span></label>
         <div class="input-wrapper">
-          <input type="password" id="reg-password" class="form-input" placeholder="Не менее 8 символов" required>
+          <input type="password" id="reg-password" class="form-input" placeholder="Не менее 8 символов" required autocomplete="new-password">
           <button type="button" class="input-suffix-btn btn-toggle-pwd" aria-label="Показать пароль">👁</button>
         </div>
         <div class="strength-meter">
@@ -133,31 +176,42 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <label for="reg-password-confirm" class="form-label">Повторите пароль <span class="required-star">*</span></label>
+        <div class="input-wrapper">
+          <input type="password" id="reg-password-confirm" class="form-input" placeholder="Введите пароль еще раз" required autocomplete="new-password">
+          <button type="button" class="input-suffix-btn btn-toggle-pwd" aria-label="Показать пароль">👁</button>
+        </div>
+        <div id="password-match-msg" class="password-match-status" style="display: none;"></div>
+      </div>
+
       <div class="form-options" style="margin-bottom: 20px;">
         <label class="checkbox-label">
           <input type="checkbox" id="reg-agreement" required>
-          <span>Я принимаю <a href="#" class="link-btn">Условия использования</a> и даю согласие на обработку персональных данных (152-ФЗ)</span>
+          <span>Я принимаю <a href="#" class="link-btn">Условия использования</a> и даю согласие на обработку персональных данных (152-ФЗ) <span class="required-star">*</span></span>
         </label>
       </div>
 
-      <button type="submit" class="btn-primary">
+      <button type="submit" class="btn-primary" id="btn-submit-register">
         <span>Зарегистрироваться на платформе</span>
       </button>
 
       <div style="text-align: center; margin-top: 18px; font-size: 13px; color: var(--text-muted);">
         Уже зарегистрированы? 
-        <button type="button" class="link-btn" id="link-to-login">Войти</button>
+        <button type="button" class="link-btn" id="link-to-login">Войти в личный кабинет</button>
       </div>
     </form>
 
-    <!-- ФОРМА 3: ВОССТАНОВЛЕНИЕ ПАРОЛЯ -->
+    <!-- ========================================== -->
+    <!-- ФОРМА 3: ВОССТАНОВЛЕНИЕ ПАРОЛЯ             -->
+    <!-- ========================================== -->
     <form id="form-forgot" style="display: none;" novalidate>
       <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.5;">
         Укажите адрес электронной почты (E-mail), привязанный к вашей учетной записи. Мы направим вам ссылку для безопасного восстановления доступа.
       </p>
 
       <div class="form-group">
-        <label for="forgot-email" class="form-label">Адрес электронной почты (E-mail)</label>
+        <label for="forgot-email" class="form-label">Адрес электронной почты (E-mail) <span class="required-star">*</span></label>
         <input type="email" id="forgot-email" class="form-input" placeholder="alexander@smartcontractum.ru" required>
       </div>
 

@@ -9,11 +9,12 @@ export interface UserProfileDTO {
   id: string;
   email: string;
   accountType: AccountType;
-  fullName?: string;
+  lastName?: string;
+  firstName?: string;
+  middleName?: string;
   phone?: string;
   companyName?: string;
   inn?: string;
-  representativeName?: string;
   isVerified: boolean;
   reputationScore: number;
   roles: string[];
@@ -27,10 +28,13 @@ export interface AuthCredentials {
 
 export interface IndividualRegisterPayload {
   userType: 'individual';
-  fullName: string;
-  email: string;
+  lastName: string;
+  firstName: string;
+  middleName?: string;
   phone: string;
+  email: string;
   password: string;
+  passwordConfirm: string;
   agreement: boolean;
 }
 
@@ -38,9 +42,13 @@ export interface OrganizationRegisterPayload {
   userType: 'organization';
   companyName: string;
   inn: string;
-  representativeName: string;
+  representativeLastName: string;
+  representativeFirstName: string;
+  representativeMiddleName?: string;
+  phone: string;
   email: string;
   password: string;
+  passwordConfirm: string;
   agreement: boolean;
 }
 

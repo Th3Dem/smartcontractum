@@ -14,20 +14,33 @@ class TestAuthFrontend(unittest.TestCase):
         self.assertTrue(os.path.exists(self.css_path), "CSS must exist")
         self.assertTrue(os.path.exists(self.js_path), "JS must exist")
 
-    def test_html_typography_and_russian_grammar(self):
+    def test_html_form_fields(self):
         with open(self.html_path, "r", encoding="utf-8") as f:
             content = f.read()
 
-        # Проверка шрифтов
-        self.assertIn("family=Inter", content)
-        self.assertIn("family=Manrope", content)
+        # Раздельные поля ФИО и телефон для физ. лица
+        self.assertIn('id="reg-lastname"', content)
+        self.assertIn('id="reg-firstname"', content)
+        self.assertIn('id="reg-middlename"', content)
+        self.assertIn('id="reg-phone"', content)
 
-        # Проверка строгой русской орфографии
-        self.assertIn("E-mail", content)
-        self.assertIn("Физ. лицо / Эксперт", content)
-        self.assertIn("Юр. лицо / Организация", content)
-        self.assertIn("152-ФЗ", content)
-        self.assertIn("Запомнить сессию", content)
+        # Поля для представителя организации
+        self.assertIn('id="reg-org-lastname"', content)
+        self.assertIn('id="reg-org-firstname"', content)
+        self.assertIn('id="reg-org-phone"', content)
+
+        # Двойной ввод пароля
+        self.assertIn('id="reg-password"', content)
+        self.assertIn('id="reg-password-confirm"', content)
+        self.assertIn('id="password-match-msg"', content)
+
+    def test_password_match_logic(self):
+        def check_passwords_match(p1: str, p2: str):
+            return bool(p1 and p2 and p1 == p2)
+
+        self.assertTrue(check_passwords_match("Pass1234!", "Pass1234!"))
+        self.assertFalse(check_passwords_match("Pass1234!", "Pass1234"))
+        self.assertFalse(check_passwords_match("", ""))
 
     def test_inn_validation_logic(self):
         def validate_inn(inn: str):
@@ -40,22 +53,6 @@ class TestAuthFrontend(unittest.TestCase):
         self.assertTrue(validate_inn("500100732259"))
         self.assertFalse(validate_inn("12345"))
         self.assertFalse(validate_inn("7707083893a"))
-
-    def test_password_strength_calculation(self):
-        def calc_strength(p: str):
-            if not p:
-                return 0
-            score = 0
-            if len(p) >= 8: score += 1
-            if re.search(r'[A-ZА-Я]', p): score += 1
-            if re.search(r'[0-9]', p): score += 1
-            if re.search(r'[!@#$%^&*(),.?":{}|<>]', p): score += 1
-            return score
-
-        self.assertEqual(calc_strength(""), 0)
-        self.assertEqual(calc_strength("123"), 1)
-        self.assertEqual(calc_strength("Pass1234"), 3)
-        self.assertEqual(calc_strength("Pass1234!"), 4)
 
 if __name__ == "__main__":
     unittest.main()

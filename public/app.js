@@ -23,10 +23,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const orgFields = document.querySelectorAll('.org-only');
   const individualFields = document.querySelectorAll('.individual-only');
 
+  // Пароли и проверка совпадения
+  const regPwd = document.getElementById('reg-password');
+  const regPwdConfirm = document.getElementById('reg-password-confirm');
+  const matchMsg = document.getElementById('password-match-msg');
+
   // Переключение режимов (Вход / Регистрация / Восстановление)
   function setMode(mode) {
     currentMode = mode;
     hideAlert();
+    clearValidationErrors();
 
     if (mode === 'login') {
       tabsContainer.style.display = 'flex';
@@ -59,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Переключение типа субъекта
   function setAccountType(type) {
     accountType = type;
+    clearValidationErrors();
     if (type === 'individual') {
       btnTypeIndividual.classList.add('active');
       btnTypeOrg.classList.remove('active');
@@ -81,6 +88,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function hideAlert() {
     alertBox.style.display = 'none';
+  }
+
+  function clearValidationErrors() {
+    document.querySelectorAll('.form-input').forEach(input => input.classList.remove('is-invalid'));
+  }
+
+  function markInvalid(inputId) {
+    const el = document.getElementById(inputId);
+    if (el) {
+      el.classList.add('is-invalid');
+      el.focus();
+    }
   }
 
   // Расчет сложности пароля
@@ -113,6 +132,60 @@ document.addEventListener('DOMContentLoaded', () => {
     label.innerText = `Сложность: ${current.text}`;
   }
 
+  // Проверка совпадения паролей в реальном времени
+  function validatePasswordMatch() {
+    const p1 = regPwd.value;
+    const p2 = regPwdConfirm.value;
+
+    if (!p2 || p2.length === 0) {
+      matchMsg.style.display = 'none';
+      regPwdConfirm.classList.remove('is-invalid');
+      return true;
+    }
+
+    matchMsg.style.display = 'flex';
+    if (p1 === p2) {
+      matchMsg.className = 'password-match-status match';
+      matchMsg.innerHTML = '✓ Пароли совпадают';
+      regPwdConfirm.classList.remove('is-invalid');
+      return true;
+    } else {
+      matchMsg.className = 'password-match-status mismatch';
+      matchMsg.innerHTML = '✕ Пароли не совпадают';
+      regPwdConfirm.classList.add('is-invalid');
+      return false;
+    }
+  }
+
+  // Автоформатирование телефона (+7 (XXX) XXX-XX-XX)
+  function formatPhone(input) {
+    input.addEventListener('input', (e) => {
+      let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+      if (!x[2]) {
+        e.target.value = x[1] ? `+7 (${x[1]}` : '';
+      } else {
+        e.target.value = `+7 (${x[2]}` + (x[3] ? `) ${x[3]}` : '') + (x[4] ? `-${x[4]}` : '') + (x[5] ? `-${x[5]}` : '');
+      }
+    });
+  }
+
+  const phoneIndividual = document.getElementById('reg-phone');
+  const phoneOrg = document.getElementById('reg-org-phone');
+  if (phoneIndividual) formatPhone(phoneIndividual);
+  if (phoneOrg) formatPhone(phoneOrg);
+
+  // Слушатели событий паролей
+  if (regPwd) {
+    regPwd.addEventListener('input', (e) => {
+      checkPasswordStrength(e.target.value);
+      if (regPwdConfirm.value.length > 0) validatePasswordMatch();
+    });
+  }
+
+  if (regPwdConfirm) {
+    regPwdConfirm.addEventListener('input', validatePasswordMatch);
+  }
+
   // Слушатели событий табов и ссылок
   tabLogin.addEventListener('click', () => setMode('login'));
   tabRegister.addEventListener('click', () => setMode('register'));
@@ -137,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
   btnTypeIndividual.addEventListener('click', () => setAccountType('individual'));
   btnTypeOrg.addEventListener('click', () => setAccountType('organization'));
 
-  // Показ / скрытие пароля
+  // Показ / скрытие пароля (👁)
   document.querySelectorAll('.btn-toggle-pwd').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -154,27 +227,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Расчет сложности при вводе
-  const regPwdInput = document.getElementById('reg-password');
-  if (regPwdInput) {
-    regPwdInput.addEventListener('input', (e) => checkPasswordStrength(e.target.value));
-  }
-
   // Отправка формы входа
   formLogin.addEventListener('submit', async (e) => {
     e.preventDefault();
     hideAlert();
-    const btn = formLogin.querySelector('.btn-primary');
-    const originalText = btn.innerHTML;
+    clearValidationErrors();
 
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
 
-    if (!email || !password) {
-      showAlert('Пожалуйста, заполните все обязательные поля формы');
+    if (!email) {
+      markInvalid('login-email');
+      showAlert('Пожалуйста, укажите адрес электронной почты (E-mail)');
       return;
     }
 
+    if (!password) {
+      markInvalid('login-password');
+      showAlert('Пожалуйста, введите пароль');
+      return;
+    }
+
+    const btn = formLogin.querySelector('.btn-primary');
+    const originalText = btn.innerHTML;
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span> Проверка учетных данных...';
 
@@ -185,6 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (email === 'demo@platform.ru' && password === 'Secret123!') {
         showAlert('Успешная авторизация! Выполняется перенаправление в личный кабинет...', 'success');
       } else {
+        markInvalid('login-password');
         showAlert('Неверный адрес электронной почты (E-mail) или пароль');
       }
     }, 600);
@@ -194,43 +270,113 @@ document.addEventListener('DOMContentLoaded', () => {
   formRegister.addEventListener('submit', async (e) => {
     e.preventDefault();
     hideAlert();
-    const btn = formRegister.querySelector('.btn-primary');
-    const originalText = btn.innerHTML;
+    clearValidationErrors();
 
     const email = document.getElementById('reg-email').value.trim();
-    const password = document.getElementById('reg-password').value;
+    const password = regPwd.value;
+    const passwordConfirm = regPwdConfirm.value;
     const agreement = document.getElementById('reg-agreement').checked;
 
+    // 1. Проверка полей для физ. лица
+    if (accountType === 'individual') {
+      const lastName = document.getElementById('reg-lastname').value.trim();
+      const firstName = document.getElementById('reg-firstname').value.trim();
+      const phone = document.getElementById('reg-phone').value.trim();
+
+      if (!lastName) {
+        markInvalid('reg-lastname');
+        showAlert('Пожалуйста, укажите фамилию');
+        return;
+      }
+
+      if (!firstName) {
+        markInvalid('reg-firstname');
+        showAlert('Пожалуйста, укажите имя');
+        return;
+      }
+
+      if (!phone || phone.length < 10) {
+        markInvalid('reg-phone');
+        showAlert('Пожалуйста, укажите корректный номер телефона');
+        return;
+      }
+    }
+
+    // 2. Проверка полей для юр. лица
+    if (accountType === 'organization') {
+      const company = document.getElementById('reg-company').value.trim();
+      const inn = document.getElementById('reg-inn').value.trim();
+      const orgLastName = document.getElementById('reg-org-lastname').value.trim();
+      const orgFirstName = document.getElementById('reg-org-firstname').value.trim();
+      const orgPhone = document.getElementById('reg-org-phone').value.trim();
+
+      if (!company) {
+        markInvalid('reg-company');
+        showAlert('Пожалуйста, укажите полное наименование организации');
+        return;
+      }
+
+      if (!inn || !/^\d{10}$|^\d{12}$/.test(inn)) {
+        markInvalid('reg-inn');
+        showAlert('ИНН организации должен состоять из 10 цифр (для ИП — 12 цифр)');
+        return;
+      }
+
+      if (!orgLastName) {
+        markInvalid('reg-org-lastname');
+        showAlert('Пожалуйста, укажите фамилию представителя организации');
+        return;
+      }
+
+      if (!orgFirstName) {
+        markInvalid('reg-org-firstname');
+        showAlert('Пожалуйста, укажите имя представителя организации');
+        return;
+      }
+
+      if (!orgPhone || orgPhone.length < 10) {
+        markInvalid('reg-org-phone');
+        showAlert('Пожалуйста, укажите контактный телефон представителя');
+        return;
+      }
+    }
+
+    // 3. Проверка E-mail
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      markInvalid('reg-email');
+      showAlert('Пожалуйста, укажите корректный адрес электронной почты (E-mail)');
+      return;
+    }
+
+    // 4. Проверка сложности и длины пароля
+    if (password.length < 8) {
+      markInvalid('reg-password');
+      showAlert('Пароль учетной записи должен содержать не менее 8 символов');
+      return;
+    }
+
+    // 5. Проверка совпадения двух паролей
+    if (password !== passwordConfirm) {
+      markInvalid('reg-password-confirm');
+      showAlert('Введенные пароли не совпадают. Пожалуйста, проверьте правильность ввода');
+      return;
+    }
+
+    // 6. Проверка согласия с 152-ФЗ
     if (!agreement) {
       showAlert('Для завершения регистрации необходимо подтвердить согласие с Условиями использования и 152-ФЗ');
       return;
     }
 
-    if (password.length < 8) {
-      showAlert('Пароль учетной записи должен содержать не менее 8 символов');
-      return;
-    }
-
-    if (accountType === 'organization') {
-      const inn = document.getElementById('reg-inn').value.trim();
-      const company = document.getElementById('reg-company').value.trim();
-      if (!company || !inn) {
-        showAlert('Укажите полное наименование организации и ИНН');
-        return;
-      }
-      if (!/^\d{10}$|^\d{12}$/.test(inn)) {
-        showAlert('ИНН организации должен содержать 10 цифр (для ИП — 12 цифр)');
-        return;
-      }
-    }
-
+    const btn = document.getElementById('btn-submit-register');
+    const originalText = btn.innerHTML;
     btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> Создание профиля...';
+    btn.innerHTML = '<span class="spinner"></span> Создание учетной записи...';
 
     setTimeout(() => {
       btn.disabled = false;
       btn.innerHTML = originalText;
-      showAlert(`Учетная запись для ${accountType === 'organization' ? 'организации' : 'физического лица'} успешно создана! На адрес ${email} направлено письмо для подтверждения регистрации.`, 'success');
+      showAlert(`Учетная запись для ${accountType === 'organization' ? 'организации' : 'физического лица (эксперта)'} успешно создана! На адрес ${email} направлено письмо для подтверждения регистрации.`, 'success');
     }, 800);
   });
 
@@ -238,15 +384,17 @@ document.addEventListener('DOMContentLoaded', () => {
   formForgot.addEventListener('submit', async (e) => {
     e.preventDefault();
     hideAlert();
-    const btn = formForgot.querySelector('.btn-primary');
-    const originalText = btn.innerHTML;
-    const email = document.getElementById('forgot-email').value.trim();
+    clearValidationErrors();
 
-    if (!email) {
-      showAlert('Пожалуйста, укажите адрес электронной почты (E-mail)');
+    const email = document.getElementById('forgot-email').value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      markInvalid('forgot-email');
+      showAlert('Пожалуйста, укажите корректный адрес электронной почты (E-mail)');
       return;
     }
 
+    const btn = formForgot.querySelector('.btn-primary');
+    const originalText = btn.innerHTML;
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span> Отправка запроса...';
 
