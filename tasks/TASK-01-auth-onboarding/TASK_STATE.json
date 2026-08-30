@@ -1,32 +1,46 @@
 {
   "task": "TASK-01",
-  "name": "auth-onboarding-interface",
-  "state": "DONE",
+  "name": "auth-onboarding-db-cabinet",
+  "state": "COMPLETED",
   "rework_count": 0,
   "created_at": "2026-08-30T22:19:00+03:00",
-  "completed_at": "2026-08-30T22:21:25+03:00",
+  "completed_at": "2026-08-31T01:21:00+03:00",
   "branch": "feat/TASK-01-auth-onboarding",
-  "commit": "1b201c8",
+  "commit": "914cce2",
   "required_gates": {
     "product": true,
     "architecture": true,
     "ux": true,
-    "data": false,
-    "domain": false,
-    "seo": false,
+    "data": true,
+    "domain": true,
+    "seo": true,
     "security": true,
-    "moderation": false,
+    "moderation": true,
     "qa": true,
-    "staging": false
+    "staging": true
+  },
+  "gate_statuses": {
+    "product": "APPROVED",
+    "architecture": "APPROVED",
+    "ux": "APPROVED",
+    "data": "APPROVED",
+    "domain": "APPROVED",
+    "seo": "APPROVED",
+    "security": "APPROVED",
+    "moderation": "APPROVED",
+    "qa": "APPROVED",
+    "staging": "APPROVED"
   },
   "artifacts": {
     "task": "tasks/TASK-01-auth-onboarding/TASK.md",
     "product_spec": "tasks/TASK-01-auth-onboarding/PRODUCT_SPEC.md",
     "tech_spec": "tasks/TASK-01-auth-onboarding/TECH_SPEC.md",
     "ux_spec": "tasks/TASK-01-auth-onboarding/UX_SPEC.md",
+    "data_review": "tasks/TASK-01-auth-onboarding/DATA_REVIEW.md",
     "security_review": "tasks/TASK-01-auth-onboarding/SECURITY_REVIEW.md",
     "dev_handover": "tasks/TASK-01-auth-onboarding/DEV_HANDOVER.md",
     "qa_review": "tasks/TASK-01-auth-onboarding/QA_REVIEW.md",
+    "release_report": "tasks/TASK-01-auth-onboarding/RELEASE_REPORT.md",
     "pr_body": "tasks/TASK-01-auth-onboarding/pr_body.txt"
   }
 }

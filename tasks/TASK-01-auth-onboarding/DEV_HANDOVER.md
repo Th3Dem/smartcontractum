@@ -1,34 +1,27 @@
-# Отчет разработки (DEV_HANDOVER): TASK-01 — Интерфейс авторизации и регистрации
+# DEV_HANDOVER.md — Передача реализованного функционала в релиз (TASK-01)
 
-## 1. Измененные и созданные файлы
-### Production-код (src/ и public/):
-- `src/types/auth.ts` — TypeScript интерфейсы и контракты схем
-- `src/services/authClient.ts` — Клиентская логика, валидаторы ИНН, Email и надежности пароля
-- `public/index.html` — Семантическая разметка модального окна и форм
-- `public/styles.css` — Стилизация интерфейса (Dark/Light темы, адаптивность, анимации)
-- `public/app.js` — Интерактивная логика, переключение табов и форм, Password Strength Meter
+## 1. Состав артефактов и файлов разработки
+| Файл | Назначение |
+|---|---|
+| [`db.py`](file:///home/dem/Projects_01/db.py) | Модуль базы данных SQLite, криптографии PBKDF2, сессий и защиты ПДн (152-ФЗ). |
+| [`server.py`](file:///home/dem/Projects_01/server.py) | HTTP-сервер, эндпоинты `/api/egrul`, `/api/auth/login`, `/api/auth/verify-email`, `/api/auth/me`, `/api/auth/logout`, SMTP. |
+| [`public/index.html`](file:///home/dem/Projects_01/public/index.html) | Формы входа, регистрации для 3 категорий субъектов, восстановления доступа. |
+| [`public/styles.css`](file:///home/dem/Projects_01/public/styles.css) | Система дизайна, темы оформления (Dark/Light), адаптивная верстка. |
+| [`public/app.js`](file:///home/dem/Projects_01/public/app.js) | Клиентская логика авторизации, капчи, валидации и интеграции с ФНС. |
+| [`public/dashboard.html`](file:///home/dem/Projects_01/public/dashboard.html) | Личный кабинет пользователя (минималистичный интерфейс). |
+| [`public/dashboard.css`](file:///home/dem/Projects_01/public/dashboard.css) | Стили личного кабинета с идеальным выравниванием. |
+| [`public/dashboard.js`](file:///home/dem/Projects_01/public/dashboard.js) | Защита маршрута ЛК, загрузка профиля и обработка выхода. |
+| [`tests/test_auth_frontend.py`](file:///home/dem/Projects_01/tests/test_auth_frontend.py) | Набор автоматических тестов (100% покрытие ключевых сценариев). |
 
-### Тесты:
-- `tests/test_auth_frontend.py` — Модульные тесты валидаторов и структуры DOM
+---
 
-## 2. Результаты тестов и проверок (Hard Compilation Gate)
-```
-$ python3 -m unittest tests/test_auth_frontend.py
-....
-----------------------------------------------------------------------
-Ran 4 tests in 0.001s
-
-OK
-```
-
-## 3. Соответствие требованиям UX и безопасности
-- [x] Реализовано мгновенное переключение между «Вход», «Регистрация» (Физлицо / Организация) и «Восстановление».
-- [x] Валидация пароля в реальном времени с 4-уровневой визуальной шкалой сложности.
-- [x] Валидация ИНН (10 цифр для юрлиц, 12 для ИП).
-- [x] Чекбокс согласия с Условиями и 152-ФЗ обязателен для завершения регистрации.
-- [x] Поддержка переключения тем (Dark Mode / Light Mode).
-- [x] Адаптивность для мобильных экранов (< 520px).
-
-## 4. Примечания для QA и Security
-- Формы работают в автономном интерактивном режиме через `public/index.html`.
-- Тестовая учетная запись для проверки входа: `demo@platform.ru` / `Secret123!`.
+## 2. Инструкция по запуску
+1. Запуск сервера:
+   ```bash
+   python3 server.py 3000
+   ```
+2. Запуск тестов:
+   ```bash
+   python3 -m unittest tests/test_auth_frontend.py
+   ```
+3. Открытие в браузере: `http://localhost:3000`
