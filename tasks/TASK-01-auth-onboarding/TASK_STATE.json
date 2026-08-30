@@ -1,10 +1,12 @@
 {
   "task": "TASK-01",
   "name": "auth-onboarding-interface",
-  "state": "IMPLEMENTATION",
+  "state": "DONE",
   "rework_count": 0,
   "created_at": "2026-08-30T22:19:00+03:00",
+  "completed_at": "2026-08-30T22:21:25+03:00",
   "branch": "feat/TASK-01-auth-onboarding",
+  "commit": "1b201c8",
   "required_gates": {
     "product": true,
     "architecture": true,
@@ -22,9 +24,9 @@
     "product_spec": "tasks/TASK-01-auth-onboarding/PRODUCT_SPEC.md",
     "tech_spec": "tasks/TASK-01-auth-onboarding/TECH_SPEC.md",
     "ux_spec": "tasks/TASK-01-auth-onboarding/UX_SPEC.md",
-    "security_review": null,
-    "dev_handover": null,
-    "qa_review": null,
-    "pr_body": null
+    "security_review": "tasks/TASK-01-auth-onboarding/SECURITY_REVIEW.md",
+    "dev_handover": "tasks/TASK-01-auth-onboarding/DEV_HANDOVER.md",
+    "qa_review": "tasks/TASK-01-auth-onboarding/QA_REVIEW.md",
+    "pr_body": "tasks/TASK-01-auth-onboarding/pr_body.txt"
   }
 }
