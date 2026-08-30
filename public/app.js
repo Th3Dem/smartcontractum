@@ -185,6 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===============================================================
   // 2. Поиск Индивидуального предпринимателя (ИП) в ЕГРИП ФНС РФ
+  // (АВТОЗАПОЛНЕНИЕ ВСЕХ ПОЛЕЙ ИП ИЗ ЕГРИП)
   // ===============================================================
   async function fetchEgripData() {
     const cleanInn = ipInnInput.value.trim().replace(/\D/g, '');
@@ -213,24 +214,39 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!data.success || !data.company) {
         ipInnInput.classList.add('is-invalid');
         egripStatus.className = 'egrul-status-box error';
-        egripStatus.innerHTML = `✕ ${data.error || 'Индивидуальный предприниматель не найден в ЕГРИП'}`;
+        egripStatus.innerHTML = `✕ ${data.error || 'Индивидуальный предприниматель не найден в реестре ЕГРИП'}`;
         egripStatus.style.display = 'block';
         return;
       }
 
       const company = data.company;
 
-      if (ipOgrnipInput) ipOgrnipInput.value = company.ogrn || '';
+      // 1. Автозаполнение ОГРНИП
+      if (ipOgrnipInput) {
+        ipOgrnipInput.value = company.ogrnip || company.ogrn || '';
+        ipOgrnipInput.classList.remove('is-invalid');
+      }
 
-      // Для ИП автозаполняем ФИО, если они извлечены
-      if (ipLastNameInput && company.ceoLastName) ipLastNameInput.value = company.ceoLastName;
-      if (ipFirstNameInput && company.ceoFirstName) ipFirstNameInput.value = company.ceoFirstName;
+      // 2. Автозаполнение всех частей ФИО ИП из ЕГРИП
+      if (ipLastNameInput && (company.ipLastName || company.ceoLastName)) {
+        ipLastNameInput.value = company.ipLastName || company.ceoLastName;
+        ipLastNameInput.classList.remove('is-invalid');
+      }
+      if (ipFirstNameInput && (company.ipFirstName || company.ceoFirstName)) {
+        ipFirstNameInput.value = company.ipFirstName || company.ceoFirstName;
+        ipFirstNameInput.classList.remove('is-invalid');
+      }
+      if (ipMiddleNameInput && company.ipMiddleName) {
+        ipMiddleNameInput.value = company.ipMiddleName;
+        ipMiddleNameInput.classList.remove('is-invalid');
+      }
 
+      // 3. Вывод подтверждающей карточки ЕГРИП
       egripStatus.className = 'egrul-status-box success';
       egripStatus.innerHTML = `
         <div><strong>✓ Найдено в ЕГРИП (ФНС России):</strong> ${escapeHtml(company.fullName)}</div>
         <div class="egrul-company-meta">
-          Статус: <strong>${escapeHtml(company.statusText)}</strong> • ОГРНИП: ${escapeHtml(company.ogrn)} • ${escapeHtml(company.address)}
+          Статус: <strong>${escapeHtml(company.statusText)}</strong> • ОГРНИП: ${escapeHtml(company.ogrnip || company.ogrn)}${company.registrationDate ? ` • Регистрация: ${escapeHtml(company.registrationDate)}` : ''} • ${escapeHtml(company.address)}
         </div>
       `;
       egripStatus.style.display = 'block';

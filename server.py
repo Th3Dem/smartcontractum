@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-SmartContractum — Local Development Server with Live EGRUL / FNS Proxy API
+SmartContractum — Local Development Server with Live EGRUL & EGRIP / FNS Proxy API
 """
 
 import os
@@ -36,9 +36,31 @@ def validate_inn_checksum(inn: str) -> bool:
         return control1 == int(inn[10]) and control2 == int(inn[11])
     return False
 
+def parse_ip_fio(name_str: str):
+    """
+    Извлекает Фамилию, Имя и Отчество из строки ЕГРИП (например, ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ ИВАНОВ АЛЕКСАНДР СЕРГЕЕВИЧ)
+    """
+    clean = name_str.upper()
+    prefixes = [
+        'ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ',
+        'ИП',
+        'ГЛАВА КФХ',
+        'ГЛАВА КРЕСТЬЯНСКОГО (ФЕРМЕРСКОГО) ХОЗЯЙСТВА',
+        'КРЕСТЬЯНСКОЕ (ФЕРМЕРСКОЕ) ХОЗЯЙСТВО'
+    ]
+    for prefix in prefixes:
+        clean = clean.replace(prefix, '')
+    clean = clean.replace('"', '').replace("'", '').strip()
+    tokens = [t.capitalize() for t in clean.split() if t]
+    
+    last = tokens[0] if len(tokens) >= 1 else ''
+    first = tokens[1] if len(tokens) >= 2 else ''
+    middle = ' '.join(tokens[2:]) if len(tokens) >= 3 else ''
+    return last, first, middle
+
 def query_egrul_nalog_ru(inn: str):
     """
-    Выполняет реальный двухэтапный запрос к API ФНС России (egrul.nalog.ru):
+    Выполняет реальный двухэтапный запрос к API ФНС России (egrul.nalog.ru) для ЕГРЮЛ и ЕГРИП:
     1. POST https://egrul.nalog.ru/ с телом query=<inn> для получения токена t
     2. GET https://egrul.nalog.ru/search-result/<token> для получения строк реестра
     """
@@ -89,7 +111,7 @@ def query_egrul_nalog_ru(inn: str):
         if not rows:
             return {
                 "success": False,
-                "error": f"Организация с ИНН {clean_inn} не найдена в реестре ЕГРЮЛ/ЕГРИП ФНС России"
+                "error": f"Субъект с ИНН {clean_inn} не найден в реестре ЕГРЮЛ/ЕГРИП ФНС России"
             }
 
         # Проверяем точное совпадение ИНН/ОГРН в строках ответа ФНС
@@ -97,7 +119,7 @@ def query_egrul_nalog_ru(inn: str):
         if not matching_rows:
             return {
                 "success": False,
-                "error": f"Организация с ИНН {clean_inn} не найдена в реестре ЕГРЮЛ/ЕГРИП ФНС России"
+                "error": f"Субъект с ИНН {clean_inn} не найден в реестре ЕГРЮЛ/ЕГРИП ФНС России"
             }
 
         row = matching_rows[0]
@@ -109,34 +131,43 @@ def query_egrul_nalog_ru(inn: str):
         termination_date = row.get("v", "").strip()
         address = row.get("a", "").strip() or row.get("rn", "").strip()
         ceo_raw = row.get("g", "").strip()
-        
+        is_ip = (len(clean_inn) == 12) or (row.get("k") == "ip") or ("ПРЕДПРИНИМАТЕЛЬ" in full_name.upper())
+
         # Определение статуса по реестру ФНС
         is_liquidated = bool(termination_date) or "ликвидирован" in full_name.lower() or "прекратил" in full_name.lower()
         if is_liquidated:
-            status_text = f"Ликвидирована / Деятельность прекращена" + (f" ({termination_date})" if termination_date else "")
+            status_text = f"Деятельность прекращена" + (f" ({termination_date})" if termination_date else "")
             status_type = "LIQUIDATED"
         else:
-            status_text = "Действующая организация (ЕГРЮЛ ФНС России)"
+            status_text = "Действующий предприниматель (ЕГРИП)" if is_ip else "Действующая организация (ЕГРЮЛ)"
             status_type = "ACTIVE"
 
-        # Извлечение ФИО руководителя
-        ceo_lastname = ""
-        ceo_firstname = ""
-        if ceo_raw:
-            parts = ceo_raw.split(":")
-            name_part = parts[-1].strip() if len(parts) > 1 else ceo_raw
-            name_tokens = name_part.split()
-            if len(name_tokens) >= 1:
-                ceo_lastname = name_tokens[0]
-            if len(name_tokens) >= 2:
-                ceo_firstname = name_tokens[1]
+        # Извлечение ФИО
+        if is_ip:
+            ip_last, ip_first, ip_middle = parse_ip_fio(full_name)
+            ceo_lastname = ip_last
+            ceo_firstname = ip_first
+        else:
+            ip_last = ip_first = ip_middle = ""
+            ceo_lastname = ""
+            ceo_firstname = ""
+            if ceo_raw:
+                parts = ceo_raw.split(":")
+                name_part = parts[-1].strip() if len(parts) > 1 else ceo_raw
+                name_tokens = name_part.split()
+                if len(name_tokens) >= 1:
+                    ceo_lastname = name_tokens[0]
+                if len(name_tokens) >= 2:
+                    ceo_firstname = name_tokens[1]
 
         return {
             "success": True,
             "source": "egrul.nalog.ru (ФНС России)",
+            "isIP": is_ip,
             "company": {
                 "inn": clean_inn,
                 "ogrn": ogrn,
+                "ogrnip": ogrn if is_ip else "",
                 "kpp": kpp,
                 "fullName": full_name,
                 "shortName": short_name,
@@ -147,7 +178,10 @@ def query_egrul_nalog_ru(inn: str):
                 "terminationDate": termination_date,
                 "ceoRaw": ceo_raw,
                 "ceoLastName": ceo_lastname,
-                "ceoFirstName": ceo_firstname
+                "ceoFirstName": ceo_firstname,
+                "ipLastName": ip_last,
+                "ipFirstName": ip_first,
+                "ipMiddleName": ip_middle
             }
         }
 
@@ -164,7 +198,7 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         parsed = urllib.parse.urlparse(self.path)
         
-        # API эндпоинт для запроса к ЕГРЮЛ ФНС РФ
+        # API эндпоинт для запроса к ЕГРЮЛ/ЕГРИП ФНС РФ
         if parsed.path == "/api/egrul":
             params = urllib.parse.parse_qs(parsed.query)
             inn = params.get("inn", [""])[0]
