@@ -1,11 +1,11 @@
 /**
  * SmartContractum — Интерактивная логика авторизации и регистрации
  * Интеграция с ЕГРЮЛ/ЕГРИП ФНС РФ, Защитная Canvas-капча,
- * Сохранение в базу данных (152-ФЗ) и перенаправление в личный кабинет
+ * Сохранение в базу данных (152-ФЗ) и авторизация в личном кабинете
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Синхронизация темы
+  // 1. Синхронизация темы
   const savedTheme = localStorage.getItem('app_theme') || 'dark';
   document.documentElement.setAttribute('data-theme', savedTheme);
   const themeToggle = document.getElementById('theme-toggle');
@@ -13,13 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
     themeToggle.innerHTML = savedTheme === 'dark' ? '🌙' : '☀️';
   }
 
-  // Проверяем: если пользователь уже авторизован, можно сразу перейти в личный кабинет
+  // 2. Проверяем: если пользователь уже авторизован, переходим в личный кабинет
   const existingToken = localStorage.getItem('auth_token');
   if (existingToken && (window.location.pathname.endsWith('index.html') || window.location.pathname === '/')) {
     fetch('/api/auth/me', {
-      headers: { 'Authorization': `Bearer ${existingToken}` }
+      headers: { 'Authorization': 'Bearer ' + existingToken }
     }).then(res => res.json()).then(data => {
-      if (data.success) {
+      if (data.success && data.user) {
         window.location.href = 'dashboard.html';
       }
     }).catch(() => {});
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let remaining = seconds;
     emailTimerText.style.display = 'inline';
     btnResendEmail.style.display = 'none';
-    emailTimerText.innerText = `Запросить код повторно через ${remaining} сек.`;
+    emailTimerText.innerText = 'Запросить код повторно через ' + remaining + ' сек.';
 
     emailCountdownInterval = setInterval(() => {
       remaining--;
@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
         emailTimerText.style.display = 'none';
         btnResendEmail.style.display = 'inline-block';
       } else {
-        emailTimerText.innerText = `Запросить код повторно через ${remaining} сек.`;
+        emailTimerText.innerText = 'Запросить код повторно через ' + remaining + ' сек.';
       }
     }, 1000);
   }
@@ -274,8 +274,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Уведомления
   function showAlert(message, type = 'error') {
-    alertBox.className = `auth-alert ${type}`;
-    alertBox.innerHTML = `<span>${type === 'error' ? '⚠️' : '✅'}</span> <div>${message}</div>`;
+    alertBox.className = 'auth-alert ' + type;
+    alertBox.innerHTML = '<span>' + (type === 'error' ? '⚠️' : '✅') + '</span> <div>' + message + '</div>';
     alertBox.style.display = 'flex';
   }
 
@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnFetchEgrul.innerHTML = '<span class="spinner-small"></span> Поиск в ЕГРЮЛ...';
 
     try {
-      const response = await fetch(`/api/egrul?inn=${encodeURIComponent(cleanInn)}`);
+      const response = await fetch('/api/egrul?inn=' + encodeURIComponent(cleanInn));
       const data = await response.json();
 
       btnFetchEgrul.disabled = false;
@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!data.success || !data.company) {
         innInput.classList.add('is-invalid');
         egrulStatus.className = 'egrul-status-box error';
-        egrulStatus.innerHTML = `✕ ${data.error || 'Организация не найдена в ЕГРЮЛ ФНС России'}`;
+        egrulStatus.innerHTML = '✕ ' + (data.error || 'Организация не найдена в ЕГРЮЛ ФНС России');
         egrulStatus.style.display = 'block';
         return;
       }
@@ -363,14 +363,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (kppInput) kppInput.value = company.kpp || '';
 
         egrulStatus.className = 'egrul-status-box error';
-        egrulStatus.innerHTML = `
-          <div><strong>✕ Деятельность прекращена / стадия ликвидации:</strong> ${escapeHtml(company.fullName)}</div>
-          <div class="egrul-company-meta" style="color: #ef4444; font-weight: 700; margin-top: 5px;">
-            ⚠️ Статус в ЕГРЮЛ: <strong>${escapeHtml(company.statusText)}</strong>.
-            ${company.ceoRaw ? `<br>Руководитель / Ликвидатор: ${escapeHtml(company.ceoRaw)}` : ''}
-            <br>Регистрация организаций на стадии ликвидации или прекративших деятельность запрещена.
-          </div>
-        `;
+        egrulStatus.innerHTML = '<div><strong>✕ Деятельность прекращена / стадия ликвидации:</strong> ' + escapeHtml(company.fullName) + '</div>' +
+          '<div class="egrul-company-meta" style="color: #ef4444; font-weight: 700; margin-top: 5px;">' +
+            '⚠️ Статус в ЕГРЮЛ: <strong>' + escapeHtml(company.statusText) + '</strong>.' +
+            (company.ceoRaw ? '<br>Руководитель / Ликвидатор: ' + escapeHtml(company.ceoRaw) : '') +
+            '<br>Регистрация организаций на стадии ликвидации или прекративших деятельность запрещена.' +
+          '</div>';
         egrulStatus.style.display = 'block';
         return;
       }
@@ -383,13 +381,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (kppInput) kppInput.value = company.kpp || '';
 
       egrulStatus.className = 'egrul-status-box success';
-      egrulStatus.innerHTML = `
-        <div><strong>✓ Найдено в ЕГРЮЛ (ФНС России):</strong> ${escapeHtml(company.fullName)}</div>
-        <div class="egrul-company-meta">
-          Статус: <strong>${escapeHtml(company.statusText)}</strong> • ОГРН: ${escapeHtml(company.ogrn)}${company.kpp ? ` • КПП: ${escapeHtml(company.kpp)}` : ''} • ${escapeHtml(company.address)}
-          ${company.ceoRaw ? `<br>Руководитель по реестру: ${escapeHtml(company.ceoRaw)}` : ''}
-        </div>
-      `;
+      egrulStatus.innerHTML = '<div><strong>✓ Найдено в ЕГРЮЛ (ФНС России):</strong> ' + escapeHtml(company.fullName) + '</div>' +
+        '<div class="egrul-company-meta">' +
+          'Статус: <strong>' + escapeHtml(company.statusText) + '</strong> • ОГРН: ' + escapeHtml(company.ogrn) + (company.kpp ? ' • КПП: ' + escapeHtml(company.kpp) : '') + ' • ' + escapeHtml(company.address) +
+          (company.ceoRaw ? '<br>Руководитель по реестру: ' + escapeHtml(company.ceoRaw) : '') +
+        '</div>';
       egrulStatus.style.display = 'block';
 
     } catch (err) {
@@ -423,7 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnFetchEgrip.innerHTML = '<span class="spinner-small"></span> Поиск в ЕГРИП...';
 
     try {
-      const response = await fetch(`/api/egrul?inn=${encodeURIComponent(cleanInn)}`);
+      const response = await fetch('/api/egrul?inn=' + encodeURIComponent(cleanInn));
       const data = await response.json();
 
       btnFetchEgrip.disabled = false;
@@ -432,7 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!data.success || !data.company) {
         ipInnInput.classList.add('is-invalid');
         egripStatus.className = 'egrul-status-box error';
-        egripStatus.innerHTML = `✕ ${data.error || 'Индивидуальный предприниматель не найден в реестре ЕГРИП'}`;
+        egripStatus.innerHTML = '✕ ' + (data.error || 'Индивидуальный предприниматель не найден в реестре ЕГРИП');
         egripStatus.style.display = 'block';
         return;
       }
@@ -467,23 +463,19 @@ document.addEventListener('DOMContentLoaded', () => {
         ipInnInput.classList.add('is-invalid');
 
         egripStatus.className = 'egrul-status-box error';
-        egripStatus.innerHTML = `
-          <div><strong>✕ Деятельность индивидуального предпринимателя прекращена${company.terminationDate ? ` (дата: ${escapeHtml(company.terminationDate)})` : ''}:</strong> ${escapeHtml(company.fullName)}</div>
-          <div class="egrul-company-meta" style="color: #ef4444; font-weight: 700; margin-top: 5px;">
-            ⚠️ Регистрация предпринимателей, прекративших деятельность, на платформе запрещена.
-          </div>
-        `;
+        egripStatus.innerHTML = '<div><strong>✕ Деятельность индивидуального предпринимателя прекращена' + (company.terminationDate ? ' (дата: ' + escapeHtml(company.terminationDate) + ')' : '') + ':</strong> ' + escapeHtml(company.fullName) + '</div>' +
+          '<div class="egrul-company-meta" style="color: #ef4444; font-weight: 700; margin-top: 5px;">' +
+            '⚠️ Регистрация предпринимателей, прекративших деятельность, на платформе запрещена.' +
+          '</div>';
         egripStatus.style.display = 'block';
         return;
       }
 
       egripStatus.className = 'egrul-status-box success';
-      egripStatus.innerHTML = `
-        <div><strong>✓ Найдено в ЕГРИП (ФНС России):</strong> ${escapeHtml(company.fullName)}</div>
-        <div class="egrul-company-meta">
-          Статус: <strong>${escapeHtml(company.statusText)}</strong> • ОГРНИП: ${escapeHtml(company.ogrnip || company.ogrn)}${company.registrationDate ? ` • Регистрация: ${escapeHtml(company.registrationDate)}` : ''} • ${escapeHtml(company.address)}
-        </div>
-      `;
+      egripStatus.innerHTML = '<div><strong>✓ Найдено в ЕГРИП (ФНС России):</strong> ' + escapeHtml(company.fullName) + '</div>' +
+        '<div class="egrul-company-meta">' +
+          'Статус: <strong>' + escapeHtml(company.statusText) + '</strong> • ОГРНИП: ' + escapeHtml(company.ogrnip || company.ogrn) + (company.registrationDate ? ' • Регистрация: ' + escapeHtml(company.registrationDate) : '') + ' • ' + escapeHtml(company.address) +
+        '</div>';
       egripStatus.style.display = 'block';
 
     } catch (err) {
@@ -568,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const current = levels[score - 1] || levels[0];
     meter.style.width = current.width;
     meter.style.backgroundColor = current.color;
-    label.innerText = `Сложность: ${current.text}`;
+    label.innerText = 'Сложность: ' + current.text;
   }
 
   // Проверка совпадения паролей
@@ -733,7 +725,7 @@ document.addEventListener('DOMContentLoaded', () => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      showAlert(`Документ «${link.innerText.trim()}» откроется в отдельном окне после утверждения финальной редакции.`, 'info');
+      showAlert('Документ «' + link.innerText.trim() + '» откроется в отдельном окне после утверждения финальной редакции.', 'info');
     });
   });
 
@@ -789,7 +781,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email: email, password: password })
       });
       const data = await response.json();
 
@@ -809,7 +801,7 @@ document.addEventListener('DOMContentLoaded', () => {
       showAlert('✓ Успешная авторизация! Перенаправление в личный кабинет...', 'success');
       setTimeout(() => {
         window.location.href = 'dashboard.html';
-      }, 500);
+      }, 300);
 
     } catch (err) {
       btn.disabled = false;
@@ -1020,7 +1012,7 @@ document.addEventListener('DOMContentLoaded', () => {
       pendingRegistrationEmail = email;
       pendingPayload = registrationPayload;
       setMode('verify-email');
-      showAlert(`Письмо с 6-значным проверочным кодом отправлено на адрес ${email}. Пожалуйста, проверьте ваш почтовый ящик.`, 'success');
+      showAlert('Письмо с 6-значным проверочным кодом отправлено на адрес ' + email + '. Пожалуйста, проверьте ваш почтовый ящик.', 'success');
 
     } catch (err) {
       btn.disabled = false;
@@ -1080,7 +1072,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       setTimeout(() => {
         window.location.href = 'dashboard.html';
-      }, 900);
+      }, 500);
 
     } catch (err) {
       btn.disabled = false;
@@ -1109,7 +1101,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (data.success) {
           startEmailTimer(60);
-          showAlert(`Новое письмо с проверочным кодом отправлено на адрес ${pendingRegistrationEmail}. Пожалуйста, проверьте почту.`, 'success');
+          showAlert('Новое письмо с проверочным кодом отправлено на адрес ' + pendingRegistrationEmail + '. Пожалуйста, проверьте почту.', 'success');
         } else {
           showAlert(data.error || 'Не удалось отправить код повторно');
         }
@@ -1151,7 +1143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       btn.disabled = false;
       btn.innerHTML = originalText;
-      showAlert(`Инструкции и ссылка для сброса пароля направлены на адрес ${email}`, 'success');
+      showAlert('Инструкции и ссылка для сброса пароля направлены на адрес ' + email, 'success');
       refreshForgotCaptcha();
     }, 600);
   });
