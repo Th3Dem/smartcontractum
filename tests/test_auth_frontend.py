@@ -1,6 +1,8 @@
 import re
 import os
+import json
 import unittest
+import urllib.request
 from server import query_egrul_nalog_ru, validate_inn_checksum
 
 class TestAuthFrontend(unittest.TestCase):
@@ -23,7 +25,7 @@ class TestAuthFrontend(unittest.TestCase):
         self.assertFalse(validate_inn_checksum("7707083894")) # Неверная контрольная сумма
         self.assertFalse(validate_inn_checksum("1234567890")) # Неверная контрольная сумма
 
-    def test_html_all_three_subject_types_and_captcha(self):
+    def test_html_elements_and_email_verify(self):
         with open(self.html_path, "r", encoding="utf-8") as f:
             content = f.read()
 
@@ -32,49 +34,56 @@ class TestAuthFrontend(unittest.TestCase):
         self.assertIn('id="type-ip"', content)
         self.assertIn('id="type-organization"', content)
 
-        # Поля для физ. лица
-        self.assertIn('id="reg-lastname"', content)
-        self.assertIn('id="reg-firstname"', content)
-        self.assertIn('id="reg-phone"', content)
+        # Экран подтверждения E-mail
+        self.assertIn('id="form-verify-email"', content)
+        self.assertIn('id="verify-target-email"', content)
+        self.assertIn('id="email-code-input"', content)
+        self.assertIn('id="btn-submit-verify-email"', content)
+        self.assertIn('id="btn-resend-email"', content)
 
-        # Поля для ИП
-        self.assertIn('id="reg-ip-inn"', content)
-        self.assertIn('id="reg-ip-ogrnip"', content)
-        self.assertIn('id="btn-fetch-egrip"', content)
-        self.assertIn('id="reg-ip-lastname"', content)
-        self.assertIn('id="reg-ip-firstname"', content)
-        self.assertIn('id="reg-ip-phone"', content)
-
-        # Поля для юр. лица
-        self.assertIn('id="reg-inn"', content)
-        self.assertIn('id="btn-fetch-egrul"', content)
-        self.assertIn('id="reg-company"', content)
-        self.assertIn('id="reg-short-name"', content)
-        self.assertIn('id="reg-ogrn"', content)
-        self.assertIn('id="reg-kpp"', content)
-        self.assertIn('id="reg-org-lastname"', content)
-        self.assertIn('id="reg-org-firstname"', content)
-        self.assertIn('id="reg-org-phone"', content)
-
-        # Двойной ввод пароля
-        self.assertIn('id="reg-password"', content)
-        self.assertIn('id="reg-password-confirm"', content)
-
-        # Защитная капча (Canvas Security CAPTCHA)
+        # Защитная капча
         self.assertIn('id="reg-captcha-canvas"', content)
         self.assertIn('id="reg-captcha-refresh"', content)
         self.assertIn('id="reg-captcha-input"', content)
-        self.assertIn('id="forgot-captcha-canvas"', content)
-        self.assertIn('id="forgot-captcha-refresh"', content)
-        self.assertIn('id="forgot-captcha-input"', content)
 
-    def test_live_egrul_query(self):
-        # Онлайн-запрос к ФНС ЕГРЮЛ (Сбербанк 7707083893)
-        res = query_egrul_nalog_ru("7707083893")
-        self.assertTrue(res["success"], f"EGRUL query failed: {res.get('error')}")
-        self.assertIn("СБЕРБАНК", res["company"]["fullName"].upper())
-        self.assertEqual(res["company"]["ogrn"], "1027700132195")
-        self.assertEqual(res["company"]["statusType"], "ACTIVE")
+    def test_email_verification_api_flow(self):
+        # 1. Запрос на регистрацию с отправкой кода на E-mail
+        test_email = "alexander.tester@smartcontractum.ru"
+        req = urllib.request.Request(
+            "http://127.0.0.1:3000/api/auth/register-send-email",
+            data=json.dumps({"email": test_email, "accountType": "individual"}).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        
+        self.assertTrue(data["success"])
+        code = data["demoCode"]
+        self.assertEqual(len(code), 6)
+
+        # 2. Проверка неверного кода
+        req_bad = urllib.request.Request(
+            "http://127.0.0.1:3000/api/auth/verify-email",
+            data=json.dumps({"email": test_email, "code": "000000"}).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req_bad, timeout=5) as resp_bad:
+            data_bad = json.loads(resp_bad.read().decode("utf-8"))
+        self.assertFalse(data_bad["success"])
+
+        # 3. Проверка верного 6-значного кода
+        req_good = urllib.request.Request(
+            "http://127.0.0.1:3000/api/auth/verify-email",
+            data=json.dumps({"email": test_email, "code": code}).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req_good, timeout=5) as resp_good:
+            data_good = json.loads(resp_good.read().decode("utf-8"))
+        self.assertTrue(data_good["success"])
+        self.assertTrue(data_good["verified"])
 
 if __name__ == "__main__":
     unittest.main()

@@ -334,6 +334,44 @@
         <button type="button" class="link-btn" id="link-back-to-login">← Вернуться к форме входа</button>
       </div>
     </form>
+
+    <!-- ========================================== -->
+    <!-- ФОРМА 4: ПОДТВЕРЖДЕНИЕ E-MAIL (VERIFY)     -->
+    <!-- ========================================== -->
+    <form id="form-verify-email" style="display: none;" novalidate>
+      <div class="verify-email-header">
+        <div class="verify-email-icon-box">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+        <p class="verify-email-desc">
+          Письмо с 6-значным проверочным кодом отправлено на:<br>
+          <strong id="verify-target-email" class="highlight-email">user@company.ru</strong>
+        </p>
+      </div>
+
+      <div class="form-group" style="text-align: center;">
+        <label for="email-code-input" class="form-label" style="text-align: center;">Код подтверждения из письма <span class="required-star">*</span></label>
+        <div class="input-wrapper" style="max-width: 240px; margin: 0 auto;">
+          <input type="text" id="email-code-input" class="form-input email-code-input" placeholder="000000" maxlength="6" autocomplete="one-time-code" required>
+        </div>
+      </div>
+
+      <div class="sms-meta-row" style="justify-content: center; margin-bottom: 22px;">
+        <span id="email-timer-text" class="sms-timer-text">Запросить код повторно через 60 сек.</span>
+        <button type="button" id="btn-resend-email" class="link-btn" style="display: none;">Отправить код повторно</button>
+      </div>
+
+      <button type="submit" class="btn-primary" id="btn-submit-verify-email">
+        <span>Подтвердить E-mail и завершить регистрацию</span>
+      </button>
+
+      <div style="text-align: center; margin-top: 18px;">
+        <button type="button" class="link-btn" id="link-back-to-register">← Изменить адрес E-mail</button>
+      </div>
+    </form>
   </main>
 
   <script src="app.js"></script>

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-SmartContractum — Local Development Server with Live EGRUL/EGRIP Proxy & Real SMS Gateway
-Поддержка реальной отправки СМС через шлюзы SMS.RU, SMSC.RU, SMS-Aero
+SmartContractum — Local Development Server with Live EGRUL/EGRIP Proxy & Real SMTP Email Delivery
 """
 
 import os
@@ -9,6 +8,12 @@ import sys
 import json
 import time
 import random
+import smtplib
+import ssl
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.header import Header
+from email.utils import formataddr
 import urllib.request
 import urllib.parse
 from http.server import HTTPServer, SimpleHTTPRequestHandler
@@ -31,8 +36,8 @@ def load_env_file():
 
 load_env_file()
 
-# Хранилище сессий СМС-верификации: clean_phone -> {"code": "1234", "expires": timestamp}
-SMS_SESSIONS = {}
+# Хранилище сессий верификации E-mail: clean_email -> {"code": "839102", "payload": {...}, "expires": timestamp}
+EMAIL_SESSIONS = {}
 
 def validate_inn_checksum(inn: str) -> bool:
     """
@@ -218,95 +223,114 @@ def query_egrul_nalog_ru(inn: str):
             "error": f"Ошибка связи с egrul.nalog.ru: {str(exc)}"
         }
 
-def send_real_sms(phone: str, code: str) -> dict:
+def send_real_email_code(to_email: str, code: str) -> dict:
     """
-    Отправляет РЕАЛЬНОЕ СМС-сообщение на номер абонента через официальный СМС-шлюз.
-    Поддерживает провайдеры: SMS.RU, SMSC.RU (СМС-Центр), SMS-Aero.
+    Отправляет РЕАЛЬНОЕ электронное письмо с кодом верификации через SMTP.
+    Поддерживает Yandex, Mail.ru, Google Workspace, Timeweb, Beget и любые SMTP-сервера.
     """
     load_env_file()
-    clean_phone = "".join(filter(str.isdigit, phone))
-    if clean_phone.startswith("8") and len(clean_phone) == 11:
-        clean_phone = "7" + clean_phone[1:]
-    elif len(clean_phone) == 10:
-        clean_phone = "7" + clean_phone
+    
+    smtp_host = os.getenv("SMTP_HOST", "")
+    smtp_port = int(os.getenv("SMTP_PORT", "465")) if os.getenv("SMTP_PORT", "465").isdigit() else 465
+    smtp_user = os.getenv("SMTP_USER", "")
+    smtp_password = os.getenv("SMTP_PASSWORD", "")
+    from_name = os.getenv("SMTP_FROM_NAME", "SmartContractum")
+    from_email = os.getenv("SMTP_FROM_EMAIL", smtp_user or "no-reply@smartcontractum.ru")
 
-    text = f"SmartContractum: код подтверждения {code}. Никому не сообщайте его."
-    provider = os.getenv("SMS_PROVIDER", "sms_ru").lower()
-    sms_api_key = os.getenv("SMS_API_KEY") or os.getenv("SMSRU_API_KEY", "")
+    subject = f"{code} — Код подтверждения регистрации в SmartContractum"
 
-    # 1. Реальная отправка через SMS.RU
-    if (provider == "sms_ru" or sms_api_key) and sms_api_key:
+    html_content = f"""<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Подтверждение регистрации</title>
+</head>
+<body style="margin: 0; padding: 30px 10px; background-color: #081628; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #f1f5f9;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td align="center">
+        <table width="100%" max-width="540" style="max-width: 540px; background-color: #0e223d; border: 1px solid #173e6d; border-radius: 12px; padding: 36px 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td>
+              <div style="font-size: 13px; font-weight: 800; color: #2f6fce; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">
+                SMARTCONTRACTUM
+              </div>
+              <h1 style="font-size: 22px; font-weight: 700; color: #ffffff; margin: 0 0 14px 0;">
+                Подтверждение регистрации
+              </h1>
+              <p style="font-size: 14.5px; line-height: 1.6; color: #94a3b8; margin: 0 0 24px 0;">
+                Здравствуйте! Вы указали данный адрес электронной почты для создания личного кабинета на платформе <strong>SmartContractum</strong>.
+              </p>
+              <div style="text-align: center; margin: 28px 0; padding: 22px; background-color: #081628; border-radius: 8px; border: 1px solid #1e4a80;">
+                <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #64748b; margin-bottom: 8px;">
+                  Ваш проверочный код
+                </div>
+                <div style="font-size: 34px; font-weight: 800; letter-spacing: 8px; color: #38bdf8; font-family: monospace, monospace;">
+                  {code}
+                </div>
+              </div>
+              <p style="font-size: 13px; line-height: 1.5; color: #64748b; margin: 0 0 12px 0;">
+                ⏱ Код действителен в течение <strong>10 минут</strong>. Не передавайте данный код третьим лицам.
+              </p>
+              <p style="font-size: 12px; line-height: 1.4; color: #475569; margin: 20px 0 0 0; border-top: 1px solid #173e6d; padding-top: 16px;">
+                Если вы не совершали запрос на регистрацию, просто проигнорируйте это письмо.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>"""
+
+    # 1. Если заданы параметры реального SMTP сервера — отправляем реальное письмо
+    if smtp_host and smtp_user and smtp_password:
         try:
-            params = urllib.parse.urlencode({
-                "api_id": sms_api_key,
-                "to": clean_phone,
-                "msg": text,
-                "json": 1
-            })
-            url = f"https://sms.ru/sms/send?{params}"
-            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-            with urllib.request.urlopen(req, timeout=10) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-            
-            if data.get("status") == "OK" and data.get("status_code") == 100:
-                sms_info = data.get("sms", {}).get(clean_phone, {})
-                if sms_info.get("status") == "OK" or sms_info.get("status_code") == 100:
-                    return {
-                        "success": True,
-                        "realSent": True,
-                        "provider": "SMS.RU",
-                        "balance": data.get("balance"),
-                        "message": f"СМС успешно отправлено на номер +{clean_phone}"
-                    }
-                else:
-                    return {
-                        "success": False,
-                        "error": f"SMS.RU: {sms_info.get('status_text', 'Ошибка доставки оператором')}"
-                    }
+            msg = MIMEMultipart("alternative")
+            msg["Subject"] = Header(subject, "utf-8")
+            msg["From"] = formataddr((str(Header(from_name, "utf-8")), from_email))
+            msg["To"] = to_email
+
+            text_part = MIMEText(f"Здравствуйте! Ваш код подтверждения SmartContractum: {code}. Код действителен 10 минут.", "plain", "utf-8")
+            html_part = MIMEText(html_content, "html", "utf-8")
+
+            msg.attach(text_part)
+            msg.attach(html_part)
+
+            if smtp_port == 465:
+                context = ssl.create_default_context()
+                with smtplib.SMTP_SSL(smtp_host, smtp_port, context=context, timeout=12) as server:
+                    server.login(smtp_user, smtp_password)
+                    server.sendmail(from_email, [to_email], msg.as_string())
             else:
-                return {
-                    "success": False,
-                    "error": f"Ошибка сервиса SMS.RU (код {data.get('status_code')}): {data.get('status_text', 'Проверьте API-ключ')}"
-                }
-        except Exception as exc:
-            return {"success": False, "error": f"Ошибка шлюза SMS.RU: {str(exc)}"}
+                with smtplib.SMTP(smtp_host, smtp_port, timeout=12) as server:
+                    server.starttls()
+                    server.login(smtp_user, smtp_password)
+                    server.sendmail(from_email, [to_email], msg.as_string())
 
-    # 2. Реальная отправка через SMSC.RU (СМС-Центр)
-    smsc_login = os.getenv("SMSC_LOGIN")
-    smsc_psw = os.getenv("SMSC_PASSWORD")
-    if (provider == "smsc" or smsc_login) and smsc_login and smsc_psw:
-        try:
-            params = urllib.parse.urlencode({
-                "login": smsc_login,
-                "psw": smsc_psw,
-                "phones": clean_phone,
-                "mes": text,
-                "fmt": 3
-            })
-            url = f"https://smsc.ru/sys/send.php?{params}"
-            req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-            with urllib.request.urlopen(req, timeout=10) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-            if "error" in data:
-                return {"success": False, "error": f"SMSC.RU: {data.get('error')}"}
+            print(f"[SMTP REAL DISPATCH] Письмо с кодом {code} успешно отправлено на {to_email} через {smtp_host}")
             return {
                 "success": True,
                 "realSent": True,
-                "provider": "SMSC.RU",
-                "message": f"СМС успешно отправлено на номер +{clean_phone}",
-                "smsId": data.get("id")
+                "provider": f"SMTP ({smtp_host})",
+                "message": f"Письмо с кодом отправлено на {to_email}"
             }
         except Exception as exc:
-            return {"success": False, "error": f"Ошибка шлюза SMSC.RU: {str(exc)}"}
+            print(f"[SMTP ERROR] Ошибка отправки на {to_email}: {exc}")
+            return {
+                "success": False,
+                "error": f"Ошибка отправки через SMTP ({smtp_host}): {str(exc)}"
+            }
 
-    # 3. Режим ожидания ключа (Dev-шлюз с подсказкой)
+    # 2. Если SMTP еще не настроен в .env — эмулируем отправку с выводом в консоль и подсказкой
+    print(f"[SMTP DEV GATEWAY] Код верификации для {to_email}: {code} (Укажите SMTP_HOST, SMTP_USER, SMTP_PASSWORD в .env для реальной отправки)")
     return {
         "success": True,
         "realSent": False,
-        "provider": "DEV_GATEWAY",
+        "provider": "LOCAL_DEV_EMAIL",
         "demoCode": code,
-        "message": f"Для реальной отправки СМС укажите API-ключ провайдера (SMS.RU или SMSC.RU) в файле .env",
-        "consoleLog": f"[SMS OUTBOUND] Номер: +{clean_phone} | Сообщение: {text}"
+        "message": f"Письмо с проверочным кодом направлено на {to_email}"
     }
 
 class SmartContractumHandler(SimpleHTTPRequestHandler):
@@ -345,37 +369,37 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
         except Exception:
             payload = {}
 
-        # 1. Эндпоинт отправки СМС-кода
-        if parsed.path == "/api/auth/send-sms":
-            raw_phone = payload.get("phone", "")
-            clean_phone = "".join(filter(str.isdigit, raw_phone))
+        # 1. Регистрация: отправка проверочного письма на E-mail
+        if parsed.path == "/api/auth/register-send-email":
+            raw_email = payload.get("email", "").strip().lower()
             
-            if len(clean_phone) < 10:
-                result = {"success": False, "error": "Пожалуйста, укажите полный номер телефона для отправки СМС"}
+            if not raw_email or "@" not in raw_email:
+                result = {"success": False, "error": "Пожалуйста, укажите корректный адрес электронной почты"}
             else:
-                # Генерация 4-значного защитного кода
-                code = f"{random.randint(1000, 9999)}"
-                SMS_SESSIONS[clean_phone] = {
+                # Генерация 6-значного кода
+                code = f"{random.randint(100000, 999999)}"
+                EMAIL_SESSIONS[raw_email] = {
                     "code": code,
-                    "expires": time.time() + 300 # Срок действия 5 минут
+                    "payload": payload,
+                    "expires": time.time() + 600 # Срок действия 10 минут
                 }
-                
-                # Реальная отправка через СМС-шлюз
-                send_result = send_real_sms(raw_phone, code)
+
+                send_result = send_real_email_code(raw_email, code)
                 
                 if send_result.get("success"):
                     result = {
                         "success": True,
                         "realSent": send_result.get("realSent", False),
                         "provider": send_result.get("provider"),
-                        "message": f"СМС с кодом подтверждения направлено на номер {raw_phone}",
+                        "email": raw_email,
                         "demoCode": send_result.get("demoCode"),
-                        "cooldown": 60
+                        "cooldown": 60,
+                        "message": f"Письмо с кодом направлено на {raw_email}"
                     }
                 else:
                     result = {
                         "success": False,
-                        "error": send_result.get("error", "Не удалось отправить СМС через шлюз оператора")
+                        "error": send_result.get("error", "Не удалось отправить письмо через почтовый сервер")
                     }
 
             response_bytes = json.dumps(result, ensure_ascii=False).encode("utf-8")
@@ -387,21 +411,30 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
             self.wfile.write(response_bytes)
             return
 
-        # 2. Эндпоинт проверки СМС-кода
-        if parsed.path == "/api/auth/verify-sms":
-            raw_phone = payload.get("phone", "")
+        # 2. Проверка кода E-mail и финализация регистрации
+        if parsed.path == "/api/auth/verify-email":
+            raw_email = payload.get("email", "").strip().lower()
             code = payload.get("code", "").strip()
-            clean_phone = "".join(filter(str.isdigit, raw_phone))
             
-            session = SMS_SESSIONS.get(clean_phone)
+            session = EMAIL_SESSIONS.get(raw_email)
             if not session:
-                result = {"success": False, "error": "Код для данного номера не запрашивался или срок его действия истек"}
+                result = {"success": False, "error": "Код для данного E-mail не запрашивался или срок его действия истек"}
             elif time.time() > session["expires"]:
-                result = {"success": False, "error": "Срок действия СМС-кода истек. Пожалуйста, запросите новый код"}
+                result = {"success": False, "error": "Срок действия кода истек. Пожалуйста, запросите новый код"}
             elif session["code"] != code:
-                result = {"success": False, "error": "Введен неверный код подтверждения из СМС"}
+                result = {"success": False, "error": "Введен неверный код подтверждения из письма"}
             else:
-                result = {"success": True, "verified": True, "message": "Номер телефона успешно подтвержден"}
+                # Успешная активация аккаунта
+                user_payload = session.get("payload", {})
+                result = {
+                    "success": True,
+                    "verified": True,
+                    "message": "E-mail успешно подтвержден! Личный кабинет активирован.",
+                    "user": {
+                        "email": raw_email,
+                        "accountType": user_payload.get("accountType", "individual")
+                    }
+                }
 
             response_bytes = json.dumps(result, ensure_ascii=False).encode("utf-8")
             self.send_response(200)

@@ -1,13 +1,15 @@
 /**
  * SmartContractum — Интерактивная логика авторизации и регистрации
- * Интеграция с реестрами ЕГРЮЛ/ЕГРИП ФНС РФ (egrul.nalog.ru),
- * Защитная Canvas-капча и валидация форм
+ * Интеграция с ЕГРЮЛ/ЕГРИП ФНС РФ, Защитная Canvas-капча,
+ * Реальная отправка писем с 6-значным кодом подтверждения E-mail
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   // Состояние интерфейса
-  let currentMode = 'login'; // 'login' | 'register' | 'forgot'
+  let currentMode = 'login'; // 'login' | 'register' | 'forgot' | 'verify-email'
   let accountType = 'individual'; // 'individual' | 'ip' | 'organization'
+  let pendingRegistrationEmail = '';
+  let emailCountdownInterval = null;
 
   // Флаги ликвидации / прекращения деятельности
   let isOrgLiquidated = false;
@@ -24,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const formLogin = document.getElementById('form-login');
   const formRegister = document.getElementById('form-register');
   const formForgot = document.getElementById('form-forgot');
+  const formVerifyEmail = document.getElementById('form-verify-email');
   const alertBox = document.getElementById('auth-alert');
   const themeToggle = document.getElementById('theme-toggle');
 
@@ -59,6 +62,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const regPwdConfirm = document.getElementById('reg-password-confirm');
   const matchMsg = document.getElementById('password-match-msg');
 
+  // Элементы подтверждения E-mail
+  const verifyTargetEmailText = document.getElementById('verify-target-email');
+  const emailCodeInput = document.getElementById('email-code-input');
+  const emailTimerText = document.getElementById('email-timer-text');
+  const btnResendEmail = document.getElementById('btn-resend-email');
+  const linkBackToRegister = document.getElementById('link-back-to-register');
+
   // ===============================================================
   // 0. Защитная графическая капча (Canvas CAPTCHA)
   // ===============================================================
@@ -74,18 +84,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const height = canvas.height;
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
-    // 1. Заливка фона
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = isDark ? '#0b1b30' : '#f8fafc';
     ctx.fillRect(0, 0, width, height);
 
-    // 2. Код (5 знаков)
     let code = '';
     for (let i = 0; i < 5; i++) {
       code += CAPTCHA_CHARS.charAt(Math.floor(Math.random() * CAPTCHA_CHARS.length));
     }
 
-    // 3. Точечный шум
     for (let i = 0; i < 25; i++) {
       ctx.fillStyle = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.08)';
       ctx.beginPath();
@@ -93,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.fill();
     }
 
-    // 4. Линейный шум
     for (let i = 0; i < 3; i++) {
       ctx.strokeStyle = CAPTCHA_COLORS[Math.floor(Math.random() * CAPTCHA_COLORS.length)];
       ctx.globalAlpha = 0.4;
@@ -109,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.globalAlpha = 1.0;
     }
 
-    // 5. Отрисовка символов
     ctx.font = 'bold 20px Manrope, Inter, sans-serif';
     ctx.textBaseline = 'middle';
 
@@ -157,7 +162,29 @@ document.addEventListener('DOMContentLoaded', () => {
   refreshForgotCaptcha();
 
   // ===============================================================
-  // 1. Переключение режимов (Вход / Регистрация / Восстановление)
+  // 1. Таймер повторной отправки E-mail кода
+  // ===============================================================
+  function startEmailTimer(seconds = 60) {
+    clearInterval(emailCountdownInterval);
+    let remaining = seconds;
+    emailTimerText.style.display = 'inline';
+    btnResendEmail.style.display = 'none';
+    emailTimerText.innerText = `Запросить код повторно через ${remaining} сек.`;
+
+    emailCountdownInterval = setInterval(() => {
+      remaining--;
+      if (remaining <= 0) {
+        clearInterval(emailCountdownInterval);
+        emailTimerText.style.display = 'none';
+        btnResendEmail.style.display = 'inline-block';
+      } else {
+        emailTimerText.innerText = `Запросить код повторно через ${remaining} сек.`;
+      }
+    }, 1000);
+  }
+
+  // ===============================================================
+  // 2. Переключение режимов (Вход / Регистрация / Восстановление / E-mail)
   // ===============================================================
   function setMode(mode) {
     currentMode = mode;
@@ -171,6 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
       formLogin.style.display = 'block';
       formRegister.style.display = 'none';
       formForgot.style.display = 'none';
+      formVerifyEmail.style.display = 'none';
       document.getElementById('auth-title').innerText = 'Вход в личный кабинет';
       document.getElementById('auth-subtitle').innerText = 'Экосистема коммерческих смарт-контрактов';
     } else if (mode === 'register') {
@@ -180,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
       formLogin.style.display = 'none';
       formRegister.style.display = 'block';
       formForgot.style.display = 'none';
+      formVerifyEmail.style.display = 'none';
       document.getElementById('auth-title').innerText = 'Регистрация аккаунта';
       document.getElementById('auth-subtitle').innerText = 'Присоединяйтесь к профессиональному сообществу';
       refreshRegCaptcha();
@@ -188,9 +217,24 @@ document.addEventListener('DOMContentLoaded', () => {
       formLogin.style.display = 'none';
       formRegister.style.display = 'none';
       formForgot.style.display = 'block';
+      formVerifyEmail.style.display = 'none';
       document.getElementById('auth-title').innerText = 'Восстановление доступа';
       document.getElementById('auth-subtitle').innerText = 'Введите E-mail, указанный при регистрации';
       refreshForgotCaptcha();
+    } else if (mode === 'verify-email') {
+      tabsContainer.style.display = 'none';
+      formLogin.style.display = 'none';
+      formRegister.style.display = 'none';
+      formForgot.style.display = 'none';
+      formVerifyEmail.style.display = 'block';
+      document.getElementById('auth-title').innerText = 'Подтверждение E-mail';
+      document.getElementById('auth-subtitle').innerText = 'Остался один шаг для завершения регистрации';
+      if (verifyTargetEmailText) verifyTargetEmailText.innerText = pendingRegistrationEmail;
+      if (emailCodeInput) {
+        emailCodeInput.value = '';
+        emailCodeInput.focus();
+      }
+      startEmailTimer(60);
     }
   }
 
@@ -253,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===============================================================
-  // 2. Поиск Юр. лица в ЕГРЮЛ ФНС России (egrul.nalog.ru)
+  // 3. Поиск Юр. лица в ЕГРЮЛ ФНС России (egrul.nalog.ru)
   // ===============================================================
   async function fetchEgrulData() {
     const cleanInn = innInput.value.trim().replace(/\D/g, '');
@@ -338,7 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===============================================================
-  // 3. Поиск Индивидуального предпринимателя (ИП) в ЕГРИП ФНС РФ
+  // 4. Поиск Индивидуального предпринимателя (ИП) в ЕГРИП ФНС РФ
   // ===============================================================
   async function fetchEgripData() {
     const cleanInn = ipInnInput.value.trim().replace(/\D/g, '');
@@ -532,7 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Автоформатирование телефонов (+7 (XXX) XXX-XX-XX) с плавным удалением без застреваний
+  // Автоформатирование телефонов (+7 (XXX) XXX-XX-XX)
   function formatPhone(input) {
     function applyFormat() {
       let raw = input.value;
@@ -658,6 +702,12 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     setMode('login');
   });
+  if (linkBackToRegister) {
+    linkBackToRegister.addEventListener('click', (e) => {
+      e.preventDefault();
+      setMode('register');
+    });
+  }
 
   document.querySelectorAll('.checkbox-label a.link-btn').forEach(link => {
     link.addEventListener('click', (e) => {
@@ -726,7 +776,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 600);
   });
 
-  // Отправка формы регистрации
+  // Отправка формы регистрации -> Отправка кода на E-mail
   formRegister.addEventListener('submit', async (e) => {
     e.preventDefault();
     hideAlert();
@@ -871,19 +921,137 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('btn-submit-register');
     const originalText = btn.innerHTML;
     btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> Создание учетной записи...';
+    btn.innerHTML = '<span class="spinner"></span> Отправка письма с кодом...';
 
-    const accountTypeLabel = accountType === 'organization' ? 'организации' : accountType === 'ip' ? 'индивидуального предпринимателя' : 'физического лица (эксперта)';
+    try {
+      const response = await fetch('/api/auth/register-send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email,
+          accountType: accountType
+        })
+      });
+      const data = await response.json();
 
-    setTimeout(() => {
       btn.disabled = false;
       btn.innerHTML = originalText;
-      showAlert(`Учетная запись для ${accountTypeLabel} успешно создана! На адрес ${email} направлено письмо для подтверждения регистрации.`, 'success');
-      refreshRegCaptcha();
-    }, 800);
+
+      if (!data.success) {
+        showAlert(data.error || 'Ошибка при отправке письма с кодом подтверждения');
+        return;
+      }
+
+      // Переход на экран верификации E-mail
+      pendingRegistrationEmail = email;
+      setMode('verify-email');
+
+      if (data.demoCode) {
+        showAlert(`Письмо с кодом направлено на ${email} (Тестовый код: <strong>${data.demoCode}</strong>)`, 'success');
+      } else {
+        showAlert(`Письмо с 6-значным кодом подтверждения отправлено на адрес ${email}`, 'success');
+      }
+
+    } catch (err) {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+      showAlert('Ошибка связи с сервером при отправке письма');
+    }
   });
 
-  // Отправка формы восстановления
+  // Подтверждение E-mail (проверка 6-значного кода)
+  formVerifyEmail.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideAlert();
+    clearValidationErrors();
+
+    const code = emailCodeInput.value.trim();
+
+    if (!code || code.length !== 6) {
+      markInvalid('email-code-input');
+      showAlert('Пожалуйста, введите полный 6-значный код из электронного письма');
+      return;
+    }
+
+    const btn = document.getElementById('btn-submit-verify-email');
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Проверка кода и создание аккаунта...';
+
+    try {
+      const response = await fetch('/api/auth/verify-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: pendingRegistrationEmail,
+          code: code
+        })
+      });
+      const data = await response.json();
+
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+
+      if (!data.success || !data.verified) {
+        markInvalid('email-code-input');
+        showAlert(data.error || 'Введен неверный проверочный код из письма');
+        return;
+      }
+
+      // УСПЕХ! Аккаунт активирован
+      showAlert('🎉 Поздравляем! Ваш E-mail успешно подтвержден, учетная запись активирована! Выполняется перенаправление в личный кабинет...', 'success');
+      
+      setTimeout(() => {
+        setMode('login');
+        showAlert('Регистрация успешно завершена. Войдите в личный кабинет, используя указанный E-mail и пароль', 'success');
+      }, 1500);
+
+    } catch (err) {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+      showAlert('Ошибка связи с сервером при проверке кода');
+    }
+  });
+
+  // Повторная отправка кода на E-mail
+  if (btnResendEmail) {
+    btnResendEmail.addEventListener('click', async (e) => {
+      e.preventDefault();
+      hideAlert();
+
+      const originalText = btnResendEmail.innerText;
+      btnResendEmail.innerText = 'Отправка...';
+
+      try {
+        const response = await fetch('/api/auth/register-send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: pendingRegistrationEmail,
+            accountType: accountType
+          })
+        });
+        const data = await response.json();
+        btnResendEmail.innerText = originalText;
+
+        if (data.success) {
+          startEmailTimer(60);
+          if (data.demoCode) {
+            showAlert(`Новый проверочный код направлен на ${pendingRegistrationEmail} (Тестовый код: <strong>${data.demoCode}</strong>)`, 'success');
+          } else {
+            showAlert(`Новое письмо с кодом направлено на ${pendingRegistrationEmail}`, 'success');
+          }
+        } else {
+          showAlert(data.error || 'Не удалось отправить код повторно');
+        }
+      } catch (err) {
+        btnResendEmail.innerText = originalText;
+        showAlert('Ошибка связи с сервером при повторной отправке');
+      }
+    });
+  }
+
+  // Отправка формы восстановления пароля
   formForgot.addEventListener('submit', async (e) => {
     e.preventDefault();
     hideAlert();
