@@ -1,12 +1,17 @@
 /**
  * SmartContractum — Интерактивная логика авторизации и регистрации
  * Интеграция с официальными реестрами ЕГРЮЛ и ЕГРИП ФНС России (egrul.nalog.ru)
+ * Проверка статуса прекращения деятельности / ликвидации
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   // Состояние интерфейса
   let currentMode = 'login'; // 'login' | 'register' | 'forgot'
   let accountType = 'individual'; // 'individual' | 'ip' | 'organization'
+
+  // Флаги ликвидации / прекращения деятельности
+  let isOrgLiquidated = false;
+  let isIPLiquidated = false;
 
   // DOM Элементы навигации
   const tabsContainer = document.getElementById('auth-tabs');
@@ -121,12 +126,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function extractFioFromFullName(rawName) {
+    if (!rawName) return { lastName: '', firstName: '', middleName: '' };
+    let clean = rawName.toUpperCase();
+    const prefixes = [
+      'ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ',
+      'ИП',
+      'ГЛАВА КФХ',
+      'ГЛАВА КРЕСТЬЯНСКОГО (ФЕРМЕРСКОГО) ХОЗЯЙСТВА',
+      'КРЕСТЬЯНСКОЕ (ФЕРМЕРСКОЕ) ХОЗЯЙСТВО'
+    ];
+    prefixes.forEach(p => { clean = clean.replace(p, ''); });
+    clean = clean.replace(/["']/g, '').trim();
+    const tokens = clean.split(/\s+/).filter(Boolean);
+    
+    const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+    const lastName = tokens[0] ? capitalize(tokens[0]) : '';
+    const firstName = tokens[1] ? capitalize(tokens[1]) : '';
+    const middleName = tokens.slice(2).map(capitalize).join(' ');
+    return { lastName, firstName, middleName };
+  }
+
   // ===============================================================
   // 1. Поиск Юр. лица в ЕГРЮЛ ФНС России (egrul.nalog.ru)
+  // С ПРОВЕРКОЙ ПРЕКРАЩЕНИЯ ДЕЯТЕЛЬНОСТИ / ЛИКВИДАЦИИ
   // ===============================================================
   async function fetchEgrulData() {
     const cleanInn = innInput.value.trim().replace(/\D/g, '');
     egrulStatus.style.display = 'none';
+    isOrgLiquidated = false;
 
     if (cleanInn.length !== 10) {
       innInput.classList.add('is-invalid');
@@ -157,6 +185,29 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const company = data.company;
+
+      // ПРОВЕРКА: Деятельность прекращена / организация ликвидирована
+      if (company.isLiquidated || company.statusType === 'LIQUIDATED' || company.terminationDate) {
+        isOrgLiquidated = true;
+        innInput.classList.add('is-invalid');
+        companyInput.value = company.fullName || '';
+        if (shortNameInput) shortNameInput.value = company.shortName || '';
+        if (ogrnInput) ogrnInput.value = company.ogrn || '';
+        if (kppInput) kppInput.value = company.kpp || '';
+
+        // КРАСНОЕ ОКНО ПРЕДУПРЕЖДЕНИЯ
+        egrulStatus.className = 'egrul-status-box error';
+        egrulStatus.innerHTML = `
+          <div><strong>✕ Деятельность организации прекращена${company.terminationDate ? ` (дата: ${escapeHtml(company.terminationDate)})` : ''}:</strong> ${escapeHtml(company.fullName)}</div>
+          <div class="egrul-company-meta" style="color: #ef4444; font-weight: 700; margin-top: 5px;">
+            ⚠️ Регистрация ликвидированных организаций на платформе запрещена.
+          </div>
+        `;
+        egrulStatus.style.display = 'block';
+        return;
+      }
+
+      // Если организация ДЕЙСТВУЮЩАЯ — автозаполнение и зеленая плашка
       companyInput.value = company.fullName || '';
       companyInput.classList.remove('is-invalid');
 
@@ -183,34 +234,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function extractFioFromFullName(rawName) {
-    if (!rawName) return { lastName: '', firstName: '', middleName: '' };
-    let clean = rawName.toUpperCase();
-    const prefixes = [
-      'ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ',
-      'ИП',
-      'ГЛАВА КФХ',
-      'ГЛАВА КРЕСТЬЯНСКОГО (ФЕРМЕРСКОГО) ХОЗЯЙСТВА',
-      'КРЕСТЬЯНСКОЕ (ФЕРМЕРСКОЕ) ХОЗЯЙСТВО'
-    ];
-    prefixes.forEach(p => { clean = clean.replace(p, ''); });
-    clean = clean.replace(/["']/g, '').trim();
-    const tokens = clean.split(/\s+/).filter(Boolean);
-    
-    const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
-    const lastName = tokens[0] ? capitalize(tokens[0]) : '';
-    const firstName = tokens[1] ? capitalize(tokens[1]) : '';
-    const middleName = tokens.slice(2).map(capitalize).join(' ');
-    return { lastName, firstName, middleName };
-  }
-
   // ===============================================================
   // 2. Поиск Индивидуального предпринимателя (ИП) в ЕГРИП ФНС РФ
-  // (АВТОЗАПОЛНЕНИЕ ВСЕХ ПОЛЕЙ ИП ИЗ ЕГРИП)
+  // С ПРОВЕРКОЙ ПРЕКРАЩЕНИЯ ДЕЯТЕЛЬНОСТИ ИП
   // ===============================================================
   async function fetchEgripData() {
     const cleanInn = ipInnInput.value.trim().replace(/\D/g, '');
     egripStatus.style.display = 'none';
+    isIPLiquidated = false;
 
     if (cleanInn.length !== 12) {
       ipInnInput.classList.add('is-invalid');
@@ -242,13 +273,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const company = data.company;
 
-      // 1. Автозаполнение ОГРНИП
+      // Автозаполнение ОГРНИП и ФИО
       if (ipOgrnipInput) {
         ipOgrnipInput.value = company.ogrnip || company.ogrn || '';
         ipOgrnipInput.classList.remove('is-invalid');
       }
 
-      // 2. Автозаполнение ВСЕХ частей ФИО ИП (Фамилия, Имя и Отчество)
       const fio = extractFioFromFullName(company.fullName || company.shortName || '');
       const lastName = company.ipLastName || fio.lastName || company.ceoLastName || '';
       const firstName = company.ipFirstName || fio.firstName || company.ceoFirstName || '';
@@ -267,7 +297,24 @@ document.addEventListener('DOMContentLoaded', () => {
         ipMiddleNameInput.classList.remove('is-invalid');
       }
 
-      // 3. Вывод подтверждающей карточки ЕГРИП
+      // ПРОВЕРКА: Деятельность ИП прекращена
+      if (company.isLiquidated || company.statusType === 'LIQUIDATED' || company.terminationDate) {
+        isIPLiquidated = true;
+        ipInnInput.classList.add('is-invalid');
+
+        // КРАСНОЕ ОКНО ПРЕДУПРЕЖДЕНИЯ
+        egripStatus.className = 'egrul-status-box error';
+        egripStatus.innerHTML = `
+          <div><strong>✕ Деятельность индивидуального предпринимателя прекращена${company.terminationDate ? ` (дата: ${escapeHtml(company.terminationDate)})` : ''}:</strong> ${escapeHtml(company.fullName)}</div>
+          <div class="egrul-company-meta" style="color: #ef4444; font-weight: 700; margin-top: 5px;">
+            ⚠️ Регистрация предпринимателей, прекративших деятельность, на платформе запрещена.
+          </div>
+        `;
+        egripStatus.style.display = 'block';
+        return;
+      }
+
+      // Если ИП ДЕЙСТВУЮЩИЙ — зеленая подтверждающая карточка
       egripStatus.className = 'egrul-status-box success';
       egripStatus.innerHTML = `
         <div><strong>✓ Найдено в ЕГРИП (ФНС России):</strong> ${escapeHtml(company.fullName)}</div>
@@ -490,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordConfirm = regPwdConfirm.value;
     const agreement = document.getElementById('reg-agreement').checked;
 
-    // 1. Проверка полей для физ. лица
+    // 1. Проверка для физ. лица
     if (accountType === 'individual') {
       const lastName = document.getElementById('reg-lastname').value.trim();
       const firstName = document.getElementById('reg-firstname').value.trim();
@@ -513,8 +560,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // 2. Проверка полей для ИП
+    // 2. Проверка для ИП
     if (accountType === 'ip') {
+      if (isIPLiquidated) {
+        markInvalid('reg-ip-inn');
+        showAlert('Невозможно завершить регистрацию: деятельность индивидуального предпринимателя прекращена в соответствии с данными ЕГРИП ФНС РФ.');
+        return;
+      }
+
       const ipInn = ipInnInput.value.trim();
       const ipLastName = ipLastNameInput.value.trim();
       const ipFirstName = ipFirstNameInput.value.trim();
@@ -542,8 +595,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // 3. Проверка полей для юр. лица
+    // 3. Проверка для юр. лица
     if (accountType === 'organization') {
+      if (isOrgLiquidated) {
+        markInvalid('reg-inn');
+        showAlert('Невозможно завершить регистрацию: деятельность организации прекращена (ликвидирована) в соответствии с данными ЕГРЮЛ ФНС РФ.');
+        return;
+      }
+
       const inn = innInput.value.trim();
       const company = companyInput.value.trim();
       const orgLastName = document.getElementById('reg-org-lastname').value.trim();

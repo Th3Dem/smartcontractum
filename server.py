@@ -128,15 +128,15 @@ def query_egrul_nalog_ru(inn: str):
         ogrn = row.get("o", "").strip()
         kpp = row.get("p", "").strip()
         reg_date = row.get("r", "").strip()
-        termination_date = row.get("v", "").strip()
+        termination_date = row.get("v", "").strip() or row.get("e", "").strip()
         address = row.get("a", "").strip() or row.get("rn", "").strip()
         ceo_raw = row.get("g", "").strip()
         is_ip = (len(clean_inn) == 12) or (row.get("k") == "ip") or ("ПРЕДПРИНИМАТЕЛЬ" in full_name.upper())
 
-        # Определение статуса по реестру ФНС
-        is_liquidated = bool(termination_date) or "ликвидирован" in full_name.lower() or "прекратил" in full_name.lower()
+        # Определение статуса прекращения деятельности / ликвидации по реестру ФНС
+        is_liquidated = bool(termination_date) or "ликвидирован" in full_name.lower() or "прекратил" in full_name.lower() or "прекративший" in full_name.lower() or "недействующ" in full_name.lower()
         if is_liquidated:
-            status_text = f"Деятельность прекращена" + (f" ({termination_date})" if termination_date else "")
+            status_text = f"Деятельность прекращена (дата: {termination_date})" if termination_date else "Ликвидирована / Прекратила деятельность"
             status_type = "LIQUIDATED"
         else:
             status_text = "Действующий предприниматель (ЕГРИП)" if is_ip else "Действующая организация (ЕГРЮЛ)"
@@ -173,6 +173,7 @@ def query_egrul_nalog_ru(inn: str):
                 "shortName": short_name,
                 "statusType": status_type,
                 "statusText": status_text,
+                "isLiquidated": is_liquidated,
                 "address": address,
                 "registrationDate": reg_date,
                 "terminationDate": termination_date,
