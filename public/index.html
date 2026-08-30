@@ -3,41 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Авторизация и Регистрация — Платформа Смарт-Контрактов</title>
+  <title>SmartContractum — Авторизация и Регистрация</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
   <main class="auth-container" id="auth-card">
-    <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему оформления">🌙</button>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему оформления" title="Сменить тему">🌙</button>
 
-    <!-- Заголовок и логотип -->
+    <!-- Заголовок и фирменный бейдж -->
     <header class="auth-header">
       <div class="auth-logo-badge">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
         </svg>
-        <span>ПЛАТФОРМА СМАРТ-КОНТРАКТОВ</span>
+        <span>SMARTCONTRACTUM</span>
       </div>
       <h1 class="auth-title" id="auth-title">Вход в личный кабинет</h1>
-      <p class="auth-subtitle" id="auth-subtitle">Единая экосистема коммерческих смарт-контрактов</p>
+      <p class="auth-subtitle" id="auth-subtitle">Экосистема коммерческих смарт-контрактов</p>
     </header>
 
-    <!-- Переключатель режима (Вход / Регистрация) -->
+    <!-- Навигационные вкладки -->
     <nav class="auth-tabs" id="auth-tabs" aria-label="Выбор действия">
       <button class="auth-tab active" id="tab-login" type="button">Вход</button>
       <button class="auth-tab" id="tab-register" type="button">Регистрация</button>
     </nav>
 
-    <!-- Блок системных уведомлений / ошибок -->
+    <!-- Системные алерты -->
     <div id="auth-alert" class="auth-alert" style="display: none;" role="alert"></div>
 
     <!-- ФОРМА 1: ВХОД (LOGIN) -->
     <form id="form-login" novalidate>
       <div class="form-group">
-        <label for="login-email" class="form-label">Email или рабочий логин</label>
+        <label for="login-email" class="form-label">Email или логин</label>
         <div class="input-wrapper">
-          <input type="email" id="login-email" class="form-input" placeholder="ivanov@example.com" required autocomplete="email">
+          <input type="email" id="login-email" class="form-input" placeholder="alexander@smartcontractum.ru" required autocomplete="email">
         </div>
       </div>
 
@@ -59,27 +59,27 @@
 
       <button type="submit" class="btn-primary">
         <span>Войти в кабинет</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
       </button>
 
-      <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-secondary);">
-        Нет учетной записи? 
-        <button type="button" class="link-btn" id="link-to-register">Зарегистрироваться</button>
+      <div style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted);">
+        Впервые на платформе? 
+        <button type="button" class="link-btn" id="link-to-register">Создать аккаунт</button>
       </div>
     </form>
 
     <!-- ФОРМА 2: РЕГИСТРАЦИЯ (REGISTER) -->
     <form id="form-register" style="display: none;" novalidate>
-      <!-- Выбор типа субъекта -->
+      <!-- Выбор субъекта -->
       <div class="account-type-group">
         <button type="button" class="account-type-btn active" id="type-individual">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
             <circle cx="12" cy="7" r="4"/>
           </svg>
-          <span>Специалист / Эксперт</span>
+          <span>Эксперт / Физлицо</span>
         </button>
 
         <button type="button" class="account-type-btn" id="type-organization">
@@ -91,16 +91,16 @@
         </button>
       </div>
 
-      <!-- Поля для физлица -->
+      <!-- Поля физлица -->
       <div class="form-group individual-only">
         <label for="reg-fullname" class="form-label">Фамилия, Имя и Отчество</label>
         <input type="text" id="reg-fullname" class="form-input" placeholder="Иванов Александр Сергеевич">
       </div>
 
-      <!-- Поля для организации -->
+      <!-- Поля организации -->
       <div class="form-group org-only" style="display: none;">
-        <label for="reg-company" class="form-label">Полное наименование компании</label>
-        <input type="text" id="reg-company" class="form-input" placeholder="ООО «Финтех Системы»">
+        <label for="reg-company" class="form-label">Наименование организации</label>
+        <input type="text" id="reg-company" class="form-input" placeholder="ООО «Финтех Смарт Системы»">
       </div>
 
       <div class="form-group org-only" style="display: none;">
@@ -109,7 +109,7 @@
       </div>
 
       <div class="form-group">
-        <label for="reg-email" class="form-label">Email (для подтверждения)</label>
+        <label for="reg-email" class="form-label">Рабочий Email</label>
         <input type="email" id="reg-email" class="form-input" placeholder="alexander@company.ru" required>
       </div>
 
@@ -133,33 +133,33 @@
       <div class="form-options" style="margin-bottom: 20px;">
         <label class="checkbox-label">
           <input type="checkbox" id="reg-agreement" required>
-          <span>Я принимаю <a href="#" class="link-btn">Условия использования</a> и даю согласие на обработку персональных данных (152-ФЗ)</span>
+          <span>Согласен с <a href="#" class="link-btn">Условиями</a> и обработкой данных (152-ФЗ)</span>
         </label>
       </div>
 
       <button type="submit" class="btn-primary">
-        <span>Создать личный кабинет</span>
+        <span>Зарегистрироваться</span>
       </button>
 
-      <div style="text-align: center; margin-top: 18px; font-size: 0.85rem; color: var(--text-secondary);">
-        Уже зарегистрированы? 
+      <div style="text-align: center; margin-top: 18px; font-size: 13px; color: var(--text-muted);">
+        Уже есть аккаунт? 
         <button type="button" class="link-btn" id="link-to-login">Войти</button>
       </div>
     </form>
 
-    <!-- ФОРМА 3: ВОССТАНОВЛЕНИЕ ПАРОЛЯ (FORGOT PASSWORD) -->
+    <!-- ФОРМА 3: ВОССТАНОВЛЕНИЕ ПАРОЛЯ -->
     <form id="form-forgot" style="display: none;" novalidate>
-      <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 18px;">
-        Укажите адрес электронной почты, привязанный к вашему аккаунту. Мы отправим одноразовую ссылку для сброса пароля.
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.5;">
+        Укажите адрес электронной почты вашего аккаунта. Мы отправим ссылку для безопасного восстановления доступа.
       </p>
 
       <div class="form-group">
         <label for="forgot-email" class="form-label">Email</label>
-        <input type="email" id="forgot-email" class="form-input" placeholder="user@example.com" required>
+        <input type="email" id="forgot-email" class="form-input" placeholder="alexander@smartcontractum.ru" required>
       </div>
 
       <button type="submit" class="btn-primary" style="margin-bottom: 16px;">
-        <span>Отправить ссылку</span>
+        <span>Отправить ссылку для сброса</span>
       </button>
 
       <div style="text-align: center;">
