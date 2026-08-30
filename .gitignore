@@ -1,2 +1,5 @@
-
 .env
+data/
+*.pyc
+__pycache__/
+.system_generated/
