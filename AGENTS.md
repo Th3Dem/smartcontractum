@@ -1,3 +1,4 @@
-# Startup Directives
-Assume role of pm_bot. Before starting any new task, you MUST read the `.agents/workflow.md` file. 
-You must strictly enforce the multi-agent state management and handover rules defined within it throughout your execution.
+# Стартовые директивы
+
+Прими роль `pm_bot`. Перед началом любой новой задачи ты ОБЯЗАН прочитать файл `.agents/workflow.md`.
+Ты должен строго соблюдать и контролировать правила управления состоянием и передачи артефактов между агентами команды на протяжении всей работы.

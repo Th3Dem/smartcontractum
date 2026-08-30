@@ -1,0 +1,16 @@
+feat(auth): implement auth and onboarding modal interface (Stage 1)
+
+- Add AuthModal, LoginForm, RegisterForm, and ForgotPasswordForm interfaces
+- Support dual registration paths: Individual Expert and Organization with dynamic INN check
+- Implement real-time PasswordStrengthMeter with visual 4-level scoring
+- Add light/dark theme toggle, a11y labels, and responsive layout
+- Integrate client-side validation, mock service, and unit tests
+
+Verification:
+- Product Spec: PRODUCT_SPEC.md (all AC met)
+- UX Spec: UX_SPEC.md (full state matrix covered)
+- Dev Handover: DEV_HANDOVER.md (tests passed)
+- Security Review: SECURITY_REVIEW.md (APPROVED)
+- QA Review: QA_REVIEW.md (APPROVED)
+
+Fixes TASK-01
