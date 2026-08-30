@@ -1,0 +1,42 @@
+{
+  "task": "TASK-02",
+  "name": "database-152fz-and-dashboard",
+  "state": "COMPLETED",
+  "rework_count": 0,
+  "created_at": "2026-08-31T00:30:00+03:00",
+  "completed_at": "2026-08-31T01:22:00+03:00",
+  "branch": "feat/TASK-02-user-dashboard",
+  "commit": "dec543a",
+  "required_gates": {
+    "product": true,
+    "architecture": true,
+    "ux": true,
+    "data": true,
+    "domain": false,
+    "seo": false,
+    "security": true,
+    "moderation": false,
+    "qa": true,
+    "staging": true
+  },
+  "gate_statuses": {
+    "product": "APPROVED",
+    "architecture": "APPROVED",
+    "ux": "APPROVED",
+    "data": "APPROVED",
+    "security": "APPROVED",
+    "qa": "APPROVED",
+    "staging": "APPROVED"
+  },
+  "artifacts": {
+    "task": "tasks/TASK-02-user-dashboard/TASK.md",
+    "product_spec": "tasks/TASK-02-user-dashboard/PRODUCT_SPEC.md",
+    "tech_spec": "tasks/TASK-02-user-dashboard/TECH_SPEC.md",
+    "ux_spec": "tasks/TASK-02-user-dashboard/UX_SPEC.md",
+    "data_review": "tasks/TASK-02-user-dashboard/DATA_REVIEW.md",
+    "security_review": "tasks/TASK-02-user-dashboard/SECURITY_REVIEW.md",
+    "dev_handover": "tasks/TASK-02-user-dashboard/DEV_HANDOVER.md",
+    "qa_review": "tasks/TASK-02-user-dashboard/QA_REVIEW.md",
+    "release_report": "tasks/TASK-02-user-dashboard/RELEASE_REPORT.md"
+  }
+}
