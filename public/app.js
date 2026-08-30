@@ -344,6 +344,15 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnFetchEgrip) btnFetchEgrip.addEventListener('click', fetchEgripData);
 
   if (innInput) {
+    innInput.addEventListener('input', () => {
+      companyInput.value = '';
+      if (shortNameInput) shortNameInput.value = '';
+      if (ogrnInput) ogrnInput.value = '';
+      if (kppInput) kppInput.value = '';
+      egrulStatus.style.display = 'none';
+      isOrgLiquidated = false;
+    });
+
     innInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -353,6 +362,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (ipInnInput) {
+    ipInnInput.addEventListener('input', () => {
+      if (ipLastNameInput) ipLastNameInput.value = '';
+      if (ipFirstNameInput) ipFirstNameInput.value = '';
+      if (ipMiddleNameInput) ipMiddleNameInput.value = '';
+      if (ipOgrnipInput) ipOgrnipInput.value = '';
+      egripStatus.style.display = 'none';
+      isIPLiquidated = false;
+    });
+
     ipInnInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -663,19 +681,14 @@ document.addEventListener('DOMContentLoaded', () => {
         showAlert('ИНН индивидуального предпринимателя должен содержать ровно 12 цифр');
         return;
       }
-      if (!ipLastName) {
-        markInvalid('reg-ip-lastname');
-        showAlert('Пожалуйста, укажите фамилию предпринимателя');
-        return;
-      }
-      if (!ipFirstName) {
-        markInvalid('reg-ip-firstname');
-        showAlert('Пожалуйста, укажите имя предпринимателя');
+      if (!ipLastName || !ipFirstName) {
+        markInvalid('reg-ip-inn');
+        showAlert('Пожалуйста, нажмите кнопку «Найти в ЕГРИП» для автоматического заполнения данных предпринимателя');
         return;
       }
       if (!ipPhone || ipPhone.length < 10) {
         markInvalid('reg-ip-phone');
-        showAlert('Пожалуйста, укажите контактный номер телефона');
+        showAlert('Пожалуйста, укажите контактный номер телефона предпринимателя');
         return;
       }
     }
@@ -700,8 +713,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       if (!company) {
-        markInvalid('reg-company');
-        showAlert('Пожалуйста, укажите или загрузите из ЕГРЮЛ наименование организации');
+        markInvalid('reg-inn');
+        showAlert('Пожалуйста, нажмите кнопку «Найти в ЕГРЮЛ» для автоматического заполнения реквизитов организации');
         return;
       }
       if (!orgLastName) {

@@ -153,22 +153,22 @@
         <div class="form-row">
           <div class="form-group">
             <label for="reg-ip-lastname" class="form-label">Фамилия ИП <span class="required-star">*</span></label>
-            <input type="text" id="reg-ip-lastname" class="form-input" placeholder="Иванов">
+            <input type="text" id="reg-ip-lastname" class="form-input" placeholder="Заполняется из ЕГРИП" readonly>
           </div>
           <div class="form-group">
             <label for="reg-ip-firstname" class="form-label">Имя ИП <span class="required-star">*</span></label>
-            <input type="text" id="reg-ip-firstname" class="form-input" placeholder="Александр">
+            <input type="text" id="reg-ip-firstname" class="form-input" placeholder="Заполняется из ЕГРИП" readonly>
           </div>
         </div>
 
         <div class="form-group">
-          <label for="reg-ip-middlename" class="form-label">Отчество ИП <span style="font-weight: 400; color: var(--text-muted);">(при наличии)</span></label>
-          <input type="text" id="reg-ip-middlename" class="form-input" placeholder="Сергеевич">
+          <label for="reg-ip-middlename" class="form-label">Отчество ИП</label>
+          <input type="text" id="reg-ip-middlename" class="form-input" placeholder="Заполняется из ЕГРИП" readonly>
         </div>
 
         <div class="form-group">
           <label for="reg-ip-ogrnip" class="form-label">ОГРНИП (15 цифр)</label>
-          <input type="text" id="reg-ip-ogrnip" class="form-input" placeholder="318774600000014" maxlength="15">
+          <input type="text" id="reg-ip-ogrnip" class="form-input" placeholder="Заполняется автоматически по ИНН" maxlength="15" readonly>
         </div>
 
         <div class="form-group">
@@ -196,22 +196,22 @@
 
         <div class="form-group">
           <label for="reg-company" class="form-label">Полное наименование организации <span class="required-star">*</span></label>
-          <input type="text" id="reg-company" class="form-input" placeholder="ПАО «Сбербанк России»">
+          <input type="text" id="reg-company" class="form-input" placeholder="Заполняется автоматически из ЕГРЮЛ" readonly>
         </div>
 
         <div class="form-group">
           <label for="reg-short-name" class="form-label">Сокращенное (краткое) наименование</label>
-          <input type="text" id="reg-short-name" class="form-input" placeholder="ПАО Сбербанк">
+          <input type="text" id="reg-short-name" class="form-input" placeholder="Заполняется автоматически из ЕГРЮЛ" readonly>
         </div>
 
         <div class="form-row">
           <div class="form-group">
             <label for="reg-ogrn" class="form-label">ОГРН (13 цифр)</label>
-            <input type="text" id="reg-ogrn" class="form-input" placeholder="1027700132195" maxlength="13">
+            <input type="text" id="reg-ogrn" class="form-input" placeholder="Заполняется автоматически" maxlength="13" readonly>
           </div>
           <div class="form-group">
-            <label for="reg-kpp" class="form-label">КПП (9 цифр) <span class="required-star">*</span></label>
-            <input type="text" id="reg-kpp" class="form-input" placeholder="773601001" maxlength="9">
+            <label for="reg-kpp" class="form-label">КПП (9 цифр)</label>
+            <input type="text" id="reg-kpp" class="form-input" placeholder="Заполняется автоматически" maxlength="9" readonly>
           </div>
         </div>
 

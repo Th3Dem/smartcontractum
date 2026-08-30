@@ -644,3 +644,26 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Стили для защищенных полей, заполняемых исключительно из реестров ФНС */
+.form-input[readonly] {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: var(--input-border);
+  color: var(--text-secondary);
+  cursor: default;
+}
+
+[data-theme="dark"] .form-input[readonly] {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+}
+
+.form-input[readonly]:focus {
+  box-shadow: none;
+  border-color: var(--input-border);
+}
+
+[data-theme="dark"] .form-input[readonly]:focus {
+  border-color: rgba(255, 255, 255, 0.08);
+}
