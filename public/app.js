@@ -1,62 +1,9 @@
 /**
  * SmartContractum — Интерактивная логика авторизации и регистрации
+ * Интеграция с официальным сервисом ЕГРЮЛ ФНС России (egrul.nalog.ru) в реальном времени
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // База данных ЕГРЮЛ для демонстрации и поиска
-  const EGRUL_REGISTRY = {
-    '7707083893': {
-      inn: '7707083893',
-      ogrn: '1027700132195',
-      fullName: 'Публичное акционерное общество «Сбербанк России»',
-      shortName: 'ПАО Сбербанк',
-      statusText: 'Действующая организация',
-      address: 'г. Москва, ул. Вавилова, д. 19',
-      ceoLastName: 'Греф',
-      ceoFirstName: 'Герман'
-    },
-    '7736207543': {
-      inn: '7736207543',
-      ogrn: '1027700229193',
-      fullName: 'Общество с ограниченной ответственностью «ЯНДЕКС»',
-      shortName: 'ООО «ЯНДЕКС»',
-      statusText: 'Действующая организация',
-      address: 'г. Москва, ул. Льва Толстого, д. 16',
-      ceoLastName: 'Савиновский',
-      ceoFirstName: 'Артем'
-    },
-    '7710140679': {
-      inn: '7710140679',
-      ogrn: '1027739642281',
-      fullName: 'Акционерное общество «ТБанк»',
-      shortName: 'АО «ТБанк»',
-      statusText: 'Действующая организация',
-      address: 'г. Москва, ул. Хуторская 2-Я, д. 38А, стр. 26',
-      ceoLastName: 'Близнюк',
-      ceoFirstName: 'Станислав'
-    },
-    '7736050003': {
-      inn: '7736050003',
-      ogrn: '1027700070518',
-      fullName: 'Публичное акционерное общество «Газпром»',
-      shortName: 'ПАО «Газпром»',
-      statusText: 'Действующая организация',
-      address: 'г. Санкт-Петербург, Лахтинский пр-кт, д. 2, к. 3, стр. 1',
-      ceoLastName: 'Миллер',
-      ceoFirstName: 'Алексей'
-    },
-    '9705118142': {
-      inn: '9705118142',
-      ogrn: '1187746473060',
-      fullName: 'Общество с ограниченной ответственностью «Финтех Смарт Системы»',
-      shortName: 'ООО «Финтех Смарт Системы»',
-      statusText: 'Действующая организация',
-      address: 'г. Москва, Пресненская наб., д. 12, эт. 45',
-      ceoLastName: 'Смирнов',
-      ceoFirstName: 'Дмитрий'
-    }
-  };
-
   // Состояние интерфейса
   let currentMode = 'login'; // 'login' | 'register' | 'forgot'
   let accountType = 'individual'; // 'individual' | 'organization'
@@ -162,7 +109,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Поиск по ИНН в ЕГРЮЛ (ФНС России)
+  // ===============================================================
+  // Реальный онлайн-запрос к ЕГРЮЛ ФНС России (egrul.nalog.ru)
+  // ===============================================================
   async function fetchEgrulData() {
     const cleanInn = innInput.value.trim().replace(/\D/g, '');
     egrulStatus.style.display = 'none';
@@ -170,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cleanInn.length !== 10 && cleanInn.length !== 12) {
       innInput.classList.add('is-invalid');
       egrulStatus.className = 'egrul-status-box error';
-      egrulStatus.innerHTML = '✕ Введите корректный ИНН (10 цифр для юридических лиц или 12 для ИП)';
+      egrulStatus.innerHTML = '✕ ИНН должен содержать 10 цифр (для юридических лиц) или 12 цифр (для ИП)';
       egrulStatus.style.display = 'block';
       return;
     }
@@ -178,40 +127,31 @@ document.addEventListener('DOMContentLoaded', () => {
     innInput.classList.remove('is-invalid');
     const originalBtnHTML = btnFetchEgrul.innerHTML;
     btnFetchEgrul.disabled = true;
-    btnFetchEgrul.innerHTML = '<span class="spinner-small"></span> Поиск...';
+    btnFetchEgrul.innerHTML = '<span class="spinner-small"></span> Поиск в ЕГРЮЛ...';
 
-    setTimeout(() => {
+    try {
+      // Прямой запрос к нашему бэкенд-шлюзу, который в реальном времени опрашивает egrul.nalog.ru
+      const response = await fetch(`/api/egrul?inn=${encodeURIComponent(cleanInn)}`);
+      const data = await response.json();
+
       btnFetchEgrul.disabled = false;
       btnFetchEgrul.innerHTML = originalBtnHTML;
 
-      if (cleanInn === '0000000000' || cleanInn === '1111111111') {
+      if (!data.success || !data.company) {
+        innInput.classList.add('is-invalid');
         egrulStatus.className = 'egrul-status-box error';
-        egrulStatus.innerHTML = '✕ Организация с указанным ИНН не найдена в реестре ЕГРЮЛ ФНС России';
+        egrulStatus.innerHTML = `✕ ${data.error || 'Организация с указанным ИНН не найдена в реестре ЕГРЮЛ ФНС России'}`;
         egrulStatus.style.display = 'block';
         return;
       }
 
-      // Получаем компанию из реестра или генерируем корректную карточку
-      let company = EGRUL_REGISTRY[cleanInn];
-      if (!company) {
-        const isIP = cleanInn.length === 12;
-        company = {
-          inn: cleanInn,
-          ogrn: isIP ? '3' + cleanInn.padEnd(14, '0') : '1' + cleanInn.padEnd(12, '0'),
-          fullName: isIP ? `Индивидуальный предприниматель (ИНН ${cleanInn})` : `Общество с ограниченной ответственностью «Смарт Системы» (ИНН ${cleanInn})`,
-          shortName: isIP ? `ИП (ИНН ${cleanInn})` : `ООО «Смарт Системы»`,
-          statusText: 'Действующая организация (данные ЕГРЮЛ ФНС России)',
-          address: 'г. Москва',
-          ceoLastName: 'Смирнов',
-          ceoFirstName: 'Алексей'
-        };
-      }
+      const company = data.company;
 
-      // Автозаполнение названия организации
-      companyInput.value = company.fullName;
+      // Автозаполнение официального наименования организации
+      companyInput.value = company.fullName || company.shortName;
       companyInput.classList.remove('is-invalid');
 
-      // Автозаполнение представителя (если поля еще не заполнены)
+      // Автозаполнение представителя (если поля не были заполнены)
       const repLastName = document.getElementById('reg-org-lastname');
       const repFirstName = document.getElementById('reg-org-firstname');
       if (repLastName && !repLastName.value && company.ceoLastName) {
@@ -221,16 +161,31 @@ document.addEventListener('DOMContentLoaded', () => {
         repFirstName.value = company.ceoFirstName;
       }
 
-      // Отображение подтвержденного статуса ЕГРЮЛ
+      // Вывод карточки подтверждения из официального реестра ФНС
       egrulStatus.className = 'egrul-status-box success';
       egrulStatus.innerHTML = `
-        <div><strong>✓ Найдено в ЕГРЮЛ:</strong> ${company.fullName}</div>
+        <div><strong>✓ Найдено в ЕГРЮЛ (ФНС России):</strong> ${escapeHtml(company.fullName)}</div>
         <div class="egrul-company-meta">
-          Статус: <strong>${company.statusText}</strong> • ОГРН: ${company.ogrn} • ${company.address}
+          Статус: <strong>${escapeHtml(company.statusText)}</strong> • ОГРН: ${escapeHtml(company.ogrn)}${company.kpp ? ` • КПП: ${escapeHtml(company.kpp)}` : ''} • ${escapeHtml(company.address)}
+          ${company.ceoRaw ? `<br>Руководитель: ${escapeHtml(company.ceoRaw)}` : ''}
         </div>
       `;
       egrulStatus.style.display = 'block';
-    }, 600);
+
+    } catch (err) {
+      btnFetchEgrul.disabled = false;
+      btnFetchEgrul.innerHTML = originalBtnHTML;
+      egrulStatus.className = 'egrul-status-box error';
+      egrulStatus.innerHTML = '✕ Не удалось связаться с сервисом ЕГРЮЛ ФНС России. Проверьте интернет-соединение.';
+      egrulStatus.style.display = 'block';
+    }
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.innerText = text;
+    return div.innerHTML;
   }
 
   if (btnFetchEgrul) {

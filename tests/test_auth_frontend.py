@@ -1,6 +1,7 @@
 import re
 import os
 import unittest
+from server import query_egrul_nalog_ru, validate_inn_checksum
 
 class TestAuthFrontend(unittest.TestCase):
     def setUp(self):
@@ -8,13 +9,19 @@ class TestAuthFrontend(unittest.TestCase):
         self.html_path = os.path.join(self.project_root, "public/index.html")
         self.css_path = os.path.join(self.project_root, "public/styles.css")
         self.js_path = os.path.join(self.project_root, "public/app.js")
-        self.egrul_service_path = os.path.join(self.project_root, "src/services/egrulService.ts")
+        self.server_path = os.path.join(self.project_root, "server.py")
 
     def test_files_exist(self):
         self.assertTrue(os.path.exists(self.html_path), "HTML must exist")
         self.assertTrue(os.path.exists(self.css_path), "CSS must exist")
         self.assertTrue(os.path.exists(self.js_path), "JS must exist")
-        self.assertTrue(os.path.exists(self.egrul_service_path), "EGRUL service must exist")
+        self.assertTrue(os.path.exists(self.server_path), "server.py must exist")
+
+    def test_inn_checksum_validator(self):
+        self.assertTrue(validate_inn_checksum("7707083893")) # Сбербанк (10 цифр)
+        self.assertTrue(validate_inn_checksum("7736207543")) # Яндекс (10 цифр)
+        self.assertFalse(validate_inn_checksum("7707083894")) # Неверная контрольная сумма
+        self.assertFalse(validate_inn_checksum("1234567890")) # Неверная контрольная сумма
 
     def test_html_egrul_and_form_elements(self):
         with open(self.html_path, "r", encoding="utf-8") as f:
@@ -41,25 +48,17 @@ class TestAuthFrontend(unittest.TestCase):
         self.assertIn('id="reg-password-confirm"', content)
         self.assertIn('id="password-match-msg"', content)
 
-    def test_inn_validation_logic(self):
-        def validate_inn(inn: str):
-            clean = inn.strip().replace(" ", "")
-            if not clean.isdigit():
-                return False
-            return len(clean) in (10, 12)
+    def test_live_egrul_query(self):
+        # Реальный онлайн-запрос к ФНС ЕГРЮЛ (Сбербанк 7707083893)
+        res = query_egrul_nalog_ru("7707083893")
+        self.assertTrue(res["success"], f"EGRUL query failed: {res.get('error')}")
+        self.assertIn("СБЕРБАНК", res["company"]["fullName"].upper())
+        self.assertEqual(res["company"]["ogrn"], "1027700132195")
+        self.assertEqual(res["company"]["statusType"], "ACTIVE")
 
-        self.assertTrue(validate_inn("7707083893"))
-        self.assertTrue(validate_inn("500100732259"))
-        self.assertFalse(validate_inn("12345"))
-        self.assertFalse(validate_inn("7707083893a"))
-
-    def test_password_match_logic(self):
-        def check_passwords_match(p1: str, p2: str):
-            return bool(p1 and p2 and p1 == p2)
-
-        self.assertTrue(check_passwords_match("Pass1234!", "Pass1234!"))
-        self.assertFalse(check_passwords_match("Pass1234!", "Pass1234"))
-        self.assertFalse(check_passwords_match("", ""))
+        # Запрос с несуществующим в ЕГРЮЛ ИНН
+        res_fake = query_egrul_nalog_ru("9999999999")
+        self.assertFalse(res_fake["success"])
 
 if __name__ == "__main__":
     unittest.main()
