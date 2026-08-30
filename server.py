@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-SmartContractum — Local Development Server with Live EGRUL/EGRIP Proxy & Real SMTP Email Delivery
+SmartContractum — Server with Live EGRUL/EGRIP Proxy & Real SMTP Email Delivery
+Строгая отправка реальных писем через SMTP без отображения тестовых кодов
 """
 
 import os
@@ -230,12 +231,19 @@ def send_real_email_code(to_email: str, code: str) -> dict:
     """
     load_env_file()
     
-    smtp_host = os.getenv("SMTP_HOST", "")
+    smtp_host = os.getenv("SMTP_HOST", "").strip()
     smtp_port = int(os.getenv("SMTP_PORT", "465")) if os.getenv("SMTP_PORT", "465").isdigit() else 465
-    smtp_user = os.getenv("SMTP_USER", "")
-    smtp_password = os.getenv("SMTP_PASSWORD", "")
+    smtp_user = os.getenv("SMTP_USER", "").strip()
+    smtp_password = os.getenv("SMTP_PASSWORD", "").strip()
     from_name = os.getenv("SMTP_FROM_NAME", "SmartContractum")
-    from_email = os.getenv("SMTP_FROM_EMAIL", smtp_user or "no-reply@smartcontractum.ru")
+    from_email = os.getenv("SMTP_FROM_EMAIL", smtp_user or "no-reply@smartcontractum.ru").strip()
+
+    # Если параметры почтового сервера еще не заполнены
+    if not (smtp_host and smtp_user and smtp_password):
+        return {
+            "success": False,
+            "error": "Почтовый сервер (SMTP) не настроен в файле .env. Пожалуйста, укажите параметры SMTP (Яндекс, Mail.ru или Gmail) для реальной отправки писем."
+        }
 
     subject = f"{code} — Код подтверждения регистрации в SmartContractum"
 
@@ -284,54 +292,42 @@ def send_real_email_code(to_email: str, code: str) -> dict:
 </body>
 </html>"""
 
-    # 1. Если заданы параметры реального SMTP сервера — отправляем реальное письмо
-    if smtp_host and smtp_user and smtp_password:
-        try:
-            msg = MIMEMultipart("alternative")
-            msg["Subject"] = Header(subject, "utf-8")
-            msg["From"] = formataddr((str(Header(from_name, "utf-8")), from_email))
-            msg["To"] = to_email
+    try:
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = Header(subject, "utf-8")
+        msg["From"] = formataddr((str(Header(from_name, "utf-8")), from_email))
+        msg["To"] = to_email
 
-            text_part = MIMEText(f"Здравствуйте! Ваш код подтверждения SmartContractum: {code}. Код действителен 10 минут.", "plain", "utf-8")
-            html_part = MIMEText(html_content, "html", "utf-8")
+        text_part = MIMEText(f"Здравствуйте! Ваш код подтверждения SmartContractum: {code}. Код действителен 10 минут.", "plain", "utf-8")
+        html_part = MIMEText(html_content, "html", "utf-8")
 
-            msg.attach(text_part)
-            msg.attach(html_part)
+        msg.attach(text_part)
+        msg.attach(html_part)
 
-            if smtp_port == 465:
-                context = ssl.create_default_context()
-                with smtplib.SMTP_SSL(smtp_host, smtp_port, context=context, timeout=12) as server:
-                    server.login(smtp_user, smtp_password)
-                    server.sendmail(from_email, [to_email], msg.as_string())
-            else:
-                with smtplib.SMTP(smtp_host, smtp_port, timeout=12) as server:
-                    server.starttls()
-                    server.login(smtp_user, smtp_password)
-                    server.sendmail(from_email, [to_email], msg.as_string())
+        if smtp_port == 465:
+            context = ssl.create_default_context()
+            with smtplib.SMTP_SSL(smtp_host, smtp_port, context=context, timeout=12) as server:
+                server.login(smtp_user, smtp_password)
+                server.sendmail(from_email, [to_email], msg.as_string())
+        else:
+            with smtplib.SMTP(smtp_host, smtp_port, timeout=12) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.sendmail(from_email, [to_email], msg.as_string())
 
-            print(f"[SMTP REAL DISPATCH] Письмо с кодом {code} успешно отправлено на {to_email} через {smtp_host}")
-            return {
-                "success": True,
-                "realSent": True,
-                "provider": f"SMTP ({smtp_host})",
-                "message": f"Письмо с кодом отправлено на {to_email}"
-            }
-        except Exception as exc:
-            print(f"[SMTP ERROR] Ошибка отправки на {to_email}: {exc}")
-            return {
-                "success": False,
-                "error": f"Ошибка отправки через SMTP ({smtp_host}): {str(exc)}"
-            }
-
-    # 2. Если SMTP еще не настроен в .env — эмулируем отправку с выводом в консоль и подсказкой
-    print(f"[SMTP DEV GATEWAY] Код верификации для {to_email}: {code} (Укажите SMTP_HOST, SMTP_USER, SMTP_PASSWORD в .env для реальной отправки)")
-    return {
-        "success": True,
-        "realSent": False,
-        "provider": "LOCAL_DEV_EMAIL",
-        "demoCode": code,
-        "message": f"Письмо с проверочным кодом направлено на {to_email}"
-    }
+        print(f"[SMTP REAL DISPATCH] Письмо с кодом успешно отправлено на {to_email} через {smtp_host}")
+        return {
+            "success": True,
+            "realSent": True,
+            "provider": f"SMTP ({smtp_host})",
+            "message": f"Письмо с проверочным кодом успешно отправлено на {to_email}"
+        }
+    except Exception as exc:
+        print(f"[SMTP ERROR] Ошибка отправки на {to_email}: {exc}")
+        return {
+            "success": False,
+            "error": f"Ошибка отправки через почтовый сервер ({smtp_host}): {str(exc)}"
+        }
 
 class SmartContractumHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -369,19 +365,18 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
         except Exception:
             payload = {}
 
-        # 1. Регистрация: отправка проверочного письма на E-mail
+        # 1. Регистрация: отправка РЕАЛЬНОГО проверочного письма на E-mail
         if parsed.path == "/api/auth/register-send-email":
             raw_email = payload.get("email", "").strip().lower()
             
             if not raw_email or "@" not in raw_email:
                 result = {"success": False, "error": "Пожалуйста, укажите корректный адрес электронной почты"}
             else:
-                # Генерация 6-значного кода
                 code = f"{random.randint(100000, 999999)}"
                 EMAIL_SESSIONS[raw_email] = {
                     "code": code,
                     "payload": payload,
-                    "expires": time.time() + 600 # Срок действия 10 минут
+                    "expires": time.time() + 600 # 10 минут
                 }
 
                 send_result = send_real_email_code(raw_email, code)
@@ -389,12 +384,11 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
                 if send_result.get("success"):
                     result = {
                         "success": True,
-                        "realSent": send_result.get("realSent", False),
+                        "realSent": True,
                         "provider": send_result.get("provider"),
                         "email": raw_email,
-                        "demoCode": send_result.get("demoCode"),
                         "cooldown": 60,
-                        "message": f"Письмо с кодом направлено на {raw_email}"
+                        "message": f"Письмо с кодом подтверждения направлено на {raw_email}"
                     }
                 else:
                     result = {
@@ -424,7 +418,6 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
             elif session["code"] != code:
                 result = {"success": False, "error": "Введен неверный код подтверждения из письма"}
             else:
-                # Успешная активация аккаунта
                 user_payload = session.get("payload", {})
                 result = {
                     "success": True,

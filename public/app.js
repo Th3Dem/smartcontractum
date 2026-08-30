@@ -1,7 +1,7 @@
 /**
  * SmartContractum — Интерактивная логика авторизации и регистрации
  * Интеграция с ЕГРЮЛ/ЕГРИП ФНС РФ, Защитная Canvas-капча,
- * Реальная отправка писем с 6-значным кодом подтверждения E-mail
+ * Отправка реальных писем с 6-значным кодом подтверждения E-mail
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -776,7 +776,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 600);
   });
 
-  // Отправка формы регистрации -> Отправка кода на E-mail
+  // Отправка формы регистрации -> Отправка РЕАЛЬНОГО проверочного письма на E-mail
   formRegister.addEventListener('submit', async (e) => {
     e.preventDefault();
     hideAlert();
@@ -921,7 +921,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('btn-submit-register');
     const originalText = btn.innerHTML;
     btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> Отправка письма с кодом...';
+    btn.innerHTML = '<span class="spinner"></span> Отправка проверочного письма...';
 
     try {
       const response = await fetch('/api/auth/register-send-email', {
@@ -945,12 +945,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Переход на экран верификации E-mail
       pendingRegistrationEmail = email;
       setMode('verify-email');
-
-      if (data.demoCode) {
-        showAlert(`Письмо с кодом направлено на ${email} (Тестовый код: <strong>${data.demoCode}</strong>)`, 'success');
-      } else {
-        showAlert(`Письмо с 6-значным кодом подтверждения отправлено на адрес ${email}`, 'success');
-      }
+      showAlert(`Письмо с 6-значным проверочным кодом отправлено на адрес ${email}. Пожалуйста, проверьте ваш почтовый ящик.`, 'success');
 
     } catch (err) {
       btn.disabled = false;
@@ -969,7 +964,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!code || code.length !== 6) {
       markInvalid('email-code-input');
-      showAlert('Пожалуйста, введите полный 6-значный код из электронного письма');
+      showAlert('Пожалуйста, введите полный 6-значный проверочный код из электронного письма');
       return;
     }
 
@@ -999,7 +994,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // УСПЕХ! Аккаунт активирован
-      showAlert('🎉 Поздравляем! Ваш E-mail успешно подтвержден, учетная запись активирована! Выполняется перенаправление в личный кабинет...', 'success');
+      showAlert('🎉 Поздравляем! Ваш E-mail успешно подтвержден, учетная запись активирована! Выполняется перенаправление...', 'success');
       
       setTimeout(() => {
         setMode('login');
@@ -1036,11 +1031,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (data.success) {
           startEmailTimer(60);
-          if (data.demoCode) {
-            showAlert(`Новый проверочный код направлен на ${pendingRegistrationEmail} (Тестовый код: <strong>${data.demoCode}</strong>)`, 'success');
-          } else {
-            showAlert(`Новое письмо с кодом направлено на ${pendingRegistrationEmail}`, 'success');
-          }
+          showAlert(`Новое письмо с проверочным кодом отправлено на адрес ${pendingRegistrationEmail}. Пожалуйста, проверьте почту.`, 'success');
         } else {
           showAlert(data.error || 'Не удалось отправить код повторно');
         }
