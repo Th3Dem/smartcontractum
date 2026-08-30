@@ -79,22 +79,33 @@
     <!-- ФОРМА 2: РЕГИСТРАЦИЯ (REGISTER)            -->
     <!-- ========================================== -->
     <form id="form-register" style="display: none;" novalidate>
-      <!-- Выбор субъекта -->
+      <!-- 3-позиционный выбор субъекта -->
       <div class="account-type-group">
         <button type="button" class="account-type-btn active" id="type-individual">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
             <circle cx="12" cy="7" r="4"/>
           </svg>
-          <span>Физ. лицо / Эксперт</span>
+          <span>Физ. лицо<br><small style="opacity: 0.7; font-weight: 400;">Эксперт</small></span>
+        </button>
+
+        <button type="button" class="account-type-btn" id="type-ip">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          <span>ИП<br><small style="opacity: 0.7; font-weight: 400;">Предприниматель</small></span>
         </button>
 
         <button type="button" class="account-type-btn" id="type-organization">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
             <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
           </svg>
-          <span>Юр. лицо / Организация</span>
+          <span>Юр. лицо<br><small style="opacity: 0.7; font-weight: 400;">Организация</small></span>
         </button>
       </div>
 
@@ -122,12 +133,60 @@
         </div>
       </div>
 
-      <!-- 2. ПОЛЯ ДЛЯ ЮР. ЛИЦА / ОРГАНИЗАЦИИ -->
+      <!-- 2. ПОЛЯ ДЛЯ ИНДИВИДУАЛЬНОГО ПРЕДПРИНИМАТЕЛЯ (ИП) -->
+      <div class="ip-only" style="display: none;">
+        <div class="form-group">
+          <label for="reg-ip-inn" class="form-label">ИНН предпринимателя (12 цифр) <span class="required-star">*</span></label>
+          <div class="input-with-button">
+            <input type="text" id="reg-ip-inn" class="form-input" placeholder="771501061993" maxlength="12" autocomplete="off">
+            <button type="button" id="btn-fetch-egrip" class="btn-secondary" title="Заполнить реквизиты из ЕГРИП ФНС России">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+              </svg>
+              <span>Найти в ЕГРИП</span>
+            </button>
+          </div>
+          <div id="egrip-status" class="egrul-status-box" style="display: none;"></div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reg-ip-lastname" class="form-label">Фамилия ИП <span class="required-star">*</span></label>
+            <input type="text" id="reg-ip-lastname" class="form-input" placeholder="Иванов">
+          </div>
+          <div class="form-group">
+            <label for="reg-ip-firstname" class="form-label">Имя ИП <span class="required-star">*</span></label>
+            <input type="text" id="reg-ip-firstname" class="form-input" placeholder="Александр">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-ip-middlename" class="form-label">Отчество ИП <span style="font-weight: 400; color: var(--text-muted);">(при наличии)</span></label>
+          <input type="text" id="reg-ip-middlename" class="form-input" placeholder="Сергеевич">
+        </div>
+
+        <div class="form-group">
+          <label for="reg-ip-ogrnip" class="form-label">ОГРНИП (15 цифр)</label>
+          <input type="text" id="reg-ip-ogrnip" class="form-input" placeholder="318774600000014" maxlength="15">
+        </div>
+
+        <div class="info-banner">
+          <span>ℹ️</span> <div>КПП для индивидуальных предпринимателей не применяется (НК РФ).</div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-ip-phone" class="form-label">Контактный номер телефона <span class="required-star">*</span></label>
+          <input type="tel" id="reg-ip-phone" class="form-input" placeholder="+7 (999) 222-33-44">
+        </div>
+      </div>
+
+      <!-- 3. ПОЛЯ ДЛЯ ЮР. ЛИЦА / ОРГАНИЗАЦИИ -->
       <div class="org-only" style="display: none;">
         <div class="form-group">
-          <label for="reg-inn" class="form-label">ИНН организации <span class="required-star">*</span></label>
+          <label for="reg-inn" class="form-label">ИНН организации (10 цифр) <span class="required-star">*</span></label>
           <div class="input-with-button">
-            <input type="text" id="reg-inn" class="form-input" placeholder="7707083893" maxlength="12" autocomplete="off">
+            <input type="text" id="reg-inn" class="form-input" placeholder="7707083893" maxlength="10" autocomplete="off">
             <button type="button" id="btn-fetch-egrul" class="btn-secondary" title="Заполнить реквизиты из ЕГРЮЛ ФНС России">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <circle cx="11" cy="11" r="8"/>
@@ -151,11 +210,11 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label for="reg-ogrn" class="form-label">ОГРН / ОГРНИП</label>
-            <input type="text" id="reg-ogrn" class="form-input" placeholder="1027700132195">
+            <label for="reg-ogrn" class="form-label">ОГРН (13 цифр)</label>
+            <input type="text" id="reg-ogrn" class="form-input" placeholder="1027700132195" maxlength="13">
           </div>
           <div class="form-group">
-            <label for="reg-kpp" class="form-label">КПП <span style="font-weight: 400; color: var(--text-muted);">(для юр. лиц)</span></label>
+            <label for="reg-kpp" class="form-label">КПП (9 цифр) <span class="required-star">*</span></label>
             <input type="text" id="reg-kpp" class="form-input" placeholder="773601001" maxlength="9">
           </div>
         </div>
@@ -179,7 +238,7 @@
         </div>
       </div>
 
-      <!-- 3. ОБЩИЕ ПОЛЯ: E-MAIL И ДВОЙНОЙ ВВОД ПАРОЛЯ -->
+      <!-- 4. ОБЩИЕ ПОЛЯ: E-MAIL И ДВОЙНОЙ ВВОД ПАРОЛЯ -->
       <div class="form-group">
         <label for="reg-email" class="form-label">Адрес электронной почты (E-mail) <span class="required-star">*</span></label>
         <input type="email" id="reg-email" class="form-input" placeholder="alexander@company.ru" required autocomplete="email">

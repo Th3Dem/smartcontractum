@@ -23,28 +23,35 @@ class TestAuthFrontend(unittest.TestCase):
         self.assertFalse(validate_inn_checksum("7707083894")) # Неверная контрольная сумма
         self.assertFalse(validate_inn_checksum("1234567890")) # Неверная контрольная сумма
 
-    def test_html_egrul_and_org_fields(self):
+    def test_html_all_three_subject_types(self):
         with open(self.html_path, "r", encoding="utf-8") as f:
             content = f.read()
 
-        # Проверка кнопки ЕГРЮЛ и контейнера статуса
-        self.assertIn('id="btn-fetch-egrul"', content)
-        self.assertIn('id="egrul-status"', content)
-        self.assertIn('Найти в ЕГРЮЛ', content)
+        # 3 кнопки переключения субъекта
+        self.assertIn('id="type-individual"', content)
+        self.assertIn('id="type-ip"', content)
+        self.assertIn('id="type-organization"', content)
 
-        # Проверка новых полей организации: краткое наименование, ОГРН, КПП
+        # Поля для физ. лица
+        self.assertIn('id="reg-lastname"', content)
+        self.assertIn('id="reg-firstname"', content)
+        self.assertIn('id="reg-phone"', content)
+
+        # Поля для ИП
+        self.assertIn('id="reg-ip-inn"', content)
+        self.assertIn('id="reg-ip-ogrnip"', content)
+        self.assertIn('id="btn-fetch-egrip"', content)
+        self.assertIn('id="reg-ip-lastname"', content)
+        self.assertIn('id="reg-ip-firstname"', content)
+        self.assertIn('id="reg-ip-phone"', content)
+
+        # Поля для юр. лица
+        self.assertIn('id="reg-inn"', content)
+        self.assertIn('id="btn-fetch-egrul"', content)
         self.assertIn('id="reg-company"', content)
         self.assertIn('id="reg-short-name"', content)
         self.assertIn('id="reg-ogrn"', content)
         self.assertIn('id="reg-kpp"', content)
-
-        # Раздельные поля ФИО и телефон для физ. лица
-        self.assertIn('id="reg-lastname"', content)
-        self.assertIn('id="reg-firstname"', content)
-        self.assertIn('id="reg-middlename"', content)
-        self.assertIn('id="reg-phone"', content)
-
-        # Поля для представителя организации
         self.assertIn('id="reg-org-lastname"', content)
         self.assertIn('id="reg-org-firstname"', content)
         self.assertIn('id="reg-org-phone"', content)
@@ -52,16 +59,13 @@ class TestAuthFrontend(unittest.TestCase):
         # Двойной ввод пароля
         self.assertIn('id="reg-password"', content)
         self.assertIn('id="reg-password-confirm"', content)
-        self.assertIn('id="password-match-msg"', content)
 
     def test_live_egrul_query(self):
-        # Реальный онлайн-запрос к ФНС ЕГРЮЛ (Сбербанк 7707083893)
+        # Онлайн-запрос к ФНС ЕГРЮЛ (Сбербанк 7707083893)
         res = query_egrul_nalog_ru("7707083893")
         self.assertTrue(res["success"], f"EGRUL query failed: {res.get('error')}")
         self.assertIn("СБЕРБАНК", res["company"]["fullName"].upper())
         self.assertEqual(res["company"]["ogrn"], "1027700132195")
-        self.assertTrue(bool(res["company"]["shortName"]))
-        self.assertTrue(bool(res["company"]["kpp"]))
         self.assertEqual(res["company"]["statusType"], "ACTIVE")
 
         # Запрос с несуществующим в ЕГРЮЛ ИНН

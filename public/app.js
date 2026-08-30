@@ -1,14 +1,14 @@
 /**
  * SmartContractum — Интерактивная логика авторизации и регистрации
- * Интеграция с официальным сервисом ЕГРЮЛ ФНС России (egrul.nalog.ru) в реальном времени
+ * Интеграция с официальными реестрами ЕГРЮЛ и ЕГРИП ФНС России (egrul.nalog.ru)
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   // Состояние интерфейса
   let currentMode = 'login'; // 'login' | 'register' | 'forgot'
-  let accountType = 'individual'; // 'individual' | 'organization'
+  let accountType = 'individual'; // 'individual' | 'ip' | 'organization'
 
-  // DOM Элементы
+  // DOM Элементы навигации
   const tabsContainer = document.getElementById('auth-tabs');
   const tabLogin = document.getElementById('tab-login');
   const tabRegister = document.getElementById('tab-register');
@@ -18,13 +18,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const alertBox = document.getElementById('auth-alert');
   const themeToggle = document.getElementById('theme-toggle');
 
-  // Выбор субъекта
+  // Выбор типа субъекта (Физлицо, ИП, Юрлицо)
   const btnTypeIndividual = document.getElementById('type-individual');
+  const btnTypeIP = document.getElementById('type-ip');
   const btnTypeOrg = document.getElementById('type-organization');
-  const orgFields = document.querySelectorAll('.org-only');
+  
   const individualFields = document.querySelectorAll('.individual-only');
+  const ipFields = document.querySelectorAll('.ip-only');
+  const orgFields = document.querySelectorAll('.org-only');
 
-  // ЕГРЮЛ элементы
+  // ЕГРЮЛ элементы (Юр. лицо)
   const btnFetchEgrul = document.getElementById('btn-fetch-egrul');
   const innInput = document.getElementById('reg-inn');
   const companyInput = document.getElementById('reg-company');
@@ -32,6 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const ogrnInput = document.getElementById('reg-ogrn');
   const kppInput = document.getElementById('reg-kpp');
   const egrulStatus = document.getElementById('egrul-status');
+
+  // ЕГРИП элементы (ИП)
+  const btnFetchEgrip = document.getElementById('btn-fetch-egrip');
+  const ipInnInput = document.getElementById('reg-ip-inn');
+  const ipOgrnipInput = document.getElementById('reg-ip-ogrnip');
+  const ipLastNameInput = document.getElementById('reg-ip-lastname');
+  const ipFirstNameInput = document.getElementById('reg-ip-firstname');
+  const ipMiddleNameInput = document.getElementById('reg-ip-middlename');
+  const egripStatus = document.getElementById('egrip-status');
 
   // Пароли и проверка совпадения
   const regPwd = document.getElementById('reg-password');
@@ -72,21 +84,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Переключение типа субъекта
+  // Переключение типа субъекта (3 сегмента)
   function setAccountType(type) {
     accountType = type;
     clearValidationErrors();
-    if (type === 'individual') {
-      btnTypeIndividual.classList.add('active');
-      btnTypeOrg.classList.remove('active');
-      individualFields.forEach(el => el.style.display = 'block');
-      orgFields.forEach(el => el.style.display = 'none');
-    } else {
-      btnTypeIndividual.classList.remove('active');
-      btnTypeOrg.classList.add('active');
-      individualFields.forEach(el => el.style.display = 'none');
-      orgFields.forEach(el => el.style.display = 'block');
-    }
+
+    btnTypeIndividual.classList.toggle('active', type === 'individual');
+    btnTypeIP.classList.toggle('active', type === 'ip');
+    btnTypeOrg.classList.toggle('active', type === 'organization');
+
+    individualFields.forEach(el => el.style.display = type === 'individual' ? 'block' : 'none');
+    ipFields.forEach(el => el.style.display = type === 'ip' ? 'block' : 'none');
+    orgFields.forEach(el => el.style.display = type === 'organization' ? 'block' : 'none');
   }
 
   // Уведомления
@@ -113,16 +122,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ===============================================================
-  // Реальный онлайн-запрос к ЕГРЮЛ ФНС России (egrul.nalog.ru)
+  // 1. Поиск Юр. лица в ЕГРЮЛ ФНС России (egrul.nalog.ru)
   // ===============================================================
   async function fetchEgrulData() {
     const cleanInn = innInput.value.trim().replace(/\D/g, '');
     egrulStatus.style.display = 'none';
 
-    if (cleanInn.length !== 10 && cleanInn.length !== 12) {
+    if (cleanInn.length !== 10) {
       innInput.classList.add('is-invalid');
       egrulStatus.className = 'egrul-status-box error';
-      egrulStatus.innerHTML = '✕ ИНН должен содержать 10 цифр (для юридических лиц) или 12 цифр (для ИП)';
+      egrulStatus.innerHTML = '✕ ИНН юридического лица должен содержать ровно 10 цифр';
       egrulStatus.style.display = 'block';
       return;
     }
@@ -133,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
     btnFetchEgrul.innerHTML = '<span class="spinner-small"></span> Поиск в ЕГРЮЛ...';
 
     try {
-      // Прямой запрос к нашему бэкенд-шлюзу, опрашивающему egrul.nalog.ru в реальном времени
       const response = await fetch(`/api/egrul?inn=${encodeURIComponent(cleanInn)}`);
       const data = await response.json();
 
@@ -143,36 +151,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!data.success || !data.company) {
         innInput.classList.add('is-invalid');
         egrulStatus.className = 'egrul-status-box error';
-        egrulStatus.innerHTML = `✕ ${data.error || 'Организация с указанным ИНН не найдена в реестре ЕГРЮЛ ФНС России'}`;
+        egrulStatus.innerHTML = `✕ ${data.error || 'Организация не найдена в ЕГРЮЛ ФНС России'}`;
         egrulStatus.style.display = 'block';
         return;
       }
 
       const company = data.company;
-
-      // 1. Автозаполнение полного наименования организации
       companyInput.value = company.fullName || '';
       companyInput.classList.remove('is-invalid');
 
-      // 2. Автозаполнение краткого наименования
-      if (shortNameInput) {
-        shortNameInput.value = company.shortName || '';
-      }
+      if (shortNameInput) shortNameInput.value = company.shortName || '';
+      if (ogrnInput) ogrnInput.value = company.ogrn || '';
+      if (kppInput) kppInput.value = company.kpp || '';
 
-      // 3. Автозаполнение ОГРН / ОГРНИП
-      if (ogrnInput) {
-        ogrnInput.value = company.ogrn || '';
-      }
-
-      // 4. Автозаполнение КПП (для юр. лиц)
-      if (kppInput) {
-        kppInput.value = company.kpp || '';
-      }
-
-      // ВАЖНО: Данные представителя (Фамилия, Имя, Телефон) намеренно НЕ перезаписываются,
-      // так как регистрирующийся на платформе пользователь может не являться генеральным директором из ЕГРЮЛ.
-
-      // 5. Вывод карточки подтверждения из официального реестра ФНС
       egrulStatus.className = 'egrul-status-box success';
       egrulStatus.innerHTML = `
         <div><strong>✓ Найдено в ЕГРЮЛ (ФНС России):</strong> ${escapeHtml(company.fullName)}</div>
@@ -187,8 +178,69 @@ document.addEventListener('DOMContentLoaded', () => {
       btnFetchEgrul.disabled = false;
       btnFetchEgrul.innerHTML = originalBtnHTML;
       egrulStatus.className = 'egrul-status-box error';
-      egrulStatus.innerHTML = '✕ Не удалось связаться с сервисом ЕГРЮЛ ФНС России. Проверьте интернет-соединение.';
+      egrulStatus.innerHTML = '✕ Ошибка связи с сервисом ЕГРЮЛ ФНС России. Проверьте сеть.';
       egrulStatus.style.display = 'block';
+    }
+  }
+
+  // ===============================================================
+  // 2. Поиск Индивидуального предпринимателя (ИП) в ЕГРИП ФНС РФ
+  // ===============================================================
+  async function fetchEgripData() {
+    const cleanInn = ipInnInput.value.trim().replace(/\D/g, '');
+    egripStatus.style.display = 'none';
+
+    if (cleanInn.length !== 12) {
+      ipInnInput.classList.add('is-invalid');
+      egripStatus.className = 'egrul-status-box error';
+      egripStatus.innerHTML = '✕ ИНН индивидуального предпринимателя должен содержать ровно 12 цифр';
+      egripStatus.style.display = 'block';
+      return;
+    }
+
+    ipInnInput.classList.remove('is-invalid');
+    const originalBtnHTML = btnFetchEgrip.innerHTML;
+    btnFetchEgrip.disabled = true;
+    btnFetchEgrip.innerHTML = '<span class="spinner-small"></span> Поиск в ЕГРИП...';
+
+    try {
+      const response = await fetch(`/api/egrul?inn=${encodeURIComponent(cleanInn)}`);
+      const data = await response.json();
+
+      btnFetchEgrip.disabled = false;
+      btnFetchEgrip.innerHTML = originalBtnHTML;
+
+      if (!data.success || !data.company) {
+        ipInnInput.classList.add('is-invalid');
+        egripStatus.className = 'egrul-status-box error';
+        egripStatus.innerHTML = `✕ ${data.error || 'Индивидуальный предприниматель не найден в ЕГРИП'}`;
+        egripStatus.style.display = 'block';
+        return;
+      }
+
+      const company = data.company;
+
+      if (ipOgrnipInput) ipOgrnipInput.value = company.ogrn || '';
+
+      // Для ИП автозаполняем ФИО, если они извлечены
+      if (ipLastNameInput && company.ceoLastName) ipLastNameInput.value = company.ceoLastName;
+      if (ipFirstNameInput && company.ceoFirstName) ipFirstNameInput.value = company.ceoFirstName;
+
+      egripStatus.className = 'egrul-status-box success';
+      egripStatus.innerHTML = `
+        <div><strong>✓ Найдено в ЕГРИП (ФНС России):</strong> ${escapeHtml(company.fullName)}</div>
+        <div class="egrul-company-meta">
+          Статус: <strong>${escapeHtml(company.statusText)}</strong> • ОГРНИП: ${escapeHtml(company.ogrn)} • ${escapeHtml(company.address)}
+        </div>
+      `;
+      egripStatus.style.display = 'block';
+
+    } catch (err) {
+      btnFetchEgrip.disabled = false;
+      btnFetchEgrip.innerHTML = originalBtnHTML;
+      egripStatus.className = 'egrul-status-box error';
+      egripStatus.innerHTML = '✕ Ошибка связи с сервисом ЕГРИП ФНС России.';
+      egripStatus.style.display = 'block';
     }
   }
 
@@ -199,15 +251,23 @@ document.addEventListener('DOMContentLoaded', () => {
     return div.innerHTML;
   }
 
-  if (btnFetchEgrul) {
-    btnFetchEgrul.addEventListener('click', fetchEgrulData);
-  }
+  if (btnFetchEgrul) btnFetchEgrul.addEventListener('click', fetchEgrulData);
+  if (btnFetchEgrip) btnFetchEgrip.addEventListener('click', fetchEgripData);
 
   if (innInput) {
     innInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
         fetchEgrulData();
+      }
+    });
+  }
+
+  if (ipInnInput) {
+    ipInnInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        fetchEgripData();
       }
     });
   }
@@ -267,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Автоформатирование телефона (+7 (XXX) XXX-XX-XX)
+  // Автоформатирование телефонов
   function formatPhone(input) {
     input.addEventListener('input', (e) => {
       let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
@@ -279,10 +339,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const phoneIndividual = document.getElementById('reg-phone');
-  const phoneOrg = document.getElementById('reg-org-phone');
-  if (phoneIndividual) formatPhone(phoneIndividual);
-  if (phoneOrg) formatPhone(phoneOrg);
+  ['reg-phone', 'reg-ip-phone', 'reg-org-phone'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) formatPhone(el);
+  });
 
   // Слушатели событий паролей
   if (regPwd) {
@@ -316,8 +376,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setMode('login');
   });
 
-  // Переключение субъектности
+  // Переключение типа субъекта
   btnTypeIndividual.addEventListener('click', () => setAccountType('individual'));
+  btnTypeIP.addEventListener('click', () => setAccountType('ip'));
   btnTypeOrg.addEventListener('click', () => setAccountType('organization'));
 
   // Показ / скрытие пароля (👁)
@@ -398,21 +459,48 @@ document.addEventListener('DOMContentLoaded', () => {
         showAlert('Пожалуйста, укажите фамилию');
         return;
       }
-
       if (!firstName) {
         markInvalid('reg-firstname');
         showAlert('Пожалуйста, укажите имя');
         return;
       }
-
       if (!phone || phone.length < 10) {
         markInvalid('reg-phone');
-        showAlert('Пожалуйста, укажите корректный номер телефона');
+        showAlert('Пожалуйста, укажите контактный номер телефона');
         return;
       }
     }
 
-    // 2. Проверка полей для юр. лица
+    // 2. Проверка полей для ИП
+    if (accountType === 'ip') {
+      const ipInn = ipInnInput.value.trim();
+      const ipLastName = ipLastNameInput.value.trim();
+      const ipFirstName = ipFirstNameInput.value.trim();
+      const ipPhone = document.getElementById('reg-ip-phone').value.trim();
+
+      if (!ipInn || ipInn.length !== 12) {
+        markInvalid('reg-ip-inn');
+        showAlert('ИНН индивидуального предпринимателя должен содержать ровно 12 цифр');
+        return;
+      }
+      if (!ipLastName) {
+        markInvalid('reg-ip-lastname');
+        showAlert('Пожалуйста, укажите фамилию предпринимателя');
+        return;
+      }
+      if (!ipFirstName) {
+        markInvalid('reg-ip-firstname');
+        showAlert('Пожалуйста, укажите имя предпринимателя');
+        return;
+      }
+      if (!ipPhone || ipPhone.length < 10) {
+        markInvalid('reg-ip-phone');
+        showAlert('Пожалуйста, укажите контактный номер телефона');
+        return;
+      }
+    }
+
+    // 3. Проверка полей для юр. лица
     if (accountType === 'organization') {
       const inn = innInput.value.trim();
       const company = companyInput.value.trim();
@@ -420,30 +508,26 @@ document.addEventListener('DOMContentLoaded', () => {
       const orgFirstName = document.getElementById('reg-org-firstname').value.trim();
       const orgPhone = document.getElementById('reg-org-phone').value.trim();
 
-      if (!inn || !/^\d{10}$|^\d{12}$/.test(inn)) {
+      if (!inn || inn.length !== 10) {
         markInvalid('reg-inn');
-        showAlert('ИНН организации должен состоять из 10 цифр (для ИП — 12 цифр)');
+        showAlert('ИНН организации должен состоять ровно из 10 цифр');
         return;
       }
-
       if (!company) {
         markInvalid('reg-company');
         showAlert('Пожалуйста, укажите или загрузите из ЕГРЮЛ наименование организации');
         return;
       }
-
       if (!orgLastName) {
         markInvalid('reg-org-lastname');
         showAlert('Пожалуйста, укажите фамилию представителя организации');
         return;
       }
-
       if (!orgFirstName) {
         markInvalid('reg-org-firstname');
         showAlert('Пожалуйста, укажите имя представителя организации');
         return;
       }
-
       if (!orgPhone || orgPhone.length < 10) {
         markInvalid('reg-org-phone');
         showAlert('Пожалуйста, укажите контактный телефон представителя');
@@ -451,28 +535,28 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // 3. Проверка E-mail
+    // 4. Проверка E-mail
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       markInvalid('reg-email');
       showAlert('Пожалуйста, укажите корректный адрес электронной почты (E-mail)');
       return;
     }
 
-    // 4. Проверка сложности и длины пароля
+    // 5. Проверка сложности и длины пароля
     if (password.length < 8) {
       markInvalid('reg-password');
       showAlert('Пароль учетной записи должен содержать не менее 8 символов');
       return;
     }
 
-    // 5. Проверка совпадения двух паролей
+    // 6. Проверка совпадения двух паролей
     if (password !== passwordConfirm) {
       markInvalid('reg-password-confirm');
       showAlert('Введенные пароли не совпадают. Пожалуйста, проверьте правильность ввода');
       return;
     }
 
-    // 6. Проверка согласия с 152-ФЗ
+    // 7. Проверка согласия с 152-ФЗ
     if (!agreement) {
       showAlert('Для завершения регистрации необходимо подтвердить согласие с Условиями использования и 152-ФЗ');
       return;
@@ -483,10 +567,12 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span> Создание учетной записи...';
 
+    const accountTypeLabel = accountType === 'organization' ? 'организации' : accountType === 'ip' ? 'индивидуального предпринимателя' : 'физического лица (эксперта)';
+
     setTimeout(() => {
       btn.disabled = false;
       btn.innerHTML = originalText;
-      showAlert(`Учетная запись для ${accountType === 'organization' ? 'организации' : 'физического лица (эксперта)'} успешно создана! На адрес ${email} направлено письмо для подтверждения регистрации.`, 'success');
+      showAlert(`Учетная запись для ${accountTypeLabel} успешно создана! На адрес ${email} направлено письмо для подтверждения регистрации.`, 'success');
     }, 800);
   });
 

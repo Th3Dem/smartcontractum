@@ -1,8 +1,8 @@
 /* ======================================================================
-   SmartContractum — Auth & Onboarding Design System (v2.1)
+   SmartContractum — Auth & Onboarding Design System (v2.2)
    Шрифты: Inter (основной текст и формы) + Manrope (заголовки и акценты)
    Палитра: SmartContractum Brand Colors
-   Строгая русская типографика и деловой стиль
+   3 режима субъектов: Физ. лицо, ИП, Юр. лицо
 ====================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap');
@@ -92,11 +92,11 @@ body {
 /* Контейнер карточки */
 .auth-container {
   width: 100%;
-  max-width: 500px;
+  max-width: 530px;
   background: var(--bg-card);
   border: 1px solid var(--bg-card-border);
   border-radius: var(--radius-lg);
-  padding: 40px 36px;
+  padding: 38px 34px;
   box-shadow: var(--card-shadow);
   position: relative;
   overflow: hidden;
@@ -112,7 +112,7 @@ body {
 /* Шапка карточки */
 .auth-header {
   text-align: center;
-  margin-bottom: 26px;
+  margin-bottom: 24px;
 }
 
 .auth-logo-badge {
@@ -127,22 +127,22 @@ body {
   font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.6px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   text-transform: uppercase;
   font-family: var(--font-heading);
 }
 
 .auth-title {
   font-family: var(--font-heading);
-  font-size: 26px;
+  font-size: 25px;
   font-weight: 800;
   letter-spacing: -0.4px;
   color: var(--text-primary);
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 .auth-subtitle {
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--text-muted);
   line-height: 1.45;
   font-weight: 400;
@@ -154,7 +154,7 @@ body {
   background: var(--bg-input);
   padding: 4px;
   border-radius: var(--radius-md);
-  margin-bottom: 24px;
+  margin-bottom: 22px;
   border: 1px solid var(--bg-card-border);
 }
 
@@ -183,11 +183,11 @@ body {
   box-shadow: 0 4px 14px rgba(47, 111, 206, 0.3);
 }
 
-/* Выбор типа субъекта (Физ. лицо / Юр. лицо) */
+/* Выбор типа субъекта (3 типа: Физ. лицо, ИП, Юр. лицо) */
 .account-type-group {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
   margin-bottom: 20px;
 }
 
@@ -195,7 +195,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 14px 10px;
+  padding: 12px 6px;
   background: var(--bg-input);
   border: 1px solid var(--bg-card-border);
   border-radius: var(--radius-md);
@@ -203,13 +203,14 @@ body {
   transition: var(--transition);
   color: var(--text-secondary);
   font-family: var(--font-heading);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   text-align: center;
+  line-height: 1.25;
 }
 
 .account-type-btn svg {
-  margin-bottom: 7px;
+  margin-bottom: 6px;
   transition: transform 0.2s ease;
 }
 
@@ -231,8 +232,19 @@ body {
 
 /* Поля ввода и лейблы */
 .form-group {
-  margin-bottom: 18px;
+  margin-bottom: 16px;
   text-align: left;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.form-row .form-group {
+  margin-bottom: 0;
 }
 
 .form-label {
@@ -244,6 +256,12 @@ body {
   letter-spacing: -0.1px;
 }
 
+.required-star {
+  color: #ef4444;
+  margin-left: 2px;
+  font-weight: bold;
+}
+
 .input-wrapper {
   position: relative;
   display: flex;
@@ -252,7 +270,7 @@ body {
 
 .form-input {
   width: 100%;
-  padding: 12px 14px;
+  padding: 11px 13px;
   font-size: 14px;
   background: var(--bg-input);
   border: 1px solid var(--input-border);
@@ -294,6 +312,87 @@ body {
   color: var(--text-primary);
 }
 
+/* Интеграция с ЕГРЮЛ / ЕГРИП */
+.input-with-button {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.input-with-button .form-input {
+  flex: 1;
+}
+
+.btn-secondary {
+  background: var(--bg-input);
+  border: 1px solid var(--input-border);
+  color: var(--blue);
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 0 12px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(47, 111, 206, 0.1);
+  border-color: var(--blue);
+  color: var(--blue-hover);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinner-small {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(47, 111, 206, 0.3);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+.egrul-status-box {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  line-height: 1.45;
+  animation: alertSlide 0.25s ease;
+}
+
+.egrul-status-box.success {
+  background: rgba(39, 133, 101, 0.12);
+  border: 1px solid rgba(39, 133, 101, 0.35);
+  color: #278565;
+}
+
+[data-theme="dark"] .egrul-status-box.success {
+  background: rgba(39, 133, 101, 0.18);
+  border-color: rgba(39, 133, 101, 0.45);
+  color: #6ee7b7;
+}
+
+.egrul-status-box.error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.egrul-company-meta {
+  margin-top: 4px;
+  font-size: 11px;
+  opacity: 0.85;
+}
+
 /* Шкала надежности пароля */
 .strength-meter {
   margin-top: 8px;
@@ -320,6 +419,48 @@ body {
   justify-content: space-between;
   color: var(--text-muted);
   font-weight: 500;
+}
+
+.password-match-status {
+  font-size: 11.5px;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.password-match-status.match {
+  color: #10b981;
+}
+
+.password-match-status.mismatch {
+  color: #ef4444;
+}
+
+.sub-section-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 16px 0 10px 0;
+  padding-bottom: 4px;
+  border-bottom: 1px dashed var(--bg-card-border);
+}
+
+.info-banner {
+  background: rgba(47, 111, 206, 0.08);
+  border: 1px solid rgba(47, 111, 206, 0.2);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 /* Чекбоксы и ссылки */
@@ -488,144 +629,18 @@ body {
 }
 
 /* Адаптивность для мобильных устройств */
-@media (max-width: 520px) {
+@media (max-width: 540px) {
   body {
-    padding: 12px;
+    padding: 10px;
   }
   .auth-container {
-    padding: 28px 20px;
+    padding: 26px 18px;
     border-radius: var(--radius-md);
   }
   .auth-title {
-    font-size: 22px;
+    font-size: 21px;
   }
-}
-
-/* Поля в строку (Form Grid Rows) */
-.form-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.form-row .form-group {
-  margin-bottom: 0;
-}
-
-.required-star {
-  color: #ef4444;
-  margin-left: 2px;
-  font-weight: bold;
-}
-
-/* Индикатор совпадения паролей */
-.password-match-status {
-  font-size: 11.5px;
-  margin-top: 5px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.password-match-status.match {
-  color: #10b981;
-}
-
-.password-match-status.mismatch {
-  color: #ef4444;
-}
-
-.sub-section-title {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 16px 0 10px 0;
-  padding-bottom: 4px;
-  border-bottom: 1px dashed var(--bg-card-border);
-}
-
-/* Интеграция с ЕГРЮЛ / Поиск по ИНН */
-.input-with-button {
-  display: flex;
-  gap: 8px;
-  align-items: stretch;
-}
-
-.input-with-button .form-input {
-  flex: 1;
-}
-
-.btn-secondary {
-  background: var(--bg-input);
-  border: 1px solid var(--input-border);
-  color: var(--blue);
-  font-family: var(--font-heading);
-  font-size: 12.5px;
-  font-weight: 700;
-  padding: 0 14px;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: var(--transition);
-}
-
-.btn-secondary:hover:not(:disabled) {
-  background: rgba(47, 111, 206, 0.1);
-  border-color: var(--blue);
-  color: var(--blue-hover);
-}
-
-.btn-secondary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.spinner-small {
-  width: 14px;
-  height: 14px;
-  border: 2px solid rgba(47, 111, 206, 0.3);
-  border-top-color: var(--blue);
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-}
-
-.egrul-status-box {
-  margin-top: 8px;
-  padding: 10px 12px;
-  border-radius: var(--radius-md);
-  font-size: 12px;
-  line-height: 1.45;
-  animation: alertSlide 0.25s ease;
-}
-
-.egrul-status-box.success {
-  background: rgba(39, 133, 101, 0.12);
-  border: 1px solid rgba(39, 133, 101, 0.35);
-  color: #278565;
-}
-
-[data-theme="dark"] .egrul-status-box.success {
-  background: rgba(39, 133, 101, 0.18);
-  border-color: rgba(39, 133, 101, 0.45);
-  color: #6ee7b7;
-}
-
-.egrul-status-box.error {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #ef4444;
-}
-
-.egrul-company-meta {
-  margin-top: 4px;
-  font-size: 11px;
-  opacity: 0.85;
+  .account-type-group {
+    grid-template-columns: 1fr;
+  }
 }

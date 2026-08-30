@@ -3,7 +3,7 @@
  */
 
 export type AuthMode = 'login' | 'register' | 'forgot_password';
-export type AccountType = 'individual' | 'organization';
+export type AccountType = 'individual' | 'ip' | 'organization';
 
 export interface UserProfileDTO {
   id: string;
@@ -17,6 +17,7 @@ export interface UserProfileDTO {
   companyShortName?: string;
   inn?: string;
   ogrn?: string;
+  ogrnip?: string;
   kpp?: string;
   isVerified: boolean;
   reputationScore: number;
@@ -31,6 +32,20 @@ export interface AuthCredentials {
 
 export interface IndividualRegisterPayload {
   userType: 'individual';
+  lastName: string;
+  firstName: string;
+  middleName?: string;
+  phone: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+  agreement: boolean;
+}
+
+export interface IPRegisterPayload {
+  userType: 'ip';
+  inn: string;
+  ogrnip?: string;
   lastName: string;
   firstName: string;
   middleName?: string;
@@ -58,7 +73,7 @@ export interface OrganizationRegisterPayload {
   agreement: boolean;
 }
 
-export type RegisterPayload = IndividualRegisterPayload | OrganizationRegisterPayload;
+export type RegisterPayload = IndividualRegisterPayload | IPRegisterPayload | OrganizationRegisterPayload;
 
 export interface AuthResponse {
   success: boolean;
