@@ -23,7 +23,7 @@ class TestAuthFrontend(unittest.TestCase):
         self.assertFalse(validate_inn_checksum("7707083894")) # Неверная контрольная сумма
         self.assertFalse(validate_inn_checksum("1234567890")) # Неверная контрольная сумма
 
-    def test_html_egrul_and_form_elements(self):
+    def test_html_egrul_and_org_fields(self):
         with open(self.html_path, "r", encoding="utf-8") as f:
             content = f.read()
 
@@ -31,6 +31,12 @@ class TestAuthFrontend(unittest.TestCase):
         self.assertIn('id="btn-fetch-egrul"', content)
         self.assertIn('id="egrul-status"', content)
         self.assertIn('Найти в ЕГРЮЛ', content)
+
+        # Проверка новых полей организации: краткое наименование, ОГРН, КПП
+        self.assertIn('id="reg-company"', content)
+        self.assertIn('id="reg-short-name"', content)
+        self.assertIn('id="reg-ogrn"', content)
+        self.assertIn('id="reg-kpp"', content)
 
         # Раздельные поля ФИО и телефон для физ. лица
         self.assertIn('id="reg-lastname"', content)
@@ -54,6 +60,8 @@ class TestAuthFrontend(unittest.TestCase):
         self.assertTrue(res["success"], f"EGRUL query failed: {res.get('error')}")
         self.assertIn("СБЕРБАНК", res["company"]["fullName"].upper())
         self.assertEqual(res["company"]["ogrn"], "1027700132195")
+        self.assertTrue(bool(res["company"]["shortName"]))
+        self.assertTrue(bool(res["company"]["kpp"]))
         self.assertEqual(res["company"]["statusType"], "ACTIVE")
 
         # Запрос с несуществующим в ЕГРЮЛ ИНН

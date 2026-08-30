@@ -28,6 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnFetchEgrul = document.getElementById('btn-fetch-egrul');
   const innInput = document.getElementById('reg-inn');
   const companyInput = document.getElementById('reg-company');
+  const shortNameInput = document.getElementById('reg-short-name');
+  const ogrnInput = document.getElementById('reg-ogrn');
+  const kppInput = document.getElementById('reg-kpp');
   const egrulStatus = document.getElementById('egrul-status');
 
   // Пароли и проверка совпадения
@@ -130,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnFetchEgrul.innerHTML = '<span class="spinner-small"></span> Поиск в ЕГРЮЛ...';
 
     try {
-      // Прямой запрос к нашему бэкенд-шлюзу, который в реальном времени опрашивает egrul.nalog.ru
+      // Прямой запрос к нашему бэкенд-шлюзу, опрашивающему egrul.nalog.ru в реальном времени
       const response = await fetch(`/api/egrul?inn=${encodeURIComponent(cleanInn)}`);
       const data = await response.json();
 
@@ -147,27 +150,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const company = data.company;
 
-      // Автозаполнение официального наименования организации
-      companyInput.value = company.fullName || company.shortName;
+      // 1. Автозаполнение полного наименования организации
+      companyInput.value = company.fullName || '';
       companyInput.classList.remove('is-invalid');
 
-      // Автозаполнение представителя (если поля не были заполнены)
-      const repLastName = document.getElementById('reg-org-lastname');
-      const repFirstName = document.getElementById('reg-org-firstname');
-      if (repLastName && !repLastName.value && company.ceoLastName) {
-        repLastName.value = company.ceoLastName;
-      }
-      if (repFirstName && !repFirstName.value && company.ceoFirstName) {
-        repFirstName.value = company.ceoFirstName;
+      // 2. Автозаполнение краткого наименования
+      if (shortNameInput) {
+        shortNameInput.value = company.shortName || '';
       }
 
-      // Вывод карточки подтверждения из официального реестра ФНС
+      // 3. Автозаполнение ОГРН / ОГРНИП
+      if (ogrnInput) {
+        ogrnInput.value = company.ogrn || '';
+      }
+
+      // 4. Автозаполнение КПП (для юр. лиц)
+      if (kppInput) {
+        kppInput.value = company.kpp || '';
+      }
+
+      // ВАЖНО: Данные представителя (Фамилия, Имя, Телефон) намеренно НЕ перезаписываются,
+      // так как регистрирующийся на платформе пользователь может не являться генеральным директором из ЕГРЮЛ.
+
+      // 5. Вывод карточки подтверждения из официального реестра ФНС
       egrulStatus.className = 'egrul-status-box success';
       egrulStatus.innerHTML = `
         <div><strong>✓ Найдено в ЕГРЮЛ (ФНС России):</strong> ${escapeHtml(company.fullName)}</div>
         <div class="egrul-company-meta">
           Статус: <strong>${escapeHtml(company.statusText)}</strong> • ОГРН: ${escapeHtml(company.ogrn)}${company.kpp ? ` • КПП: ${escapeHtml(company.kpp)}` : ''} • ${escapeHtml(company.address)}
-          ${company.ceoRaw ? `<br>Руководитель: ${escapeHtml(company.ceoRaw)}` : ''}
+          ${company.ceoRaw ? `<br>Руководитель по реестру: ${escapeHtml(company.ceoRaw)}` : ''}
         </div>
       `;
       egrulStatus.style.display = 'block';

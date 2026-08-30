@@ -14,7 +14,10 @@ export interface UserProfileDTO {
   middleName?: string;
   phone?: string;
   companyName?: string;
+  companyShortName?: string;
   inn?: string;
+  ogrn?: string;
+  kpp?: string;
   isVerified: boolean;
   reputationScore: number;
   roles: string[];
@@ -41,7 +44,10 @@ export interface IndividualRegisterPayload {
 export interface OrganizationRegisterPayload {
   userType: 'organization';
   companyName: string;
+  shortName?: string;
   inn: string;
+  ogrn?: string;
+  kpp?: string;
   representativeLastName: string;
   representativeFirstName: string;
   representativeMiddleName?: string;
