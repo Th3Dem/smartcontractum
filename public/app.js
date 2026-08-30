@@ -416,14 +416,54 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Автоформатирование телефонов
+  // Автоформатирование телефонов (+7 (XXX) XXX-XX-XX) с плавным удалением
   function formatPhone(input) {
-    input.addEventListener('input', (e) => {
-      let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-      if (!x[2]) {
-        e.target.value = x[1] ? `+7 (${x[1]}` : '';
-      } else {
-        e.target.value = `+7 (${x[2]}` + (x[3] ? `) ${x[3]}` : '') + (x[4] ? `-${x[4]}` : '') + (x[5] ? `-${x[5]}` : '');
+    input.addEventListener('input', () => {
+      let raw = input.value;
+      if (!raw) return;
+
+      let digits = raw.replace(/\D/g, '');
+      if (!digits) {
+        input.value = '';
+        return;
+      }
+
+      // Удаляем префикс 7 или 8 в начале
+      if (digits.startsWith('8') || digits.startsWith('7')) {
+        digits = digits.substring(1);
+      }
+
+      digits = digits.substring(0, 10);
+      if (digits.length === 0) {
+        input.value = '';
+        return;
+      }
+
+      let formatted = '+7 ';
+      if (digits.length > 0) {
+        formatted += '(' + digits.substring(0, Math.min(3, digits.length));
+      }
+      if (digits.length >= 3) {
+        formatted += ') ' + digits.substring(3, Math.min(6, digits.length));
+      }
+      if (digits.length >= 6) {
+        formatted += '-' + digits.substring(6, Math.min(8, digits.length));
+      }
+      if (digits.length >= 8) {
+        formatted += '-' + digits.substring(8, Math.min(10, digits.length));
+      }
+
+      input.value = formatted;
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace') {
+        const digits = input.value.replace(/\D/g, '');
+        // Если осталась только одна цифра или только код страны, очищаем поле
+        if (digits.length <= 1 || (digits.startsWith('7') && digits.length <= 2)) {
+          input.value = '';
+          e.preventDefault();
+        }
       }
     });
   }
