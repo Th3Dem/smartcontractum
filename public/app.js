@@ -570,6 +570,15 @@ document.addEventListener('DOMContentLoaded', () => {
     setMode('login');
   });
 
+  // Обработка кликов по ссылкам Условий и Согласия
+  document.querySelectorAll('.checkbox-label a.link-btn').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      showAlert(`Документ «${link.innerText.trim()}» откроется в отдельном окне после утверждения финальной редакции.`, 'info');
+    });
+  });
+
   // Переключение типа субъекта
   btnTypeIndividual.addEventListener('click', () => setAccountType('individual'));
   btnTypeIP.addEventListener('click', () => setAccountType('ip'));
