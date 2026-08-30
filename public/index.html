@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SmartContractum — Авторизация и Регистрация</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,7 +14,7 @@
   <main class="auth-container" id="auth-card">
     <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему оформления" title="Сменить тему">🌙</button>
 
-    <!-- Заголовок и фирменный бейдж -->
+    <!-- Заголовок и логотип -->
     <header class="auth-header">
       <div class="auth-logo-badge">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -35,7 +38,7 @@
     <!-- ФОРМА 1: ВХОД (LOGIN) -->
     <form id="form-login" novalidate>
       <div class="form-group">
-        <label for="login-email" class="form-label">Email или логин</label>
+        <label for="login-email" class="form-label">E-mail или логин</label>
         <div class="input-wrapper">
           <input type="email" id="login-email" class="form-input" placeholder="alexander@smartcontractum.ru" required autocomplete="email">
         </div>
@@ -58,7 +61,7 @@
       </div>
 
       <button type="submit" class="btn-primary">
-        <span>Войти в кабинет</span>
+        <span>Войти в личный кабинет</span>
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
@@ -79,7 +82,7 @@
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
             <circle cx="12" cy="7" r="4"/>
           </svg>
-          <span>Эксперт / Физлицо</span>
+          <span>Физ. лицо / Эксперт</span>
         </button>
 
         <button type="button" class="account-type-btn" id="type-organization">
@@ -87,19 +90,19 @@
             <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
             <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
           </svg>
-          <span>Организация / Юрлицо</span>
+          <span>Юр. лицо / Организация</span>
         </button>
       </div>
 
-      <!-- Поля физлица -->
+      <!-- Поля для физ. лица -->
       <div class="form-group individual-only">
-        <label for="reg-fullname" class="form-label">Фамилия, Имя и Отчество</label>
+        <label for="reg-fullname" class="form-label">Фамилия, имя и отчество</label>
         <input type="text" id="reg-fullname" class="form-input" placeholder="Иванов Александр Сергеевич">
       </div>
 
-      <!-- Поля организации -->
+      <!-- Поля для юр. лица -->
       <div class="form-group org-only" style="display: none;">
-        <label for="reg-company" class="form-label">Наименование организации</label>
+        <label for="reg-company" class="form-label">Полное наименование организации</label>
         <input type="text" id="reg-company" class="form-input" placeholder="ООО «Финтех Смарт Системы»">
       </div>
 
@@ -109,12 +112,12 @@
       </div>
 
       <div class="form-group">
-        <label for="reg-email" class="form-label">Рабочий Email</label>
+        <label for="reg-email" class="form-label">Корпоративный или личный E-mail</label>
         <input type="email" id="reg-email" class="form-input" placeholder="alexander@company.ru" required>
       </div>
 
       <div class="form-group">
-        <label for="reg-password" class="form-label">Пароль</label>
+        <label for="reg-password" class="form-label">Пароль для учетной записи</label>
         <div class="input-wrapper">
           <input type="password" id="reg-password" class="form-input" placeholder="Не менее 8 символов" required>
           <button type="button" class="input-suffix-btn btn-toggle-pwd" aria-label="Показать пароль">👁</button>
@@ -124,8 +127,8 @@
             <div id="strength-fill" class="strength-bar-fill"></div>
           </div>
           <div class="strength-text">
-            <span id="strength-label">Надежность: —</span>
-            <span>Мин. 8 знаков, заглавная, цифра</span>
+            <span id="strength-label">Сложность: —</span>
+            <span>Мин. 8 знаков, заглавная буква, цифра</span>
           </div>
         </div>
       </div>
@@ -133,16 +136,16 @@
       <div class="form-options" style="margin-bottom: 20px;">
         <label class="checkbox-label">
           <input type="checkbox" id="reg-agreement" required>
-          <span>Согласен с <a href="#" class="link-btn">Условиями</a> и обработкой данных (152-ФЗ)</span>
+          <span>Я принимаю <a href="#" class="link-btn">Условия использования</a> и даю согласие на обработку персональных данных (152-ФЗ)</span>
         </label>
       </div>
 
       <button type="submit" class="btn-primary">
-        <span>Зарегистрироваться</span>
+        <span>Зарегистрироваться на платформе</span>
       </button>
 
       <div style="text-align: center; margin-top: 18px; font-size: 13px; color: var(--text-muted);">
-        Уже есть аккаунт? 
+        Уже зарегистрированы? 
         <button type="button" class="link-btn" id="link-to-login">Войти</button>
       </div>
     </form>
@@ -150,20 +153,20 @@
     <!-- ФОРМА 3: ВОССТАНОВЛЕНИЕ ПАРОЛЯ -->
     <form id="form-forgot" style="display: none;" novalidate>
       <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.5;">
-        Укажите адрес электронной почты вашего аккаунта. Мы отправим ссылку для безопасного восстановления доступа.
+        Укажите адрес электронной почты (E-mail), привязанный к вашей учетной записи. Мы направим вам ссылку для безопасного восстановления доступа.
       </p>
 
       <div class="form-group">
-        <label for="forgot-email" class="form-label">Email</label>
+        <label for="forgot-email" class="form-label">Адрес электронной почты (E-mail)</label>
         <input type="email" id="forgot-email" class="form-input" placeholder="alexander@smartcontractum.ru" required>
       </div>
 
       <button type="submit" class="btn-primary" style="margin-bottom: 16px;">
-        <span>Отправить ссылку для сброса</span>
+        <span>Отправить ссылку для сброса пароля</span>
       </button>
 
       <div style="text-align: center;">
-        <button type="button" class="link-btn" id="link-back-to-login">← Вернуться ко входу</button>
+        <button type="button" class="link-btn" id="link-back-to-login">← Вернуться к форме входа</button>
       </div>
     </form>
   </main>

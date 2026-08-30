@@ -1,13 +1,14 @@
 /* ======================================================================
-   SmartContractum — Auth & Onboarding Design System (v2.0)
-   Color palette, typography, and styling matched with SmartContractum:
-   --nav: #0e223d, --nav2: #173e6d, --blue: #2f6fce, --cyan: #2f9cad,
-   --green: #278565, --orange: #c77c32, --violet: #6957c7
-   Full support for Light and Dark themes.
+   SmartContractum — Auth & Onboarding Design System (v2.1)
+   Шрифты: Inter (основной текст и формы) + Manrope (заголовки и акценты)
+   Палитра: SmartContractum Brand Colors
+   Строгая русская типографика и деловой стиль
 ====================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap');
+
 :root {
-  /* SmartContractum Brand Palette */
+  /* Фирменная палитра SmartContractum */
   --nav: #0e223d;
   --nav2: #173e6d;
   --blue: #2f6fce;
@@ -18,7 +19,7 @@
   --orange: #c77c32;
   --violet: #6957c7;
 
-  /* Theme Defaults (Light Theme) */
+  /* Светлая тема (Default / Light) */
   --bg-main: #f5f8fc;
   --bg-card: #ffffff;
   --bg-card-border: #dce5ef;
@@ -26,39 +27,41 @@
   --bg-input-focus: #ffffff;
   --text-primary: #172333;
   --text-secondary: #475569;
-  --text-muted: #6b7a8e;
-  --card-shadow: 0 12px 36px rgba(20, 51, 86, 0.1), 0 2px 8px rgba(20, 51, 86, 0.04);
+  --text-muted: #64748b;
+  --card-shadow: 0 16px 40px rgba(20, 51, 86, 0.08), 0 2px 6px rgba(20, 51, 86, 0.04);
   --input-border: #cbd9ec;
   --input-focus-border: #2f6fce;
-  --input-glow: rgba(47, 111, 206, 0.2);
+  --input-glow: rgba(47, 111, 206, 0.18);
   --badge-bg: #eaf2ff;
   --badge-text: #245ca7;
   --badge-border: #cddcf0;
   
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  
   --radius-lg: 16px;
   --radius-md: 10px;
   --radius-sm: 8px;
-  --transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 [data-theme="dark"] {
-  /* Dark Theme (SmartContractum Night Mode) */
-  --bg-main: #091524;
+  /* Темная тема (Dark Mode) */
+  --bg-main: #081322;
   --bg-card: #0e223d;
   --bg-card-border: #1a385f;
   --bg-input: #0a1b30;
   --bg-input-focus: #0f2744;
-  --text-primary: #f0f6fc;
-  --text-secondary: #94a9c2;
-  --text-muted: #627b99;
-  --card-shadow: 0 20px 48px rgba(3, 8, 15, 0.6), 0 0 40px rgba(47, 111, 206, 0.12);
-  --input-border: #1c3d66;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --card-shadow: 0 24px 56px rgba(2, 6, 12, 0.65), 0 0 40px rgba(47, 111, 206, 0.12);
+  --input-border: #1e3a5f;
   --input-focus-border: #4a8ff0;
   --input-glow: rgba(74, 143, 240, 0.25);
-  --badge-bg: rgba(47, 111, 206, 0.15);
+  --badge-bg: rgba(47, 111, 206, 0.18);
   --badge-text: #60a5fa;
-  --badge-border: rgba(96, 165, 250, 0.25);
+  --badge-border: rgba(96, 165, 250, 0.3);
 }
 
 * {
@@ -68,7 +71,7 @@
 }
 
 body {
-  font-family: var(--font-family);
+  font-family: var(--font-body);
   background-color: var(--bg-main);
   color: var(--text-primary);
   min-height: 100vh;
@@ -76,7 +79,9 @@ body {
   align-items: center;
   justify-content: center;
   padding: 24px 16px;
-  line-height: 1.45;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   background-image: 
     radial-gradient(at 0% 0%, rgba(47, 111, 206, 0.12) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(23, 62, 109, 0.15) 0px, transparent 50%);
@@ -84,14 +89,14 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Card Container */
+/* Контейнер карточки */
 .auth-container {
   width: 100%;
-  max-width: 490px;
+  max-width: 500px;
   background: var(--bg-card);
   border: 1px solid var(--bg-card-border);
   border-radius: var(--radius-lg);
-  padding: 38px 34px;
+  padding: 40px 36px;
   box-shadow: var(--card-shadow);
   position: relative;
   overflow: hidden;
@@ -104,7 +109,7 @@ body {
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Header */
+/* Шапка карточки */
 .auth-header {
   text-align: center;
   margin-bottom: 26px;
@@ -119,17 +124,19 @@ body {
   color: var(--badge-text);
   padding: 6px 14px;
   border-radius: 99px;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.6px;
   margin-bottom: 14px;
   text-transform: uppercase;
+  font-family: var(--font-heading);
 }
 
 .auth-title {
+  font-family: var(--font-heading);
   font-size: 26px;
   font-weight: 800;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.4px;
   color: var(--text-primary);
   margin-bottom: 6px;
 }
@@ -137,16 +144,17 @@ body {
 .auth-subtitle {
   font-size: 14px;
   color: var(--text-muted);
-  line-height: 1.4;
+  line-height: 1.45;
+  font-weight: 400;
 }
 
-/* Navigation Tabs */
+/* Вкладки переключения (Табы) */
 .auth-tabs {
   display: flex;
   background: var(--bg-input);
   padding: 4px;
   border-radius: var(--radius-md);
-  margin-bottom: 22px;
+  margin-bottom: 24px;
   border: 1px solid var(--bg-card-border);
 }
 
@@ -154,6 +162,7 @@ body {
   flex: 1;
   padding: 10px 14px;
   text-align: center;
+  font-family: var(--font-heading);
   font-size: 14px;
   font-weight: 700;
   color: var(--text-muted);
@@ -174,11 +183,11 @@ body {
   box-shadow: 0 4px 14px rgba(47, 111, 206, 0.3);
 }
 
-/* Account Type Selector */
+/* Выбор типа субъекта (Физ. лицо / Юр. лицо) */
 .account-type-group {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
@@ -186,49 +195,53 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 12px 10px;
+  padding: 14px 10px;
   background: var(--bg-input);
   border: 1px solid var(--bg-card-border);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: var(--transition);
   color: var(--text-secondary);
+  font-family: var(--font-heading);
   font-size: 13px;
   font-weight: 700;
+  text-align: center;
 }
 
 .account-type-btn svg {
-  margin-bottom: 6px;
+  margin-bottom: 7px;
   transition: transform 0.2s ease;
 }
 
 .account-type-btn:hover {
   border-color: var(--blue);
-  background: rgba(47, 111, 206, 0.05);
+  background: rgba(47, 111, 206, 0.06);
 }
 
 .account-type-btn.active {
   border-color: var(--blue);
-  background: rgba(47, 111, 206, 0.1);
+  background: rgba(47, 111, 206, 0.12);
   color: var(--blue);
+  box-shadow: 0 0 0 1px var(--blue);
 }
 
 .account-type-btn.active svg {
   transform: scale(1.1);
 }
 
-/* Form Controls */
+/* Поля ввода и лейблы */
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   text-align: left;
 }
 
 .form-label {
   display: block;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 6px;
+  letter-spacing: -0.1px;
 }
 
 .input-wrapper {
@@ -239,7 +252,7 @@ body {
 
 .form-input {
   width: 100%;
-  padding: 11px 13px;
+  padding: 12px 14px;
   font-size: 14px;
   background: var(--bg-input);
   border: 1px solid var(--input-border);
@@ -247,7 +260,7 @@ body {
   color: var(--text-primary);
   transition: var(--transition);
   outline: none;
-  font-family: inherit;
+  font-family: var(--font-body);
 }
 
 .form-input:focus {
@@ -268,7 +281,7 @@ body {
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 5px;
+  padding: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -281,7 +294,7 @@ body {
   color: var(--text-primary);
 }
 
-/* Password Strength Meter */
+/* Шкала надежности пароля */
 .strength-meter {
   margin-top: 8px;
 }
@@ -291,7 +304,7 @@ body {
   background: var(--bg-card-border);
   border-radius: 99px;
   overflow: hidden;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 
 .strength-bar-fill {
@@ -302,30 +315,31 @@ body {
 }
 
 .strength-text {
-  font-size: 11px;
+  font-size: 11.5px;
   display: flex;
   justify-content: space-between;
   color: var(--text-muted);
   font-weight: 500;
 }
 
-/* Options & Checkboxes */
+/* Чекбоксы и ссылки */
 .form-options {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 13px;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .checkbox-label {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
+  gap: 9px;
   color: var(--text-secondary);
   cursor: pointer;
   user-select: none;
   font-size: 13px;
+  line-height: 1.4;
 }
 
 .checkbox-label input[type="checkbox"] {
@@ -334,6 +348,7 @@ body {
   width: 16px;
   height: 16px;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .link-btn {
@@ -341,10 +356,11 @@ body {
   background: transparent;
   border: none;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   text-decoration: none;
   padding: 0;
+  font-family: inherit;
   transition: color 0.16s ease;
 }
 
@@ -353,14 +369,16 @@ body {
   color: var(--blue-hover);
 }
 
-/* Primary Button */
+/* Основная кнопка */
 .btn-primary {
   width: 100%;
-  padding: 13px 18px;
+  padding: 13px 20px;
   background: linear-gradient(135deg, var(--blue), #3f82df);
   color: #ffffff;
+  font-family: var(--font-heading);
   font-size: 15px;
   font-weight: 800;
+  letter-spacing: -0.1px;
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
@@ -369,13 +387,13 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 16px rgba(47, 111, 206, 0.3);
+  box-shadow: 0 4px 16px rgba(47, 111, 206, 0.28);
 }
 
 .btn-primary:hover:not(:disabled) {
   background: linear-gradient(135deg, var(--blue-hover), var(--blue));
   transform: translateY(-1px);
-  box-shadow: 0 6px 22px rgba(47, 111, 206, 0.4);
+  box-shadow: 0 6px 22px rgba(47, 111, 206, 0.38);
 }
 
 .btn-primary:active:not(:disabled) {
@@ -387,7 +405,7 @@ body {
   cursor: not-allowed;
 }
 
-/* Spinner */
+/* Спиннер загрузки */
 .spinner {
   width: 18px;
   height: 18px;
@@ -401,16 +419,16 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* Alerts */
+/* Системные алерты */
 .auth-alert {
   padding: 12px 14px;
   border-radius: var(--radius-md);
   font-size: 13px;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  line-height: 1.4;
+  line-height: 1.45;
   animation: alertSlide 0.25s ease;
 }
 
@@ -443,7 +461,7 @@ body {
   color: #6ee7b7;
 }
 
-/* Theme Toggle Button */
+/* Кнопка смены темы */
 .theme-toggle {
   position: absolute;
   top: 18px;
@@ -469,7 +487,7 @@ body {
   background: rgba(47, 111, 206, 0.1);
 }
 
-/* Responsive */
+/* Адаптивность для мобильных устройств */
 @media (max-width: 520px) {
   body {
     padding: 12px;

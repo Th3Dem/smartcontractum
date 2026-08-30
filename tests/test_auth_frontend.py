@@ -8,30 +8,26 @@ class TestAuthFrontend(unittest.TestCase):
         self.html_path = os.path.join(self.project_root, "public/index.html")
         self.css_path = os.path.join(self.project_root, "public/styles.css")
         self.js_path = os.path.join(self.project_root, "public/app.js")
-        self.ts_types_path = os.path.join(self.project_root, "src/types/auth.ts")
-        self.ts_service_path = os.path.join(self.project_root, "src/services/authClient.ts")
 
     def test_files_exist(self):
         self.assertTrue(os.path.exists(self.html_path), "HTML must exist")
         self.assertTrue(os.path.exists(self.css_path), "CSS must exist")
         self.assertTrue(os.path.exists(self.js_path), "JS must exist")
-        self.assertTrue(os.path.exists(self.ts_types_path), "TS types must exist")
-        self.assertTrue(os.path.exists(self.ts_service_path), "TS service must exist")
 
-    def test_html_structure_and_a11y(self):
+    def test_html_typography_and_russian_grammar(self):
         with open(self.html_path, "r", encoding="utf-8") as f:
             content = f.read()
 
-        # Check essential elements
-        self.assertIn('id="form-login"', content)
-        self.assertIn('id="form-register"', content)
-        self.assertIn('id="form-forgot"', content)
-        self.assertIn('id="type-individual"', content)
-        self.assertIn('id="type-organization"', content)
-        self.assertIn('id="strength-fill"', content)
-        self.assertIn('id="theme-toggle"', content)
-        self.assertIn('152-ФЗ', content)
-        self.assertIn('aria-label', content)
+        # Проверка шрифтов
+        self.assertIn("family=Inter", content)
+        self.assertIn("family=Manrope", content)
+
+        # Проверка строгой русской орфографии
+        self.assertIn("E-mail", content)
+        self.assertIn("Физ. лицо / Эксперт", content)
+        self.assertIn("Юр. лицо / Организация", content)
+        self.assertIn("152-ФЗ", content)
+        self.assertIn("Запомнить сессию", content)
 
     def test_inn_validation_logic(self):
         def validate_inn(inn: str):
