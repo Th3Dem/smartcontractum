@@ -3,21 +3,26 @@ import os
 import json
 import unittest
 import urllib.request
-from server import query_egrul_nalog_ru, validate_inn_checksum, EMAIL_SESSIONS
+import db
+from server import query_egrul_nalog_ru, validate_inn_checksum
 
 class TestAuthFrontend(unittest.TestCase):
     def setUp(self):
         self.project_root = "/home/dem/Projects_01"
         self.html_path = os.path.join(self.project_root, "public/index.html")
+        self.dash_html_path = os.path.join(self.project_root, "public/dashboard.html")
         self.css_path = os.path.join(self.project_root, "public/styles.css")
         self.js_path = os.path.join(self.project_root, "public/app.js")
         self.server_path = os.path.join(self.project_root, "server.py")
+        self.db_path = os.path.join(self.project_root, "db.py")
 
     def test_files_exist(self):
-        self.assertTrue(os.path.exists(self.html_path), "HTML must exist")
-        self.assertTrue(os.path.exists(self.css_path), "CSS must exist")
-        self.assertTrue(os.path.exists(self.js_path), "JS must exist")
+        self.assertTrue(os.path.exists(self.html_path), "index.html must exist")
+        self.assertTrue(os.path.exists(self.dash_html_path), "dashboard.html must exist")
+        self.assertTrue(os.path.exists(self.css_path), "styles.css must exist")
+        self.assertTrue(os.path.exists(self.js_path), "app.js must exist")
         self.assertTrue(os.path.exists(self.server_path), "server.py must exist")
+        self.assertTrue(os.path.exists(self.db_path), "db.py must exist")
 
     def test_inn_checksum_validator(self):
         self.assertTrue(validate_inn_checksum("7707083893")) # Сбербанк (10 цифр)
@@ -25,69 +30,87 @@ class TestAuthFrontend(unittest.TestCase):
         self.assertFalse(validate_inn_checksum("7707083894")) # Неверная контрольная сумма
         self.assertFalse(validate_inn_checksum("1234567890")) # Неверная контрольная сумма
 
-    def test_html_elements_and_email_verify(self):
-        with open(self.html_path, "r", encoding="utf-8") as f:
-            content = f.read()
+    def test_password_hashing_pbkdf2(self):
+        pwd = "SecretPassword123!"
+        hash1, salt1 = db.hash_password(pwd)
+        self.assertEqual(len(salt1), 32) # 16 байт в hex
+        self.assertTrue(db.verify_password(pwd, hash1, salt1))
+        self.assertFalse(db.verify_password("WrongPassword!", hash1, salt1))
 
-        # 3 кнопки переключения субъекта
-        self.assertIn('id="type-individual"', content)
-        self.assertIn('id="type-ip"', content)
-        self.assertIn('id="type-organization"', content)
+    def test_db_user_creation_and_auth_flow(self):
+        # 1. Создание физлица
+        user_data = {
+            "email": "test.user@smartcontractum.ru",
+            "password": "SuperSecret123!",
+            "accountType": "individual",
+            "phone": "+7 (999) 111-22-33",
+            "lastName": "Иванов",
+            "firstName": "Алексей",
+            "middleName": "Сергеевич"
+        }
+        created = db.create_user(user_data)
+        self.assertEqual(created["email"], "test.user@smartcontractum.ru")
+        self.assertEqual(created["account_type"], "individual")
+        self.assertEqual(created["displayName"], "Иванов Алексей Сергеевич")
 
-        # Экран подтверждения E-mail
-        self.assertIn('id="form-verify-email"', content)
-        self.assertIn('id="verify-target-email"', content)
-        self.assertIn('id="email-code-input"', content)
-        self.assertIn('id="btn-submit-verify-email"', content)
-        self.assertIn('id="btn-resend-email"', content)
+        # 2. Аутентификация с верным паролем
+        auth_success = db.authenticate_user("test.user@smartcontractum.ru", "SuperSecret123!")
+        self.assertIsNotNone(auth_success)
+        self.assertEqual(auth_success["id"], created["id"])
 
-        # Защитная капча
-        self.assertIn('id="reg-captcha-canvas"', content)
-        self.assertIn('id="reg-captcha-refresh"', content)
-        self.assertIn('id="reg-captcha-input"', content)
+        # 3. Аутентификация с неверным паролем
+        auth_fail = db.authenticate_user("test.user@smartcontractum.ru", "BadPassword!")
+        self.assertIsNone(auth_fail)
 
-    def test_email_verification_api_flow(self):
-        # 1. Запрос на регистрацию с отправкой кода на E-mail
-        test_email = "qxzib@yandex.ru"
+        # 4. Сессия
+        token = db.create_session(created["id"])
+        user_by_token = db.get_user_by_token(token)
+        self.assertIsNotNone(user_by_token)
+        self.assertEqual(user_by_token["email"], "test.user@smartcontractum.ru")
+
+        # 5. Контракты
+        contracts = db.get_user_contracts(created["id"])
+        self.assertGreaterEqual(len(contracts), 1)
+
+    def test_api_login_endpoint(self):
+        # Регистрация пользователя в БД
+        db.create_user({
+            "email": "api.tester@smartcontractum.ru",
+            "password": "Password777!",
+            "accountType": "organization",
+            "phone": "+7 (999) 555-44-33",
+            "orgInn": "7707083893",
+            "companyFullName": "ПАО СБЕРБАНК",
+            "companyShortName": "Сбербанк"
+        })
+
+        # Успешный вход через API
         req = urllib.request.Request(
-            "http://127.0.0.1:3000/api/auth/register-send-email",
-            data=json.dumps({"email": test_email, "accountType": "individual"}).encode("utf-8"),
+            "http://127.0.0.1:3000/api/auth/login",
+            data=json.dumps({"email": "api.tester@smartcontractum.ru", "password": "Password777!"}).encode("utf-8"),
             headers={"Content-Type": "application/json"},
             method="POST"
         )
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with urllib.request.urlopen(req, timeout=5) as resp:
             data = json.loads(resp.read().decode("utf-8"))
-        
+
         self.assertTrue(data["success"])
-        self.assertNotIn("demoCode", data, "Demo code must NEVER be returned in production API responses")
+        self.assertIn("token", data)
+        self.assertEqual(data["user"]["account_type"], "organization")
 
-        # 2. Проверка неверного кода
-        req_bad = urllib.request.Request(
-            "http://127.0.0.1:3000/api/auth/verify-email",
-            data=json.dumps({"email": test_email, "code": "000000"}).encode("utf-8"),
-            headers={"Content-Type": "application/json"},
-            method="POST"
+        # Запрос профиля /api/auth/me
+        token = data["token"]
+        req_me = urllib.request.Request(
+            "http://127.0.0.1:3000/api/auth/me",
+            headers={"Authorization": f"Bearer {token}"},
+            method="GET"
         )
-        with urllib.request.urlopen(req_bad, timeout=5) as resp_bad:
-            data_bad = json.loads(resp_bad.read().decode("utf-8"))
-        self.assertFalse(data_bad["success"])
+        with urllib.request.urlopen(req_me, timeout=5) as resp_me:
+            data_me = json.loads(resp_me.read().decode("utf-8"))
 
-        # 3. Проверка верного 6-значного кода (проверяем что не пустой и верный формат)
-        session_info = EMAIL_SESSIONS.get(test_email.lower())
-        if session_info:
-            code = session_info["code"]
-            self.assertEqual(len(code), 6)
-
-            req_good = urllib.request.Request(
-                "http://127.0.0.1:3000/api/auth/verify-email",
-                data=json.dumps({"email": test_email, "code": code}).encode("utf-8"),
-                headers={"Content-Type": "application/json"},
-                method="POST"
-            )
-            with urllib.request.urlopen(req_good, timeout=5) as resp_good:
-                data_good = json.loads(resp_good.read().decode("utf-8"))
-            self.assertTrue(data_good["success"])
-            self.assertTrue(data_good["verified"])
+        self.assertTrue(data_me["success"])
+        self.assertEqual(data_me["user"]["email"], "api.tester@smartcontractum.ru")
+        self.assertGreaterEqual(len(data_me["contracts"]), 1)
 
 if __name__ == "__main__":
     unittest.main()

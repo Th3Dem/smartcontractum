@@ -1,14 +1,27 @@
 /**
  * SmartContractum — Интерактивная логика авторизации и регистрации
  * Интеграция с ЕГРЮЛ/ЕГРИП ФНС РФ, Защитная Canvas-капча,
- * Отправка реальных писем с 6-значным кодом подтверждения E-mail
+ * Сохранение в базу данных (152-ФЗ) и перенаправление в личный кабинет
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Проверяем: если пользователь уже авторизован, можно сразу перейти в личный кабинет
+  const existingToken = localStorage.getItem('auth_token');
+  if (existingToken && window.location.pathname.endsWith('index.html')) {
+    fetch('/api/auth/me', {
+      headers: { 'Authorization': `Bearer ${existingToken}` }
+    }).then(res => res.json()).then(data => {
+      if (data.success) {
+        window.location.href = 'dashboard.html';
+      }
+    }).catch(() => {});
+  }
+
   // Состояние интерфейса
   let currentMode = 'login'; // 'login' | 'register' | 'forgot' | 'verify-email'
   let accountType = 'individual'; // 'individual' | 'ip' | 'organization'
   let pendingRegistrationEmail = '';
+  let pendingPayload = {};
   let emailCountdownInterval = null;
 
   // Флаги ликвидации / прекращения деятельности
@@ -737,7 +750,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Отправка формы входа
+  // ===============================================================
+  // 5. Отправка формы входа (Авторизация по БД)
+  // ===============================================================
   formLogin.addEventListener('submit', async (e) => {
     e.preventDefault();
     hideAlert();
@@ -763,20 +778,42 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span> Проверка учетных данных...';
 
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await response.json();
+
       btn.disabled = false;
       btn.innerHTML = originalText;
 
-      if (email === 'demo@platform.ru' && password === 'Secret123!') {
-        showAlert('Успешная авторизация! Выполняется перенаправление в личный кабинет...', 'success');
-      } else {
+      if (!data.success || !data.token) {
         markInvalid('login-password');
-        showAlert('Неверный адрес электронной почты (E-mail) или пароль');
+        showAlert(data.error || 'Неверный адрес электронной почты (E-mail) или пароль');
+        return;
       }
-    }, 600);
+
+      // Сохраняем сессию и переходим в Личный кабинет!
+      localStorage.setItem('auth_token', data.token);
+      localStorage.setItem('user_profile', JSON.stringify(data.user));
+
+      showAlert('✓ Успешная авторизация! Перенаправление в личный кабинет...', 'success');
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 500);
+
+    } catch (err) {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+      showAlert('Ошибка связи с сервером при входе');
+    }
   });
 
-  // Отправка формы регистрации -> Отправка РЕАЛЬНОГО проверочного письма на E-mail
+  // ===============================================================
+  // 6. Отправка формы регистрации -> Отправка проверочного письма
+  // ===============================================================
   formRegister.addEventListener('submit', async (e) => {
     e.preventDefault();
     hideAlert();
@@ -789,10 +826,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const captchaVal = captchaInput ? captchaInput.value.trim().toUpperCase() : '';
     const agreement = document.getElementById('reg-agreement').checked;
 
+    let registrationPayload = {
+      email,
+      password,
+      accountType
+    };
+
     // 1. Проверка для физ. лица
     if (accountType === 'individual') {
       const lastName = document.getElementById('reg-lastname').value.trim();
       const firstName = document.getElementById('reg-firstname').value.trim();
+      const middleName = document.getElementById('reg-middlename').value.trim();
       const phone = document.getElementById('reg-phone').value.trim();
 
       if (!lastName) {
@@ -810,6 +854,11 @@ document.addEventListener('DOMContentLoaded', () => {
         showAlert('Пожалуйста, укажите контактный номер телефона');
         return;
       }
+
+      registrationPayload.lastName = lastName;
+      registrationPayload.firstName = firstName;
+      registrationPayload.middleName = middleName;
+      registrationPayload.phone = phone;
     }
 
     // 2. Проверка для ИП
@@ -823,6 +872,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const ipInn = ipInnInput.value.trim();
       const ipLastName = ipLastNameInput.value.trim();
       const ipFirstName = ipFirstNameInput.value.trim();
+      const ipMiddleName = ipMiddleNameInput.value.trim();
+      const ipOgrnip = ipOgrnipInput.value.trim();
       const ipPhone = document.getElementById('reg-ip-phone').value.trim();
 
       if (!ipInn || ipInn.length !== 12) {
@@ -840,6 +891,13 @@ document.addEventListener('DOMContentLoaded', () => {
         showAlert('Пожалуйста, укажите контактный номер телефона предпринимателя');
         return;
       }
+
+      registrationPayload.ipInn = ipInn;
+      registrationPayload.ipOgrnip = ipOgrnip;
+      registrationPayload.ipLastName = ipLastName;
+      registrationPayload.ipFirstName = ipFirstName;
+      registrationPayload.ipMiddleName = ipMiddleName;
+      registrationPayload.phone = ipPhone;
     }
 
     // 3. Проверка для юр. лица
@@ -852,6 +910,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const inn = innInput.value.trim();
       const company = companyInput.value.trim();
+      const shortName = shortNameInput ? shortNameInput.value.trim() : '';
+      const ogrn = ogrnInput ? ogrnInput.value.trim() : '';
+      const kpp = kppInput ? kppInput.value.trim() : '';
       const orgLastName = document.getElementById('reg-org-lastname').value.trim();
       const orgFirstName = document.getElementById('reg-org-firstname').value.trim();
       const orgPhone = document.getElementById('reg-org-phone').value.trim();
@@ -881,6 +942,15 @@ document.addEventListener('DOMContentLoaded', () => {
         showAlert('Пожалуйста, укажите контактный телефон представителя');
         return;
       }
+
+      registrationPayload.orgInn = inn;
+      registrationPayload.companyFullName = company;
+      registrationPayload.companyShortName = shortName;
+      registrationPayload.orgOgrn = ogrn;
+      registrationPayload.orgKpp = kpp;
+      registrationPayload.repLastName = orgLastName;
+      registrationPayload.repFirstName = orgFirstName;
+      registrationPayload.phone = orgPhone;
     }
 
     // 4. Проверка E-mail
@@ -927,10 +997,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch('/api/auth/register-send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: email,
-          accountType: accountType
-        })
+        body: JSON.stringify(registrationPayload)
       });
       const data = await response.json();
 
@@ -944,6 +1011,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Переход на экран верификации E-mail
       pendingRegistrationEmail = email;
+      pendingPayload = registrationPayload;
       setMode('verify-email');
       showAlert(`Письмо с 6-значным проверочным кодом отправлено на адрес ${email}. Пожалуйста, проверьте ваш почтовый ящик.`, 'success');
 
@@ -954,7 +1022,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Подтверждение E-mail (проверка 6-значного кода)
+  // ===============================================================
+  // 7. Подтверждение E-mail (проверка кода -> сохранение в БД -> вход)
+  // ===============================================================
   formVerifyEmail.addEventListener('submit', async (e) => {
     e.preventDefault();
     hideAlert();
@@ -971,7 +1041,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('btn-submit-verify-email');
     const originalText = btn.innerHTML;
     btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> Проверка кода и создание аккаунта...';
+    btn.innerHTML = '<span class="spinner"></span> Проверка кода и сохранение аккаунта в базе данных...';
 
     try {
       const response = await fetch('/api/auth/verify-email', {
@@ -993,13 +1063,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // УСПЕХ! Аккаунт активирован
-      showAlert('🎉 Поздравляем! Ваш E-mail успешно подтвержден, учетная запись активирована! Выполняется перенаправление...', 'success');
+      // УСПЕХ! Аккаунт сохранен в базе данных и активирован!
+      if (data.token) {
+        localStorage.setItem('auth_token', data.token);
+        localStorage.setItem('user_profile', JSON.stringify(data.user));
+      }
+
+      showAlert('🎉 Поздравляем! Ваш E-mail подтвержден, аккаунт сохранен в базе данных. Перенаправление в личный кабинет...', 'success');
       
       setTimeout(() => {
-        setMode('login');
-        showAlert('Регистрация успешно завершена. Войдите в личный кабинет, используя указанный E-mail и пароль', 'success');
-      }, 1500);
+        window.location.href = 'dashboard.html';
+      }, 900);
 
     } catch (err) {
       btn.disabled = false;
@@ -1021,10 +1095,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch('/api/auth/register-send-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: pendingRegistrationEmail,
-            accountType: accountType
-          })
+          body: JSON.stringify(pendingPayload)
         });
         const data = await response.json();
         btnResendEmail.innerText = originalText;

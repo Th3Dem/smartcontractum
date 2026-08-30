@@ -1,0 +1,572 @@
+/* ===============================================================
+   SmartContractum — Стили личного кабинета (Dashboard)
+   =============================================================== */
+
+.dashboard-body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 16px;
+  color: var(--text-muted);
+}
+
+.spinner-large {
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(47, 111, 206, 0.2);
+  border-top-color: var(--accent-blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ===============================================================
+   Хедер (Header)
+   =============================================================== */
+.dash-header {
+  height: 64px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.dash-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dash-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-main);
+}
+
+.security-badge-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(39, 133, 101, 0.12);
+  border: 1px solid rgba(39, 133, 101, 0.3);
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #10b981;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.dash-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.user-profile-widget {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px;
+  border-radius: var(--radius-md);
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.user-display-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.user-account-badge {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.btn-logout {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-logout:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+/* ===============================================================
+   Контейнер и Сайдбар
+   =============================================================== */
+.dash-container {
+  display: flex;
+  flex: 1;
+}
+
+.dash-sidebar {
+  width: 250px;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border-color);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dash-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  text-align: left;
+  width: 100%;
+}
+
+.nav-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-main);
+}
+
+.nav-item.active {
+  background: rgba(47, 111, 206, 0.15);
+  color: var(--accent-blue);
+  border: 1px solid rgba(47, 111, 206, 0.3);
+}
+
+.badge-count {
+  margin-left: auto;
+  background: var(--bg-hover);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid var(--border-color);
+}
+
+.sidebar-footer-card {
+  padding: 14px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.shield-mini {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.sfc-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.sfc-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ===============================================================
+   Основная область (Main Area)
+   =============================================================== */
+.dash-main {
+  flex: 1;
+  padding: 28px 36px;
+  overflow-y: auto;
+  max-width: 1200px;
+}
+
+.dash-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.dash-page-title {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0;
+  color: var(--text-main);
+}
+
+.dash-page-subtitle {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin: 4px 0 0 0;
+}
+
+.btn-action {
+  padding: 10px 18px;
+  font-size: 13.5px;
+}
+
+/* ===============================================================
+   Карточки метрик (Metrics Grid)
+   =============================================================== */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.metric-icon-wrap {
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metric-icon-wrap.blue { background: rgba(47, 111, 206, 0.15); color: #3b82f6; }
+.metric-icon-wrap.emerald { background: rgba(39, 133, 101, 0.15); color: #10b981; }
+.metric-icon-wrap.amber { background: rgba(199, 124, 50, 0.15); color: #f59e0b; }
+.metric-icon-wrap.indigo { background: rgba(99, 102, 241, 0.15); color: #6366f1; }
+
+.metric-val {
+  font-size: 22px;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  color: var(--text-main);
+  line-height: 1.1;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* ===============================================================
+   Карточки и Таблицы
+   =============================================================== */
+.dash-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 22px 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-main);
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.contracts-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.contracts-table th {
+  padding: 12px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.contracts-table td {
+  padding: 14px;
+  font-size: 13.5px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+
+.contracts-table tr:hover td {
+  background: var(--bg-hover);
+}
+
+.contract-code {
+  font-family: monospace;
+  font-weight: 700;
+  color: var(--accent-blue);
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-pill.active, .status-pill.success {
+  background: rgba(39, 133, 101, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(39, 133, 101, 0.3);
+}
+
+.status-pill.negotiation {
+  background: rgba(199, 124, 50, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(199, 124, 50, 0.3);
+}
+
+/* ===============================================================
+   Профиль и Реквизиты
+   =============================================================== */
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
+}
+
+.profile-header-box {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 18px;
+}
+
+.profile-large-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prof-name {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.prof-type-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  background: rgba(47, 111, 206, 0.15);
+  color: var(--accent-blue);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--bg-hover);
+  font-size: 13px;
+}
+
+.detail-label {
+  color: var(--text-muted);
+}
+
+.detail-val {
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: right;
+}
+
+.registry-status-box {
+  display: flex;
+  gap: 14px;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  margin-top: 14px;
+}
+
+.registry-status-box.success {
+  background: rgba(39, 133, 101, 0.12);
+  border: 1px solid rgba(39, 133, 101, 0.3);
+}
+
+.rs-icon {
+  font-size: 18px;
+  color: #10b981;
+  font-weight: 800;
+}
+
+.rs-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.rs-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.45;
+}
+
+.info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.info-label { color: var(--text-muted); }
+.info-val { font-weight: 600; color: var(--text-main); }
+
+/* ===============================================================
+   Безопасность (152-ФЗ)
+   =============================================================== */
+.security-features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 16px;
+}
+
+.sec-feature-item {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.sfi-icon {
+  font-size: 24px;
+}
+
+.sfi-text strong {
+  display: block;
+  font-size: 13.5px;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.sfi-text p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+@media (max-width: 900px) {
+  .profile-grid { grid-template-columns: 1fr; }
+  .security-features-grid { grid-template-columns: 1fr; }
+  .dash-container { flex-direction: column; }
+  .dash-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); }
+}

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-SmartContractum — Server with Live EGRUL/EGRIP Proxy & Real SMTP Email Delivery
-Строгая отправка реальных писем через SMTP без отображения тестовых кодов
+SmartContractum — Full Backend Server with Database Storage, 152-FZ Protection,
+Live EGRUL/EGRIP Proxy & Real SMTP Email Delivery
 """
 
 import os
@@ -18,6 +18,8 @@ from email.utils import formataddr
 import urllib.request
 import urllib.parse
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+import db
 
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 and sys.argv[1].isdigit() else 3000
 PUBLIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "public")
@@ -37,7 +39,7 @@ def load_env_file():
 
 load_env_file()
 
-# Хранилище сессий верификации E-mail: clean_email -> {"code": "839102", "payload": {...}, "expires": timestamp}
+# Временное хранилище сессий верификации E-mail: clean_email -> {"code": "839102", "payload": {...}, "expires": timestamp}
 EMAIL_SESSIONS = {}
 
 def validate_inn_checksum(inn: str) -> bool:
@@ -238,11 +240,11 @@ def send_real_email_code(to_email: str, code: str) -> dict:
     from_name = os.getenv("SMTP_FROM_NAME", "SmartContractum")
     from_email = os.getenv("SMTP_FROM_EMAIL", smtp_user or "no-reply@smartcontractum.ru").strip()
 
-    # Если параметры почтового сервера еще не заполнены
+    # Если параметры почтового сервера не заполнены
     if not (smtp_host and smtp_user and smtp_password):
         return {
             "success": False,
-            "error": "Почтовый сервер (SMTP) не настроен в файле .env. Пожалуйста, укажите параметры SMTP (Яндекс, Mail.ru или Gmail) для реальной отправки писем."
+            "error": "Почтовый сервер (SMTP) не настроен в файле .env. Пожалуйста, укажите параметры SMTP для реальной отправки писем."
         }
 
     subject = f"{code} — Код подтверждения регистрации в SmartContractum"
@@ -333,23 +335,68 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=PUBLIC_DIR, **kwargs)
 
+    def extract_auth_token(self):
+        auth_header = self.headers.get("Authorization", "")
+        if auth_header.startswith("Bearer "):
+            return auth_header[7:].strip()
+        parsed = urllib.parse.urlparse(self.path)
+        params = urllib.parse.parse_qs(parsed.query)
+        return params.get("token", [""])[0]
+
+    def send_json(self, data, status=200):
+        response_bytes = json.dumps(data, ensure_ascii=False).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(response_bytes)))
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.end_headers()
+        self.wfile.write(response_bytes)
+
+    def do_OPTIONS(self):
+        self.send_response(204)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.end_headers()
+
     def do_GET(self):
         parsed = urllib.parse.urlparse(self.path)
         
-        # API эндпоинт для запроса к ЕГРЮЛ/ЕГРИП ФНС РФ
+        # 1. API эндпоинт для запроса к ЕГРЮЛ/ЕГРИП ФНС РФ
         if parsed.path == "/api/egrul":
             params = urllib.parse.parse_qs(parsed.query)
             inn = params.get("inn", [""])[0]
-            
             result = query_egrul_nalog_ru(inn)
+            self.send_json(result)
+            return
+
+        # 2. API эндпоинт профиля текущего пользователя (/api/auth/me)
+        if parsed.path == "/api/auth/me":
+            token = self.extract_auth_token()
+            user = db.get_user_by_token(token)
+            if not user:
+                self.send_json({"success": False, "error": "Неавторизованный доступ. Сессия не найдена или истекла."}, 401)
+                return
             
-            response_bytes = json.dumps(result, ensure_ascii=False).encode("utf-8")
-            self.send_response(200)
-            self.send_header("Content-Type", "application/json; charset=utf-8")
-            self.send_header("Content-Length", str(len(response_bytes)))
-            self.send_header("Access-Control-Allow-Origin", "*")
-            self.end_headers()
-            self.wfile.write(response_bytes)
+            contracts = db.get_user_contracts(user["id"])
+            self.send_json({
+                "success": True,
+                "user": user,
+                "contracts": contracts
+            })
+            return
+
+        # 3. API списка смарт-контрактов
+        if parsed.path == "/api/contracts":
+            token = self.extract_auth_token()
+            user = db.get_user_by_token(token)
+            if not user:
+                self.send_json({"success": False, "error": "Неавторизованный доступ"}, 401)
+                return
+            contracts = db.get_user_contracts(user["id"])
+            self.send_json({"success": True, "contracts": contracts})
             return
 
         # Стандартная раздача статики
@@ -365,77 +412,108 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
         except Exception:
             payload = {}
 
-        # 1. Регистрация: отправка РЕАЛЬНОГО проверочного письма на E-mail
+        # 1. Регистрация: генерация кода и отправка проверочного письма на E-mail
         if parsed.path == "/api/auth/register-send-email":
             raw_email = payload.get("email", "").strip().lower()
             
             if not raw_email or "@" not in raw_email:
-                result = {"success": False, "error": "Пожалуйста, укажите корректный адрес электронной почты"}
+                self.send_json({"success": False, "error": "Пожалуйста, укажите корректный адрес электронной почты"})
+                return
+
+            if not payload.get("password") or len(payload.get("password")) < 8:
+                self.send_json({"success": False, "error": "Пароль должен содержать не менее 8 символов"})
+                return
+
+            code = f"{random.randint(100000, 999999)}"
+            EMAIL_SESSIONS[raw_email] = {
+                "code": code,
+                "payload": payload,
+                "expires": time.time() + 600 # 10 минут
+            }
+
+            send_result = send_real_email_code(raw_email, code)
+            
+            if send_result.get("success"):
+                self.send_json({
+                    "success": True,
+                    "realSent": True,
+                    "email": raw_email,
+                    "cooldown": 60,
+                    "message": f"Письмо с проверочным кодом направлено на {raw_email}"
+                })
             else:
-                code = f"{random.randint(100000, 999999)}"
-                EMAIL_SESSIONS[raw_email] = {
-                    "code": code,
-                    "payload": payload,
-                    "expires": time.time() + 600 # 10 минут
-                }
-
-                send_result = send_real_email_code(raw_email, code)
-                
-                if send_result.get("success"):
-                    result = {
-                        "success": True,
-                        "realSent": True,
-                        "provider": send_result.get("provider"),
-                        "email": raw_email,
-                        "cooldown": 60,
-                        "message": f"Письмо с кодом подтверждения направлено на {raw_email}"
-                    }
-                else:
-                    result = {
-                        "success": False,
-                        "error": send_result.get("error", "Не удалось отправить письмо через почтовый сервер")
-                    }
-
-            response_bytes = json.dumps(result, ensure_ascii=False).encode("utf-8")
-            self.send_response(200)
-            self.send_header("Content-Type", "application/json; charset=utf-8")
-            self.send_header("Content-Length", str(len(response_bytes)))
-            self.send_header("Access-Control-Allow-Origin", "*")
-            self.end_headers()
-            self.wfile.write(response_bytes)
+                self.send_json({
+                    "success": False,
+                    "error": send_result.get("error", "Не удалось отправить проверочное письмо через SMTP")
+                })
             return
 
-        # 2. Проверка кода E-mail и финализация регистрации
+        # 2. Проверка кода E-mail -> СОХРАНЕНИЕ В БАЗУ ДАННЫХ -> СОЗДАНИЕ СЕССИИ
         if parsed.path == "/api/auth/verify-email":
             raw_email = payload.get("email", "").strip().lower()
             code = payload.get("code", "").strip()
             
             session = EMAIL_SESSIONS.get(raw_email)
             if not session:
-                result = {"success": False, "error": "Код для данного E-mail не запрашивался или срок его действия истек"}
+                self.send_json({"success": False, "error": "Код для данного E-mail не запрашивался или срок его действия истек"})
+                return
             elif time.time() > session["expires"]:
-                result = {"success": False, "error": "Срок действия кода истек. Пожалуйста, запросите новый код"}
+                self.send_json({"success": False, "error": "Срок действия кода истек. Пожалуйста, запросите новый код"})
+                return
             elif session["code"] != code:
-                result = {"success": False, "error": "Введен неверный код подтверждения из письма"}
-            else:
-                user_payload = session.get("payload", {})
-                result = {
+                self.send_json({"success": False, "error": "Введен неверный проверочный код из электронного письма"})
+                return
+
+            # Код подтвержден! Сохраняем пользователя в SQLite с PBKDF2 хешированием
+            user_payload = session.get("payload", {})
+            try:
+                user = db.create_user(user_payload)
+                token = db.create_session(user["id"])
+                
+                # Очищаем сессию верификации
+                EMAIL_SESSIONS.pop(raw_email, None)
+
+                self.send_json({
                     "success": True,
                     "verified": True,
-                    "message": "E-mail успешно подтвержден! Личный кабинет активирован.",
-                    "user": {
-                        "email": raw_email,
-                        "accountType": user_payload.get("accountType", "individual")
-                    }
-                }
+                    "token": token,
+                    "user": user,
+                    "message": "E-mail успешно подтвержден! Учетная запись сохранена в базе данных."
+                })
+            except Exception as e:
+                self.send_json({"success": False, "error": f"Ошибка сохранения пользователя в базе данных: {str(e)}"})
+            return
 
-            response_bytes = json.dumps(result, ensure_ascii=False).encode("utf-8")
-            self.send_response(200)
-            self.send_header("Content-Type", "application/json; charset=utf-8")
-            self.send_header("Content-Length", str(len(response_bytes)))
-            self.send_header("Access-Control-Allow-Origin", "*")
-            self.end_headers()
-            self.wfile.write(response_bytes)
+        # 3. Вход в личный кабинет (Авторизация по БД)
+        if parsed.path == "/api/auth/login":
+            email = payload.get("email", "").strip().lower()
+            password = payload.get("password", "")
+
+            if not email or not password:
+                self.send_json({"success": False, "error": "Пожалуйста, введите E-mail и пароль"})
+                return
+
+            user = db.authenticate_user(email, password)
+            if not user:
+                self.send_json({"success": False, "error": "Неверный адрес электронной почты (E-mail) или пароль"})
+                return
+
+            # Создаем сессионный токен
+            token = db.create_session(user["id"])
+            self.send_json({
+                "success": True,
+                "token": token,
+                "user": user,
+                "message": "Успешная авторизация"
+            })
+            return
+
+        # 4. Выход из личного кабинета (Logout)
+        if parsed.path == "/api/auth/logout":
+            token = self.extract_auth_token()
+            if token:
+                db.delete_session(token)
+            self.send_json({"success": True, "message": "Сессия успешно завершена"})
             return
 
         # 404 для других POST-запросов
@@ -445,7 +523,7 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
 def run():
     server_address = ("", PORT)
     httpd = HTTPServer(server_address, SmartContractumHandler)
-    print(f"SmartContractum Dev Server running on http://localhost:{PORT}")
+    print(f"SmartContractum Server running on http://localhost:{PORT}")
     httpd.serve_forever()
 
 if __name__ == "__main__":
