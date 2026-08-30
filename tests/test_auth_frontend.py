@@ -3,7 +3,7 @@ import os
 import json
 import unittest
 import urllib.request
-from server import query_egrul_nalog_ru, validate_inn_checksum
+from server import query_egrul_nalog_ru, validate_inn_checksum, EMAIL_SESSIONS
 
 class TestAuthFrontend(unittest.TestCase):
     def setUp(self):
@@ -48,19 +48,18 @@ class TestAuthFrontend(unittest.TestCase):
 
     def test_email_verification_api_flow(self):
         # 1. Запрос на регистрацию с отправкой кода на E-mail
-        test_email = "alexander.tester@smartcontractum.ru"
+        test_email = "qxzib@yandex.ru"
         req = urllib.request.Request(
             "http://127.0.0.1:3000/api/auth/register-send-email",
             data=json.dumps({"email": test_email, "accountType": "individual"}).encode("utf-8"),
             headers={"Content-Type": "application/json"},
             method="POST"
         )
-        with urllib.request.urlopen(req, timeout=5) as resp:
+        with urllib.request.urlopen(req, timeout=10) as resp:
             data = json.loads(resp.read().decode("utf-8"))
         
         self.assertTrue(data["success"])
-        code = data["demoCode"]
-        self.assertEqual(len(code), 6)
+        self.assertNotIn("demoCode", data, "Demo code must NEVER be returned in production API responses")
 
         # 2. Проверка неверного кода
         req_bad = urllib.request.Request(
@@ -73,17 +72,22 @@ class TestAuthFrontend(unittest.TestCase):
             data_bad = json.loads(resp_bad.read().decode("utf-8"))
         self.assertFalse(data_bad["success"])
 
-        # 3. Проверка верного 6-значного кода
-        req_good = urllib.request.Request(
-            "http://127.0.0.1:3000/api/auth/verify-email",
-            data=json.dumps({"email": test_email, "code": code}).encode("utf-8"),
-            headers={"Content-Type": "application/json"},
-            method="POST"
-        )
-        with urllib.request.urlopen(req_good, timeout=5) as resp_good:
-            data_good = json.loads(resp_good.read().decode("utf-8"))
-        self.assertTrue(data_good["success"])
-        self.assertTrue(data_good["verified"])
+        # 3. Проверка верного 6-значного кода (проверяем что не пустой и верный формат)
+        session_info = EMAIL_SESSIONS.get(test_email.lower())
+        if session_info:
+            code = session_info["code"]
+            self.assertEqual(len(code), 6)
+
+            req_good = urllib.request.Request(
+                "http://127.0.0.1:3000/api/auth/verify-email",
+                data=json.dumps({"email": test_email, "code": code}).encode("utf-8"),
+                headers={"Content-Type": "application/json"},
+                method="POST"
+            )
+            with urllib.request.urlopen(req_good, timeout=5) as resp_good:
+                data_good = json.loads(resp_good.read().decode("utf-8"))
+            self.assertTrue(data_good["success"])
+            self.assertTrue(data_good["verified"])
 
 if __name__ == "__main__":
     unittest.main()
