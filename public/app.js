@@ -183,6 +183,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function extractFioFromFullName(rawName) {
+    if (!rawName) return { lastName: '', firstName: '', middleName: '' };
+    let clean = rawName.toUpperCase();
+    const prefixes = [
+      'ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ',
+      'ИП',
+      'ГЛАВА КФХ',
+      'ГЛАВА КРЕСТЬЯНСКОГО (ФЕРМЕРСКОГО) ХОЗЯЙСТВА',
+      'КРЕСТЬЯНСКОЕ (ФЕРМЕРСКОЕ) ХОЗЯЙСТВО'
+    ];
+    prefixes.forEach(p => { clean = clean.replace(p, ''); });
+    clean = clean.replace(/["']/g, '').trim();
+    const tokens = clean.split(/\s+/).filter(Boolean);
+    
+    const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+    const lastName = tokens[0] ? capitalize(tokens[0]) : '';
+    const firstName = tokens[1] ? capitalize(tokens[1]) : '';
+    const middleName = tokens.slice(2).map(capitalize).join(' ');
+    return { lastName, firstName, middleName };
+  }
+
   // ===============================================================
   // 2. Поиск Индивидуального предпринимателя (ИП) в ЕГРИП ФНС РФ
   // (АВТОЗАПОЛНЕНИЕ ВСЕХ ПОЛЕЙ ИП ИЗ ЕГРИП)
@@ -227,17 +248,22 @@ document.addEventListener('DOMContentLoaded', () => {
         ipOgrnipInput.classList.remove('is-invalid');
       }
 
-      // 2. Автозаполнение всех частей ФИО ИП из ЕГРИП
-      if (ipLastNameInput && (company.ipLastName || company.ceoLastName)) {
-        ipLastNameInput.value = company.ipLastName || company.ceoLastName;
+      // 2. Автозаполнение ВСЕХ частей ФИО ИП (Фамилия, Имя и Отчество)
+      const fio = extractFioFromFullName(company.fullName || company.shortName || '');
+      const lastName = company.ipLastName || fio.lastName || company.ceoLastName || '';
+      const firstName = company.ipFirstName || fio.firstName || company.ceoFirstName || '';
+      const middleName = company.ipMiddleName || fio.middleName || '';
+
+      if (ipLastNameInput) {
+        ipLastNameInput.value = lastName;
         ipLastNameInput.classList.remove('is-invalid');
       }
-      if (ipFirstNameInput && (company.ipFirstName || company.ceoFirstName)) {
-        ipFirstNameInput.value = company.ipFirstName || company.ceoFirstName;
+      if (ipFirstNameInput) {
+        ipFirstNameInput.value = firstName;
         ipFirstNameInput.classList.remove('is-invalid');
       }
-      if (ipMiddleNameInput && company.ipMiddleName) {
-        ipMiddleNameInput.value = company.ipMiddleName;
+      if (ipMiddleNameInput) {
+        ipMiddleNameInput.value = middleName;
         ipMiddleNameInput.classList.remove('is-invalid');
       }
 
