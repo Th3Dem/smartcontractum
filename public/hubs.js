@@ -83,18 +83,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     allHubs = data.hubs;
                     renderHubs(allHubs);
                 } else {
-                    hubsGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 40px;">Хабы временно недоступны</div>`;
+                    hubsGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 40px;">Разделы временно недоступны</div>`;
                 }
             })
             .catch(() => {
-                hubsGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #f43f5e; padding: 40px;">Ошибка загрузки хабов базы знаний</div>`;
+                hubsGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #f43f5e; padding: 40px;">Ошибка загрузки разделов базы знаний</div>`;
             });
     }
 
     function renderHubs(hubs) {
         if (!hubsGrid) return;
         if (hubs.length === 0) {
-            hubsGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 40px; font-size: 15px;">Хабы по вашему запросу не найдены</div>`;
+            hubsGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 40px; font-size: 15px;">Разделы по вашему запросу не найдены</div>`;
             return;
         }
 
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
 
                     <div class="hub-actions-footer">
-                        <a href="/feed?cat=${encodeURIComponent(h.slug)}" class="btn-hub-open">Перейти в ленту хаба →</a>
+                        <a href="/feed?cat=${encodeURIComponent(h.slug)}" class="btn-hub-open">Перейти в раздел →</a>
                         <button type="button" class="btn-hub-sub ${isSub ? 'is-subscribed' : ''}" data-hub-slug="${h.slug}" data-hub-name="${escapeHtml(h.name)}">
                             ${isSub ? '✓ Вы подписаны' : '+ Подписаться'}
                         </button>
@@ -179,12 +179,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 subscribed = subscribed.filter(s => s !== slug);
                 btnSub.classList.remove('is-subscribed');
                 btnSub.textContent = '+ Подписаться';
-                showToast(`Вы отписались от хаба «${name}»`, '🏷️');
+                showToast(`Вы отписались от раздела «${name}»`, '🏷️');
             } else {
                 subscribed.push(slug);
                 btnSub.classList.add('is-subscribed');
                 btnSub.textContent = '✓ Вы подписаны';
-                showToast(`Вы успешно подписались на хаб «${name}»!`, '⭐');
+                showToast(`Вы успешно подписались на раздел «${name}»!`, '⭐');
             }
 
             localStorage.setItem('subscribed_hubs', JSON.stringify(subscribed));

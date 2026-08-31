@@ -108,7 +108,7 @@ class TestHubsAndTaxonomy(unittest.TestCase):
         with urllib.request.urlopen(url) as resp:
             self.assertEqual(resp.status, 200)
             html = resp.read().decode("utf-8")
-            self.assertIn("Хабы базы знаний", html)
+            self.assertIn("Тематические разделы базы знаний", html)
             self.assertIn("hubsGrid", html)
 
 

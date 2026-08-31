@@ -645,7 +645,7 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
                 if details:
                     self.send_json({"success": True, "data": details})
                 else:
-                    self.send_json({"success": False, "error": "Хаб не найден"}, 404)
+                    self.send_json({"success": False, "error": "Раздел не найден"}, 404)
                 return
 
 
