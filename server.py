@@ -572,6 +572,41 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
             })
             return
 
+        # 3.2 API ленты публикаций, вопросов Q&A и базы знаний (/api/feed/posts)
+        if parsed.path == "/api/feed/posts":
+            params = urllib.parse.parse_qs(parsed.query)
+            p_type = params.get("type", [None])[0]
+            p_cat = params.get("cat", [None])[0]
+            search = params.get("search", [None])[0]
+            limit = int(params.get("limit", ["50"])[0])
+            offset = int(params.get("offset", ["0"])[0])
+            posts = db.get_feed_posts(post_type=p_type, category=p_cat, search=search, limit=limit, offset=offset)
+            self.send_json({"success": True, "posts": posts})
+            return
+
+        # 3.3 API получения отдельного поста или ветки комментариев
+        if parsed.path.startswith("/api/feed/posts/"):
+            parts = parsed.path.strip("/").split("/")
+            if len(parts) == 4 and parts[3].isdigit():
+                post_id = int(parts[3])
+                post = db.get_feed_post_by_id(post_id)
+                if post:
+                    self.send_json({"success": True, "post": post})
+                else:
+                    self.send_json({"success": False, "error": "Публикация не найдена"}, 404)
+                return
+            elif len(parts) == 5 and parts[3].isdigit() and parts[4] == "comments":
+                post_id = int(parts[3])
+                comments = db.get_feed_comments(post_id)
+                self.send_json({"success": True, "comments": comments})
+                return
+
+        # 3.4 API лидерборда экспертов
+        if parsed.path == "/api/feed/leaderboard":
+            leaders = db.get_top_reputation_users(5)
+            self.send_json({"success": True, "leaders": leaders})
+            return
+
 
         # 4. Проверка Host для поддомена второго уровня (auth.localhost, auth.smartcontractum.ru и т.п.)
         host_header = self.headers.get("Host", "").lower().split(":")[0]
@@ -991,6 +1026,70 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
             })
             return
 
+        # 13. Публикация нового вопроса, статьи или поста (/api/feed/posts)
+        if parsed.path == "/api/feed/posts":
+            token = self.extract_auth_token()
+            user = db.get_user_by_token(token) if token else None
+            success, err, post = db.create_feed_post(payload, user=user)
+            if not success:
+                self.send_json({"success": False, "error": err or "Ошибка создания публикации"}, 400)
+                return
+            self.send_json({"success": True, "post": post, "message": "Публикация успешно размещена"})
+            return
+
+        # 14. Добавление ответа или комментария (/api/feed/posts/<id>/comments)
+        if parsed.path.startswith("/api/feed/posts/") and parsed.path.endswith("/comments"):
+            parts = parsed.path.strip("/").split("/")
+            if len(parts) == 5 and parts[3].isdigit():
+                post_id = int(parts[3])
+                token = self.extract_auth_token()
+                user = db.get_user_by_token(token) if token else None
+                content = payload.get("content", "")
+                is_answer = bool(payload.get("isAnswer", False))
+                success, err, comment = db.add_feed_comment(post_id, content, user=user, is_answer=is_answer)
+                if not success:
+                    self.send_json({"success": False, "error": err or "Ошибка добавления ответа"}, 400)
+                    return
+                self.send_json({"success": True, "comment": comment, "message": "Ответ успешно опубликован"})
+                return
+
+        # 15. Отметка ответа как принятого решения (/api/feed/posts/<id>/accept-answer)
+        if parsed.path.startswith("/api/feed/posts/") and parsed.path.endswith("/accept-answer"):
+            parts = parsed.path.strip("/").split("/")
+            if len(parts) == 5 and parts[3].isdigit():
+                post_id = int(parts[3])
+                token = self.extract_auth_token()
+                user = db.get_user_by_token(token) if token else None
+                comment_id = payload.get("commentId")
+                if not comment_id:
+                    self.send_json({"success": False, "error": "commentId обязателен"}, 400)
+                    return
+                success, err, result = db.accept_answer(post_id, int(comment_id), user=user)
+                if not success:
+                    self.send_json({"success": False, "error": err or "Ошибка принятия ответа"}, 400)
+                    return
+                self.send_json({
+                    "success": True,
+                    "result": result,
+                    "message": "Ответ принят как лучшее решение! Автору начислено +50 очков репутации."
+                })
+                return
+
+        # 16. Оценка полезности («Полезно ▲ / ▼») (/api/feed/posts/<id>/vote)
+        if parsed.path.startswith("/api/feed/posts/") and parsed.path.endswith("/vote"):
+            parts = parsed.path.strip("/").split("/")
+            if len(parts) == 5 and parts[3].isdigit():
+                post_id = int(parts[3])
+                token = self.extract_auth_token()
+                user = db.get_user_by_token(token) if token else None
+                delta = int(payload.get("delta", 1))
+                success, helpful_count = db.vote_feed_post(post_id, delta, user=user)
+                self.send_json({
+                    "success": True,
+                    "helpfulCount": helpful_count,
+                    "message": "Голос учтен"
+                })
+                return
 
         # 404 для других POST-запросов
         self.send_response(404)

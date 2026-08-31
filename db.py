@@ -104,23 +104,76 @@ def init_db():
     )
     """)
 
-    # Таблица смарт-контрактов
+    # Таблица публикаций Сообщества (Q&A Вопросы, Статьи, Обсуждения RFC, Кейсы, Посты)
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS contracts (
+    CREATE TABLE IF NOT EXISTS feed_posts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER NOT NULL,
-        contract_number TEXT NOT NULL,
+        user_id INTEGER,
+        author_name TEXT NOT NULL,
+        author_role TEXT DEFAULT '',
+        type TEXT NOT NULL, -- 'question', 'article', 'discussion', 'case', 'post'
+        category TEXT NOT NULL, -- 'smart-contracts', 'security', 'oracles', 'cbrf-law', 'escrow-b2b', 'marketplace-jobs'
         title TEXT NOT NULL,
-        counterparty TEXT NOT NULL,
-        amount TEXT NOT NULL,
-        status TEXT NOT NULL, -- 'draft', 'negotiation', 'active', 'completed'
+        snippet TEXT DEFAULT '',
+        content TEXT DEFAULT '',
+        tags TEXT DEFAULT '',
+        poll_data_json TEXT DEFAULT '',
+        code_snippet TEXT DEFAULT '',
+        helpful_count INTEGER DEFAULT 0,
+        views_count INTEGER DEFAULT 1,
+        is_solved INTEGER DEFAULT 0,
+        accepted_answer_id INTEGER,
+        bounty_amount TEXT DEFAULT '',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
+
+    # Таблица комментариев и ответов на вопросы
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS feed_comments (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        post_id INTEGER NOT NULL,
+        user_id INTEGER,
+        author_name TEXT NOT NULL,
+        author_role TEXT DEFAULT '',
+        content TEXT NOT NULL,
+        is_accepted_answer INTEGER DEFAULT 0,
+        helpful_count INTEGER DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        FOREIGN KEY (post_id) REFERENCES feed_posts(id) ON DELETE CASCADE
+    )
+    """)
+
+    # Таблица профессиональной репутации и компетенций
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS user_reputation (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER UNIQUE,
+        display_name TEXT NOT NULL,
+        score INTEGER DEFAULT 0,
+        competencies_json TEXT DEFAULT '[]',
+        verified_badges_json TEXT DEFAULT '[]',
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
+
+    # Таблица голосований за полезность (дедупликация)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS feed_votes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        post_id INTEGER NOT NULL,
+        user_id INTEGER,
+        vote_delta INTEGER NOT NULL, -- +1 или -1
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(post_id, user_id)
     )
     """)
 
     conn.commit()
     conn.close()
+
+    # Сидинг начальных постов при пустой базе
+    seed_feed_baseline()
 
 
 def create_user(user_data: dict) -> dict:
@@ -511,8 +564,411 @@ def update_user_profile(user_id: int, data: dict) -> tuple[bool, str | None, dic
     
     return True, None, sanitize_user_dict(dict(updated_row))
 
+
+# =============================================================================
+# Q&A, ЛЕНТА СООБЩЕСТВА, БАЗА ЗНАНИЙ И РЕПУТАЦИЯ
+# =============================================================================
+
+def seed_feed_baseline():
+    """
+    Первичный сидинг профессиональной базы знаний и Q&A при пустой таблице feed_posts.
+    """
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT COUNT(*) FROM feed_posts")
+        cnt = cursor.fetchone()[0]
+        if cnt > 0:
+            conn.close()
+            return
+
+        # 1. RFC-04 Discussion
+        cursor.execute("""
+            INSERT INTO feed_posts (
+                author_name, author_role, type, category, title, snippet, content, tags,
+                poll_data_json, helpful_count, views_count, is_solved
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            "Рабочая группа стандартов SmartContractum [DEMO]",
+            "Общественные консультации · Экспертный совет",
+            "discussion",
+            "oracles",
+            "RFC-04: Стандарты децентрализованных оракулов для смарт-контрактов ПКСК",
+            "Инициировано открытое экспертное обсуждение архитектуры отказоустойчивых шлюзов доставки внешних данных в платформу смарт-контрактов. Голосуйте за предпочтительный механизм консенсуса оракулов.",
+            "Полный текст спецификации RFC-04 включает требования к ZK-доказательствам истинности внешних котировок и прямому ГОСТ TLS-соединению с государственными реестрами.",
+            "#пкск-цб-рф, #rfc-стандарты, #оракулы, #голосование",
+            '{"options": [{"id": 1, "text": "Прямой TLS-шлюз с подписью ГОСТ (ФНС / Казначейство)", "votes": 202}, {"id": 2, "text": "Децентрализованный ZK-комитет нод валидаторов", "votes": 108}, {"id": 3, "text": "Гибридная модель (Tee-анклавы + ончейн-мультисиг)", "votes": 38}], "totalVotes": 348}',
+            78,
+            1840,
+            0
+        ))
+
+        # 2. Article: КС-2/КС-3 и смарт-эскроу
+        cursor.execute("""
+            INSERT INTO feed_posts (
+                author_name, author_role, type, category, title, snippet, content, tags,
+                code_snippet, helpful_count, views_count, is_solved
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            "Дарья Воронова",
+            "Fintech & Smart-Law Counsel · Репутация: +980 (Право & ЦБ РФ)",
+            "article",
+            "cbrf-law",
+            "Связка закрывающих строительных актов КС-2/КС-3 с ончейн-эскроу в цифровом рубле",
+            "Пошаговый разбор юридических и технических аспектов автоматического раскрытия депонированных средств при получении подписанного УКЭП акта приемки выполненных строительных работ.",
+            "В статье рассматриваются прецеденты применения статьи 860.7 ГК РФ (Договор счета эскроу) в связке с автоматизированным шлюзом цифрового рубля.",
+            "#смарт-эскроу, #строительство-кс2, #цифровой-рубль, #гк-рф",
+            "// Пример верификации акта КС-2 в смарт-эскроу\nfunction releaseMilestone(bytes32 actHash, bytes calldata gostSign) external onlyEscrowAgent {\n    require(verifyGost3410(actHash, gostSign, vendorPubKey), \"Invalid GOST signature\");\n    cbrfDigitalRuble.transferFrom(escrowVault, contractorAddress, milestoneAmount);\n}",
+            94,
+            3200,
+            0
+        ))
+
+        # 3. Case: 1C:ERP
+        cursor.execute("""
+            INSERT INTO feed_posts (
+                author_name, author_role, type, category, title, snippet, content, tags,
+                helpful_count, views_count, is_solved
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            "Елена Крылова",
+            "Lead Architect · SmartContractum · Репутация: +1 420 (Разработка)",
+            "case",
+            "escrow-b2b",
+            "Паспорт сценария: B2B взаиморасчеты через 1С:ERP и Цифровой рубль без кассовых разрывов",
+            "Типовой паспорт интеграции учетной системы 1С:Предприятие со смарт-эскроу. Позволяет предприятиям осуществлять сквозную постоплату поставок сырья по факту закрытия складских ордеров в реальном времени.",
+            "Архитектура решения базируется на прямом REST/gRPC шлюзе 1С к смарт-контракту эскроу.",
+            "#1c-erp, #смарт-эскроу, #в2в-расчеты, #автоматизация",
+            112,
+            4150,
+            0
+        ))
+
+        # 4. Question: ГОСТ Р 34.10 в EVM (с принятым решением)
+        cursor.execute("""
+            INSERT INTO feed_posts (
+                author_name, author_role, type, category, title, snippet, content, tags,
+                helpful_count, views_count, is_solved, bounty_amount
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            "Александр Попов",
+            "EVM Developer · SmartContractum Lab",
+            "question",
+            "security",
+            "Как оптимизировать вызовы прекомпилов ГОСТ Р 34.10 в кастомном EVM-контуре?",
+            "При выполнении пакетных проверок 50+ подписей подряд натыкаемся на лимит газа блока. Есть ли проверенные паттерны агрегации хэшей или пакетной верификации без раздувания memory footprint?",
+            "Коллеги, проектируем шлюз валидации первичных документов. При проверке одиночной подписи ГОСТ 34.10-2012 тратится 42 000 газа. При цикле for лимит транзакции исчерпывается.",
+            "#solidity, #гост-криптография, #evm-precompiles, #газ-оптимизация",
+            86,
+            2700,
+            1,
+            "15 000 ₽"
+        ))
+        q4_id = cursor.lastrowid
+
+        # Ответ к вопросу 4
+        cursor.execute("""
+            INSERT INTO feed_comments (
+                post_id, author_name, author_role, content, is_accepted_answer, helpful_count
+            ) VALUES (?, ?, ?, ?, ?, ?)
+        """, (
+            q4_id,
+            "Михаил Соколов",
+            "Security Auditor · Репутация: +1 180 (Аудит ИБ)",
+            "Рекомендуем использовать паттерн Merkle-аккумулятора: на стороне бэкенда строится дерево Меркла по хэшам актов, а в контракт передается корень и агрегированная подпись. Это снижает gas footprint с 2.1М до 140k на пакет из 50 документов.",
+            1,
+            42
+        ))
+        c4_id = cursor.lastrowid
+        cursor.execute("UPDATE feed_posts SET accepted_answer_id = ? WHERE id = ?", (c4_id, q4_id))
+
+        # 5. Data Hub Card
+        cursor.execute("""
+            INSERT INTO feed_posts (
+                author_name, author_role, type, category, title, snippet, content, tags,
+                helpful_count, views_count, is_solved
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            "Шлюз Оракулов ФНС РФ (ЕГРЮЛ/ЕГРИП)",
+            "Демонстрационный контур данных [DEMO] · 99.98% SLA",
+            "case",
+            "oracles",
+            "Доверенный оракул ФНС: Валидация выписок ЕГРЮЛ/ЕГРИП, блокировок счетов и статуса банкротства контрагентов",
+            "Интеграционный шлюз поставщика данных для смарт-контрактов. Позволяет смарт-эскроу и кредитным смарт-контрактам проверять правоспособность юрлица и отсутствие блокировок ФНС перед исполнением транзакции.",
+            "Шлюз поддерживает криптографическую валидацию TLS ГОСТ и JSON-RPC интерфейс.",
+            "#егрюл-фнс, #оракулы, #рынок-данных, #комплаенс",
+            65,
+            2400,
+            0
+        ))
+
+        # 6. Post: Short insight (EIP-1153)
+        cursor.execute("""
+            INSERT INTO feed_posts (
+                author_name, author_role, type, category, title, snippet, content, tags,
+                helpful_count, views_count, is_solved
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            "Михаил Соколов",
+            "Security Auditor · Репутация: +1 180 (Аудит ИБ)",
+            "post",
+            "smart-contracts",
+            "Обновлен тестовый стенд верификации смарт-контрактов: поддержка компилятора Yul 0.8.26",
+            "В тестовом стенде аудита добавлена автоматическая проверка транзиентной памяти (Transient Storage / EIP-1153) для смарт-эскроу. Теперь gas footprint снижается на 35% при пакетном исполнении взаиморасчетов.",
+            "Опкоды TLOAD и TSTORE позволяют реализовывать дешевые мьютексы и защитные реентранси-гарды без лишней записи в постоянный Storage.",
+            "#eip1153, #gas-optimization, #yul, #безопасность",
+            43,
+            1100,
+            0
+        ))
+
+        # 7. Начальная репутация экспертов
+        cursor.execute("INSERT OR IGNORE INTO user_reputation (user_id, display_name, score, competencies_json) VALUES (1, 'Елена Крылова', 1420, '[\"Разработка смарт-контрактов\", \"1С:ERP Архитектура\"]')")
+        cursor.execute("INSERT OR IGNORE INTO user_reputation (user_id, display_name, score, competencies_json) VALUES (2, 'Михаил Соколов', 1180, '[\"Аудит ИБ\", \"Solidity Security\", \"EIP-1153\"]')")
+        cursor.execute("INSERT OR IGNORE INTO user_reputation (user_id, display_name, score, competencies_json) VALUES (3, 'Дарья Воронова', 980, '[\"Право & ЦБ РФ\", \"Смарт-эскроу\"]')")
+
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"[DB SEED WARNING] Error during baseline seed: {e}")
+
+
+def create_feed_post(post_data: dict, user: dict = None) -> tuple[bool, str | None, dict | None]:
+    """
+    Создает новую публикацию в базе знаний/ленте (вопрос, статья, обсуждение, кейс, пост).
+    """
+    title = str(post_data.get("title", "")).strip()
+    if not title or len(title) < 5:
+        return False, "Заголовок публикации должен содержать не менее 5 символов", None
+        
+    post_type = str(post_data.get("type", "question")).strip().lower()
+    if post_type not in ("question", "article", "discussion", "poll", "case", "post"):
+        post_type = "question"
+    if post_type == "poll":
+        post_type = "discussion"
+
+    category = str(post_data.get("category", "smart-contracts")).strip().lower()
+    content = str(post_data.get("content", "")).strip()
+    snippet = str(post_data.get("snippet", "")).strip()
+    if not snippet and content:
+        snippet = content[:220] + ("..." if len(content) > 220 else "")
+
+    tags = str(post_data.get("tags", "")).strip()
+    code_snippet = str(post_data.get("codeSnippet", "")).strip()
+    poll_data_json = str(post_data.get("pollDataJson", "")).strip()
+    bounty_amount = str(post_data.get("bountyAmount", "")).strip()
+
+    user_id = user.get("id") if user else None
+    if user:
+        author_name = user.get("first_name", "") + " " + user.get("last_name", "")
+        author_name = author_name.strip() or user.get("company_short_name") or user.get("email")
+        author_role = user.get("blog_title") or ("Верифицированный эксперт" if user.get("is_verified") else "Участник сообщества")
+    else:
+        author_name = str(post_data.get("authorName", "Анонимный специалист")).strip()
+        author_role = str(post_data.get("authorRole", "Участник сообщества")).strip()
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO feed_posts (
+            user_id, author_name, author_role, type, category, title, snippet, content,
+            tags, poll_data_json, code_snippet, helpful_count, views_count, is_solved, bounty_amount
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 1, 0, ?)
+    """, (
+        user_id, author_name, author_role, post_type, category, title, snippet, content,
+        tags, poll_data_json, code_snippet, bounty_amount
+    ))
+    new_id = cursor.lastrowid
+    conn.commit()
+
+    cursor.execute("SELECT * FROM feed_posts WHERE id = ?", (new_id,))
+    row = cursor.fetchone()
+    conn.close()
+
+    return True, None, dict(row)
+
+
+def get_feed_posts(post_type: str = None, category: str = None, search: str = None, limit: int = 50, offset: int = 0) -> list[dict]:
+    """
+    Возвращает список публикаций с поддержкой фильтрации и поиска.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    query = "SELECT * FROM feed_posts WHERE 1=1"
+    params = []
+
+    if post_type and post_type not in ("all", "for-you", "following"):
+        if post_type in ("discussion", "poll"):
+            query += " AND (type = 'discussion' OR type = 'poll')"
+        else:
+            query += " AND type = ?"
+            params.append(post_type)
+
+    if category and category != "all":
+        query += " AND category = ?"
+        params.append(category)
+
+    if search:
+        search_like = f"%{search.strip().lower()}%"
+        query += " AND (LOWER(title) LIKE ? OR LOWER(snippet) LIKE ? OR LOWER(content) LIKE ? OR LOWER(tags) LIKE ? OR LOWER(author_name) LIKE ?)"
+        params.extend([search_like, search_like, search_like, search_like, search_like])
+
+    query += " ORDER BY id DESC LIMIT ? OFFSET ?"
+    params.extend([limit, offset])
+
+    cursor.execute(query, params)
+    rows = cursor.fetchall()
+    conn.close()
+
+    return [dict(r) for r in rows]
+
+
+def get_feed_post_by_id(post_id: int) -> dict | None:
+    """
+    Возвращает публикацию по ID с инкрементом счетчика просмотров.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE feed_posts SET views_count = views_count + 1 WHERE id = ?", (post_id,))
+    conn.commit()
+
+    cursor.execute("SELECT * FROM feed_posts WHERE id = ?", (post_id,))
+    row = cursor.fetchone()
+    conn.close()
+    return dict(row) if row else None
+
+
+def add_feed_comment(post_id: int, content: str, user: dict = None, is_answer: bool = False) -> tuple[bool, str | None, dict | None]:
+    """
+    Добавляет комментарий или ответ на вопрос в ветку публикации.
+    """
+    content = content.strip()
+    if not content or len(content) < 2:
+        return False, "Текст ответа/комментария не может быть пустым", None
+
+    user_id = user.get("id") if user else None
+    if user:
+        author_name = user.get("first_name", "") + " " + user.get("last_name", "")
+        author_name = author_name.strip() or user.get("company_short_name") or user.get("email")
+        author_role = user.get("blog_title") or ("Эксперт" if user.get("is_verified") else "Участник")
+    else:
+        author_name = "Инженер сообщества"
+        author_role = "Участник"
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO feed_comments (
+            post_id, user_id, author_name, author_role, content, is_accepted_answer, helpful_count
+        ) VALUES (?, ?, ?, ?, ?, 0, 0)
+    """, (post_id, user_id, author_name, author_role, content))
+    comment_id = cursor.lastrowid
+    conn.commit()
+
+    cursor.execute("SELECT * FROM feed_comments WHERE id = ?", (comment_id,))
+    row = cursor.fetchone()
+    conn.close()
+
+    return True, None, dict(row)
+
+
+def get_feed_comments(post_id: int) -> list[dict]:
+    """
+    Возвращает все комментарии и ответы к публикации.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM feed_comments WHERE post_id = ? ORDER BY is_accepted_answer DESC, id ASC", (post_id,))
+    rows = cursor.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def accept_answer(post_id: int, comment_id: int, user: dict = None) -> tuple[bool, str | None, dict | None]:
+    """
+    Отмечает ответ на вопрос как принятое решение (Accepted Answer) и начисляет +50 очков репутации автору ответа.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Проверка наличия поста
+    cursor.execute("SELECT * FROM feed_posts WHERE id = ?", (post_id,))
+    post = cursor.fetchone()
+    if not post:
+        conn.close()
+        return False, "Публикация не найдена", None
+
+    # Проверка наличия комментария
+    cursor.execute("SELECT * FROM feed_comments WHERE id = ? AND post_id = ?", (comment_id, post_id))
+    comment = cursor.fetchone()
+    if not comment:
+        conn.close()
+        return False, "Ответ не найден в данной ветке", None
+
+    # Снимаем предыдущий принятый ответ
+    cursor.execute("UPDATE feed_comments SET is_accepted_answer = 0 WHERE post_id = ?", (post_id,))
+    # Устанавливаем новый принятый ответ
+    cursor.execute("UPDATE feed_comments SET is_accepted_answer = 1 WHERE id = ?", (comment_id,))
+    # Обновляем пост
+    cursor.execute("UPDATE feed_posts SET is_solved = 1, accepted_answer_id = ? WHERE id = ?", (comment_id, post_id))
+
+    # Начисление репутации автору ответа (+50 очков)
+    awarded_points = 50
+    comment_user_id = comment["user_id"]
+    if comment_user_id:
+        cursor.execute("""
+            INSERT INTO user_reputation (user_id, display_name, score)
+            VALUES (?, ?, ?)
+            ON CONFLICT(user_id) DO UPDATE SET score = score + ?
+        """, (comment_user_id, comment["author_name"], awarded_points, awarded_points))
+
+    conn.commit()
+    conn.close()
+
+    return True, None, {
+        "postId": post_id,
+        "commentId": comment_id,
+        "isSolved": True,
+        "reputationAwarded": awarded_points
+    }
+
+
+def vote_feed_post(post_id: int, delta: int, user: dict = None) -> tuple[bool, int]:
+    """
+    Учитывает голос за полезность («Полезно ▲ / ▼») и обновляет счетчик.
+    """
+    delta_val = 1 if delta >= 0 else -1
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("UPDATE feed_posts SET helpful_count = helpful_count + ? WHERE id = ?", (delta_val, post_id))
+    conn.commit()
+
+    cursor.execute("SELECT helpful_count FROM feed_posts WHERE id = ?", (post_id,))
+    row = cursor.fetchone()
+    new_count = row[0] if row else 0
+    conn.close()
+
+    return True, new_count
+
+
+def get_top_reputation_users(limit: int = 5) -> list[dict]:
+    """
+    Возвращает лидерборд экспертов по очкам профессиональной репутации.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM user_reputation ORDER BY score DESC LIMIT ?", (limit,))
+    rows = cursor.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
 # Инициализируем БД при импорте
 init_db()
+
 
 
 

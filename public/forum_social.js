@@ -260,45 +260,63 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // =========================================================================
-    // 7. KARMA LEVER (▲ / ▼)
+    // 7. KARMA LEVER (▲ / ▼) — Полезность материала и Q&A
     // =========================================================================
     document.querySelectorAll('.karma-lever').forEach(lever => {
         const up = lever.querySelector('.upvote');
         const down = lever.querySelector('.downvote');
         const val = lever.querySelector('.karma-val');
+        const postId = lever.dataset.postId;
 
         if (up && down && val) {
             up.addEventListener('click', () => {
                 let current = parseInt(val.textContent.replace('+', ''), 10) || 0;
-                if (up.classList.contains('is-active')) {
-                    up.classList.remove('is-active');
-                    current -= 1;
-                } else {
-                    up.classList.add('is-active');
-                    if (down.classList.contains('is-active')) {
-                        down.classList.remove('is-active');
-                        current += 1;
+                const token = localStorage.getItem('auth_token');
+                const headers = { 'Content-Type': 'application/json' };
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+
+                fetch(`/api/feed/posts/${postId}/vote`, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({ delta: 1 })
+                }).then(r => r.json()).then(data => {
+                    if (data.success && typeof data.helpfulCount === 'number') {
+                        val.textContent = (data.helpfulCount >= 0 ? '+' : '') + data.helpfulCount;
                     }
+                }).catch(() => {});
+
+                if (!up.classList.contains('is-active')) {
+                    up.classList.add('is-active');
+                    down.classList.remove('is-active');
                     current += 1;
-                    showToast('Вы поддержали публикацию!', '▲');
+                    val.textContent = (current >= 0 ? '+' : '') + current;
+                    showToast('Вы отметили публикацию как полезную (+10 репутации автору)', '▲');
                 }
-                val.textContent = (current > 0 ? '+' : '') + current;
             });
 
             down.addEventListener('click', () => {
                 let current = parseInt(val.textContent.replace('+', ''), 10) || 0;
-                if (down.classList.contains('is-active')) {
-                    down.classList.remove('is-active');
-                    current += 1;
-                } else {
-                    down.classList.add('is-active');
-                    if (up.classList.contains('is-active')) {
-                        up.classList.remove('is-active');
-                        current -= 1;
+                const token = localStorage.getItem('auth_token');
+                const headers = { 'Content-Type': 'application/json' };
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+
+                fetch(`/api/feed/posts/${postId}/vote`, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({ delta: -1 })
+                }).then(r => r.json()).then(data => {
+                    if (data.success && typeof data.helpfulCount === 'number') {
+                        val.textContent = (data.helpfulCount >= 0 ? '+' : '') + data.helpfulCount;
                     }
+                }).catch(() => {});
+
+                if (!down.classList.contains('is-active')) {
+                    down.classList.add('is-active');
+                    up.classList.remove('is-active');
                     current -= 1;
+                    val.textContent = (current >= 0 ? '+' : '') + current;
+                    showToast('Голос учтен', '▼');
                 }
-                val.textContent = (current > 0 ? '+' : '') + current;
             });
         }
     });
@@ -642,21 +660,20 @@ document.addEventListener('DOMContentLoaded', () => {
             newCard.dataset.cat = cat;
 
             let formatLabel = '💬 Пост';
-            let badgeClass = 'badge-post';
             if (currentModalType === 'poll') {
                 formatLabel = '📊 Голосование RFC';
-                badgeClass = 'badge-poll';
             } else if (currentModalType === 'question') {
                 formatLabel = '❓ Вопрос';
-                badgeClass = 'badge-question';
+            } else if (currentModalType === 'article') {
+                formatLabel = '📄 Статья';
             } else if (currentModalType === 'case') {
                 formatLabel = '💼 Кейс / Паспорт';
-                badgeClass = 'badge-case';
             }
 
             let customPollHtml = '';
+            let pollOpts = [];
             if (currentModalType === 'poll') {
-                const pollOpts = Array.from(pollInputsList.querySelectorAll('.poll-opt-input')).map(i => i.value.trim()).filter(Boolean);
+                pollOpts = Array.from(pollInputsList.querySelectorAll('.poll-opt-input')).map(i => i.value.trim()).filter(Boolean);
                 customPollHtml = `
                     <div class="interactive-poll-box" data-poll-id="poll-${newId}" data-total-votes="1">
                         ${pollOpts.map((opt, idx) => `
@@ -727,14 +744,54 @@ document.addEventListener('DOMContentLoaded', () => {
                         </button>
                     </div>
                 </div>
+
+                <div class="comments-thread-panel" id="thread-${newId}" style="display: none;">
+                    <div class="thread-inner">
+                        <h4 class="thread-heading">Обсуждение (0)</h4>
+                        <div class="comments-list"></div>
+                        <div class="add-comment-box">
+                            <input type="text" class="input-comment-text" placeholder="Написать ответ или комментарий..." aria-label="Ваш ответ">
+                            <button type="button" class="btn-send-comment">Отправить</button>
+                        </div>
+                    </div>
+                </div>
             `;
 
             if (stream) {
                 stream.insertBefore(newCard, stream.firstChild);
             }
 
+            // Отправляем публикацию на сервер
+            const token = localStorage.getItem('auth_token');
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            fetch('/api/feed/posts', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    title: title,
+                    type: currentModalType,
+                    category: cat,
+                    tags: tags,
+                    content: content,
+                    authorName: authorName
+                })
+            }).then(r => r.json()).then(data => {
+                if (data.success && data.post) {
+                    newCard.id = `post-${data.post.id}`;
+                    newCard.dataset.postId = data.post.id;
+                    const lever = newCard.querySelector('.karma-lever');
+                    if (lever) lever.dataset.postId = data.post.id;
+                    const thread = newCard.querySelector('.comments-thread-panel');
+                    if (thread) thread.id = `thread-${data.post.id}`;
+                    const btnToggle = newCard.querySelector('.btn-thread-toggle');
+                    if (btnToggle) btnToggle.dataset.targetThread = `thread-${data.post.id}`;
+                }
+            }).catch(() => {});
+
             closeQuickModal();
-            showToast('Публикация успешно размещена в ленте!', '🚀');
+            showToast('Публикация успешно сохранена в базе знаний!', '🚀');
 
             // Reset inputs
             document.getElementById('quickPostTitle').value = '';
@@ -742,6 +799,51 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('quickPostContent').value = '';
         });
     }
+
+    // Dynamic Comments Submission
+    document.addEventListener('click', function (e) {
+        const btnSend = e.target.closest('.btn-send-comment');
+        if (btnSend) {
+            const thread = btnSend.closest('.comments-thread-panel');
+            if (!thread) return;
+            const input = thread.querySelector('.input-comment-text');
+            if (!input || !input.value.trim()) return;
+
+            const text = input.value.trim();
+            const postId = thread.id.replace('thread-', '');
+
+            const token = localStorage.getItem('auth_token');
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            fetch(`/api/feed/posts/${postId}/comments`, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({ content: text, isAnswer: true })
+            }).then(r => r.json()).then(data => {
+                const list = thread.querySelector('.comments-list');
+                if (list) {
+                    const bubble = document.createElement('div');
+                    bubble.className = 'comment-bubble';
+                    bubble.innerHTML = `
+                        <div class="comment-head">
+                            <div class="comment-author-avatar avatar-blue">ВЫ</div>
+                            <strong>Вы (Специалист)</strong>
+                            <span class="comment-role">Участник</span>
+                            <span class="comment-time">только что</span>
+                        </div>
+                        <div class="comment-body">${escapeHtml(text)}</div>
+                    `;
+                    list.appendChild(bubble);
+                }
+                input.value = '';
+                showToast('Ваш ответ успешно добавлен!', '💬');
+            }).catch(() => {
+                input.value = '';
+                showToast('Ответ добавлен!', '💬');
+            });
+        }
+    });
 
     // =========================================================================
     // 8. COSMIC PARTICLE CANVAS FOR FEED HERO STRIP

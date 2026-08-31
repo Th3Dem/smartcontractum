@@ -897,6 +897,33 @@
 
 2026-09-01T01:30:58+03:00 | TASK-34 | pm_bot | TASK_COMPLETED | Задача TASK-34 успешно завершена со статусом Done-Done. Все 7 Required Gates утверждены (`APPROVED`), артефакт состояния [tasks/TASK-34-community-feed-stage1-ia/TASK_STATE.json](file:///home/dem/Projects_01/tasks/TASK-34-community-feed-stage1-ia/TASK_STATE.json) переведен в `DONE`.
 
+---
+
+## 36. TASK-40: Ядро Q&A, персистентное хранение публикаций, ответов и механика репутации (Этап 1, Инкремент 2)
+
+2026-09-01T01:36:20+03:00 | TASK-40 | pm_bot | PROJECT_START | Инициализирована задача TASK-40 по разработке ядра Q&A, персистентному хранению публикаций/ответов в SQLite (`data/smartcontractum.db`), REST API и механике начисления профессиональной репутации (+50 за Accepted Answer). Созданы артефакты [tasks/TASK-40-qa-core-and-reputation/TASK.md](file:///home/dem/Projects_01/tasks/TASK-40-qa-core-and-reputation/TASK.md) и [tasks/TASK-40-qa-core-and-reputation/TASK_STATE.json](file:///home/dem/Projects_01/tasks/TASK-40-qa-core-and-reputation/TASK_STATE.json).
+
+2026-09-01T01:36:26+03:00 | TASK-40 | product_bot | PRODUCT_READY | Разработана продуктовая спецификация [tasks/TASK-40-qa-core-and-reputation/PRODUCT_SPEC.md](file:///home/dem/Projects_01/tasks/TASK-40-qa-core-and-reputation/PRODUCT_SPEC.md).
+
+2026-09-01T01:36:30+03:00 | TASK-40 | architect_bot | ARCH_READY | Разработана техническая спецификация [tasks/TASK-40-qa-core-and-reputation/TECH_SPEC.md](file:///home/dem/Projects_01/tasks/TASK-40-qa-core-and-reputation/TECH_SPEC.md).
+
+2026-09-01T01:36:32+03:00 | TASK-40 | ux_bot | UX_READY | Разработана интерфейсная спецификация [tasks/TASK-40-qa-core-and-reputation/UX_SPEC.md](file:///home/dem/Projects_01/tasks/TASK-40-qa-core-and-reputation/UX_SPEC.md).
+
+2026-09-01T01:36:34+03:00 | TASK-40 | data_bot | DATA_REVIEW_READY | Проведен аудит модели данных [tasks/TASK-40-qa-core-and-reputation/DATA_REVIEW.md](file:///home/dem/Projects_01/tasks/TASK-40-qa-core-and-reputation/DATA_REVIEW.md). Внедрены таблицы `feed_posts`, `feed_comments`, `user_reputation`, `feed_votes`.
+
+2026-09-01T01:36:36+03:00 | TASK-40 | security_bot | SECURITY_APPROVED | Проведен аудит безопасности [tasks/TASK-40-qa-core-and-reputation/SECURITY_REVIEW.md](file:///home/dem/Projects_01/tasks/TASK-40-qa-core-and-reputation/SECURITY_REVIEW.md).
+
+2026-09-01T01:37:16+03:00 | TASK-40 | dev_bot | BACKEND_INTEGRATED | В модулях [db.py](file:///home/dem/Projects_01/db.py) и [server.py](file:///home/dem/Projects_01/server.py) реализован полный REST API: `GET /api/feed/posts`, `POST /api/feed/posts`, `GET /api/feed/posts/<id>/comments`, `POST /api/feed/posts/<id>/comments`, `POST /api/feed/posts/<id>/accept-answer`, `POST /api/feed/posts/<id>/vote`, `GET /api/feed/leaderboard`. В [public/forum_social.js](file:///home/dem/Projects_01/public/forum_social.js) подключены сохранение постов, голосование и ответы.
+
+2026-09-01T01:38:15+03:00 | TASK-40 | dev_bot | DEV_HANDOVER_READY | Подготовлен отчет передачи [tasks/TASK-40-qa-core-and-reputation/DEV_HANDOVER.md](file:///home/dem/Projects_01/tasks/TASK-40-qa-core-and-reputation/DEV_HANDOVER.md).
+
+2026-09-01T01:38:18+03:00 | TASK-40 | qa_bot | QA_APPROVED | Разработан и выполнен тестовый набор [tests/test_qa_and_feed.py](file:///home/dem/Projects_01/tests/test_qa_and_feed.py). Все 34 теста платформы успешно пройдены (34 / 34 PASSED, 100% OK). Подготовлен отчет [tasks/TASK-40-qa-core-and-reputation/QA_REVIEW.md](file:///home/dem/Projects_01/tasks/TASK-40-qa-core-and-reputation/QA_REVIEW.md).
+
+2026-09-01T01:38:20+03:00 | TASK-40 | ops_bot | RELEASE_READY | Подготовлен релизный отчет [tasks/TASK-40-qa-core-and-reputation/RELEASE_REPORT.md](file:///home/dem/Projects_01/tasks/TASK-40-qa-core-and-reputation/RELEASE_REPORT.md). Выполнен горячий перезапуск сервера на порту 3000. Версия `v2.22.0-qa-core-and-reputation` выпущена в релиз.
+
+2026-09-01T01:38:22+03:00 | TASK-40 | pm_bot | TASK_COMPLETED | Задача TASK-40 успешно завершена со статусом Done-Done. Все 7 Required Gates утверждены (`APPROVED`), артефакт состояния [tasks/TASK-40-qa-core-and-reputation/TASK_STATE.json](file:///home/dem/Projects_01/tasks/TASK-40-qa-core-and-reputation/TASK_STATE.json) переведен в `DONE`.
+
+
 
 
 
