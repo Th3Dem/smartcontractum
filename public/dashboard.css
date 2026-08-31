@@ -1,6 +1,6 @@
 /* ===============================================================
-   SmartContractum — Стили личного кабинета (Dashboard v2.5)
-   Идеальное выравнивание линий, типографика и поддержка Dark/Light тем
+   SmartContractum — Стили личного кабинета (Dashboard v3.0)
+   Левое боковое меню, разделы "Основные" и "Безопасность", смена пароля и темы
    =============================================================== */
 
 .dashboard-body {
@@ -10,8 +10,6 @@
   color: var(--text-primary);
   font-family: var(--font-body);
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
@@ -34,39 +32,36 @@
   animation: spin 0.8s linear infinite;
 }
 
-.dashboard-layout {
+/* ===============================================================
+   Двухколоночная структура (Sidebar + Main Content)
+   =============================================================== */
+.dashboard-shell {
   display: flex;
-  flex-direction: column;
   min-height: 100vh;
+  width: 100%;
 }
 
 /* ===============================================================
-   Верхняя панель (Header)
+   ЛЕВОЕ БОКОВОЕ МЕНЮ (SIDEBAR)
    =============================================================== */
-.dash-header {
-  height: 64px;
+.dash-sidebar {
+  width: 260px;
+  flex-shrink: 0;
   background: var(--bg-card);
-  border-bottom: 1px solid var(--bg-card-border);
+  border-right: 1px solid var(--bg-card-border);
+  display: flex;
+  flex-direction: column;
   position: sticky;
   top: 0;
+  height: 100vh;
   z-index: 100;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease;
 }
 
-.dash-header-inner {
-  max-width: 960px;
-  margin: 0 auto;
-  height: 100%;
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.dash-header-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+.sidebar-top {
+  padding: 24px 20px 18px 20px;
+  border-bottom: 1px solid var(--bg-card-border);
 }
 
 .dash-logo {
@@ -85,96 +80,210 @@
   color: var(--blue);
 }
 
-.security-badge-top {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  background: rgba(39, 133, 101, 0.12);
-  border: 1px solid rgba(39, 133, 101, 0.3);
-  border-radius: 20px;
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--green);
-}
-
-[data-theme="dark"] .security-badge-top {
-  color: #34d399;
-  border-color: rgba(52, 211, 153, 0.3);
-  background: rgba(52, 211, 153, 0.1);
-}
-
-.status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.dash-header-right {
+/* Плашка пользователя в сайдбаре */
+.sidebar-user-card {
+  margin: 16px 16px 12px 16px;
+  padding: 12px 14px;
+  background: var(--bg-input);
+  border: 1px solid var(--bg-card-border);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-/* Кнопка Профиль в шапке */
-.nav-btn-profile {
+.sidebar-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--cyan) 100%);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 800;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 14px;
-  border-radius: var(--radius-sm);
-  background: rgba(47, 111, 206, 0.12);
-  border: 1px solid rgba(47, 111, 206, 0.3);
-  color: var(--blue);
-  font-family: var(--font-body);
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(47, 111, 206, 0.3);
+}
+
+.sidebar-user-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.sidebar-user-name {
+  font-family: var(--font-heading);
   font-size: 13.5px;
-  font-weight: 600;
-  cursor: default;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-[data-theme="dark"] .nav-btn-profile {
-  color: #60a5fa;
-  border-color: rgba(96, 165, 250, 0.35);
-  background: rgba(96, 165, 250, 0.12);
+.sidebar-user-role {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Кнопка Выход */
-.btn-logout {
+/* Навигация */
+.sidebar-nav {
+  padding: 10px 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.8px;
+  padding: 8px 12px 4px 12px;
+}
+
+.sidebar-nav-item {
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
+  gap: 12px;
+  padding: 10px 14px;
   border-radius: var(--radius-sm);
   background: transparent;
-  border: 1px solid var(--bg-card-border);
+  border: 1px solid transparent;
   color: var(--text-secondary);
   font-family: var(--font-body);
   font-size: 13.5px;
   font-weight: 600;
   cursor: pointer;
+  text-align: left;
   transition: var(--transition);
 }
 
-.btn-logout:hover {
+.sidebar-nav-item svg {
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.sidebar-nav-item:hover {
+  background: var(--bg-input);
+  color: var(--text-primary);
+}
+
+.sidebar-nav-item:hover svg {
+  color: var(--blue);
+}
+
+.sidebar-nav-item.active {
+  background: rgba(47, 111, 206, 0.12);
+  border-color: rgba(47, 111, 206, 0.3);
+  color: var(--blue);
+  font-weight: 700;
+}
+
+[data-theme="dark"] .sidebar-nav-item.active {
+  color: #60a5fa;
+  border-color: rgba(96, 165, 250, 0.35);
+  background: rgba(96, 165, 250, 0.12);
+}
+
+.sidebar-nav-item.active svg {
+  color: var(--blue);
+}
+
+[data-theme="dark"] .sidebar-nav-item.active svg {
+  color: #60a5fa;
+}
+
+/* Нижний блок сайдбара */
+.sidebar-bottom {
+  padding: 16px 14px;
+  border-top: 1px solid var(--bg-card-border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-action-btn,
+.sidebar-logout-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid var(--bg-card-border);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.sidebar-action-btn:hover {
+  background: var(--bg-input);
+  color: var(--text-primary);
+}
+
+.sidebar-logout-btn:hover {
   background: rgba(239, 68, 68, 0.1);
   border-color: rgba(239, 68, 68, 0.35);
   color: #ef4444;
 }
 
 /* ===============================================================
-   Основная контентная область
+   ОСНОВНАЯ ОБЛАСТЬ КОНТЕНТА (MAIN CONTENT WRAPPER)
    =============================================================== */
-.dash-main-center {
+.dash-main-wrap {
   flex: 1;
-  padding: 32px 20px 48px 20px;
+  min-width: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  background-color: var(--bg-main);
+}
+
+.dash-mobile-topbar {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--bg-card-border);
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+
+.btn-mobile-toggle {
+  background: transparent;
+  border: 1px solid var(--bg-card-border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 18px;
+  padding: 4px 10px;
+  cursor: pointer;
 }
 
 .dash-content-container {
   width: 100%;
-  max-width: 920px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 24px 48px 24px;
+  box-sizing: border-box;
+}
+
+/* Переключение разделов с плавной анимацией */
+.dash-section {
+  animation: fadeIn 0.25s ease-out;
 }
 
 .dash-page-header {
@@ -201,7 +310,7 @@
   margin: 4px 0 0 0;
 }
 
-/* Карточки Личного кабинета */
+/* Карточки контента */
 .dash-card {
   background: var(--bg-card);
   border: 1px solid var(--bg-card-border);
@@ -240,7 +349,7 @@
 }
 
 /* ===============================================================
-   Блок профиля пользователя
+   Блок профиля пользователя в разделе "Основные"
    =============================================================== */
 .profile-header-box {
   display: flex;
@@ -301,9 +410,7 @@
   background: rgba(147, 197, 253, 0.1);
 }
 
-/* ===============================================================
-   Список реквизитов (Details List - Идеальное выравнивание)
-   =============================================================== */
+/* Список реквизитов */
 .details-list {
   display: flex;
   flex-direction: column;
@@ -335,7 +442,130 @@
   color: var(--text-primary);
   text-align: right;
   word-break: break-word;
+}
+
+.detail-val-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
   flex: 1;
+}
+
+.btn-row-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid var(--bg-card-border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.btn-row-edit svg {
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.btn-row-edit:hover {
+  background: rgba(47, 111, 206, 0.12);
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.btn-row-edit:hover svg {
+  color: var(--blue);
+}
+
+[data-theme="dark"] .btn-row-edit:hover {
+  background: rgba(96, 165, 250, 0.15);
+  border-color: #60a5fa;
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .btn-row-edit:hover svg {
+  color: #60a5fa;
+}
+
+/* Режим инлайн-редактирования параметра */
+.detail-edit-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.form-input-inline {
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: 1px solid var(--blue);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  max-width: 320px;
+  width: 100%;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(47, 111, 206, 0.2);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input-inline.is-invalid {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.inline-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.btn-inline-save {
+  padding: 6px 12px;
+  background: var(--blue);
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: var(--transition);
+}
+
+.btn-inline-save:hover {
+  background: #1b5cb8;
+  box-shadow: 0 2px 8px rgba(47, 111, 206, 0.35);
+}
+
+.btn-inline-cancel {
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid var(--bg-card-border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-inline-cancel:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
 }
 
 .mono-num {
@@ -345,26 +575,132 @@
   letter-spacing: 0.5px;
 }
 
-.status-pill {
-  display: inline-flex;
+.blog-title-badge {
+  color: var(--blue);
+  font-weight: 700;
+}
+
+[data-theme="dark"] .blog-title-badge {
+  color: #60a5fa;
+}
+
+
+/* ===============================================================
+   3-шаговый мастер смены пароля в разделе "Безопасность"
+   =============================================================== */
+.sec-step-container {
+  animation: fadeIn 0.25s ease-out;
+}
+
+.sec-init-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 20px;
+  background: var(--bg-input);
+  border: 1px solid var(--bg-card-border);
+  border-radius: var(--radius-md);
+}
+
+.sec-init-icon {
+  font-size: 28px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.sec-init-text h4 {
+  margin: 0 0 6px 0;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.sec-init-text p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.sec-init-text strong {
+  color: var(--blue);
+}
+
+[data-theme="dark"] .sec-init-text strong {
+  color: #60a5fa;
+}
+
+.sec-step-header {
+  margin-bottom: 20px;
+}
+
+.sec-step-title {
+  margin: 0 0 6px 0;
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.sec-step-desc {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.sec-step-desc strong {
+  color: var(--text-primary);
+}
+
+.form-input-code {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 8px;
+  text-align: center;
+  font-family: monospace, monospace;
+}
+
+.sec-actions-row {
+  display: flex;
   align-items: center;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btn-resend-code {
+  padding: 9px 16px;
+  background: transparent;
+  border: 1px solid var(--bg-card-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 13px;
   font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
 }
 
-.status-pill.success {
-  background: rgba(39, 133, 101, 0.12);
-  color: var(--green);
-  border: 1px solid rgba(39, 133, 101, 0.3);
+.btn-resend-code:hover:not(:disabled) {
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border-color: var(--blue);
 }
 
-[data-theme="dark"] .status-pill.success {
-  background: rgba(52, 211, 153, 0.12);
-  color: #34d399;
-  border-color: rgba(52, 211, 153, 0.3);
+.btn-resend-code:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
+
+.password-change-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 520px;
+}
+
 
 /* ===============================================================
    Сетка параметров безопасности (152-ФЗ)
@@ -408,13 +744,208 @@
 }
 
 /* ===============================================================
+   Кнопка редактирования профиля
+   =============================================================== */
+.btn-edit-profile {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--blue-glow);
+  border: 1px solid var(--blue);
+  border-radius: var(--radius-sm);
+  color: var(--blue);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+[data-theme="dark"] .btn-edit-profile {
+  color: #60a5fa;
+  border-color: rgba(96, 165, 250, 0.4);
+  background: rgba(96, 165, 250, 0.12);
+}
+
+.btn-edit-profile:hover {
+  background: var(--blue);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(47, 111, 206, 0.3);
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .btn-edit-profile:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #3b82f6;
+}
+
+/* ===============================================================
+   Модальное окно редактирования профиля
+   =============================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(4, 13, 24, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--bg-card-border);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 28px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+  animation: modalScale 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalScale {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--bg-card-border);
+}
+
+.modal-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modal-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.2px;
+}
+
+.modal-subtitle {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: var(--transition);
+}
+
+.modal-close-btn:hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 18px;
+  border-top: 1px solid var(--bg-card-border);
+}
+
+.btn-modal-cancel {
+  padding: 10px 18px;
+  background: transparent;
+  border: 1px solid var(--bg-card-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-modal-cancel:hover {
+  background: var(--bg-input);
+  color: var(--text-primary);
+}
+
+.modal-btn-submit {
+  padding: 10px 22px;
+  font-size: 13.5px;
+}
+
+/* ===============================================================
    Адаптивность (Mobile & Tablet)
    =============================================================== */
-@media (max-width: 768px) {
+@media (max-width: 860px) {
+  .dash-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .dash-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .dash-mobile-topbar {
+    display: flex;
+  }
+
+  .dash-content-container {
+    padding: 20px 16px;
+  }
+
   .dash-page-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 14px;
+  }
+  
+  .btn-edit-profile {
+    width: 100%;
+    justify-content: center;
   }
   
   .detail-row {
@@ -433,5 +964,16 @@
   
   .security-features-grid {
     grid-template-columns: 1fr;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .btn-modal-cancel,
+  .modal-btn-submit {
+    width: 100%;
+    justify-content: center;
   }
 }

@@ -1,0 +1,21 @@
+{
+  "task": "TASK-06",
+  "name": "inline-parameter-editing",
+  "state": "DONE",
+  "completed_at": "2026-08-31T19:33:05+03:00",
+  "rework_count": 0,
+  "required_gates": {
+    "product": true,
+    "architecture": true,
+    "ux": true,
+    "data": true,
+    "domain": false,
+    "seo": false,
+    "security": true,
+    "moderation": false,
+    "qa": true,
+    "staging": false,
+    "release": true
+  },
+  "created_at": "2026-08-31T19:31:14+03:00"
+}

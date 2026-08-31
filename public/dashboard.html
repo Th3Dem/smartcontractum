@@ -7,9 +7,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="styles.css?v=1.10.0">
+  <link rel="stylesheet" href="dashboard.css?v=1.10.0">
 </head>
+
 <body class="dashboard-body">
   <!-- Загрузчик проверки сессии -->
   <div id="dashboard-loader" class="dashboard-loader">
@@ -17,80 +18,276 @@
     <p>Загрузка личного кабинета...</p>
   </div>
 
-  <div id="dashboard-app" class="dashboard-layout" style="display: none;">
+  <div id="dashboard-app" class="dashboard-shell" style="display: none;">
     <!-- ===============================================================
-         ВЕРХНЯЯ ШАПКА (HEADER)
+         ЛЕВОЕ БОКОВОЕ МЕНЮ (SIDEBAR)
          =============================================================== -->
-    <header class="dash-header">
-      <div class="dash-header-inner">
-        <div class="dash-header-left">
-          <a href="dashboard.html" class="dash-logo" title="SmartContractum Главная">
-            <svg class="brand-shield" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              <path d="M9 12l2 2 4-4"/>
-            </svg>
-            <span class="logo-title">SMARTCONTRACTUM</span>
-          </a>
-        </div>
+    <aside class="dash-sidebar" id="dash-sidebar">
+      <div class="sidebar-top">
+        <a href="dashboard.html" class="dash-logo" title="SmartContractum Главная">
+          <svg class="brand-shield" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+          <span class="logo-title">SMARTCONTRACTUM</span>
+        </a>
+      </div>
 
-        <div class="dash-header-right">
-          <!-- Кнопка Профиль -->
-          <button class="nav-btn-profile active" title="Профиль учетной записи">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <span>Профиль</span>
-          </button>
-
-          <!-- Переключатель темы (Темная / Светлая) -->
-          <button id="theme-toggle-dash" class="theme-toggle" title="Переключить тему оформления" aria-label="Сменить тему">
-            🌙
-          </button>
-
-          <!-- Кнопка Выход -->
-          <button id="btn-logout" class="btn-logout" title="Выйти из учетной записи">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-              <polyline points="16 17 21 12 16 7"/>
-              <line x1="21" y1="12" x2="9" y2="12"/>
-            </svg>
-            <span>Выход</span>
-          </button>
+      <!-- Пользовательская плашка в боковом меню -->
+      <div class="sidebar-user-card">
+        <div class="sidebar-avatar" id="sidebar-avatar">У</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="sidebar-user-name">Загрузка...</div>
+          <div class="sidebar-user-role" id="sidebar-user-badge">Физическое лицо</div>
         </div>
       </div>
-    </header>
+
+      <!-- Навигационные кнопки разделов -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Навигация</div>
+        
+        <button id="nav-item-general" class="sidebar-nav-item active" data-section="general">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span>Основные</span>
+        </button>
+
+        <button id="nav-item-security" class="sidebar-nav-item" data-section="security">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>Безопасность</span>
+        </button>
+      </nav>
+
+      <!-- Нижний блок меню: тема и выход -->
+      <div class="sidebar-bottom">
+        <button id="theme-toggle-dash" class="sidebar-action-btn" title="Сменить тему оформления">
+          <span id="theme-icon" class="theme-icon">🌙</span>
+          <span id="theme-label" class="theme-label">Темная тема</span>
+        </button>
+
+        <button id="btn-logout" class="sidebar-logout-btn" title="Выйти из учетной записи">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span>Выход</span>
+        </button>
+      </div>
+    </aside>
 
     <!-- ===============================================================
-         ОСНОВНОЙ КОНТЕНТ: ПРОФИЛЬ И РЕКВИЗИТЫ
+         ОСНОВНАЯ ОБЛАСТЬ КОНТЕНТА (MAIN WRAPPER)
          =============================================================== -->
-    <main class="dash-main-center">
-      <div class="dash-content-container">
-        <!-- Заголовок страницы -->
-        <div class="dash-page-header">
-          <div>
-            <h1 class="dash-page-title">Профиль пользователя</h1>
-          </div>
-        </div>
+    <div class="dash-main-wrap">
+      <!-- Мобильный топбар -->
+      <div class="dash-mobile-topbar">
+        <a href="dashboard.html" class="dash-logo">
+          <svg class="brand-shield" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+          <span>SMARTCONTRACTUM</span>
+        </a>
+        <button id="btn-mobile-menu" class="btn-mobile-toggle" aria-label="Открыть меню">☰</button>
+      </div>
 
-        <!-- КАРТОЧКА 1: ОСНОВНЫЕ РЕКВИЗИТЫ СУБЪЕКТА -->
-        <div class="dash-card">
-          <div class="profile-header-box">
-            <div class="profile-large-avatar" id="prof-avatar">У</div>
-            <div class="profile-header-meta">
-              <h2 class="prof-name" id="prof-display-name">Загрузка...</h2>
-              <div class="prof-type-badge" id="prof-type-badge">Физическое лицо</div>
+      <div class="dash-content-container">
+        <!-- Глобальное уведомление на странице -->
+        <div id="dash-alert" class="auth-alert" style="display: none; margin-bottom: 20px;"></div>
+
+        <!-- ===============================================================
+             РАЗДЕЛ 1: ОСНОВНЫЕ (GENERAL)
+             =============================================================== -->
+        <section id="section-general" class="dash-section active">
+          <div class="dash-page-header">
+            <div>
+              <h1 class="dash-page-title">Основные данные</h1>
+              <p class="dash-page-subtitle">Персональная информация, контактные реквизиты и блог</p>
             </div>
           </div>
 
-          <div class="details-list" id="prof-details-list">
-            <!-- Заполняется динамически через JS -->
+          <!-- КАРТОЧКА ПРОФИЛЯ -->
+          <div class="dash-card">
+            <div class="profile-header-box">
+              <div class="profile-large-avatar" id="prof-avatar">У</div>
+              <div class="profile-header-meta">
+                <h2 class="prof-name" id="prof-display-name">Загрузка...</h2>
+                <div class="prof-type-badge" id="prof-type-badge">Физическое лицо</div>
+              </div>
+            </div>
+
+            <div class="details-list" id="prof-details-list">
+              <!-- Заполняется динамически через JS с кнопками напротив каждого параметра -->
+            </div>
           </div>
-        </div>
+        </section>
+
+        <!-- ===============================================================
+             РАЗДЕЛ 2: БЕЗОПАСНОСТЬ (SECURITY)
+             =============================================================== -->
+        <section id="section-security" class="dash-section" style="display: none;">
+          <div class="dash-page-header">
+            <div>
+              <h1 class="dash-page-title">Безопасность учетной записи</h1>
+              <p class="dash-page-subtitle">Двухфакторная смена пароля и криптографическая защита по 152-ФЗ</p>
+            </div>
+          </div>
+
+          <!-- Уведомление в разделе безопасности -->
+          <div id="security-alert" class="auth-alert" style="display: none; margin-bottom: 20px;"></div>
+
+          <!-- КАРТОЧКА СМЕНЫ ПАРОЛЯ -->
+          <div class="dash-card">
+            <div class="card-header-row">
+              <h3 class="card-title">Управление паролем</h3>
+              <span class="badge-status-sec">PBKDF2-HMAC-SHA256</span>
+            </div>
+
+            <!-- ШАГ 1: Исходное состояние — кнопка «Сменить пароль» -->
+            <div id="sec-step-init" class="sec-step-container">
+              <div class="sec-init-info">
+                <div class="sec-init-icon">🔐</div>
+                <div class="sec-init-text">
+                  <h4>Смена пароля с подтверждением по E-mail</h4>
+                  <p>Для защиты вашей учетной записи смена пароля требует подтверждения 6-значным кодом, который будет направлен на ваш E-mail: <strong id="sec-user-email">...</strong></p>
+                </div>
+              </div>
+              <div style="margin-top: 22px;">
+                <button type="button" id="btn-init-pwd-change" class="btn-primary">
+                  <span>🔐 Сменить пароль</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- ШАГ 2: Ввод 6-значного кода подтверждения -->
+            <div id="sec-step-code" class="sec-step-container" style="display: none;">
+              <div class="sec-step-header">
+                <h4 class="sec-step-title">Подтверждение по электронной почте</h4>
+                <p class="sec-step-desc">Мы отправили письмо с проверочным кодом на адрес <strong id="sec-code-sent-email">...</strong>. Введите 6-значный код ниже:</p>
+              </div>
+
+              <div class="form-group" style="max-width: 320px;">
+                <label class="form-label" for="sec-code-input">Код подтверждения (6 цифр) <span class="req">*</span></label>
+                <input type="text" id="sec-code-input" class="form-input form-input-code" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+              </div>
+
+              <div class="sec-actions-row">
+                <button type="button" id="btn-verify-sec-code" class="btn-primary">
+                  <span>Подтвердить код</span>
+                </button>
+                <button type="button" id="btn-resend-sec-code" class="btn-resend-code" disabled>
+                  <span>Отправить повторно (60)</span>
+                </button>
+                <button type="button" id="btn-cancel-sec-code" class="btn-modal-cancel">
+                  <span>Отмена</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- ШАГ 3: Задание нового пароля -->
+            <div id="sec-step-newpwd" class="sec-step-container" style="display: none;">
+              <div class="sec-step-header">
+                <h4 class="sec-step-title">Установка нового пароля</h4>
+                <p class="sec-step-desc">Задайте надежный пароль для вашей учетной записи (не менее 8 символов).</p>
+              </div>
+
+              <form id="form-sec-new-password" class="password-change-form" novalidate>
+                <div class="form-group">
+                  <label class="form-label" for="new-password">Новый пароль <span class="req">*</span></label>
+                  <div class="input-wrapper">
+                    <input type="password" id="new-password" class="form-input" placeholder="Не менее 8 символов" autocomplete="new-password">
+                    <button type="button" class="input-suffix-btn btn-toggle-pwd" aria-label="Показать пароль">👁</button>
+                  </div>
+                  <!-- Индикатор сложности (полоска) -->
+                  <div class="strength-meter">
+                    <div class="strength-bar-track">
+                      <div id="new-pwd-strength-fill" class="strength-bar-fill"></div>
+                    </div>
+                    <div class="strength-text">
+                      <span id="new-pwd-strength-label">Сложность: —</span>
+                      <span>Мин. 8 знаков, заглавная буква, цифра</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="confirm-new-password">Подтверждение нового пароля <span class="req">*</span></label>
+                  <div class="input-wrapper">
+                    <input type="password" id="confirm-new-password" class="form-input" placeholder="Повторите новый пароль" autocomplete="new-password">
+                    <button type="button" class="input-suffix-btn btn-toggle-pwd" aria-label="Показать пароль">👁</button>
+                  </div>
+                  <div id="new-pwd-match-msg" class="password-match-status" style="display: none;"></div>
+                </div>
+
+
+                <div class="sec-actions-row" style="margin-top: 20px;">
+                  <button type="submit" id="btn-save-new-pwd" class="btn-primary">
+                    <span>Сохранить новый пароль</span>
+                  </button>
+                  <button type="button" id="btn-cancel-newpwd" class="btn-modal-cancel">
+                    <span>Отмена</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+
+          <!-- КАРТОЧКА ПАРАМЕТРОВ БЕЗОПАСНОСТИ 152-ФЗ -->
+          <div class="dash-card">
+            <div class="card-header-row">
+              <h3 class="card-title">Параметры защиты и соответствие 152-ФЗ РФ</h3>
+              <span class="badge-status-sec">Активная защита</span>
+            </div>
+
+            <div class="security-features-grid">
+              <div class="sec-feature-item">
+                <span class="sfi-icon">🔐</span>
+                <div class="sfi-text">
+                  <strong>Хеширование паролей</strong>
+                  <p>PBKDF2-HMAC-SHA256 (100 000 итераций) с индивидуальной криптографической 16-байтной солью.</p>
+                </div>
+              </div>
+
+              <div class="sec-feature-item">
+                <span class="sfi-icon">🛡️</span>
+                <div class="sfi-text">
+                  <strong>Изоляция сессий</strong>
+                  <p>256-битные сессионные токены Bearer с защитой от тайминг-атак через <code>hmac.compare_digest</code>.</p>
+                </div>
+              </div>
+
+              <div class="sec-feature-item">
+                <span class="sfi-icon">📜</span>
+                <div class="sfi-text">
+                  <strong>152-ФЗ «О персональных данных»</strong>
+                  <p>Хранение данных в РФ, строгая санитаризация API и раздельное шифрование реквизитов.</p>
+                </div>
+              </div>
+
+              <div class="sec-feature-item">
+                <span class="sfi-icon">🌐</span>
+                <div class="sfi-text">
+                  <strong>Шифрование каналов</strong>
+                  <p>Все соединения и почтовые транзакции защищены протоколами TLS/SSL (Яндекс SMTP SSL: 465).</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
-    </main>
+    </div>
   </div>
 
-  <script src="dashboard.js"></script>
+  <script src="dashboard.js?v=1.10.0"></script>
 </body>
 </html>
+
+
+

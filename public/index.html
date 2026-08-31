@@ -1,379 +1,735 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartContractum — Авторизация и Регистрация</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SmartContractum — Профессиональная среда смарт-контрактов и мост к ПКСК Банка России. Каталог оракулов, конструктор и паспорта контрактов.">
+    <meta name="keywords" content="ПКСК, Банк России, смарт-контракты, ЦФА, эскроу, оракулы, блокчейн, конструктор смарт-контрактов">
+    <meta name="author" content="SmartContractum Umbrella-Dev">
+
+    <!-- OpenGraph Metadata -->
+    <meta property="og:title" content="SmartContractum — Здесь рождаются российские смарт-контракты | ПКСК Банка России">
+    <meta property="og:description" content="Независимая профессиональная среда для проектирования, верификации и вывода смарт-контрактов в контур ПКСК.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://smartcontractum.ru">
+    <meta property="og:image" content="/static/img/og-cover.png">
+
+    <!-- Security Metadata -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="theme-color" content="#0b1426">
+
+    <title>SmartContractum — Здесь рождаются российские смарт-контракты | ПКСК Банка России</title>
+
+    <!-- Google Fonts: Inter & Manrope -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="landing_main.css?v=2.1.0">
+    <link rel="stylesheet" href="hero.css?v=2.1.0">
+    <link rel="stylesheet" href="hero_constellation.css?v=2.1.0">
 </head>
-<body>
+<body class="app-body">
+    <!-- 0.1 ВЕРХНЕЕ МЕНЮ И ШАПКА (Sticky Header) -->
+    <header class="app-header" id="appHeader">
+        <div class="header-container">
+            <!-- Brand Logo -->
+            <a href="/" class="brand-logo" aria-label="SmartContractum Главная">
+                <div class="logo-icon-box" aria-hidden="true">
+                    <svg class="smart-contract-logo-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="scDocGradFrameless" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#38bdf8"></stop>
+                                <stop offset="0.5" stop-color="#6188ff"></stop>
+                                <stop offset="1" stop-color="#16c784"></stop>
+                            </linearGradient>
+                        </defs>
+                        <path d="M7 3.5h11.5l7.5 7.5v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5.5a2 2 0 0 1 2-2z" fill="rgba(56, 189, 248, 0.06)" stroke="url(#scDocGradFrameless)" stroke-width="1.8" stroke-linejoin="round"></path>
+                        <path d="M18.5 3.5v6a1.5 1.5 0 0 0 1.5 1.5h6" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <line x1="9.5" y1="12.5" x2="15.5" y2="12.5" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round"></line>
+                        <line x1="9.5" y1="17.5" x2="19.5" y2="17.5" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round"></line>
+                        <line x1="9.5" y1="22.5" x2="16.5" y2="22.5" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round"></line>
+                        <circle cx="23" cy="23" r="5" fill="#0b1426" stroke="#16c784" stroke-width="1.8"></circle>
+                        <path d="M21 23l1.5 1.5 3-3" stroke="#16c784" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-title"><span class="logo-smart">Smart</span><span class="logo-contractum">Contractum</span></span>
+                </div>
+            </a>
 
-  <main class="auth-container" id="auth-card">
-    <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему оформления" title="Сменить тему">🌙</button>
+            <!-- Mobile Hamburger Toggle -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Открыть навигационное меню" aria-expanded="false">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+            </button>
 
-    <!-- Заголовок и логотип -->
-    <header class="auth-header">
-      <div class="auth-logo-badge">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-        <span>SMARTCONTRACTUM</span>
-      </div>
-      <h1 class="auth-title" id="auth-title">Вход в личный кабинет</h1>
-      <p class="auth-subtitle" id="auth-subtitle">Экосистема коммерческих смарт-контрактов</p>
+            <!-- Navigation Links -->
+            <nav class="header-nav" id="headerNav" aria-label="Основная навигация">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="/feed" class="nav-link">
+                            <span class="nav-icon-box">
+                                <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.25 1a.75.75 0 00-.75.75v.5c0 .414.336.75.75.75h9.5a.75.75 0 00.75-.75v-.5a.75.75 0 00-.75-.75h-9.5zm0 4a.75.75 0 000 1.5h9.5a.75.75 0 000-1.5h-9.5zm0 3.5a.75.75 0 000 1.5h5.5a.75.75 0 000-1.5h-5.5z" clip-rule="evenodd"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Лента</span>
+                        </a>
+                    </li>
+                </ul>
+
+            </nav>
+
+            <!-- User Login / Profile Action Button -->
+            <div class="header-user-bar">
+                <a href="/auth.html" class="header-login-action-btn" id="headerLoginBtn" title="Перейти в Личный Кабинет">
+                    <div class="btn-user-avatar-wrap" aria-hidden="true">
+                        <svg class="btn-user-svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="btn-user-status-dot" id="headerUserDot" title="Верифицирован в ПКСК" style="display: none;"></span>
+                    </div>
+                    <span class="btn-user-label" id="headerUserLabel">Войти / Регистрация</span>
+                    <svg class="btn-user-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z" clip-rule="evenodd"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
     </header>
 
-    <!-- Навигационные вкладки -->
-    <nav class="auth-tabs" id="auth-tabs" aria-label="Выбор действия">
-      <button class="auth-tab active" id="tab-login" type="button">Вход</button>
-      <button class="auth-tab" id="tab-register" type="button">Регистрация</button>
-    </nav>
+    <!-- 0.2 БАЗОВЫЙ МАКЕТ СТРАНИЦЫ (Main Layout Container) -->
+    <main class="main-layout-container" id="mainContent">
+        
+<div class="home-page-container">
+    <!-- ================================================================
+         1.1 HERO BANNER (Full-Height Viewport: 3D Blockchain Cube Behind UTP)
+    ================================================================= -->
+    <section class="hero-3d-banner" id="heroBanner">
+        <!-- Interactive Canvas Background for Floating Cosmic Shards -->
+        <canvas id="cosmicShardsCanvas" class="cosmic-shards-canvas" width="1352" height="759"></canvas>
 
-    <!-- Системные алерты -->
-    <div id="auth-alert" class="auth-alert" style="display: none;" role="alert"></div>
+        <!-- 3D Spatial Blockchain & Smart Contract Node Matrix (Positioned BEHIND Text) -->
+        <div class="hero-3d-bg-matrix" id="hero3dBgMatrix">
+            <div class="scene-3d" id="cube3dViewport">
+                <!-- Cryptographic Ambient Nebula Glow -->
+                <div class="ambient-glow-nebula"></div>
 
-    <!-- ========================================== -->
-    <!-- ФОРМА 1: ВХОД (LOGIN)                      -->
-    <!-- ========================================== -->
-    <form id="form-login" novalidate>
-      <div class="form-group">
-        <label for="login-email" class="form-label">E-mail или логин <span class="required-star">*</span></label>
-        <div class="input-wrapper">
-          <input type="email" id="login-email" class="form-input" placeholder="alexander@smartcontractum.ru" required autocomplete="email">
-        </div>
-      </div>
+                <!-- 5 Concentric Blockchain Atomic Orbital Rings -->
+                <div class="orbit-halo ring-ultra">
+                    <div class="orbit-satellite sat-5" title="Consensus Layer"></div>
+                </div>
+                <div class="orbit-halo ring-outer">
+                    <div class="orbit-satellite sat-1" title="Validator Node A"></div>
+                    <div class="orbit-satellite sat-2" title="Oracle Feed B"></div>
+                </div>
+                <div class="orbit-halo ring-mid">
+                    <div class="orbit-satellite sat-3" title="PKSC Core Node"></div>
+                </div>
+                <div class="orbit-halo ring-inner">
+                    <div class="orbit-satellite sat-4" title="Smart Contract State Channel"></div>
+                </div>
+                <div class="orbit-halo ring-tilted">
+                    <div class="orbit-satellite sat-6" title="Zero Knowledge Proof Node"></div>
+                </div>
 
-      <div class="form-group">
-        <label for="login-password" class="form-label">Пароль <span class="required-star">*</span></label>
-        <div class="input-wrapper">
-          <input type="password" id="login-password" class="form-input" placeholder="Введите пароль" required autocomplete="current-password">
-          <button type="button" class="input-suffix-btn btn-toggle-pwd" aria-label="Показать пароль">👁</button>
-        </div>
-      </div>
+                <!-- 3D Smart Contract Blockchain Cube (200px) -->
+                <div class="crystal-3d-cube" id="crystal3dCube">
+                    <!-- Internal Laser Coordinate Axes (X, Y, Z) -->
+                    <div class="cube-axis axis-x"></div>
+                    <div class="cube-axis axis-y"></div>
+                    <div class="cube-axis axis-z"></div>
 
-      <div class="form-options">
-        <label class="checkbox-label">
-          <input type="checkbox" id="login-remember">
-          <span>Запомнить сессию</span>
-        </label>
-        <button type="button" class="link-btn" id="link-forgot-password">Забыли пароль?</button>
-      </div>
+                    <!-- Glowing Quantum Core Nucleus -->
+                    <div class="quantum-core-nucleus"></div>
 
-      <button type="submit" class="btn-primary">
-        <span>Войти в личный кабинет</span>
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </button>
+                    <!-- 6 Pure Semi-Transparent Hologram Crystal Facets -->
+                    <div class="cube-facet facet-front">
+                        <div class="facet-mesh"></div>
+                        <span class="corner-dot c-tl"></span>
+                        <span class="corner-dot c-tr"></span>
+                        <span class="corner-dot c-bl"></span>
+                        <span class="corner-dot c-br"></span>
+                    </div>
+                    <div class="cube-facet facet-back">
+                        <div class="facet-mesh"></div>
+                        <span class="corner-dot c-tl"></span>
+                        <span class="corner-dot c-tr"></span>
+                        <span class="corner-dot c-bl"></span>
+                        <span class="corner-dot c-br"></span>
+                    </div>
+                    <div class="cube-facet facet-right">
+                        <div class="facet-mesh"></div>
+                        <span class="corner-dot c-tl"></span>
+                        <span class="corner-dot c-tr"></span>
+                        <span class="corner-dot c-bl"></span>
+                        <span class="corner-dot c-br"></span>
+                    </div>
+                    <div class="cube-facet facet-left">
+                        <div class="facet-mesh"></div>
+                        <span class="corner-dot c-tl"></span>
+                        <span class="corner-dot c-tr"></span>
+                        <span class="corner-dot c-bl"></span>
+                        <span class="corner-dot c-br"></span>
+                    </div>
+                    <div class="cube-facet facet-top">
+                        <div class="facet-mesh"></div>
+                        <span class="corner-dot c-tl"></span>
+                        <span class="corner-dot c-tr"></span>
+                        <span class="corner-dot c-bl"></span>
+                        <span class="corner-dot c-br"></span>
+                    </div>
+                    <div class="cube-facet facet-bottom">
+                        <div class="facet-mesh"></div>
+                        <span class="corner-dot c-tl"></span>
+                        <span class="corner-dot c-tr"></span>
+                        <span class="corner-dot c-bl"></span>
+                        <span class="corner-dot c-br"></span>
+                    </div>
+                </div>
 
-      <div style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted);">
-        Впервые на платформе? 
-        <button type="button" class="link-btn" id="link-to-register">Создать аккаунт</button>
-      </div>
-    </form>
-
-    <!-- ========================================== -->
-    <!-- ФОРМА 2: РЕГИСТРАЦИЯ (REGISTER)            -->
-    <!-- ========================================== -->
-    <form id="form-register" style="display: none;" novalidate>
-      <!-- 3-позиционный выбор субъекта -->
-      <div class="account-type-group">
-        <button type="button" class="account-type-btn active" id="type-individual">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-          <span>Физ. лицо</span>
-        </button>
-
-        <button type="button" class="account-type-btn" id="type-ip">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
-            <line x1="16" y1="13" x2="8" y2="13"/>
-            <line x1="16" y1="17" x2="8" y2="17"/>
-            <polyline points="10 9 9 9 8 9"/>
-          </svg>
-          <span>ИП</span>
-        </button>
-
-        <button type="button" class="account-type-btn" id="type-organization">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-          </svg>
-          <span>Юр. лицо</span>
-        </button>
-      </div>
-
-      <!-- 1. ПОЛЯ ДЛЯ ФИЗИЧЕСКОГО ЛИЦА -->
-      <div class="individual-only">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="reg-lastname" class="form-label">Фамилия <span class="required-star">*</span></label>
-            <input type="text" id="reg-lastname" class="form-input" placeholder="Иванов" required>
-          </div>
-          <div class="form-group">
-            <label for="reg-firstname" class="form-label">Имя <span class="required-star">*</span></label>
-            <input type="text" id="reg-firstname" class="form-input" placeholder="Александр" required>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="reg-middlename" class="form-label">Отчество <span style="font-weight: 400; color: var(--text-muted);">(при наличии)</span></label>
-          <input type="text" id="reg-middlename" class="form-input" placeholder="Сергеевич">
+                <!-- Ambient Floor Cryptographic Shadow -->
+                <div class="cube-ground-shadow"></div>
+            </div>
         </div>
 
-        <div class="form-group">
-          <label for="reg-phone" class="form-label">Номер телефона <span class="required-star">*</span></label>
-          <input type="tel" id="reg-phone" class="form-input" placeholder="+7 (999) 000-00-00" required>
+        <!-- Foreground Hero Content -->
+        <div class="hero-foreground-content">
+            <!-- Main Heading -->
+            <h1 class="hero-main-title">
+                <span class="hero-title-opt4-white">Здесь рождаются</span> <br>
+                <span class="hero-title-opt4-electric">российские</span> <br>
+                <span class="hero-title-opt4-emerald">смарт-контракты</span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="hero-description">
+                Место, где бизнес-задачи встречаются с разработчиками, экспертами и поставщиками данных и превращаются в новые решения на базе ПКСК <span class="text-nowrap">Банка&nbsp;России.</span>
+            </p>
+
+            <!-- Scroll Indicator to Task Actions Below -->
+            <a href="#actionScenariosHeading" class="hero-scroll-cue" aria-label="Перейти к выбору сценариев">
+                <span class="scroll-cue-text">Что вы хотите сделать?</span>
+                <span class="scroll-cue-arrow">↓</span>
+            </a>
         </div>
-      </div>
+    </section>
 
-      <!-- 2. ПОЛЯ ДЛЯ ИНДИВИДУАЛЬНОГО ПРЕДПРИНИМАТЕЛЯ (ИП) -->
-      <div class="ip-only" style="display: none;">
-        <div class="form-group">
-          <label for="reg-ip-inn" class="form-label">ИНН предпринимателя (12 цифр) <span class="required-star">*</span></label>
-          <div class="input-with-button">
-            <input type="text" id="reg-ip-inn" class="form-input" placeholder="771501061993" maxlength="12" autocomplete="off">
-            <button type="button" id="btn-fetch-egrip" class="btn-secondary" title="Заполнить реквизиты из ЕГРИП ФНС России">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="M21 21l-4.35-4.35"/>
-              </svg>
-              <span>Найти в ЕГРИП</span>
-            </button>
-          </div>
-          <div id="egrip-status" class="egrul-status-box" style="display: none;"></div>
+    <!-- ================================================================
+         1.2 СЕЛЕКТОР ЗАДАЧ ("Что вы хотите сделать?" / Дорожная карта)
+    ================================================================= -->
+    <section class="task-router-section" id="taskRouterSection">
+        <!-- ГОРИЗОНТАЛЬНАЯ ДОРОЖНАЯ КАРТА ПКСК БАНКА РОССИИ -->
+        <div class="pksc-horizontal-timeline-container" id="pkscTimeline">
+            <!-- Timeline Header Bar -->
+            <div class="timeline-header-bar">
+                <div class="timeline-header-left">
+                    <h3 class="timeline-main-title">Дорожная карта создания ПКСК Банка России</h3>
+                </div>
+                <div class="timeline-header-right">
+                    <span class="timeline-pulse-dot"></span>
+                    <span class="timeline-nir-badge">Фаза НИР ЦБ РФ (до 31.03.2027)</span>
+                </div>
+            </div>
+
+            <!-- Sleek Horizontal Track & Steps -->
+            <div class="pksc-timeline-track-wrapper">
+                <!-- Connecting Gradient Progress Line -->
+                <div class="pksc-connecting-line" aria-hidden="true">
+                    <div class="line-progress-fill">
+                        <span class="bar-laser-glow"></span>
+                    </div>
+                </div>
+
+                <div class="pksc-timeline-steps-grid">
+                    <!-- Step 1: Completed -->
+                    <div class="pksc-step-card step-status-completed">
+                        <div class="step-node-anchor">
+                            <div class="step-node-disc">
+                                <svg class="node-svg-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M16 5.5L7.75 13.75L4 10" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="step-card-body">
+                            <div class="step-card-meta">
+                                <span class="step-card-num">01</span>
+                                <span class="step-card-date">18 июня 2026</span>
+                                <span class="step-pill-badge pill-completed">Завершено</span>
+                            </div>
+                            <h4 class="step-card-title">Публикация Концепции</h4>
+                            <p class="step-card-desc">Опубликован доклад Банка России для общественных консультаций.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Active / Current Stage -->
+                    <div class="pksc-step-card step-status-active">
+                        <div class="step-node-anchor">
+                            <div class="step-node-disc active-node-pulse">
+                                <svg class="node-svg-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M11 2L3 11.5H9.5L9 18L17 8.5H10.5L11 2Z" stroke="#f59e0b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="step-card-body active-body-highlight">
+                            <div class="step-card-meta">
+                                <span class="step-card-num">02</span>
+                                <span class="step-card-date active-date">До 30 сентября 2026</span>
+                                <span class="step-pill-badge pill-active">Текущий этап</span>
+                            </div>
+                            <h4 class="step-card-title active-title">Сбор обратной связи</h4>
+                            <p class="step-card-desc">Прием предложений рынка, формирование сценариев и предложений.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Planned -->
+                    <div class="pksc-step-card step-status-planned">
+                        <div class="step-node-anchor">
+                            <div class="step-node-disc">
+                                <svg class="node-svg-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="4" y="4" width="12" height="12" rx="2" stroke="#38bdf8" stroke-width="1.8"></rect>
+                                    <path d="M7.5 2V4M12.5 2V4M7.5 16V18M12.5 16V18M2 7.5H4M2 12.5H4M16 7.5H18M16 12.5H18" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round"></path>
+                                    <circle cx="10" cy="10" r="1.5" fill="#38bdf8"></circle>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="step-card-body">
+                            <div class="step-card-meta">
+                                <span class="step-card-num">03</span>
+                                <span class="step-card-date">IV кв. 2026 – I кв. 2027</span>
+                                <span class="step-pill-badge pill-planned">Проектирование</span>
+                            </div>
+                            <h4 class="step-card-title">НИР &amp; Целевая модель</h4>
+                            <p class="step-card-desc">Научно-исследовательская работа, стандарты ИБ и прототип среды.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Future Rollout -->
+                    <div class="pksc-step-card step-status-future">
+                        <div class="step-node-anchor">
+                            <div class="step-node-disc">
+                                <svg class="node-svg-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10 2.5C6.96 2.5 4.5 4.96 4.5 8C4.5 12.125 10 17.5 10 17.5C10 17.5 15.5 12.125 15.5 8C15.5 4.96 13.04 2.5 10 2.5Z" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <circle cx="10" cy="8" r="2.2" stroke="#94a3b8" stroke-width="1.8"></circle>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="step-card-body">
+                            <div class="step-card-meta">
+                                <span class="step-card-num">04</span>
+                                <span class="step-card-date">С 31 марта 2027</span>
+                                <span class="step-pill-badge pill-future">Пилотный контур</span>
+                            </div>
+                            <h4 class="step-card-title">Проектирование пилота</h4>
+                            <p class="step-card-desc">Утверждение архитектуры и технической концепции пилота ПКСК.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="reg-ip-lastname" class="form-label">Фамилия ИП <span class="required-star">*</span></label>
-            <input type="text" id="reg-ip-lastname" class="form-input" placeholder="Заполняется из ЕГРИП" readonly>
-          </div>
-          <div class="form-group">
-            <label for="reg-ip-firstname" class="form-label">Имя ИП <span class="required-star">*</span></label>
-            <input type="text" id="reg-ip-firstname" class="form-input" placeholder="Заполняется из ЕГРИП" readonly>
-          </div>
+        <!-- ЗАГОЛОВОК СЦЕНАРИЕВ ("Что вы хотите сделать?") -->
+        <div class="section-heading-box" id="actionScenariosHeading">
+            <h2 class="section-title">Что вы хотите сделать?</h2>
+            <p class="section-subtitle">Выберите ключевой пользовательский сценарий для старта работы</p>
+        </div>
+    </section>
+
+    <!-- ====================================================================
+         1.2 ИНТЕРАКТИВНОЕ СОЗВЕЗДИЕ УСЛУГ (Hero Constellation Graph)
+    ==================================================================== -->
+    <section class="hero-constellation-section" id="heroConstellationSection" aria-label="Интерактивное созвездие услуг и сценариев платформы">
+        <!-- Constellation Interactive Graph Canvas & Centered Radial Nodes -->
+        <div class="constellation-container" id="constellationContainer">
+            <!-- Interactive Canvas for Volumetric Particle Flows -->
+            <canvas class="constellation-wave-canvas" id="constellationCanvas" aria-hidden="true" width="1462" height="675"></canvas>
+
+            <!-- 1.1 CENTRAL CORE NODE -->
+            <div class="constellation-core-node" id="constellationCore" tabindex="0" role="region" aria-label="SmartContractum">
+                <div class="core-aura-pulse"></div>
+                <div class="core-glass-body">
+                    <span class="core-brand-name">SmartContractum</span>
+                </div>
+            </div>
+
+            <!-- 1.2 SATELLITE NODES -->
+            <div class="constellation-radial-ring" id="constellationRing">
+                <!-- Node 1: Top-Left (Бизнес-задача -> Паспорт решения) -->
+                <a href="/auth.html" class="constellation-satellite-card node-pos-1 node-amber" id="nodeCardPassport" data-node-id="1" data-accent="#f59e0b">
+                    <div class="satellite-card-inner">
+                        <div class="satellite-header-centered">
+                            <span class="satellite-icon-inline glow-amber" aria-hidden="true">
+                                <svg class="sat-vector-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10 2a6 6 0 00-6 6c0 1.887.87 3.57 2.235 4.673A2.5 2.5 0 017 14.5v.5a1.5 1.5 0 001.5 1.5h3A1.5 1.5 0 0013 15v-.5a2.5 2.5 0 01.765-1.827C15.13 11.57 16 9.887 16 8a6 6 0 00-6-6zM8 18.5a.5.5 0 00.5.5h3a.5.5 0 00.5-.5V18H8v.5z"></path>
+                                </svg>
+                            </span>
+                            <h3 class="satellite-title">У меня есть бизнес-задача</h3>
+                        </div>
+                        <p class="satellite-desc">Нужен ли смарт-контракт, сценарий и паспорт решения.</p>
+                        <div class="satellite-footer-centered">
+                            <span class="satellite-badge badge-amber">Паспорт решения</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Node 2: Top-Right (Готовое решение -> Каталог решений) -->
+                <a href="/auth.html" class="constellation-satellite-card node-pos-2 node-cyan" id="nodeCardSolutions" data-node-id="2" data-accent="#38bdf8">
+                    <div class="satellite-card-inner">
+                        <div class="satellite-header-centered">
+                            <span class="satellite-icon-inline glow-cyan" aria-hidden="true">
+                                <svg class="sat-vector-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v2.5C2 7.99 3.01 9 4.25 9h11.5C16.99 9 18 7.99 18 6.75v-2.5A2.25 2.25 0 0015.75 2H4.25zM3.5 4.25a.75.75 0 01.75-.75h11.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75H4.25a.75.75 0 01-.75-.75v-2.5zM2 10.75A2.25 2.25 0 014.25 8.5h11.5A2.25 2.25 0 0118 10.75v5A2.25 2.25 0 0115.75 18H4.25A2.25 2.25 0 012 15.75v-5zm2.25-.75a.75.75 0 00-.75.75v5c0 .414.336.75.75.75h11.5a.75.75 0 00.75-.75v-5a.75.75 0 00-.75-.75H4.25z" clip-rule="evenodd"></path>
+                                </svg>
+                            </span>
+                            <h3 class="satellite-title">Ищу готовое решение</h3>
+                        </div>
+                        <p class="satellite-desc">Сценарии, типовые компоненты и готовые разработки.</p>
+                        <div class="satellite-footer-centered">
+                            <span class="satellite-badge badge-cyan">Каталог решений</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Node 3: Mid-Left (Специалист или услуга -> Modal Trigger) -->
+                <button type="button" class="constellation-satellite-card node-pos-3 satellite-btn node-violet" id="btnSpecialistModalTrigger" data-node-id="3" data-accent="#8b5cf6" aria-haspopup="dialog">
+                    <div class="satellite-card-inner">
+                        <div class="satellite-header-centered">
+                            <span class="satellite-icon-inline glow-violet" aria-hidden="true">
+                                <svg class="sat-vector-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd"></path>
+                                </svg>
+                            </span>
+                            <h3 class="satellite-title">Ищу специалиста или услугу</h3>
+                        </div>
+                        <p class="satellite-desc">Разработчики, эксперты, команды, аудиторы.</p>
+                        <div class="satellite-footer-centered">
+                            <span class="satellite-badge badge-violet">Подбор экспертов</span>
+                        </div>
+                    </div>
+                </button>
+
+                <!-- Node 4: Mid-Right (Вход для профи) -->
+                <a href="/auth.html" class="constellation-satellite-card node-pos-4 node-emerald" id="nodeCardProfile" data-node-id="4" data-accent="#10b981">
+                    <div class="satellite-card-inner">
+                        <div class="satellite-header-centered">
+                            <span class="satellite-icon-inline glow-emerald" aria-hidden="true">
+                                <svg class="sat-vector-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.068 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.83-4.401z" clip-rule="evenodd"></path>
+                                </svg>
+                            </span>
+                            <h3 class="satellite-title">Я специалист и хочу участвовать</h3>
+                        </div>
+                        <p class="satellite-desc">Проекты, рабочие группы, публикация разработок.</p>
+                        <div class="satellite-footer-centered">
+                            <span class="satellite-badge badge-emerald">Вход для профи</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Node 5: Bottom-Left (Данные и оракулы) -->
+                <a href="/auth.html" class="constellation-satellite-card node-pos-5 node-sky" id="nodeCardSources" data-node-id="5" data-accent="#0284c7">
+                    <div class="satellite-card-inner">
+                        <div class="satellite-header-centered">
+                            <span class="satellite-icon-inline glow-sky" aria-hidden="true">
+                                <svg class="sat-vector-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M2 3a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H3a1 1 0 01-1-1V3zm0 6a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H3a1 1 0 01-1-1V9zm0 6a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H3a1 1 0 01-1-1v-2z"></path>
+                                </svg>
+                            </span>
+                            <h3 class="satellite-title">Данные и оракулы</h3>
+                        </div>
+                        <p class="satellite-desc">Найти источник данных или предложить свои.</p>
+                        <div class="satellite-footer-centered">
+                            <span class="satellite-badge badge-sky">Маркетплейс данных</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Node 6: Bottom-Right (База знаний ПКСК) -->
+                <a href="/auth.html" class="constellation-satellite-card node-pos-6 node-gold" id="nodeCardKnowledge" data-node-id="6" data-accent="#ec4899">
+                    <div class="satellite-card-inner">
+                        <div class="satellite-header-centered">
+                            <span class="satellite-icon-inline glow-gold" aria-hidden="true">
+                                <svg class="sat-vector-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 017 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+                                </svg>
+                            </span>
+                            <h3 class="satellite-title">Хочу разобраться в ПКСК</h3>
+                        </div>
+                        <p class="satellite-desc">Знания, изменения, открытые вопросы и обучение.</p>
+                        <div class="satellite-footer-centered">
+                            <span class="satellite-badge badge-gold">База знаний</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         1.3 ВИДЖЕТ ЭКОСИСТЕМЫ И СТАТИСТИКИ
+    ================================================================= -->
+    <section class="stats-counter-section">
+        <div class="stats-panel-box">
+            <div class="stat-counter-card">
+                <span class="stat-number" id="statExpertsCount">142+</span>
+                <span class="stat-label">Зарегистрированных экспертов</span>
+            </div>
+            <div class="stat-divider"></div>
+
+            <div class="stat-counter-card">
+                <span class="stat-number" id="statPassportsCount">38</span>
+                <span class="stat-label">Разработанных Паспортов</span>
+            </div>
+            <div class="stat-divider"></div>
+
+            <div class="stat-counter-card">
+                <span class="stat-number" id="statSourcesCount">19</span>
+                <span class="stat-label">Доверенных источников данных (ГИС/ИС)</span>
+            </div>
+            <div class="stat-divider"></div>
+
+            <div class="stat-counter-card">
+                <span class="stat-number" id="statScenariosCount">15</span>
+                <span class="stat-label">Проверенных сценариев</span>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- ====================================================================
+     1.4 МОДАЛЬНОЕ ОКНО ПОДВЫБОРА РОЛЕЙ СПЕЦИАЛИСТОВ (Role Selector Modal)
+==================================================================== -->
+<div class="modal-overlay" id="specialistModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card specialist-modal-card">
+        <div class="modal-header">
+            <div class="modal-title-group">
+                <div class="modal-icon-box">
+                    <svg class="modal-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="modal-title">Кого или что вы ищете?</h3>
+                    <p class="modal-subtitle">Выберите категорию для быстрого перехода в каталог специалистов</p>
+                </div>
+            </div>
+            <button class="modal-close-btn" id="btnCloseSpecialistModal" aria-label="Закрыть окно подбора">✕</button>
         </div>
 
-        <div class="form-group">
-          <label for="reg-ip-middlename" class="form-label">Отчество ИП</label>
-          <input type="text" id="reg-ip-middlename" class="form-input" placeholder="Заполняется из ЕГРИП" readonly>
+        <div class="specialist-roles-grid">
+            <!-- Role 1: Разработчик -->
+            <a href="/auth.html" class="role-chip-card" data-role="developer">
+                <span class="role-chip-icon">
+                    <svg class="role-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </span>
+                <div class="role-chip-info">
+                    <strong class="role-chip-name">Разработчик</strong>
+                    <span class="role-chip-desc">Смарт-контракты, бэкенд, Web3</span>
+                </div>
+                <span class="role-chip-arrow">→</span>
+            </a>
+
+            <!-- Role 2: Команда -->
+            <a href="/auth.html" class="role-chip-card" data-role="team">
+                <span class="role-chip-icon">
+                    <svg class="role-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v1h8v-1zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 16v-1a4 4 0 00-2.2-3.563A6.002 6.002 0 0118 16h-2zM6.2 11.437A4.002 4.002 0 004 15v1H2v-1a4 4 0 014.2-3.563z"></path>
+                    </svg>
+                </span>
+                <div class="role-chip-info">
+                    <strong class="role-chip-name">Команда</strong>
+                    <span class="role-chip-desc">Комплексная заказная разработка</span>
+                </div>
+                <span class="role-chip-arrow">→</span>
+            </a>
+
+            <!-- Role 3: Аудит ИБ -->
+            <a href="/auth.html" class="role-chip-card" data-role="audit">
+                <span class="role-chip-icon">
+                    <svg class="role-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.268 4.66-1.597 8-6.043 8-11.268 0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z" clip-rule="evenodd"></path>
+                    </svg>
+                </span>
+                <div class="role-chip-info">
+                    <strong class="role-chip-name">Аудит ИБ</strong>
+                    <span class="role-chip-desc">Пред-аудит, SAST, верификация</span>
+                </div>
+                <span class="role-chip-arrow">→</span>
+            </a>
+
+            <!-- Role 4: Эксперт -->
+            <a href="/auth.html" class="role-chip-card" data-role="expert">
+                <span class="role-chip-icon">
+                    <svg class="role-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.068 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.83-4.401z" clip-rule="evenodd"></path>
+                    </svg>
+                </span>
+                <div class="role-chip-info">
+                    <strong class="role-chip-name">Эксперт</strong>
+                    <span class="role-chip-desc">Архитектура ПлЦР и комплаенс</span>
+                </div>
+                <span class="role-chip-arrow">→</span>
+            </a>
+
+            <!-- Role 5: Интегратор -->
+            <a href="/auth.html" class="role-chip-card" data-role="integrator">
+                <span class="role-chip-icon">
+                    <svg class="role-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"></path>
+                    </svg>
+                </span>
+                <div class="role-chip-info">
+                    <strong class="role-chip-name">Интегратор</strong>
+                    <span class="role-chip-desc">Шлюзы к АБС, ERP и контуру ПКСК</span>
+                </div>
+                <span class="role-chip-arrow">→</span>
+            </a>
+
+            <!-- Role 6: Консультант -->
+            <a href="/auth.html" class="role-chip-card" data-role="consultant">
+                <span class="role-chip-icon">
+                    <svg class="role-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                        <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z"></path>
+                    </svg>
+                </span>
+                <div class="role-chip-info">
+                    <strong class="role-chip-name">Консультант</strong>
+                    <span class="role-chip-desc">Бизнес-моделирование и право</span>
+                </div>
+                <span class="role-chip-arrow">→</span>
+            </a>
         </div>
+    </div>
+</div>
 
-        <div class="form-group">
-          <label for="reg-ip-ogrnip" class="form-label">ОГРНИП (15 цифр)</label>
-          <input type="text" id="reg-ip-ogrnip" class="form-input" placeholder="Заполняется автоматически по ИНН" maxlength="15" readonly>
+    </main>
+
+    <!-- 0.3 ПОДВАЛ СТРАНИЦЫ (Footer) -->
+    <footer class="app-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Col 1: О платформе и НИР -->
+                <div class="footer-col footer-col-brand">
+                    <div class="footer-logo">
+                        <span class="logo-smart">Smart</span><span class="logo-contractum">Contractum</span>
+                    </div>
+                    <p class="footer-desc">
+                        Единая независимая профессиональная среда для проектирования, верификации и подключения смарт-контрактов к ПКСК Банка России.
+                    </p>
+                    <div class="phase-indicator-badge">
+                        <span class="phase-dot"></span>
+                        <span class="phase-text">Фаза НИР ЦБ РФ (до 31.03.2027)</span>
+                    </div>
+                </div>
+
+                <!-- Col 2: Инструменты и сервисы -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Инструменты экосистемы</h4>
+                    <ul class="footer-links">
+                        <li><a href="/auth.html" class="footer-link">Личный кабинет специалиста</a></li>
+                        <li><a href="/auth.html" class="footer-link">Конструктор «Дерево решений»</a></li>
+                        <li><a href="/auth.html" class="footer-link">Паспорт смарт-контракта</a></li>
+                        <li><a href="/auth.html" class="footer-link">Реестр доверенных оракулов</a></li>
+                        <li><a href="/auth.html" class="footer-link">Лента сообщества &amp; Форум</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: База знаний и регуляторика -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Регуляторика &amp; Доки</h4>
+                    <ul class="footer-links">
+                        <li><a href="/auth.html" class="footer-link">Доклад ЦБ РФ по ПКСК</a></li>
+                        <li><a href="/auth.html" class="footer-link">Стандарты ИБ &amp; Аудита</a></li>
+                        <li><a href="/auth.html" class="footer-link">Регламенты оракулов</a></li>
+                        <li><a href="/auth.html" class="footer-link">Смарт-эскроу казначейства</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Umbrella Security & Контакты -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Umbrella-Security</h4>
+                    <div class="umbrella-badge-box">
+                        <div class="umbrella-icon-box">
+                            <svg class="umbrella-svg-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L3 6V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V6L12 2Z" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.8" stroke-linejoin="round"></path>
+                                <path d="M9 12L11 14L15 9" stroke="#16c784" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </div>
+                        <div class="umbrella-info">
+                            <span class="umbrella-title">Umbrella Trust Protocol</span>
+                            <span class="umbrella-sub">Верифицированная среда исполнения</span>
+                        </div>
+                    </div>
+                    <p class="footer-security-note">
+                        Сквозная криптографическая проверка кода смарт-контрактов по ГОСТ Р 34.12-2015.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Footer Bottom Bar -->
+            <div class="footer-bottom-bar">
+                <p class="copyright-text">
+                    © 2026 SmartContractum Umbrella-Dev Ecosystem. Все права защищены.
+                </p>
+                <div class="footer-bottom-links">
+                    <a href="/auth.html" class="footer-mini-link">Комьюнити</a>
+                    <a href="/auth.html" class="footer-mini-link">Политика конфиденциальности</a>
+                    <a href="/auth.html" class="footer-mini-link">Условия использования</a>
+                </div>
+            </div>
         </div>
+    </footer>
 
-        <div class="form-group">
-          <label for="reg-ip-phone" class="form-label">Контактный номер телефона <span class="required-star">*</span></label>
-          <input type="tel" id="reg-ip-phone" class="form-input" placeholder="+7 (999) 222-33-44">
-        </div>
-      </div>
+    <!-- Scripts -->
+    <script src="landing_main.js?v=2.1.0" defer></script>
+    <script src="hero.js?v=2.1.0" defer></script>
+    <script src="hero_constellation.js?v=2.1.0" defer></script>
 
-      <!-- 3. ПОЛЯ ДЛЯ ЮР. ЛИЦА / ОРГАНИЗАЦИИ -->
-      <div class="org-only" style="display: none;">
-        <div class="form-group">
-          <label for="reg-inn" class="form-label">ИНН организации (10 цифр) <span class="required-star">*</span></label>
-          <div class="input-with-button">
-            <input type="text" id="reg-inn" class="form-input" placeholder="7707083893" maxlength="10" autocomplete="off">
-            <button type="button" id="btn-fetch-egrul" class="btn-secondary" title="Заполнить реквизиты из ЕГРЮЛ ФНС России">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="M21 21l-4.35-4.35"/>
-              </svg>
-              <span>Найти в ЕГРЮЛ</span>
-            </button>
-          </div>
-          <div id="egrul-status" class="egrul-status-box" style="display: none;"></div>
-        </div>
+    <!-- Session & Navigation Sync -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const userBtn = document.getElementById('headerLoginBtn');
+        const userLabel = document.getElementById('headerUserLabel');
+        const userDot = document.getElementById('headerUserDot');
+        const token = localStorage.getItem('auth_token');
 
-        <div class="form-group">
-          <label for="reg-company" class="form-label">Полное наименование организации <span class="required-star">*</span></label>
-          <input type="text" id="reg-company" class="form-input" placeholder="Заполняется автоматически из ЕГРЮЛ" readonly>
-        </div>
-
-        <div class="form-group">
-          <label for="reg-short-name" class="form-label">Сокращенное (краткое) наименование</label>
-          <input type="text" id="reg-short-name" class="form-input" placeholder="Заполняется автоматически из ЕГРЮЛ" readonly>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="reg-ogrn" class="form-label">ОГРН (13 цифр)</label>
-            <input type="text" id="reg-ogrn" class="form-input" placeholder="Заполняется автоматически" maxlength="13" readonly>
-          </div>
-          <div class="form-group">
-            <label for="reg-kpp" class="form-label">КПП (9 цифр)</label>
-            <input type="text" id="reg-kpp" class="form-input" placeholder="Заполняется автоматически" maxlength="9" readonly>
-          </div>
-        </div>
-
-        <div class="sub-section-title">Данные представителя организации</div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="reg-org-lastname" class="form-label">Фамилия <span class="required-star">*</span></label>
-            <input type="text" id="reg-org-lastname" class="form-input" placeholder="Смирнов">
-          </div>
-          <div class="form-group">
-            <label for="reg-org-firstname" class="form-label">Имя <span class="required-star">*</span></label>
-            <input type="text" id="reg-org-firstname" class="form-input" placeholder="Дмитрий">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="reg-org-phone" class="form-label">Контактный номер телефона <span class="required-star">*</span></label>
-          <input type="tel" id="reg-org-phone" class="form-input" placeholder="+7 (999) 111-22-33">
-        </div>
-      </div>
-
-      <!-- 4. ОБЩИЕ ПОЛЯ: E-MAIL И ДВОЙНОЙ ВВОД ПАРОЛЯ -->
-      <div class="form-group">
-        <label for="reg-email" class="form-label">Адрес электронной почты (E-mail) <span class="required-star">*</span></label>
-        <input type="email" id="reg-email" class="form-input" placeholder="alexander@company.ru" required autocomplete="email">
-      </div>
-
-      <div class="form-group">
-        <label for="reg-password" class="form-label">Пароль учетной записи <span class="required-star">*</span></label>
-        <div class="input-wrapper">
-          <input type="password" id="reg-password" class="form-input" placeholder="Не менее 8 символов" required autocomplete="new-password">
-          <button type="button" class="input-suffix-btn btn-toggle-pwd" aria-label="Показать пароль">👁</button>
-        </div>
-        <div class="strength-meter">
-          <div class="strength-bar-track">
-            <div id="strength-fill" class="strength-bar-fill"></div>
-          </div>
-          <div class="strength-text">
-            <span id="strength-label">Сложность: —</span>
-            <span>Мин. 8 знаков, заглавная буква, цифра</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="reg-password-confirm" class="form-label">Повторите пароль <span class="required-star">*</span></label>
-        <div class="input-wrapper">
-          <input type="password" id="reg-password-confirm" class="form-input" placeholder="Введите пароль еще раз" required autocomplete="new-password">
-          <button type="button" class="input-suffix-btn btn-toggle-pwd" aria-label="Показать пароль">👁</button>
-        </div>
-        <div id="password-match-msg" class="password-match-status" style="display: none;"></div>
-      </div>
-
-      <div class="form-group">
-        <label for="reg-captcha-input" class="form-label">Защитный код (капча) <span class="required-star">*</span></label>
-        <div class="captcha-row">
-          <div class="captcha-card" title="Нажмите, чтобы обновить код">
-            <canvas id="reg-captcha-canvas" width="130" height="38" class="captcha-canvas"></canvas>
-            <button type="button" id="reg-captcha-refresh" class="captcha-btn-refresh" title="Сгенерировать другой код" aria-label="Обновить защитный код">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
-                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-              </svg>
-            </button>
-          </div>
-          <input type="text" id="reg-captcha-input" class="form-input captcha-input" placeholder="Код с картинки" maxlength="6" autocomplete="off" required>
-        </div>
-      </div>
-
-      <div class="form-options" style="margin-bottom: 20px;">
-        <label class="checkbox-label">
-          <input type="checkbox" id="reg-agreement" required>
-          <span>Я принимаю <a href="#" class="link-btn">Условия использования</a> и даю <a href="#" class="link-btn">Согласие на обработку персональных данных</a> (152-ФЗ) <span class="required-star">*</span></span>
-        </label>
-      </div>
-
-      <button type="submit" class="btn-primary" id="btn-submit-register">
-        <span>Зарегистрироваться на платформе</span>
-      </button>
-
-      <div style="text-align: center; margin-top: 18px; font-size: 13px; color: var(--text-muted);">
-        Уже зарегистрированы? 
-        <button type="button" class="link-btn" id="link-to-login">Войти в личный кабинет</button>
-      </div>
-    </form>
-
-    <!-- ========================================== -->
-    <!-- ФОРМА 3: ВОССТАНОВЛЕНИЕ ПАРОЛЯ             -->
-    <!-- ========================================== -->
-    <form id="form-forgot" style="display: none;" novalidate>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.5;">
-        Укажите адрес электронной почты (E-mail), привязанный к вашей учетной записи. Мы направим вам ссылку для безопасного восстановления доступа.
-      </p>
-
-      <div class="form-group">
-        <label for="forgot-email" class="form-label">Адрес электронной почты (E-mail) <span class="required-star">*</span></label>
-        <input type="email" id="forgot-email" class="form-input" placeholder="alexander@smartcontractum.ru" required>
-      </div>
-
-      <div class="form-group">
-        <label for="forgot-captcha-input" class="form-label">Защитный код (капча) <span class="required-star">*</span></label>
-        <div class="captcha-row">
-          <div class="captcha-card" title="Нажмите, чтобы обновить код">
-            <canvas id="forgot-captcha-canvas" width="130" height="38" class="captcha-canvas"></canvas>
-            <button type="button" id="forgot-captcha-refresh" class="captcha-btn-refresh" title="Сгенерировать другой код" aria-label="Обновить защитный код">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
-                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-              </svg>
-            </button>
-          </div>
-          <input type="text" id="forgot-captcha-input" class="form-input captcha-input" placeholder="Код с картинки" maxlength="6" autocomplete="off" required>
-        </div>
-      </div>
-
-      <button type="submit" class="btn-primary" style="margin-bottom: 16px;">
-        <span>Отправить ссылку для сброса пароля</span>
-      </button>
-
-      <div style="text-align: center;">
-        <button type="button" class="link-btn" id="link-back-to-login">← Вернуться к форме входа</button>
-      </div>
-    </form>
-
-    <!-- ========================================== -->
-    <!-- ФОРМА 4: ПОДТВЕРЖДЕНИЕ E-MAIL (VERIFY)     -->
-    <!-- ========================================== -->
-    <form id="form-verify-email" style="display: none;" novalidate>
-      <div class="verify-email-header">
-        <div class="verify-email-icon-box">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-            <polyline points="22,6 12,13 2,6"/>
-          </svg>
-        </div>
-        <p class="verify-email-desc">
-          Письмо с 6-значным проверочным кодом отправлено на:<br>
-          <strong id="verify-target-email" class="highlight-email">user@company.ru</strong>
-        </p>
-      </div>
-
-      <div class="form-group" style="text-align: center;">
-        <label for="email-code-input" class="form-label" style="text-align: center;">Код подтверждения из письма <span class="required-star">*</span></label>
-        <div class="input-wrapper" style="max-width: 240px; margin: 0 auto;">
-          <input type="text" id="email-code-input" class="form-input email-code-input" placeholder="000000" maxlength="6" autocomplete="one-time-code" required>
-        </div>
-      </div>
-
-      <div class="sms-meta-row" style="justify-content: center; margin-bottom: 22px;">
-        <span id="email-timer-text" class="sms-timer-text">Запросить код повторно через 60 сек.</span>
-        <button type="button" id="btn-resend-email" class="link-btn" style="display: none;">Отправить код повторно</button>
-      </div>
-
-      <button type="submit" class="btn-primary" id="btn-submit-verify-email">
-        <span>Подтвердить E-mail и завершить регистрацию</span>
-      </button>
-
-      <div style="text-align: center; margin-top: 18px;">
-        <button type="button" class="link-btn" id="link-back-to-register">← Изменить адрес E-mail</button>
-      </div>
-    </form>
-  </main>
-
-  <script src="app.js"></script>
+        if (token) {
+            if (userLabel) userLabel.textContent = 'Выйти';
+            if (userDot) {
+                userDot.style.display = 'block';
+                userDot.style.background = '#10b981';
+                userDot.style.boxShadow = '0 0 6px #10b981';
+            }
+            if (userBtn) {
+                userBtn.setAttribute('href', '#logout');
+                userBtn.setAttribute('title', 'Выйти из аккаунта');
+                userBtn.onclick = function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('auth_token');
+                    localStorage.removeItem('user_profile');
+                    localStorage.removeItem('user');
+                    window.location.reload();
+                };
+            }
+        } else {
+            if (userLabel) userLabel.textContent = 'Войти / Регистрация';
+            if (userDot) {
+                userDot.style.display = 'none';
+            }
+            if (userBtn) {
+                userBtn.setAttribute('href', '/auth.html');
+                userBtn.setAttribute('title', 'Войти в личный кабинет');
+                userBtn.onclick = null;
+            }
+        }
+    });
+    </script>
 </body>
 </html>

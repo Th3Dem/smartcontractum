@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SmartContractum — Профессиональная среда и база знаний вокруг ПКСК Банка России. Статьи, посты, кейсы, паспорта решений, рынок данных и голосования по стандартам.">
+    <meta name="keywords" content="ПКСК, Банк России, смарт-контракты, Цифровой рубль, оракулы, аудит ИБ, ГОСТ, Solidity, конструктор смарт-контрактов, биржа заказов">
+    <meta name="author" content="SmartContractum Ecosystem">
+
+    <!-- OpenGraph Metadata -->
+    <meta property="og:title" content="Лента сообщества & База знаний — SmartContractum">
+    <meta property="og:description" content="Профессиональная экосистема вокруг ПКСК Банка России: публикации, паспорта сценариев, голосования RFC и оракулы.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://smartcontractum.ru/feed">
+    <meta property="og:image" content="/static/img/og-cover.png">
+
+    <!-- Security Metadata -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="theme-color" content="#0b1426">
+
+    <title>Лента сообщества &amp; База знаний ПКСК — SmartContractum</title>
+
+    <!-- Google Fonts: Inter, Manrope, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets matching Main Landing Page -->
+    <link rel="stylesheet" href="landing_main.css?v=2.7.0">
+    <link rel="stylesheet" href="hero_constellation.css?v=2.7.0">
+    <link rel="stylesheet" href="forum_social.css?v=2.7.0">
+
+    <script>
+        (function() {
+            try {
+                var theme = localStorage.getItem('sc_theme') || 'dark';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch(e) {}
+        })();
+    </script>
+</head>
+<body class="app-body dark-theme-feed">
+
+    <!-- ================================================================
+         1. TOP STICKY HEADER (Exact Style & SVG from Landing)
+    ================================================================= -->
+    <header class="app-header" id="appHeader">
+        <div class="header-container">
+            <!-- Brand Logo -->
+            <a href="/" class="brand-logo" aria-label="SmartContractum Главная">
+                <div class="logo-icon-box" aria-hidden="true">
+                    <svg class="smart-contract-logo-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="scDocGradFeedUnified" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#38bdf8"></stop>
+                                <stop offset="0.5" stop-color="#6188ff"></stop>
+                                <stop offset="1" stop-color="#16c784"></stop>
+                            </linearGradient>
+                        </defs>
+                        <path d="M7 3.5h11.5l7.5 7.5v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5.5a2 2 0 0 1 2-2z" fill="rgba(56, 189, 248, 0.06)" stroke="url(#scDocGradFeedUnified)" stroke-width="1.8" stroke-linejoin="round"></path>
+                        <path d="M18.5 3.5v6a1.5 1.5 0 0 0 1.5 1.5h6" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <line x1="9.5" y1="12.5" x2="15.5" y2="12.5" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round"></line>
+                        <line x1="9.5" y1="17.5" x2="19.5" y2="17.5" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round"></line>
+                        <line x1="9.5" y1="22.5" x2="16.5" y2="22.5" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round"></line>
+                        <circle cx="23" cy="23" r="5" fill="#0b1426" stroke="#16c784" stroke-width="1.8"></circle>
+                        <path d="M21 23l1.5 1.5 3-3" stroke="#16c784" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-title"><span class="logo-smart">Smart</span><span class="logo-contractum">Contractum</span></span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="header-nav" id="headerNav" aria-label="Основная навигация">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link">
+                            <span class="nav-icon-box">
+                                <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Главная</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/feed" class="nav-link active">
+                            <span class="nav-icon-box">
+                                <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.25 1a.75.75 0 00-.75.75v.5c0 .414.336.75.75.75h9.5a.75.75 0 00.75-.75v-.5a.75.75 0 00-.75-.75h-9.5zm0 4a.75.75 0 000 1.5h9.5a.75.75 0 000-1.5h-9.5zm0 3.5a.75.75 0 000 1.5h5.5a.75.75 0 000-1.5h-5.5z" clip-rule="evenodd"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Лента</span>
+                            <span class="nav-badge-live">LIVE</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/editor" class="nav-link">
+                            <span class="nav-icon-box">
+                                <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Редактор</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Header Right Group: Theme Switcher + Auth -->
+            <div class="header-right-group">
+                <!-- Theme Toggle Button (Dark / Light) -->
+                <button type="button" class="btn-theme-toggle" id="btnThemeToggle" title="Переключить тему оформления" aria-label="Переключить тему оформления">
+                    <span class="theme-icon-box" aria-hidden="true">
+                        <svg class="theme-icon-sun" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                        </svg>
+                        <svg class="theme-icon-moon" viewBox="0 0 20 20" fill="currentColor" style="display: none;">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </span>
+                    <span class="theme-toggle-text" id="themeToggleText">Тема</span>
+                </button>
+
+                <!-- User Login / Profile Action Button (Header Session State) -->
+                <div class="header-user-bar">
+                    <a href="/auth.html" class="header-login-action-btn" id="headerLoginBtn" title="Войти в личный кабинет">
+                        <div class="btn-user-avatar-wrap" aria-hidden="true">
+                            <svg class="btn-user-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="btn-user-status-dot" id="headerUserDot" title="Верифицирован в ПКСК" style="display: none;"></span>
+                        </div>
+                        <span class="btn-user-label" id="headerUserLabel">Войти / Регистрация</span>
+                        <svg class="btn-user-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z" clip-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================================================================
+         2. COMMUNITY HERO BANNER (With Cosmic Particle Canvas)
+    ================================================================= -->
+    <section class="feed-hero-strip" id="feedHeroStrip">
+        <!-- Interactive Particle Canvas Background -->
+        <canvas id="feedCosmicCanvas" class="feed-cosmic-canvas" width="1400" height="200" aria-hidden="true"></canvas>
+
+        <div class="feed-hero-container">
+            <!-- Top Row: Brand Title -->
+            <div class="feed-hero-brand-row">
+                <div class="feed-community-brand-wrap">
+                    <div class="brand-logo-icon-box" aria-hidden="true">
+                        <svg class="smart-contract-logo-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="scDocGradHero" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#38bdf8"></stop>
+                                    <stop offset="0.5" stop-color="#6188ff"></stop>
+                                    <stop offset="1" stop-color="#16c784"></stop>
+                                </linearGradient>
+                            </defs>
+                            <path d="M7 3.5h11.5l7.5 7.5v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5.5a2 2 0 0 1 2-2z" fill="rgba(56, 189, 248, 0.06)" stroke="url(#scDocGradHero)" stroke-width="1.8" stroke-linejoin="round"></path>
+                            <path d="M18.5 3.5v6a1.5 1.5 0 0 0 1.5 1.5h6" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <line x1="9.5" y1="12.5" x2="15.5" y2="12.5" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round"></line>
+                            <line x1="9.5" y1="17.5" x2="19.5" y2="17.5" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round"></line>
+                            <line x1="9.5" y1="22.5" x2="16.5" y2="22.5" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round"></line>
+                            <circle cx="23" cy="23" r="5" fill="#0b1426" stroke="#16c784" stroke-width="1.8"></circle>
+                            <path d="M21 23l1.5 1.5 3-3" stroke="#16c784" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </div>
+                    <h1 class="feed-community-brand-title">
+                        <span class="feed-community-title-text">Сообщество</span> <span class="logo-smart">Smart</span><span class="logo-contractum">Contractum</span>
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Bottom Row: Navigation & Filtering Menu Bar + Write Button & Search -->
+            <div class="feed-hero-nav-bar">
+                <div class="feed-hero-nav-tabs" role="tablist" aria-label="Разделы ленты сообщества">
+                    <!-- 1. Primary Action: Write / Create Post (Leftmost) -->
+                    <button type="button" class="btn-hero-write" id="btnHeroWrite" title="Опубликовать статью, пост или опрос">
+                        <svg class="btn-write-svg" viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                        </svg>
+                        <span>Написать</span>
+                    </button>
+
+                    <!-- 2. Content Type & Entity Tabs -->
+                    <button type="button" class="feed-hero-tab is-active" data-hero-tab="all" role="tab" aria-selected="true">
+                        <span>Все</span>
+                    </button>
+                    <button type="button" class="feed-hero-tab" data-hero-tab="article" role="tab" aria-selected="false">
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>Статьи</span>
+                    </button>
+                    <button type="button" class="feed-hero-tab" data-hero-tab="post" role="tab" aria-selected="false">
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                            <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>Посты</span>
+                    </button>
+                    <button type="button" class="feed-hero-tab" data-hero-tab="news" role="tab" aria-selected="false">
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                            <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd"></path>
+                            <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V7z"></path>
+                        </svg>
+                        <span>Новости</span>
+                    </button>
+                    <div class="feed-nav-sep" aria-hidden="true"></div>
+                    <button type="button" class="feed-hero-tab" data-hero-tab="authors" role="tab" aria-selected="false">
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
+                        </svg>
+                        <span>Авторы</span>
+                    </button>
+                    <button type="button" class="feed-hero-tab" data-hero-tab="companies" role="tab" aria-selected="false">
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h2v2H7V5zm4 0h2v2h-2V5zm-4 4h2v2H7V9zm4 0h2v2h-2V9zm-4 4h2v2H7v-2zm4 0h2v2h-2v-2z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>Компании</span>
+                    </button>
+
+                    <!-- 3. Search Box on the Right of Companies -->
+                    <div class="feed-hero-search-box" id="feedHeroSearchBox">
+                        <svg class="hero-search-svg-icon" viewBox="0 0 20 20" fill="currentColor" width="15" height="15" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+                        </svg>
+                        <input type="text" id="feedHeroSearchInput" placeholder="Поиск по ленте..." aria-label="Поиск по ленте сообщества">
+                        <button type="button" id="btnClearHeroSearch" class="btn-clear-hero-search" title="Очистить поиск" style="display: none;">✕</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sub Row: Topics Dropdown & Quick Filter Bar -->
+            <div class="feed-hero-topics-row">
+                <div class="feed-topics-dropdown-wrap" id="feedTopicsDropdownWrap">
+                    <button type="button" class="btn-feed-topics" id="btnFeedTopicsDropdown" aria-haspopup="true" aria-expanded="false">
+                        <svg class="topics-svg-icon" viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                            <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="topics-btn-text">Темы</span>
+                        <span class="topics-active-badge" id="currentTopicLabel">Все темы</span>
+                        <span class="topics-arrow">▼</span>
+                    </button>
+                    <div class="feed-topics-menu" id="feedTopicsMenu" style="display: none;">
+                        <div class="topic-menu-item is-active" data-cat="all">
+                            <div class="topic-item-icon-box glow-cyan" aria-hidden="true">
+                                <svg class="topic-svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="topic-item-content">
+                                <span class="topic-item-title">Все темы</span>
+                                <span class="topic-item-sub">Полный поток компетенций</span>
+                            </div>
+                        </div>
+                        <div class="topic-menu-item" data-cat="smart-contracts">
+                            <div class="topic-item-icon-box glow-blue" aria-hidden="true">
+                                <svg class="topic-svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="topic-item-content">
+                                <span class="topic-item-title">Разработка смарт-контрактов &amp; EVM/Yul</span>
+                                <span class="topic-item-sub">Архитектура, шаблоны, компиляция</span>
+                            </div>
+                        </div>
+                        <div class="topic-menu-item" data-cat="security">
+                            <div class="topic-item-icon-box glow-emerald" aria-hidden="true">
+                                <svg class="topic-svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="topic-item-content">
+                                <span class="topic-item-title">Информационная безопасность, аудит &amp; ГОСТ</span>
+                                <span class="topic-item-sub">Защита, криптография, верификация</span>
+                            </div>
+                        </div>
+                        <div class="topic-menu-item" data-cat="oracles">
+                            <div class="topic-item-icon-box glow-sky" aria-hidden="true">
+                                <svg class="topic-svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v.183a2 2 0 01-.44 1.258l-.678.814a6.002 6.002 0 01-7.466-7.226z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="topic-item-content">
+                                <span class="topic-item-title">Рынок внешних данных &amp; Реестр оракулов</span>
+                                <span class="topic-item-sub">Шлюзы поставщиков, ZK-доказательства</span>
+                            </div>
+                        </div>
+                        <div class="topic-menu-item" data-cat="cbrf-law">
+                            <div class="topic-item-icon-box glow-amber" aria-hidden="true">
+                                <svg class="topic-svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10.496 2.132a1 1 0 00-.992 0l-7 4A1 1 0 003 7v1a1 1 0 001 1h12a1 1 0 001-1V7a1 1 0 00-.504-.868l-7-4zM4 11a1 1 0 100 2h1v3H4a1 1 0 100 2h12a1 1 0 100-2h-1v-3h1a1 1 0 100-2H4zm4 5v-3h4v3H8z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="topic-item-content">
+                                <span class="topic-item-title">Регуляторика, ЦБ РФ &amp; Цифровой рубль</span>
+                                <span class="topic-item-sub">Правовые рамки, стандарты НИР ПКСК</span>
+                            </div>
+                        </div>
+                        <div class="topic-menu-item" data-cat="escrow-b2b">
+                            <div class="topic-item-icon-box glow-violet" aria-hidden="true">
+                                <svg class="topic-svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                    <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z"></path>
+                                </svg>
+                            </div>
+                            <div class="topic-item-content">
+                                <span class="topic-item-title">Смарт-эскроу &amp; 1C:Предприятие</span>
+                                <span class="topic-item-sub">B2B расчеты, ERP интеграции</span>
+                            </div>
+                        </div>
+                        <div class="topic-menu-item" data-cat="marketplace-jobs">
+                            <div class="topic-item-icon-box glow-gold" aria-hidden="true">
+                                <svg class="topic-svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
+                                </svg>
+                            </div>
+                            <div class="topic-item-content">
+                                <span class="topic-item-title">Биржа заказов &amp; Проектные команды</span>
+                                <span class="topic-item-sub">Заказы, хакатоны, гранты ЦБ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================
+         3. MAIN LAYOUT GRID (Left: Feed + Creator, Right: Ecosystem Sidebar)
+    ================================================================= -->
+    <div class="feed-main-container">
+        <div class="feed-layout-grid">
+
+            <!-- MAIN FEED COLUMN -->
+            <main class="feed-content-stream">
+
+                <!-- 3.1 ACTIVE POSTS STREAM -->
+                <div class="feed-posts-stream" id="feedPostsStream">
+
+                    <!-- ============================================================
+                         POST 101: RFC STANDARDS POLL (Банк России / Этап 1)
+                    ============================================================= -->
+                    <article class="feed-card post-poll-card" id="post-101" data-post-id="101" data-type="poll" data-cat="cbrf-law">
+                        <div class="feed-card-header">
+                            <div class="author-block">
+                                <div class="author-avatar avatar-cbrf">ЦБ</div>
+                                <div class="author-info">
+                                    <div class="author-line">
+                                        <span class="author-name">Рабочая группа ПКСК Банка России</span>
+                                        <span class="shield-badge" title="Официальная рабочая группа НИР ЦБ РФ">🏛️ Общественные консультации</span>
+                                    </div>
+                                    <div class="author-role-sub">Архитектурный совет НИР ПКСК · 2 часа назад</div>
+                                </div>
+                            </div>
+                            <div class="post-badges">
+                                <span class="step-pill-badge pill-active">📊 Голосование RFC</span>
+                                <span class="badge-status-live">● Идет голосование</span>
+                            </div>
+                        </div>
+
+                        <h2 class="post-title">
+                            RFC-04: Модель интеграции доверенных оракулов и поставщиков внешних данных в контур ПКСК
+                        </h2>
+
+                        <p class="post-snippet">
+                            В рамках этапа НИР до 31.03.2027 Банк России собирает экспертные предложения по архитектуре доверенных оракулов. Проголосуйте за приоритетный способ поставки данных из внешних государственных и коммерческих ИС (ЕГРЮЛ, Росреестр, ГИС ЕИС Закупки, АБС банков):
+                        </p>
+
+                        <!-- Interactive Poll Box -->
+                        <div class="interactive-poll-box" data-poll-id="poll-101" data-total-votes="348">
+                            <div class="poll-option-row" data-opt-id="1">
+                                <button type="button" class="poll-option-btn">
+                                    <div class="poll-opt-progress" style="width: 58%;"></div>
+                                    <div class="poll-opt-content">
+                                        <span class="opt-check">◯</span>
+                                        <span class="opt-text">Децентрализованная сеть оракулов с ZK-доказательствами целостности</span>
+                                        <span class="opt-percent">58%</span>
+                                    </div>
+                                </button>
+                                <span class="opt-votes-count">202 голоса</span>
+                            </div>
+
+                            <div class="poll-option-row" data-opt-id="2">
+                                <button type="button" class="poll-option-btn">
+                                    <div class="poll-opt-progress" style="width: 29%;"></div>
+                                    <div class="poll-opt-content">
+                                        <span class="opt-check">◯</span>
+                                        <span class="opt-text">Прямые доверенные TLS-шлюзы к государственным ИС (ЕГРЮЛ, Росреестр, ГИС)</span>
+                                        <span class="opt-percent">29%</span>
+                                    </div>
+                                </button>
+                                <span class="opt-votes-count">101 голос</span>
+                            </div>
+
+                            <div class="poll-option-row" data-opt-id="3">
+                                <button type="button" class="poll-option-btn">
+                                    <div class="poll-opt-progress" style="width: 13%;"></div>
+                                    <div class="poll-opt-content">
+                                        <span class="opt-check">◯</span>
+                                        <span class="opt-text">Гибридная модель с мультисигнатурой аккредитованных операторов узлов</span>
+                                        <span class="opt-percent">13%</span>
+                                    </div>
+                                </button>
+                                <span class="opt-votes-count">45 голосов</span>
+                            </div>
+
+                            <div class="poll-footer-meta">
+                                <span>👥 <strong>348</strong> экспертов проголосовало</span>
+                                <span>⏳ До окончания: <strong>3 дня 14 часов</strong></span>
+                            </div>
+                        </div>
+
+                        <div class="post-tags-row">
+                            <span class="tag-pill">#пкск-цб-рф</span>
+                            <span class="tag-pill">#оракулы</span>
+                            <span class="tag-pill">#стандарты-гост</span>
+                            <span class="tag-pill">#цифровой-рубль</span>
+                        </div>
+
+                        <!-- Card Interaction Footer -->
+                        <div class="feed-card-footer">
+                            <div class="footer-actions-left">
+                                <div class="karma-lever" data-post-id="101">
+                                    <button type="button" class="karma-btn upvote" title="Поддержать">▲</button>
+                                    <span class="karma-val text-emerald">+128</span>
+                                    <button type="button" class="karma-btn downvote" title="Против">▼</button>
+                                </div>
+                                <button type="button" class="btn-thread-toggle" data-target-thread="thread-101">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+                                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>42 комментария</span>
+                                </button>
+                                <div class="stat-views-badge">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" style="vertical-align: middle; margin-right: 2px;">
+                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>3.4k</span>
+                                </div>
+                            </div>
+                            <div class="footer-actions-right">
+                                <div class="reaction-bar">
+                                    <button type="button" class="btn-react" data-emoji="🔥">🔥 <span class="react-cnt">48</span></button>
+                                    <button type="button" class="btn-react" data-emoji="🚀">🚀 <span class="react-cnt">31</span></button>
+                                    <button type="button" class="btn-react" data-emoji="💡">💡 <span class="react-cnt">64</span></button>
+                                </div>
+                                <button type="button" class="btn-action-icon btn-bookmark-post" title="В закладки">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                                        <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path>
+                                    </svg>
+                                </button>
+                                <button type="button" class="btn-action-icon btn-share-post" title="Поделиться">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Expandable Comments Thread -->
+                        <div class="comments-thread-panel" id="thread-101" style="display: none;">
+                            <div class="thread-inner">
+                                <h4 class="thread-heading">Обсуждение стандарта экспертным советом (42)</h4>
+                                <div class="comments-list">
+                                    <div class="comment-bubble">
+                                        <div class="comment-head">
+                                            <div class="comment-author-avatar avatar-blue">ЕК</div>
+                                            <strong>Елена Крылова</strong>
+                                            <span class="comment-role">Lead Web3 Architect</span>
+                                            <span class="comment-time">1 час назад</span>
+                                        </div>
+                                        <div class="comment-body">
+                                            Считаю, что вариант 1 с ZK-доказательствами единственный способ гарантировать отсутствие подмены данных при валидации закрытых строительных актов КС-2 без раскрытия чувствительных сведений.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="add-comment-box">
+                                    <input type="text" class="input-comment-text" placeholder="Напишите экспертное мнение или аргумент..." aria-label="Ваш комментарий">
+                                    <button type="button" class="btn-send-comment">Отправить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- ============================================================
+                         POST 102: DEEP TECHNICAL ARTICLE WITH SOLIDITY & GOST
+                    ============================================================= -->
+                    <article class="feed-card post-article-card" id="post-102" data-post-id="102" data-type="article" data-cat="smart-contracts">
+                        <div class="feed-card-header">
+                            <div class="author-block">
+                                <div class="author-avatar avatar-blue">ЕК</div>
+                                <div class="author-info">
+                                    <div class="author-line">
+                                        <span class="author-name">Елена Крылова</span>
+                                        <span class="shield-badge badge-verified" title="Верифицированный разработчик ПКСК">✓ Верифицирован</span>
+                                    </div>
+                                    <div class="author-role-sub">Lead Web3 Architect @ SmartContractum Labs · Рейтинг: +1 420 (Разработка)</div>
+                                </div>
+                            </div>
+                            <div class="post-badges">
+                                <span class="step-pill-badge pill-planned">📄 Архитектура</span>
+                                <span class="badge-diff-hard">● Сложный</span>
+                                <span class="badge-time">⏱️ 8 мин</span>
+                            </div>
+                        </div>
+
+                        <h2 class="post-title">
+                            <a href="#post-102" class="post-title-link" data-action="toggle-full-article">Архитектура децентрализованных оракулов для строительных контрактов: связка КС-2/КС-3 с ончейн-эскроу</a>
+                        </h2>
+
+                        <p class="post-snippet">
+                            Практическое руководство по сквозной автоматизации строительных взаиморасчетов. Разбор криптографической аттестации геодезических отметок, интеграции с ГИС ЕИС Закупки и прекомпилов ГОСТ Р 34.10-2012 в EVM.
+                        </p>
+
+                        <!-- Code Block with Copy and Gas Estimate -->
+                        <div class="smart-contract-code-widget">
+                            <div class="code-widget-header">
+                                <div class="code-info-left">
+                                    <span class="code-badge-lang">&lt;/&gt; SOLIDITY 0.8.26 + ГОСТ Р 34.10</span>
+                                    <span class="code-gas-badge">⛽ Gas Overhead: ~42.5k</span>
+                                </div>
+                                <button type="button" class="btn-copy-code-snippet" title="Скопировать код в буфер">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13" style="vertical-align:middle; margin-right: 2px;">
+                                        <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path>
+                                        <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 2H9a3 3 0 01-3-2z"></path>
+                                    </svg>
+                                    <span>Скопировать</span>
+                                </button>
+                            </div>
+                            <pre class="code-pre-box"><code class="code-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.26;
+
+interface IConstructionOracle {
+    function verifyMilestone(bytes32 projectId, uint256 milestoneId, bytes calldata proof) external view returns (bool);
+}
+
+contract EscrowMilestonePayment {
+    IConstructionOracle public immutable oracle;
+    address public immutable treasury;
+
+    event MilestonePaid(bytes32 indexed projectId, uint256 milestoneId, uint256 amount);
+
+    constructor(address _oracle, address _treasury) {
+        oracle = IConstructionOracle(_oracle);
+        treasury = _treasury;
+    }
+
+    function releaseMilestone(bytes32 projectId, uint256 milestoneId, uint256 amount, bytes calldata proof) external {
+        require(oracle.verifyMilestone(projectId, milestoneId, proof), "Oracle: Proof invalid");
+        emit MilestonePaid(projectId, milestoneId, amount);
+    }
+}</code></pre>
+                        </div>
+
+                        <!-- Expandable Body -->
+                        <div class="full-article-body" id="full-102" style="display: none;">
+                            <div class="article-rich-text">
+                                <h3>1. Ключевые требования к оракулам в стройке</h3>
+                                <p>В строительных цепочках поставок ключевой риск — это несвоевременная оплата выполненных этапов либо подделка бумажных актов КС-2/КС-3. Смарт-контракт эскроу гарантирует, что средства списываются автоматически, как только электронный акт подписывается УКЭП технического заказчика в ГИС ЕИС Закупки.</p>
+                                <h3>2. Бенчмарки газа при верификации подписей ГОСТ</h3>
+                                <p>Использование прекомпилов ГОСТ Р 34.10-2012 снижает стоимость валидации подписи до 18,200 gas по сравнению с программной реализацией на чистом EVM.</p>
+                            </div>
+                        </div>
+
+                        <div class="read-more-bar">
+                            <button type="button" class="btn-read-more" data-action="toggle-full-article" data-target="full-102">
+                                <span class="read-more-label">Читать статью полностью</span>
+                                <span class="read-more-arrow">↓</span>
+                            </button>
+                        </div>
+
+                        <div class="post-tags-row">
+                            <span class="tag-pill">#oracles</span>
+                            <span class="tag-pill">#construction</span>
+                            <span class="tag-pill">#solidity</span>
+                            <span class="tag-pill">#escrow</span>
+                            <span class="tag-pill">#гис-еис</span>
+                        </div>
+
+                        <!-- Card Interaction Footer -->
+                        <div class="feed-card-footer">
+                            <div class="footer-actions-left">
+                                <div class="karma-lever" data-post-id="102">
+                                    <button type="button" class="karma-btn upvote">▲</button>
+                                    <span class="karma-val text-emerald">+94</span>
+                                    <button type="button" class="karma-btn downvote">▼</button>
+                                </div>
+                                <button type="button" class="btn-thread-toggle" data-target-thread="thread-102">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+                                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>19 комментариев</span>
+                                </button>
+                                <div class="stat-views-badge">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" style="vertical-align: middle; margin-right: 2px;">
+                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>2.8k</span>
+                                </div>
+                            </div>
+                            <div class="footer-actions-right">
+                                <div class="reaction-bar">
+                                    <button type="button" class="btn-react" data-emoji="🔥">🔥 <span class="react-cnt">52</span></button>
+                                    <button type="button" class="btn-react" data-emoji="👏">👏 <span class="react-cnt">27</span></button>
+                                </div>
+                                <button type="button" class="btn-action-icon btn-bookmark-post" title="В закладки">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                                        <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path>
+                                    </svg>
+                                </button>
+                                <button type="button" class="btn-action-icon btn-share-post" title="Поделиться">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Thread for Post 102 -->
+                        <div class="comments-thread-panel" id="thread-102" style="display: none;">
+                            <div class="thread-inner">
+                                <h4 class="thread-heading">Комментарии к статье (19)</h4>
+                                <div class="comments-list">
+                                    <div class="comment-bubble">
+                                        <div class="comment-head">
+                                            <div class="comment-author-avatar avatar-green">МС</div>
+                                            <strong>Михаил Соколов</strong>
+                                            <span class="comment-role">Security Auditor</span>
+                                            <span class="comment-time">3 дня назад</span>
+                                        </div>
+                                        <div class="comment-body">
+                                            Отличная схема! Рекомендую также предусмотреть проверку таймаута на случай временной недоступности шлюза к ГИС ЕИС Закупки (circuit breaker).
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="add-comment-box">
+                                    <input type="text" class="input-comment-text" placeholder="Оставить комментарий..." aria-label="Ваш комментарий">
+                                    <button type="button" class="btn-send-comment">Отправить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- ============================================================
+                         POST 103: INDUSTRY CASE / DECISION TREE PASSPORT (Этап 2)
+                    ============================================================= -->
+                    <article class="feed-card post-case-card" id="post-103" data-post-id="103" data-type="case" data-cat="escrow-b2b">
+                        <div class="feed-card-header">
+                            <div class="author-block">
+                                <div class="author-avatar avatar-purple">АС</div>
+                                <div class="author-info">
+                                    <div class="author-line">
+                                        <span class="author-name">Алексей Смирнов</span>
+                                        <span class="shield-badge badge-verified">✓ Интегратор 1С</span>
+                                    </div>
+                                    <div class="author-role-sub">Enterprise FinTech Integrator · Рейтинг: +860 (Интеграция 1С/ERP)</div>
+                                </div>
+                            </div>
+                            <div class="post-badges">
+                                <span class="step-pill-badge pill-completed">💼 Кейс / Паспорт</span>
+                                <span class="badge-solved">✓ Готово к внедрению</span>
+                            </div>
+                        </div>
+
+                        <h2 class="post-title">
+                            Паспорт решения: B2B смарт-эскроу взаиморасчеты для оптовых поставок металлопроката через 1С:ERP и Цифровой рубль
+                        </h2>
+
+                        <p class="post-snippet">
+                            Разбор реального кейса автоматизации казначейских платежей. Архитектура: логика IF-THEN в конструкторе «Дерево решений», генерация паспорта сценария, шлюз к 1С:ERP и триггеры списания через электронные накладные УПД.
+                        </p>
+
+                        <!-- Solution Passport Highlights Box -->
+                        <div class="passport-summary-box">
+                            <div class="passport-grid">
+                                <div class="pass-col">
+                                    <span class="pass-lbl">Бизнес-задача</span>
+                                    <strong class="pass-val">Безопасная постоплата партий проката с факторингом</strong>
+                                </div>
+                                <div class="pass-col">
+                                    <span class="pass-lbl">Требуемые данные</span>
+                                    <strong class="pass-val">УПД с УКЭП в Диадок / 1С-ЭДО + статус РЖД</strong>
+                                </div>
+                                <div class="pass-col">
+                                    <span class="pass-lbl">Экономия времени</span>
+                                    <strong class="pass-val text-emerald">С 14 дней до 30 секунд</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="post-tags-row">
+                            <span class="tag-pill">#1c-erp</span>
+                            <span class="tag-pill">#смарт-эскроу</span>
+                            <span class="tag-pill">#паспорт-сценария</span>
+                            <span class="tag-pill">#b2b-расчеты</span>
+                            <span class="tag-pill">#цифровой-рубль</span>
+                        </div>
+
+                        <!-- Card Interaction Footer -->
+                        <div class="feed-card-footer">
+                            <div class="footer-actions-left">
+                                <div class="karma-lever" data-post-id="103">
+                                    <button type="button" class="karma-btn upvote">▲</button>
+                                    <span class="karma-val text-emerald">+112</span>
+                                    <button type="button" class="karma-btn downvote">▼</button>
+                                </div>
+                                <button type="button" class="btn-thread-toggle" data-target-thread="thread-103">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+                                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>16 комментариев</span>
+                                </button>
+                                <div class="stat-views-badge">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" style="vertical-align: middle; margin-right: 2px;">
+                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>3.1k</span>
+                                </div>
+                            </div>
+                            <div class="footer-actions-right">
+                                <div class="reaction-bar">
+                                    <button type="button" class="btn-react" data-emoji="💡">💡 <span class="react-cnt">63</span></button>
+                                    <button type="button" class="btn-react" data-emoji="🚀">🚀 <span class="react-cnt">41</span></button>
+                                </div>
+                                <button type="button" class="btn-action-icon btn-bookmark-post" title="В закладки">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                                        <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path>
+                                    </svg>
+                                </button>
+                                <button type="button" class="btn-action-icon btn-share-post" title="Поделиться">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Thread for Post 103 -->
+                        <div class="comments-thread-panel" id="thread-103" style="display: none;">
+                            <div class="thread-inner">
+                                <h4 class="thread-heading">Обсуждение кейса (16)</h4>
+                                <div class="comments-list">
+                                    <div class="comment-bubble">
+                                        <div class="comment-head">
+                                            <div class="comment-author-avatar avatar-purple">ДВ</div>
+                                            <strong>Дарья Воронова</strong>
+                                            <span class="comment-role">Legal &amp; Compliance</span>
+                                            <span class="comment-time">18 августа</span>
+                                        </div>
+                                        <div class="comment-body">
+                                            С точки зрения ст. 309.2 ГК РФ и правил платформы цифрового рубля такая схема полностью легитимна и исключает кассовые разрывы поставщика.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="add-comment-box">
+                                    <input type="text" class="input-comment-text" placeholder="Задать вопрос автору кейса..." aria-label="Ваш вопрос">
+                                    <button type="button" class="btn-send-comment">Отправить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- ============================================================
+                         POST 104: Q&A QUESTION WITH BOUNTY REWARD
+                    ============================================================= -->
+                    <article class="feed-card post-question-card" id="post-104" data-post-id="104" data-type="question" data-cat="security">
+                        <div class="feed-card-header">
+                            <div class="author-block">
+                                <div class="author-avatar avatar-purple">РВ</div>
+                                <div class="author-info">
+                                    <div class="author-line">
+                                        <span class="author-name">Роман Васильев</span>
+                                        <span class="author-handle">@roman_fintech</span>
+                                    </div>
+                                    <div class="author-role-sub">FinTech Architect @ B2B Bank · 19 августа</div>
+                                </div>
+                            </div>
+                            <div class="post-badges">
+                                <span class="step-pill-badge pill-planned">❓ Вопрос</span>
+                                <span class="badge-bounty">💰 Баунти: 25 000 ₽</span>
+                                <span class="badge-solved">✓ Решено</span>
+                            </div>
+                        </div>
+
+                        <h2 class="post-title">
+                            Как гарантировать конфиденциальность накладных УПД при передаче событий в смарт-контракт?
+                        </h2>
+
+                        <p class="post-snippet">
+                            Проектируем B2B взаиморасчеты для оптовых поставок. Необходимо подтверждать факт отгрузки по накладной УПД, но сами спецификации позиций и цены не должны попадать в открытый блокчейн.
+                        </p>
+
+                        <!-- Accepted Best Answer Box -->
+                        <div class="accepted-answer-box">
+                            <div class="accepted-answer-header">
+                                <span class="accepted-icon">✅</span>
+                                <span class="accepted-label">Принятый лучший ответ (Награда 25 000 ₽ выплачена)</span>
+                            </div>
+                            <div class="accepted-answer-body">
+                                <strong>Решение от Дарьи Вороновой (@daria_auditor):</strong>
+                                <p>
+                                    Используйте схему <em>Commit-and-Prove</em>: в ончейн-контракт передается только <code>keccak256(УПД + Salt)</code> и ZK-SNARK доказательство того, что сумма превышает пороговую. Исходные строки накладной остаются исключительно в защищенном контуре 1С и передаются контрагенту по зашифрованному каналу.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="post-tags-row">
+                            <span class="tag-pill">#zero-knowledge</span>
+                            <span class="tag-pill">#privacy</span>
+                            <span class="tag-pill">#1c-enterprise</span>
+                            <span class="tag-pill">#b2b-escrow</span>
+                        </div>
+
+                        <!-- Card Interaction Footer -->
+                        <div class="feed-card-footer">
+                            <div class="footer-actions-left">
+                                <div class="karma-lever" data-post-id="104">
+                                    <button type="button" class="karma-btn upvote">▲</button>
+                                    <span class="karma-val text-emerald">+76</span>
+                                    <button type="button" class="karma-btn downvote">▼</button>
+                                </div>
+                                <button type="button" class="btn-thread-toggle" data-target-thread="thread-104">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+                                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>14 ответов</span>
+                                </button>
+                                <div class="stat-views-badge">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" style="vertical-align: middle; margin-right: 2px;">
+                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>1.9k</span>
+                                </div>
+                            </div>
+                            <div class="footer-actions-right">
+                                <div class="reaction-bar">
+                                    <button type="button" class="btn-react" data-emoji="💡">💡 <span class="react-cnt">41</span></button>
+                                </div>
+                                <button type="button" class="btn-action-icon btn-bookmark-post" title="В закладки">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                                        <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path>
+                                    </svg>
+                                </button>
+                                <button type="button" class="btn-action-icon btn-share-post" title="Поделиться">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Thread for Post 104 -->
+                        <div class="comments-thread-panel" id="thread-104" style="display: none;">
+                            <div class="thread-inner">
+                                <h4 class="thread-heading">Ответы разработчиков (14)</h4>
+                                <div class="comments-list">
+                                    <div class="comment-bubble">
+                                        <div class="comment-head">
+                                            <div class="comment-author-avatar avatar-purple">ДВ</div>
+                                            <strong>Дарья Воронова</strong>
+                                            <span class="comment-role">Protocol Engineer</span>
+                                            <span class="comment-time">19 августа</span>
+                                        </div>
+                                        <div class="comment-body">
+                                            Также рекомендуем ознакомиться с нашим открытым SDK <code>smartcontractum-1c-zk-bridge</code> в репозитории экосистемы.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="add-comment-box">
+                                    <input type="text" class="input-comment-text" placeholder="Предложить свой ответ..." aria-label="Ваш ответ">
+                                    <button type="button" class="btn-send-comment">Отправить ответ</button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- ============================================================
+                         POST 105: DATA PROVIDER CARD (Рынок данных / Этап 3)
+                    ============================================================= -->
+                    <article class="feed-card post-data-card" id="post-105" data-post-id="105" data-type="data-source" data-cat="oracles">
+                        <div class="feed-card-header">
+                            <div class="author-block">
+                                <div class="author-avatar avatar-green">ФНС</div>
+                                <div class="author-info">
+                                    <div class="author-line">
+                                        <span class="author-name">Шлюз Оракулов ФНС РФ (ЕГРЮЛ/ЕГРИП)</span>
+                                        <span class="shield-badge badge-verified">✓ Аккредитованный источник</span>
+                                    </div>
+                                    <div class="author-role-sub">Провайдер внешних данных · Рейтинг надежности: 99.98% SLA</div>
+                                </div>
+                            </div>
+                            <div class="post-badges">
+                                <span class="step-pill-badge pill-completed">🌐 Карточка данных</span>
+                                <span class="badge-time">SLA 99.98%</span>
+                            </div>
+                        </div>
+
+                        <h2 class="post-title">
+                            Доверенный оракул ФНС: Валидация выписок ЕГРЮЛ/ЕГРИП, блокировок счетов и статуса банкротства контрагентов
+                        </h2>
+
+                        <p class="post-snippet">
+                            Официальный шлюз поставщика данных для смарт-контрактов. Позволяет смарт-эскроу и кредитным смарт-контрактам проверять правоспособность юрлица и отсутствие блокировок ФНС перед исполнением транзакции в цифровых рублях.
+                        </p>
+
+                        <!-- Data Source Specs Box -->
+                        <div class="data-specs-grid">
+                            <div class="spec-cell">
+                                <span class="spec-lbl">Формат поставки</span>
+                                <strong class="spec-val">JSON-RPC / TLS ГОСТ</strong>
+                            </div>
+                            <div class="spec-cell">
+                                <span class="spec-lbl">Задержка (Latency)</span>
+                                <strong class="spec-val text-emerald">&lt; 1.2 сек</strong>
+                            </div>
+                            <div class="spec-cell">
+                                <span class="spec-lbl">Тарификация</span>
+                                <strong class="spec-val">15 ₽ / запрос</strong>
+                            </div>
+                            <div class="spec-cell">
+                                <span class="spec-lbl">Совместимость</span>
+                                <strong class="spec-val">ПКСК / Эскроу / ЦФА</strong>
+                            </div>
+                        </div>
+
+                        <div class="post-tags-row">
+                            <span class="tag-pill">#егрюл-фнс</span>
+                            <span class="tag-pill">#оракулы</span>
+                            <span class="tag-pill">#рынок-данных</span>
+                            <span class="tag-pill">#комплаенс</span>
+                        </div>
+
+                        <!-- Card Interaction Footer -->
+                        <div class="feed-card-footer">
+                            <div class="footer-actions-left">
+                                <div class="karma-lever" data-post-id="105">
+                                    <button type="button" class="karma-btn upvote">▲</button>
+                                    <span class="karma-val text-emerald">+65</span>
+                                    <button type="button" class="karma-btn downvote">▼</button>
+                                </div>
+                                <button type="button" class="btn-thread-toggle" data-target-thread="thread-105">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+                                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>9 отзывов</span>
+                                </button>
+                                <div class="stat-views-badge">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" style="vertical-align: middle; margin-right: 2px;">
+                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>2.4k</span>
+                                </div>
+                            </div>
+                            <div class="footer-actions-right">
+                                <button type="button" class="btn-sidebar-primary" style="padding: 4px 12px; font-size:12px;" onclick="alert('Запрос на подключение к оракулу ЕГРЮЛ отправлен оператору!')">Подключить источник →</button>
+                                <button type="button" class="btn-action-icon btn-bookmark-post" title="В закладки">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                                        <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Thread for Post 105 -->
+                        <div class="comments-thread-panel" id="thread-105" style="display: none;">
+                            <div class="thread-inner">
+                                <h4 class="thread-heading">Отзывы разработчиков о стабильности оракула (9)</h4>
+                                <div class="comments-list">
+                                    <div class="comment-bubble">
+                                        <div class="comment-head">
+                                            <div class="comment-author-avatar avatar-blue">ЕК</div>
+                                            <strong>Елена Крылова</strong>
+                                            <span class="comment-role">Lead Architect</span>
+                                            <span class="comment-time">Вчера</span>
+                                        </div>
+                                        <div class="comment-body">
+                                            Протестировали в стенде ЦФА: среднее время ответа 820 мс, подпись ГОСТ валидируется корректно.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="add-comment-box">
+                                    <input type="text" class="input-comment-text" placeholder="Оставить отзыв о работе источника..." aria-label="Ваш отзыв">
+                                    <button type="button" class="btn-send-comment">Отправить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </main>
+
+            <!-- RIGHT SIDEBAR (Community Hub & Ecosystem) -->
+            <aside class="feed-sidebar">
+
+                <!-- 1. Community Ecosystem Card -->
+                <div class="sidebar-box-widget">
+                    <h3 class="sidebar-widget-title">
+                        <svg class="widget-svg-icon" viewBox="0 0 20 20" fill="#38bdf8" width="18" height="18">
+                            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>Экосистема вокруг ПКСК</span>
+                    </h3>
+                    <p class="sidebar-widget-text">
+                        Самостоятельная отраслевая инфраструктура, соединяющая бизнес-заказчиков, разработчиков, аудиторов ИБ и поставщиков данных.
+                    </p>
+                    <div class="sidebar-stages-mini">
+                        <div class="stage-mini-row done">
+                            <span class="stage-num">1</span>
+                            <span>База знаний &amp; Сообщество (Активно)</span>
+                        </div>
+                        <div class="stage-mini-row">
+                            <span class="stage-num">2</span>
+                            <span>Конструктор «Дерево решений»</span>
+                        </div>
+                        <div class="stage-mini-row">
+                            <span class="stage-num">3</span>
+                            <span>Рынок данных &amp; Оракулы</span>
+                        </div>
+                        <div class="stage-mini-row">
+                            <span class="stage-num">4</span>
+                            <span>Marketplace готовых контрактов</span>
+                        </div>
+                        <div class="stage-mini-row">
+                            <span class="stage-num">5</span>
+                            <span>Биржа заказов &amp; Услуг</span>
+                        </div>
+                    </div>
+                    <div class="sidebar-btn-group" style="margin-top: 14px;">
+                        <a href="/editor" class="btn-sidebar-primary">Написать статью</a>
+                        <a href="/dashboard.html" class="btn-sidebar-secondary">Личный кабинет</a>
+                    </div>
+                </div>
+
+                <!-- 2. Active CBRF Standards Polls -->
+                <div class="sidebar-box-widget">
+                    <div class="widget-header-row">
+                        <h3 class="sidebar-widget-title">
+                            <svg class="widget-svg-icon" viewBox="0 0 20 20" fill="#f59e0b" width="18" height="18">
+                                <path fill-rule="evenodd" d="M10.496 2.132a1 1 0 00-.992 0l-7 4A1 1 0 003 7v1a1 1 0 001 1h12a1 1 0 001-1V7a1 1 0 00-.504-.868l-7-4zM4 11v5h2v-5H4zm4 0v5h2v-5H8zm4 0v5h2v-5h-2zm4 0v5h2v-5h-2zM2 18a1 1 0 011-1h14a1 1 0 110 2H3a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Голосования стандартов</span>
+                        </h3>
+                        <span class="sidebar-badge-count">3 активных</span>
+                    </div>
+                    <div class="sidebar-poll-mini">
+                        <a href="#post-101" class="poll-mini-link">
+                            <strong class="poll-mini-title">RFC-04: Стандарты децентрализованных оракулов</strong>
+                            <div class="poll-mini-progress">
+                                <div class="mini-progress-fill" style="width: 58%;"></div>
+                            </div>
+                            <span class="poll-mini-meta">348 голосов · 3 дня осталось</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-poll-mini">
+                        <a href="#post-101" class="poll-mini-link">
+                            <strong class="poll-mini-title">RFC-05: Спецификация смарт-эскроу в цифровом рубле</strong>
+                            <div class="poll-mini-progress">
+                                <div class="mini-progress-fill" style="width: 74%;"></div>
+                            </div>
+                            <span class="poll-mini-meta">512 голосов · 1 день остался</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 3. Open Grants & Bounties (Биржа заказов) -->
+                <div class="sidebar-box-widget">
+                    <div class="widget-header-row">
+                        <h3 class="sidebar-widget-title">
+                            <svg class="widget-svg-icon" viewBox="0 0 20 20" fill="#10b981" width="18" height="18">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Биржа заказов &amp; Гранты</span>
+                        </h3>
+                        <span class="sidebar-badge-emerald">1.2M ₽ фонд</span>
+                    </div>
+                    <ul class="sidebar-bounty-list">
+                        <li class="bounty-item">
+                            <div class="bounty-info">
+                                <strong>Адаптер 1С к смарт-эскроу</strong>
+                                <span>Бэкенд интеграция / OpenSource</span>
+                            </div>
+                            <span class="bounty-reward">150 000 ₽</span>
+                        </li>
+                        <li class="bounty-item">
+                            <div class="bounty-info">
+                                <strong>SAST-анализатор уязвимостей ПКСК</strong>
+                                <span>Статический анализ Solidity / ГОСТ</span>
+                            </div>
+                            <span class="bounty-reward">300 000 ₽</span>
+                        </li>
+                        <li class="bounty-item">
+                            <div class="bounty-info">
+                                <strong>Кастомный оракул для Росреестра</strong>
+                                <span>Проверка кадастровых номеров</span>
+                            </div>
+                            <span class="bounty-reward">200 000 ₽</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 4. Top Community Experts Leaderboard (по компетенциям) -->
+                <div class="sidebar-box-widget">
+                    <h3 class="sidebar-widget-title">
+                        <svg class="widget-svg-icon" viewBox="0 0 20 20" fill="#f59e0b" width="18" height="18">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <span>Лидерборд по компетенциям</span>
+                    </h3>
+                    <ul class="sidebar-leaderboard-list">
+                        <li class="leader-item">
+                            <div class="leader-rank rank-1">1</div>
+                            <div class="leader-avatar avatar-blue">ЕК</div>
+                            <div class="leader-details">
+                                <strong>Елена Крылова</strong>
+                                <span>+1 420 (Разработка) · 18 статей</span>
+                            </div>
+                            <button type="button" class="btn-follow-author" title="Подписаться">+</button>
+                        </li>
+                        <li class="leader-item">
+                            <div class="leader-rank rank-2">2</div>
+                            <div class="leader-avatar avatar-green">МС</div>
+                            <div class="leader-details">
+                                <strong>Михаил Соколов</strong>
+                                <span>+1 180 (Аудит ИБ) · 14 постов</span>
+                            </div>
+                            <button type="button" class="btn-follow-author" title="Подписаться">+</button>
+                        </li>
+                        <li class="leader-item">
+                            <div class="leader-rank rank-3">3</div>
+                            <div class="leader-avatar avatar-purple">ДВ</div>
+                            <div class="leader-details">
+                                <strong>Дарья Воронова</strong>
+                                <span>+980 (Право &amp; ЦБ РФ) · 11 решений</span>
+                            </div>
+                            <button type="button" class="btn-follow-author" title="Подписаться">+</button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 5. Trusted Data Providers Registry -->
+                <div class="sidebar-box-widget">
+                    <h3 class="sidebar-widget-title">
+                        <svg class="widget-svg-icon" viewBox="0 0 20 20" fill="#38bdf8" width="18" height="18">
+                            <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3 1a1 1 0 000 2h10a1 1 0 100-2H5zm0 4a1 1 0 000 2h10a1 1 0 100-2H5zm0 4a1 1 0 000 2h10a1 1 0 100-2H5z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>Реестр источников данных</span>
+                    </h3>
+                    <div class="sources-mini-list">
+                        <div class="source-mini-item">
+                            <strong>ЕГРЮЛ / ЕГРИП (ФНС РФ)</strong>
+                            <span class="text-emerald">● Подключен · 99.98%</span>
+                        </div>
+                        <div class="source-mini-item">
+                            <strong>ГИС ЕИС Закупки (Казначейство)</strong>
+                            <span class="text-emerald">● Подключен · 99.95%</span>
+                        </div>
+                        <div class="source-mini-item">
+                            <strong>Росреестр (Кадастр / Недвижимость)</strong>
+                            <span style="color:#f59e0b;">● Тестовый контур</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Popular Topic Hubs Cloud -->
+                <div class="sidebar-box-widget">
+                    <h3 class="sidebar-widget-title">
+                        <svg class="widget-svg-icon" viewBox="0 0 20 20" fill="#94a3b8" width="18" height="18">
+                            <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>Популярные хабы</span>
+                    </h3>
+                    <div class="sidebar-tags-cloud">
+                        <a href="#post-101" class="hub-chip">#пкск-цб-рф (184)</a>
+                        <a href="#post-103" class="hub-chip">#цифровой-рубль (158)</a>
+                        <a href="#post-103" class="hub-chip">#смарт-эскроу (112)</a>
+                        <a href="#post-102" class="hub-chip">#децентрализованные-оракулы (84)</a>
+                        <a href="#post-104" class="hub-chip">#аудит-иб (79)</a>
+                        <a href="#post-104" class="hub-chip">#eip1153 (45)</a>
+                        <a href="#post-104" class="hub-chip">#zero-knowledge (38)</a>
+                    </div>
+                </div>
+
+            </aside>
+
+        </div>
+    </div>
+
+    <!-- ================================================================
+         4. QUICK POST CREATOR MODAL
+    ================================================================= -->
+    <div class="modal-overlay-backdrop" id="modalQuickCreate" style="display: none;">
+        <div class="quick-create-modal-card">
+            <div class="modal-header-line">
+                <div class="modal-tabs-line">
+                    <button type="button" class="modal-tab-btn is-active" data-modal-type="post">💬 Пост</button>
+                    <button type="button" class="modal-tab-btn" data-modal-type="question">❓ Вопрос</button>
+                    <button type="button" class="modal-tab-btn" data-modal-type="poll">📊 Опрос RFC</button>
+                    <button type="button" class="modal-tab-btn" data-modal-type="case">💼 Кейс/Паспорт</button>
+                    <a href="/editor" class="modal-tab-btn btn-full-editor-tab" style="text-decoration:none;">📄 Полный редактор →</a>
+                </div>
+                <button type="button" class="btn-close-quick-modal" id="btnCloseQuickCreate">✕</button>
+            </div>
+
+            <div class="modal-body-form">
+                <input type="text" class="modal-input-title" id="quickPostTitle" placeholder="Заголовок публикации, вопроса или паспорта...">
+                
+                <div class="modal-meta-row">
+                    <select class="modal-select-cat" id="quickPostCat">
+                        <option value="smart-contracts">⚡ Разработка смарт-контрактов &amp; EVM</option>
+                        <option value="security">🛡️ Информационная безопасность &amp; Аудит</option>
+                        <option value="oracles">🌐 Рынок внешних данных &amp; Оракулы</option>
+                        <option value="cbrf-law">🏛️ Регуляторика, ЦБ РФ &amp; Цифровой рубль</option>
+                        <option value="escrow-b2b">💼 Смарт-эскроу &amp; 1C:Предприятие</option>
+                        <option value="marketplace-jobs">💰 Биржа заказов &amp; Проектные команды</option>
+                    </select>
+                    <input type="text" class="modal-input-tags" id="quickPostTags" placeholder="Теги (например: #solidity, #пкск, #оракулы)">
+                </div>
+
+                <!-- Textarea for post/question -->
+                <textarea class="modal-textarea-content" id="quickPostContent" rows="5" placeholder="Опишите суть инсайта, проблему, бизнес-логику или детали вопроса... Поддерживается код ```solidity"></textarea>
+
+                <!-- Poll Options Box (Only visible when tab = poll) -->
+                <div class="modal-poll-builder" id="modalPollBuilder" style="display: none;">
+                    <label class="poll-builder-lbl">Варианты ответов для голосования RFC:</label>
+                    <div class="poll-inputs-list" id="pollInputsList">
+                        <input type="text" class="poll-opt-input" placeholder="Вариант 1 (например: Децентрализованный ZK-оракул)">
+                        <input type="text" class="poll-opt-input" placeholder="Вариант 2 (например: Прямой доверенный TLS-шлюз)">
+                    </div>
+                    <button type="button" class="btn-add-poll-option" id="btnAddPollOption">+ Добавить вариант</button>
+                </div>
+            </div>
+
+            <div class="modal-footer-line">
+                <span class="modal-status-hint">Публикация появится в ленте экосистемы мгновенно</span>
+                <div class="modal-footer-btns">
+                    <button type="button" class="btn-cancel-modal" id="btnCancelQuickCreate">Отмена</button>
+                    <button type="button" class="btn-submit-quick-post" id="btnSubmitQuickPost">Опубликовать в ленту</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="feed-toast" id="feedToast" style="display: none;">
+        <span class="toast-icon">✨</span>
+        <span class="toast-msg" id="feedToastMsg">Действие выполнено успешно!</span>
+    </div>
+
+    <!-- ================================================================
+         5. UNIFIED ECOSYSTEM FOOTER (Matching Main Page)
+    ================================================================= -->
+    <footer class="app-footer" id="appFooter">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Col 1: О платформе -->
+                <div class="footer-col footer-col-brand">
+                    <div class="footer-logo">
+                        <span class="logo-smart">Smart</span><span class="logo-contractum">Contractum</span>
+                    </div>
+                    <p class="footer-desc">
+                        Единая независимая профессиональная среда для проектирования, верификации и подключения смарт-контрактов к ПКСК Банка России.
+                    </p>
+                    <div class="phase-indicator-badge">
+                        <span class="phase-dot"></span>
+                        <span class="phase-text">Фаза НИР ЦБ РФ (до 31.03.2027)</span>
+                    </div>
+                </div>
+
+                <!-- Col 2: Инструменты и сервисы -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Инструменты экосистемы</h4>
+                    <ul class="footer-links">
+                        <li><a href="/dashboard.html" class="footer-link">Личный кабинет специалиста</a></li>
+                        <li><a href="/editor" class="footer-link">Редактор смарт-контрактов</a></li>
+                        <li><a href="/feed" class="footer-link">Лента публикаций &amp; База знаний</a></li>
+                        <li><a href="#post-101" class="footer-link">Голосования стандартов RFC</a></li>
+                        <li><a href="#post-105" class="footer-link">Реестр доверенных оракулов</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: База знаний и регуляторика -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Регуляторика &amp; Доки</h4>
+                    <ul class="footer-links">
+                        <li><a href="#post-101" class="footer-link">Доклад ЦБ РФ по ПКСК</a></li>
+                        <li><a href="#post-102" class="footer-link">Стандарты ИБ &amp; ГОСТ Р 34.10</a></li>
+                        <li><a href="#post-105" class="footer-link">Регламенты поставщиков данных</a></li>
+                        <li><a href="#post-103" class="footer-link">Смарт-эскроу казначейства</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Umbrella Security & Контакты -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Umbrella-Security</h4>
+                    <div class="umbrella-badge-box">
+                        <div class="umbrella-icon-box">
+                            <svg class="umbrella-svg-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L3 6V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V6L12 2Z" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.8" stroke-linejoin="round"></path>
+                                <path d="M9 12L11 14L15 9" stroke="#16c784" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </div>
+                        <div class="umbrella-info">
+                            <span class="umbrella-title">Umbrella Trust Protocol</span>
+                            <span class="umbrella-sub">Верифицированная среда исполнения</span>
+                        </div>
+                    </div>
+                    <p class="footer-security-note">
+                        Сквозная криптографическая проверка кода смарт-контрактов по ГОСТ Р 34.12-2015.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Footer Bottom Bar -->
+            <div class="footer-bottom-bar">
+                <p class="copyright-text">
+                    © 2026 SmartContractum Umbrella-Dev Ecosystem. Все права защищены.
+                </p>
+                <div class="footer-bottom-links">
+                    <a href="/feed" class="footer-mini-link">Комьюнити</a>
+                    <a href="/auth.html" class="footer-mini-link">Политика конфиденциальности</a>
+                    <a href="/auth.html" class="footer-mini-link">Условия использования</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="landing_main.js?v=2.7.0" defer></script>
+    <script src="forum_social.js?v=2.7.0" defer></script>
+</body>
+</html>

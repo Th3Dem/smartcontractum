@@ -1,0 +1,21 @@
+{
+  "task": "TASK-04",
+  "name": "dashboard-profile-edit",
+  "state": "DONE",
+  "completed_at": "2026-08-31T18:51:10+03:00",
+  "rework_count": 0,
+  "required_gates": {
+    "product": true,
+    "architecture": true,
+    "ux": true,
+    "data": true,
+    "domain": false,
+    "seo": false,
+    "security": true,
+    "moderation": false,
+    "qa": true,
+    "staging": false,
+    "release": true
+  },
+  "created_at": "2026-08-31T18:49:15+03:00"
+}

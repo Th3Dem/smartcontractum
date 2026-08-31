@@ -10,6 +10,7 @@ class TestAuthFrontend(unittest.TestCase):
     def setUp(self):
         self.project_root = "/home/dem/Projects_01"
         self.html_path = os.path.join(self.project_root, "public/index.html")
+        self.auth_html_path = os.path.join(self.project_root, "public/auth.html")
         self.dash_html_path = os.path.join(self.project_root, "public/dashboard.html")
         self.css_path = os.path.join(self.project_root, "public/styles.css")
         self.js_path = os.path.join(self.project_root, "public/app.js")
@@ -18,11 +19,13 @@ class TestAuthFrontend(unittest.TestCase):
 
     def test_files_exist(self):
         self.assertTrue(os.path.exists(self.html_path), "index.html must exist")
+        self.assertTrue(os.path.exists(self.auth_html_path), "auth.html must exist")
         self.assertTrue(os.path.exists(self.dash_html_path), "dashboard.html must exist")
         self.assertTrue(os.path.exists(self.css_path), "styles.css must exist")
         self.assertTrue(os.path.exists(self.js_path), "app.js must exist")
         self.assertTrue(os.path.exists(self.server_path), "server.py must exist")
         self.assertTrue(os.path.exists(self.db_path), "db.py must exist")
+
 
     def test_inn_checksum_validator(self):
         self.assertTrue(validate_inn_checksum("7707083893")) # Сбербанк (10 цифр)
@@ -112,5 +115,15 @@ class TestAuthFrontend(unittest.TestCase):
         self.assertEqual(data_me["user"]["email"], "api.tester@smartcontractum.ru")
         self.assertGreaterEqual(len(data_me["contracts"]), 1)
 
+    def test_no_duplicate_checkmarks_in_alerts(self):
+        """Проверка отсутствия значков ✓, ✅, 🎉, ⚠️, 🔐 внутри параметров вызовов showAlert/showDashAlert/showSecurityAlert"""
+        for js_file in [self.js_path, os.path.join(self.project_root, "public/dashboard.js")]:
+            with open(js_file, "r", encoding="utf-8") as f:
+                content = f.read()
+            matches = re.findall(r'(?:showAlert|showDashAlert|showSecurityAlert)\s*\(\s*[\'\"][✓✅✔️🎉⚠️🔐🔒]', content)
+            self.assertEqual(len(matches), 0, f"Найдено дублирование иконок/эмодзи в {js_file}: {matches}")
+
 if __name__ == "__main__":
     unittest.main()
+
+

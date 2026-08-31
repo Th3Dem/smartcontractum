@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartContractum — Авторизация и Регистрация</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=1.10.0">
+</head>
+
+<body>
+
+  <main class="auth-container" id="auth-card">
+    <a href="/" style="display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); text-decoration: none; font-size: 13px; margin-bottom: 14px; font-weight: 500; transition: color 0.2s ease;">← На главную</a>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему оформления" title="Сменить тему">🌙</button>
+
+    <!-- Заголовок и логотип -->
+    <header class="auth-header">
+
+      <div class="auth-logo-badge">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        <span>SMARTCONTRACTUM</span>
+      </div>
+      <h1 class="auth-title" id="auth-title">Вход в личный кабинет</h1>
+      <p class="auth-subtitle" id="auth-subtitle">Экосистема коммерческих смарт-контрактов</p>
+    </header>
+
+    <!-- Навигационные вкладки -->
+    <nav class="auth-tabs" id="auth-tabs" aria-label="Выбор действия">
+      <button class="auth-tab active" id="tab-login" type="button">Вход</button>
+      <button class="auth-tab" id="tab-register" type="button">Регистрация</button>
+    </nav>
+
+    <!-- Системные алерты -->
+    <div id="auth-alert" class="auth-alert" style="display: none;" role="alert"></div>
+
+    <!-- ========================================== -->
+    <!-- ФОРМА 1: ВХОД (LOGIN)                      -->
+    <!-- ========================================== -->
+    <form id="form-login" novalidate>
+      <div class="form-group">
+        <label for="login-email" class="form-label">E-mail или логин <span class="required-star">*</span></label>
+        <div class="input-wrapper">
+          <input type="email" id="login-email" class="form-input" placeholder="alexander@smartcontractum.ru" required autocomplete="email">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="login-password" class="form-label">Пароль <span class="required-star">*</span></label>
+        <div class="input-wrapper">
+          <input type="password" id="login-password" class="form-input" placeholder="Введите пароль" required autocomplete="current-password">
+          <button type="button" class="input-suffix-btn btn-toggle-pwd" aria-label="Показать пароль">👁</button>
+        </div>
+      </div>
+
+      <div class="form-options">
+        <label class="checkbox-label">
+          <input type="checkbox" id="login-remember">
+          <span>Запомнить сессию</span>
+        </label>
+        <button type="button" class="link-btn" id="link-forgot-password">Забыли пароль?</button>
+      </div>
+
+      <button type="submit" class="btn-primary">
+        <span>Войти в личный кабинет</span>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+
+      <div style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted);">
+        Впервые на платформе? 
+        <button type="button" class="link-btn" id="link-to-register">Создать аккаунт</button>
+      </div>
+    </form>
+
+    <!-- ========================================== -->
+    <!-- ФОРМА 2: РЕГИСТРАЦИЯ (REGISTER)            -->
+    <!-- ========================================== -->
+    <form id="form-register" style="display: none;" novalidate>
+      <!-- 3-позиционный выбор субъекта -->
+      <div class="account-type-group">
+        <button type="button" class="account-type-btn active" id="type-individual">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span>Физ. лицо</span>
+        </button>
+
+        <button type="button" class="account-type-btn" id="type-ip">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          <span>ИП</span>
+        </button>
+
+        <button type="button" class="account-type-btn" id="type-organization">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+          <span>Юр. лицо</span>
+        </button>
+      </div>
+
+      <!-- 1. ПОЛЯ ДЛЯ ФИЗИЧЕСКОГО ЛИЦА -->
+      <div class="individual-only">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reg-lastname" class="form-label">Фамилия <span class="required-star">*</span></label>
+            <input type="text" id="reg-lastname" class="form-input" placeholder="Иванов" required>
+          </div>
+          <div class="form-group">
+            <label for="reg-firstname" class="form-label">Имя <span class="required-star">*</span></label>
+            <input type="text" id="reg-firstname" class="form-input" placeholder="Александр" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-middlename" class="form-label">Отчество <span style="font-weight: 400; color: var(--text-muted);">(при наличии)</span></label>
+          <input type="text" id="reg-middlename" class="form-input" placeholder="Сергеевич">
+        </div>
+
+        <div class="form-group">
+          <label for="reg-phone" class="form-label">Номер телефона <span class="required-star">*</span></label>
+          <input type="tel" id="reg-phone" class="form-input" placeholder="+7 (999) 000-00-00" required>
+        </div>
+      </div>
+
+      <!-- 2. ПОЛЯ ДЛЯ ИНДИВИДУАЛЬНОГО ПРЕДПРИНИМАТЕЛЯ (ИП) -->
+      <div class="ip-only" style="display: none;">
+        <div class="form-group">
+          <label for="reg-ip-inn" class="form-label">ИНН предпринимателя (12 цифр) <span class="required-star">*</span></label>
+          <div class="input-with-button">
+            <input type="text" id="reg-ip-inn" class="form-input" placeholder="771501061993" maxlength="12" autocomplete="off">
+            <button type="button" id="btn-fetch-egrip" class="btn-secondary" title="Заполнить реквизиты из ЕГРИП ФНС России">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+              </svg>
+              <span>Найти в ЕГРИП</span>
+            </button>
+          </div>
+          <div id="egrip-status" class="egrul-status-box" style="display: none;"></div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reg-ip-lastname" class="form-label">Фамилия ИП <span class="required-star">*</span></label>
+            <input type="text" id="reg-ip-lastname" class="form-input" placeholder="Заполняется из ЕГРИП" readonly>
+          </div>
+          <div class="form-group">
+            <label for="reg-ip-firstname" class="form-label">Имя ИП <span class="required-star">*</span></label>
+            <input type="text" id="reg-ip-firstname" class="form-input" placeholder="Заполняется из ЕГРИП" readonly>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-ip-middlename" class="form-label">Отчество ИП</label>
+          <input type="text" id="reg-ip-middlename" class="form-input" placeholder="Заполняется из ЕГРИП" readonly>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-ip-ogrnip" class="form-label">ОГРНИП (15 цифр)</label>
+          <input type="text" id="reg-ip-ogrnip" class="form-input" placeholder="Заполняется автоматически по ИНН" maxlength="15" readonly>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-ip-phone" class="form-label">Контактный номер телефона <span class="required-star">*</span></label>
+          <input type="tel" id="reg-ip-phone" class="form-input" placeholder="+7 (999) 222-33-44">
+        </div>
+      </div>
+
+      <!-- 3. ПОЛЯ ДЛЯ ЮР. ЛИЦА / ОРГАНИЗАЦИИ -->
+      <div class="org-only" style="display: none;">
+        <div class="form-group">
+          <label for="reg-inn" class="form-label">ИНН организации (10 цифр) <span class="required-star">*</span></label>
+          <div class="input-with-button">
+            <input type="text" id="reg-inn" class="form-input" placeholder="7707083893" maxlength="10" autocomplete="off">
+            <button type="button" id="btn-fetch-egrul" class="btn-secondary" title="Заполнить реквизиты из ЕГРЮЛ ФНС России">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+              </svg>
+              <span>Найти в ЕГРЮЛ</span>
+            </button>
+          </div>
+          <div id="egrul-status" class="egrul-status-box" style="display: none;"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-company" class="form-label">Полное наименование организации <span class="required-star">*</span></label>
+          <input type="text" id="reg-company" class="form-input" placeholder="Заполняется автоматически из ЕГРЮЛ" readonly>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-short-name" class="form-label">Сокращенное (краткое) наименование</label>
+          <input type="text" id="reg-short-name" class="form-input" placeholder="Заполняется автоматически из ЕГРЮЛ" readonly>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reg-ogrn" class="form-label">ОГРН (13 цифр)</label>
+            <input type="text" id="reg-ogrn" class="form-input" placeholder="Заполняется автоматически" maxlength="13" readonly>
+          </div>
+          <div class="form-group">
+            <label for="reg-kpp" class="form-label">КПП (9 цифр)</label>
+            <input type="text" id="reg-kpp" class="form-input" placeholder="Заполняется автоматически" maxlength="9" readonly>
+          </div>
+        </div>
+
+        <div class="sub-section-title">Данные представителя организации</div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reg-org-lastname" class="form-label">Фамилия <span class="required-star">*</span></label>
+            <input type="text" id="reg-org-lastname" class="form-input" placeholder="Смирнов">
+          </div>
+          <div class="form-group">
+            <label for="reg-org-firstname" class="form-label">Имя <span class="required-star">*</span></label>
+            <input type="text" id="reg-org-firstname" class="form-input" placeholder="Дмитрий">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-org-phone" class="form-label">Контактный номер телефона <span class="required-star">*</span></label>
+          <input type="tel" id="reg-org-phone" class="form-input" placeholder="+7 (999) 111-22-33">
+        </div>
+      </div>
+
+      <!-- 4. ОБЩИЕ ПОЛЯ: E-MAIL И ДВОЙНОЙ ВВОД ПАРОЛЯ -->
+      <div class="form-group">
+        <label for="reg-email" class="form-label">Адрес электронной почты (E-mail) <span class="required-star">*</span></label>
+        <input type="email" id="reg-email" class="form-input" placeholder="alexander@company.ru" required autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label for="reg-password" class="form-label">Пароль учетной записи <span class="required-star">*</span></label>
+        <div class="input-wrapper">
+          <input type="password" id="reg-password" class="form-input" placeholder="Не менее 8 символов" required autocomplete="new-password">
+          <button type="button" class="input-suffix-btn btn-toggle-pwd" aria-label="Показать пароль">👁</button>
+        </div>
+        <div class="strength-meter">
+          <div class="strength-bar-track">
+            <div id="strength-fill" class="strength-bar-fill"></div>
+          </div>
+          <div class="strength-text">
+            <span id="strength-label">Сложность: —</span>
+            <span>Мин. 8 знаков, заглавная буква, цифра</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="reg-password-confirm" class="form-label">Повторите пароль <span class="required-star">*</span></label>
+        <div class="input-wrapper">
+          <input type="password" id="reg-password-confirm" class="form-input" placeholder="Введите пароль еще раз" required autocomplete="new-password">
+          <button type="button" class="input-suffix-btn btn-toggle-pwd" aria-label="Показать пароль">👁</button>
+        </div>
+        <div id="password-match-msg" class="password-match-status" style="display: none;"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="reg-captcha-input" class="form-label">Защитный код (капча) <span class="required-star">*</span></label>
+        <div class="captcha-row">
+          <div class="captcha-card" title="Нажмите, чтобы обновить код">
+            <canvas id="reg-captcha-canvas" width="130" height="38" class="captcha-canvas"></canvas>
+            <button type="button" id="reg-captcha-refresh" class="captcha-btn-refresh" title="Сгенерировать другой код" aria-label="Обновить защитный код">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+              </svg>
+            </button>
+          </div>
+          <input type="text" id="reg-captcha-input" class="form-input captcha-input" placeholder="Код с картинки" maxlength="6" autocomplete="off" required>
+        </div>
+      </div>
+
+      <div class="form-options" style="margin-bottom: 20px;">
+        <label class="checkbox-label">
+          <input type="checkbox" id="reg-agreement" required>
+          <span>Я принимаю <a href="#" class="link-btn">Условия использования</a> и даю <a href="#" class="link-btn">Согласие на обработку персональных данных</a> (152-ФЗ) <span class="required-star">*</span></span>
+        </label>
+      </div>
+
+      <button type="submit" class="btn-primary" id="btn-submit-register">
+        <span>Зарегистрироваться на платформе</span>
+      </button>
+
+      <div style="text-align: center; margin-top: 18px; font-size: 13px; color: var(--text-muted);">
+        Уже зарегистрированы? 
+        <button type="button" class="link-btn" id="link-to-login">Войти в личный кабинет</button>
+      </div>
+    </form>
+
+    <!-- ========================================== -->
+    <!-- ФОРМА 3.1: ВОССТАНОВЛЕНИЕ ПАРОЛЯ — ШАГ 1   -->
+    <!-- ========================================== -->
+    <form id="form-forgot" style="display: none;" novalidate>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.5;">
+        Укажите адрес электронной почты (E-mail), привязанный к вашей учетной записи. Мы направим вам проверочный код для сброса пароля.
+      </p>
+
+      <div class="form-group">
+        <label for="forgot-email" class="form-label">Адрес электронной почты (E-mail) <span class="required-star">*</span></label>
+        <input type="email" id="forgot-email" class="form-input" placeholder="alexander@smartcontractum.ru" required autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label for="forgot-captcha-input" class="form-label">Защитный код (капча) <span class="required-star">*</span></label>
+        <div class="captcha-row">
+          <div class="captcha-card" title="Нажмите, чтобы обновить код">
+            <canvas id="forgot-captcha-canvas" width="130" height="38" class="captcha-canvas"></canvas>
+            <button type="button" id="forgot-captcha-refresh" class="captcha-btn-refresh" title="Сгенерировать другой код" aria-label="Обновить защитный код">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+              </svg>
+            </button>
+          </div>
+          <input type="text" id="forgot-captcha-input" class="form-input captcha-input" placeholder="Код с картинки" maxlength="6" autocomplete="off" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" id="btn-submit-forgot" style="margin-bottom: 16px;">
+        <span>Отправить код для сброса пароля</span>
+      </button>
+
+      <div style="text-align: center;">
+        <button type="button" class="link-btn" id="link-back-to-login">← Вернуться к форме входа</button>
+      </div>
+    </form>
+
+    <!-- ========================================== -->
+    <!-- ФОРМА 3.2: СБРОС ПАРОЛЯ — ШАГ 2 (КОД)       -->
+    <!-- ========================================== -->
+    <form id="form-forgot-verify" style="display: none;" novalidate>
+      <div class="verify-email-header">
+        <div class="verify-email-icon-box">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <p class="verify-email-desc">
+          Письмо с 6-значным проверочным кодом для сброса пароля отправлено на:<br>
+          <strong id="forgot-target-email" class="highlight-email">user@company.ru</strong>
+        </p>
+      </div>
+
+      <div class="form-group" style="text-align: center;">
+        <label for="forgot-code-input" class="form-label" style="text-align: center;">Код подтверждения из письма <span class="required-star">*</span></label>
+        <div class="input-wrapper" style="max-width: 240px; margin: 0 auto;">
+          <input type="text" id="forgot-code-input" class="form-input email-code-input" placeholder="000000" maxlength="6" autocomplete="one-time-code" required>
+        </div>
+      </div>
+
+      <div class="sms-meta-row" style="justify-content: center; margin-bottom: 22px;">
+        <span id="forgot-timer-text" class="sms-timer-text">Запросить код повторно через 60 сек.</span>
+        <button type="button" id="btn-forgot-resend" class="link-btn" style="display: none;">Отправить код повторно</button>
+      </div>
+
+      <button type="submit" class="btn-primary" id="btn-submit-forgot-verify">
+        <span>Подтвердить проверочный код</span>
+      </button>
+
+      <div style="text-align: center; margin-top: 18px;">
+        <button type="button" class="link-btn" id="link-forgot-back-to-step1">← Изменить адрес E-mail</button>
+      </div>
+    </form>
+
+    <!-- ========================================== -->
+    <!-- ФОРМА 3.3: СБРОС ПАРОЛЯ — ШАГ 3 (НОВЫЙ ПАРОЛЬ) -->
+    <!-- ========================================== -->
+    <form id="form-forgot-new-pwd" style="display: none;" novalidate>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.5;">
+        Код подтвержден. Задайте новый пароль для доступа к вашей учетной записи.
+      </p>
+
+      <div class="form-group">
+        <label for="forgot-new-password" class="form-label">Новый пароль <span class="required-star">*</span></label>
+        <div class="input-wrapper">
+          <input type="password" id="forgot-new-password" class="form-input" placeholder="Не менее 8 символов" required autocomplete="new-password">
+          <button type="button" class="input-suffix-btn btn-toggle-pwd" aria-label="Показать пароль">👁</button>
+        </div>
+        <div class="strength-meter">
+          <div class="strength-bar-track">
+            <div id="forgot-strength-fill" class="strength-bar-fill"></div>
+          </div>
+          <div class="strength-text">
+            <span id="forgot-strength-label">Сложность: —</span>
+            <span>Мин. 8 знаков, заглавная буква, цифра</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="forgot-new-password-confirm" class="form-label">Повторите новый пароль <span class="required-star">*</span></label>
+        <div class="input-wrapper">
+          <input type="password" id="forgot-new-password-confirm" class="form-input" placeholder="Введите пароль еще раз" required autocomplete="new-password">
+          <button type="button" class="input-suffix-btn btn-toggle-pwd" aria-label="Показать пароль">👁</button>
+        </div>
+        <div id="forgot-password-match-msg" class="password-match-status" style="display: none;"></div>
+      </div>
+
+      <button type="submit" class="btn-primary" id="btn-submit-save-new-pwd" style="margin-bottom: 16px;">
+        <span>Сохранить новый пароль</span>
+      </button>
+
+      <div style="text-align: center;">
+        <button type="button" class="link-btn" id="link-forgot-cancel">← Отмена и возврат к форме входа</button>
+      </div>
+    </form>
+
+
+    <!-- ========================================== -->
+    <!-- ФОРМА 4: ПОДТВЕРЖДЕНИЕ E-MAIL (VERIFY)     -->
+    <!-- ========================================== -->
+    <form id="form-verify-email" style="display: none;" novalidate>
+      <div class="verify-email-header">
+        <div class="verify-email-icon-box">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+        <p class="verify-email-desc">
+          Письмо с 6-значным проверочным кодом отправлено на:<br>
+          <strong id="verify-target-email" class="highlight-email">user@company.ru</strong>
+        </p>
+      </div>
+
+      <div class="form-group" style="text-align: center;">
+        <label for="email-code-input" class="form-label" style="text-align: center;">Код подтверждения из письма <span class="required-star">*</span></label>
+        <div class="input-wrapper" style="max-width: 240px; margin: 0 auto;">
+          <input type="text" id="email-code-input" class="form-input email-code-input" placeholder="000000" maxlength="6" autocomplete="one-time-code" required>
+        </div>
+      </div>
+
+      <div class="sms-meta-row" style="justify-content: center; margin-bottom: 22px;">
+        <span id="email-timer-text" class="sms-timer-text">Запросить код повторно через 60 сек.</span>
+        <button type="button" id="btn-resend-email" class="link-btn" style="display: none;">Отправить код повторно</button>
+      </div>
+
+      <button type="submit" class="btn-primary" id="btn-submit-verify-email">
+        <span>Подтвердить E-mail и завершить регистрацию</span>
+      </button>
+
+      <div style="text-align: center; margin-top: 18px;">
+        <button type="button" class="link-btn" id="link-back-to-register">← Изменить адрес E-mail</button>
+      </div>
+    </form>
+  </main>
+
+  <script src="app.js?v=1.10.0"></script>
+</body>
+</html>
+

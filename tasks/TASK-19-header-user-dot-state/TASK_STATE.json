@@ -1,0 +1,17 @@
+{
+  "task": "TASK-19",
+  "name": "header-user-dot-state",
+  "state": "DONE",
+  "completed_at": "2026-08-31T22:20:00+03:00",
+  "rework_count": 0,
+  "required_gates": {
+    "product": true,
+    "tech": true,
+    "ux": true,
+    "data": true,
+    "security": true,
+    "qa": true,
+    "release": true
+  },
+  "created_at": "2026-08-31T22:18:51+03:00"
+}

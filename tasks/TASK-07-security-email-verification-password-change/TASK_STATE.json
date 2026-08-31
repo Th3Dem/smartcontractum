@@ -1,0 +1,21 @@
+{
+  "task": "TASK-07",
+  "name": "security-email-verification-password-change",
+  "state": "DONE",
+  "completed_at": "2026-08-31T19:41:30+03:00",
+  "rework_count": 0,
+  "required_gates": {
+    "product": true,
+    "architecture": true,
+    "ux": true,
+    "data": true,
+    "domain": false,
+    "seo": false,
+    "security": true,
+    "moderation": false,
+    "qa": true,
+    "staging": false,
+    "release": true
+  },
+  "created_at": "2026-08-31T19:39:25+03:00"
+}

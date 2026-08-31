@@ -281,6 +281,11 @@ body {
   font-family: var(--font-body);
 }
 
+.input-wrapper .form-input {
+  padding-right: 42px;
+}
+
+
 .form-input:focus {
   border-color: var(--input-focus-border);
   background: var(--bg-input-focus);

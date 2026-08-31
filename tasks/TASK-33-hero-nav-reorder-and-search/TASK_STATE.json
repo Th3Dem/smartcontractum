@@ -1,0 +1,17 @@
+{
+  "task": "TASK-33",
+  "name": "hero-nav-reorder-and-search",
+  "state": "DONE",
+  "completed_at": "2026-09-01T00:26:12+03:00",
+  "rework_count": 0,
+  "required_gates": {
+    "product": true,
+    "tech": true,
+    "ux": true,
+    "data": true,
+    "security": true,
+    "qa": true,
+    "release": true
+  },
+  "created_at": "2026-09-01T00:24:37+03:00"
+}

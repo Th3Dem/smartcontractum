@@ -79,12 +79,19 @@ def init_db():
         company_short_name TEXT,
         rep_last_name TEXT,
         rep_first_name TEXT,
+        blog_title TEXT DEFAULT '',
         
         is_verified INTEGER DEFAULT 1,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         last_login_at TIMESTAMP
     )
     """)
+
+    # Миграция: добавление колонки blog_title, если таблица уже создана ранее
+    cursor.execute("PRAGMA table_info(users)")
+    cols = [col[1] for col in cursor.fetchall()]
+    if "blog_title" not in cols:
+        cursor.execute("ALTER TABLE users ADD COLUMN blog_title TEXT DEFAULT ''")
 
     # Таблица активных сессий авторизации
     cursor.execute("""
@@ -114,6 +121,7 @@ def init_db():
 
     conn.commit()
     conn.close()
+
 
 def create_user(user_data: dict) -> dict:
     """
@@ -324,5 +332,187 @@ def sanitize_user_dict(user: dict) -> dict:
 
     return safe
 
+def get_user_by_email(email: str) -> dict | None:
+    """
+    Находит пользователя по email (без учета регистра).
+    """
+    if not email:
+        return None
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE email = ?", (email.strip().lower(),))
+    row = cursor.fetchone()
+    conn.close()
+    if not row:
+        return None
+    return dict(row)
+
+def update_user_password(email: str, new_password: str) -> bool:
+    """
+    Обновляет пароль пользователя с новым хэшем PBKDF2-HMAC-SHA256 и сбрасывает все активные сессии.
+    """
+    user = get_user_by_email(email)
+    if not user:
+        return False
+    pwd_hash, pwd_salt = hash_password(new_password)
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE users SET password_hash = ?, password_salt = ? WHERE id = ?", (pwd_hash, pwd_salt, user["id"]))
+    cursor.execute("DELETE FROM sessions WHERE user_id = ?", (user["id"],))
+    conn.commit()
+    conn.close()
+    return True
+
+def change_user_password(user_id: int, current_pwd: str, new_pwd: str) -> tuple[bool, str | None]:
+    """
+    Безопасная смена пароля авторизованным пользователем.
+    Проверяет текущий пароль и хэширует новый по PBKDF2-HMAC-SHA256.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+    user = cursor.fetchone()
+    if not user:
+        conn.close()
+        return False, "Пользователь не найден"
+
+    if not verify_password(current_pwd, user["password_hash"], user["password_salt"]):
+        conn.close()
+        return False, "Неверно указан текущий пароль"
+
+    if not new_pwd or len(new_pwd) < 8:
+        conn.close()
+        return False, "Новый пароль должен содержать не менее 8 символов"
+
+    new_hash, new_salt = hash_password(new_pwd)
+    cursor.execute("UPDATE users SET password_hash = ?, password_salt = ? WHERE id = ?", (new_hash, new_salt, user_id))
+    conn.commit()
+    conn.close()
+    return True, "Пароль успешно изменен"
+
+def update_user_profile(user_id: int, data: dict) -> tuple[bool, str | None, dict | None]:
+    """
+    Обновляет персональные данные профиля (ФИО, телефон, email, название блога).
+    Проверяет уникальность email среди других пользователей.
+    Возвращает (success, error_message, updated_user).
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+    user_row = cursor.fetchone()
+    if not user_row:
+        conn.close()
+        return False, "Пользователь не найден", None
+    
+    current_user = dict(user_row)
+    acc_type = current_user.get("account_type", "individual")
+    
+    # 1. Валидация E-mail
+    if "email" in data:
+        new_email = str(data["email"]).strip().lower()
+        if not new_email or "@" not in new_email:
+            conn.close()
+            return False, "Укажите корректный адрес электронной почты (E-mail)", None
+        
+        # Проверка уникальности email
+        cursor.execute("SELECT id FROM users WHERE email = ? AND id != ?", (new_email, user_id))
+        conflict = cursor.fetchone()
+        if conflict:
+            conn.close()
+            return False, "Пользователь с таким адресом электронной почты уже зарегистрирован", None
+    else:
+        new_email = current_user.get("email", "")
+
+    if "phone" in data:
+        new_phone = str(data["phone"]).strip()
+        if new_phone and len(new_phone) < 10:
+            conn.close()
+            return False, "Укажите корректный номер телефона", None
+    else:
+        new_phone = current_user.get("phone", "")
+
+    if "lastName" in data or "last_name" in data:
+        last_name = str(data.get("lastName") if "lastName" in data else data.get("last_name", "")).strip()
+    else:
+        last_name = current_user.get("last_name") or current_user.get("ip_last_name") or current_user.get("rep_last_name") or ""
+
+    if "firstName" in data or "first_name" in data:
+        first_name = str(data.get("firstName") if "firstName" in data else data.get("first_name", "")).strip()
+    else:
+        first_name = current_user.get("first_name") or current_user.get("ip_first_name") or current_user.get("rep_first_name") or ""
+
+    if "middleName" in data or "middle_name" in data:
+        middle_name = str(data.get("middleName") if "middleName" in data else data.get("middle_name", "")).strip()
+    else:
+        middle_name = current_user.get("middle_name") or current_user.get("ip_middle_name") or ""
+
+    if "blogTitle" in data or "blog_title" in data:
+        blog_title = str(data.get("blogTitle") if "blogTitle" in data else data.get("blog_title", "")).strip()
+    else:
+        blog_title = current_user.get("blog_title", "")
+
+    if acc_type == "individual":
+        cursor.execute("""
+            UPDATE users
+            SET last_name = ?, first_name = ?, middle_name = ?, phone = ?, email = ?, blog_title = ?
+            WHERE id = ?
+        """, (
+            last_name,
+            first_name,
+            middle_name,
+            new_phone,
+            new_email,
+            blog_title,
+            user_id
+        ))
+    elif acc_type == "ip":
+        cursor.execute("""
+            UPDATE users
+            SET ip_last_name = ?, ip_first_name = ?, ip_middle_name = ?, phone = ?, email = ?, blog_title = ?
+            WHERE id = ?
+        """, (
+            last_name,
+            first_name,
+            middle_name,
+            new_phone,
+            new_email,
+            blog_title,
+            user_id
+        ))
+    elif acc_type == "organization":
+        cursor.execute("""
+            UPDATE users
+            SET rep_last_name = ?, rep_first_name = ?, phone = ?, email = ?, blog_title = ?
+            WHERE id = ?
+        """, (
+            last_name,
+            first_name,
+            new_phone,
+            new_email,
+            blog_title,
+            user_id
+        ))
+    else:
+        cursor.execute("""
+            UPDATE users
+            SET last_name = ?, first_name = ?, middle_name = ?, phone = ?, email = ?, blog_title = ?
+            WHERE id = ?
+        """, (
+            last_name, first_name, middle_name, new_phone, new_email, blog_title, user_id
+        ))
+    
+    conn.commit()
+
+    
+    cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+    updated_row = cursor.fetchone()
+    conn.close()
+    
+    return True, None, sanitize_user_dict(dict(updated_row))
+
 # Инициализируем БД при импорте
 init_db()
+
+
+

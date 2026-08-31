@@ -26,11 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Состояние интерфейса
-  let currentMode = 'login'; // 'login' | 'register' | 'forgot' | 'verify-email'
+  let currentMode = 'login'; // 'login' | 'register' | 'forgot' | 'forgot-verify' | 'forgot-new-pwd' | 'verify-email'
   let accountType = 'individual'; // 'individual' | 'ip' | 'organization'
   let pendingRegistrationEmail = '';
+  let pendingForgotEmail = '';
+  let pendingResetToken = '';
   let pendingPayload = {};
   let emailCountdownInterval = null;
+  let forgotCountdownInterval = null;
 
   // Флаги ликвидации / прекращения деятельности
   let isOrgLiquidated = false;
@@ -47,8 +50,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const formLogin = document.getElementById('form-login');
   const formRegister = document.getElementById('form-register');
   const formForgot = document.getElementById('form-forgot');
+  const formForgotVerify = document.getElementById('form-forgot-verify');
+  const formForgotNewPwd = document.getElementById('form-forgot-new-pwd');
   const formVerifyEmail = document.getElementById('form-verify-email');
   const alertBox = document.getElementById('auth-alert');
+
+  // Элементы сброса пароля
+  const forgotTargetEmailText = document.getElementById('forgot-target-email');
+  const forgotCodeInput = document.getElementById('forgot-code-input');
+  const forgotTimerText = document.getElementById('forgot-timer-text');
+  const btnForgotResend = document.getElementById('btn-forgot-resend');
+  const linkForgotBackToStep1 = document.getElementById('link-forgot-back-to-step1');
+  const linkForgotCancel = document.getElementById('link-forgot-cancel');
+  const forgotNewPwd = document.getElementById('forgot-new-password');
+  const forgotNewPwdConfirm = document.getElementById('forgot-new-password-confirm');
+  const forgotMatchMsg = document.getElementById('forgot-password-match-msg');
+  const forgotStrengthFill = document.getElementById('forgot-strength-fill');
+  const forgotStrengthLabel = document.getElementById('forgot-strength-label');
+
 
   // Выбор типа субъекта (Физлицо, ИП, Юрлицо)
   const btnTypeIndividual = document.getElementById('type-individual');
@@ -182,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
   refreshForgotCaptcha();
 
   // ===============================================================
-  // 1. Таймер повторной отправки E-mail кода
+  // 1. Таймеры повторной отправки E-mail кодов
   // ===============================================================
   function startEmailTimer(seconds = 60) {
     clearInterval(emailCountdownInterval);
@@ -203,6 +222,81 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 1000);
   }
 
+  function startForgotTimer(seconds = 60) {
+    clearInterval(forgotCountdownInterval);
+    let remaining = seconds;
+    if (forgotTimerText) {
+      forgotTimerText.style.display = 'inline';
+      forgotTimerText.innerText = 'Запросить код повторно через ' + remaining + ' сек.';
+    }
+    if (btnForgotResend) btnForgotResend.style.display = 'none';
+
+    forgotCountdownInterval = setInterval(() => {
+      remaining--;
+      if (remaining <= 0) {
+        clearInterval(forgotCountdownInterval);
+        if (forgotTimerText) forgotTimerText.style.display = 'none';
+        if (btnForgotResend) btnForgotResend.style.display = 'inline-block';
+      } else {
+        if (forgotTimerText) forgotTimerText.innerText = 'Запросить код повторно через ' + remaining + ' сек.';
+      }
+    }, 1000);
+  }
+
+  // Расчет сложности пароля при сбросе
+  function checkForgotPwdStrength(password) {
+    if (!forgotStrengthFill || !forgotStrengthLabel) return;
+    if (!password || password.length === 0) {
+      forgotStrengthFill.style.width = '0%';
+      forgotStrengthLabel.innerText = 'Сложность: —';
+      return;
+    }
+
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[A-ZА-Я]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++;
+
+    const levels = [
+      { width: '25%', color: '#EF4444', text: 'Слабый' },
+      { width: '50%', color: '#F59E0B', text: 'Средний' },
+      { width: '75%', color: '#3B82F6', text: 'Хороший' },
+      { width: '100%', color: '#10B981', text: 'Надежный' }
+    ];
+
+    const current = levels[score - 1] || levels[0];
+    forgotStrengthFill.style.width = current.width;
+    forgotStrengthFill.style.backgroundColor = current.color;
+    forgotStrengthLabel.innerText = 'Сложность: ' + current.text;
+  }
+
+  // Проверка совпадения нового пароля при сбросе
+  function validateForgotPwdMatch() {
+    if (!forgotNewPwd || !forgotNewPwdConfirm || !forgotMatchMsg) return true;
+    const p1 = forgotNewPwd.value;
+    const p2 = forgotNewPwdConfirm.value;
+
+    if (!p2 || p2.length === 0) {
+      forgotMatchMsg.style.display = 'none';
+      forgotNewPwdConfirm.classList.remove('is-invalid');
+      return true;
+    }
+
+    forgotMatchMsg.style.display = 'flex';
+    if (p1 === p2) {
+      forgotMatchMsg.className = 'password-match-status match';
+      forgotMatchMsg.innerHTML = '✓ Пароли совпадают';
+      forgotNewPwdConfirm.classList.remove('is-invalid');
+      return true;
+    } else {
+      forgotMatchMsg.className = 'password-match-status mismatch';
+      forgotMatchMsg.innerHTML = '✕ Пароли не совпадают';
+      forgotNewPwdConfirm.classList.add('is-invalid');
+      return false;
+    }
+  }
+
   // ===============================================================
   // 2. Переключение режимов (Вход / Регистрация / Восстановление / E-mail)
   // ===============================================================
@@ -217,7 +311,9 @@ document.addEventListener('DOMContentLoaded', () => {
       tabRegister.classList.remove('active');
       formLogin.style.display = 'block';
       formRegister.style.display = 'none';
-      formForgot.style.display = 'none';
+      if (formForgot) formForgot.style.display = 'none';
+      if (formForgotVerify) formForgotVerify.style.display = 'none';
+      if (formForgotNewPwd) formForgotNewPwd.style.display = 'none';
       formVerifyEmail.style.display = 'none';
       document.getElementById('auth-title').innerText = 'Вход в личный кабинет';
       document.getElementById('auth-subtitle').innerText = 'Экосистема коммерческих смарт-контрактов';
@@ -227,7 +323,9 @@ document.addEventListener('DOMContentLoaded', () => {
       tabRegister.classList.add('active');
       formLogin.style.display = 'none';
       formRegister.style.display = 'block';
-      formForgot.style.display = 'none';
+      if (formForgot) formForgot.style.display = 'none';
+      if (formForgotVerify) formForgotVerify.style.display = 'none';
+      if (formForgotNewPwd) formForgotNewPwd.style.display = 'none';
       formVerifyEmail.style.display = 'none';
       document.getElementById('auth-title').innerText = 'Регистрация аккаунта';
       document.getElementById('auth-subtitle').innerText = 'Присоединяйтесь к профессиональному сообществу';
@@ -236,16 +334,53 @@ document.addEventListener('DOMContentLoaded', () => {
       tabsContainer.style.display = 'none';
       formLogin.style.display = 'none';
       formRegister.style.display = 'none';
-      formForgot.style.display = 'block';
+      if (formForgot) formForgot.style.display = 'block';
+      if (formForgotVerify) formForgotVerify.style.display = 'none';
+      if (formForgotNewPwd) formForgotNewPwd.style.display = 'none';
       formVerifyEmail.style.display = 'none';
       document.getElementById('auth-title').innerText = 'Восстановление доступа';
       document.getElementById('auth-subtitle').innerText = 'Введите E-mail, указанный при регистрации';
       refreshForgotCaptcha();
+    } else if (mode === 'forgot-verify') {
+      tabsContainer.style.display = 'none';
+      formLogin.style.display = 'none';
+      formRegister.style.display = 'none';
+      if (formForgot) formForgot.style.display = 'none';
+      if (formForgotVerify) formForgotVerify.style.display = 'block';
+      if (formForgotNewPwd) formForgotNewPwd.style.display = 'none';
+      formVerifyEmail.style.display = 'none';
+      document.getElementById('auth-title').innerText = 'Проверочный код';
+      document.getElementById('auth-subtitle').innerText = 'Письмо с 6-значным проверочным кодом отправлено на почту';
+      if (forgotTargetEmailText) forgotTargetEmailText.innerText = pendingForgotEmail;
+      if (forgotCodeInput) {
+        forgotCodeInput.value = '';
+        forgotCodeInput.focus();
+      }
+      startForgotTimer(60);
+    } else if (mode === 'forgot-new-pwd') {
+      tabsContainer.style.display = 'none';
+      formLogin.style.display = 'none';
+      formRegister.style.display = 'none';
+      if (formForgot) formForgot.style.display = 'none';
+      if (formForgotVerify) formForgotVerify.style.display = 'none';
+      if (formForgotNewPwd) formForgotNewPwd.style.display = 'block';
+      formVerifyEmail.style.display = 'none';
+      document.getElementById('auth-title').innerText = 'Новый пароль';
+      document.getElementById('auth-subtitle').innerText = 'Придумайте надежный пароль для вашей учетной записи';
+      if (forgotNewPwd) {
+        forgotNewPwd.value = '';
+        forgotNewPwd.focus();
+      }
+      if (forgotNewPwdConfirm) forgotNewPwdConfirm.value = '';
+      if (forgotMatchMsg) forgotMatchMsg.style.display = 'none';
+      checkForgotPwdStrength('');
     } else if (mode === 'verify-email') {
       tabsContainer.style.display = 'none';
       formLogin.style.display = 'none';
       formRegister.style.display = 'none';
-      formForgot.style.display = 'none';
+      if (formForgot) formForgot.style.display = 'none';
+      if (formForgotVerify) formForgotVerify.style.display = 'none';
+      if (formForgotNewPwd) formForgotNewPwd.style.display = 'none';
       formVerifyEmail.style.display = 'block';
       document.getElementById('auth-title').innerText = 'Подтверждение E-mail';
       document.getElementById('auth-subtitle').innerText = 'Остался один шаг для завершения регистрации';
@@ -257,6 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
       startEmailTimer(60);
     }
   }
+
 
   // Переключение типа субъекта (3 сегмента)
   function setAccountType(type) {
@@ -274,10 +410,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Уведомления
   function showAlert(message, type = 'error') {
+    const cleanMsg = String(message || '').replace(/^[\s✓✅✔️🎉⚠️🔐🔒🔔💡📌*—–-]+/, '').trim();
     alertBox.className = 'auth-alert ' + type;
-    alertBox.innerHTML = '<span>' + (type === 'error' ? '⚠️' : '✅') + '</span> <div>' + message + '</div>';
+    alertBox.innerHTML = '<span>' + (type === 'error' ? '⚠️' : '✅') + '</span> <div>' + cleanMsg + '</div>';
     alertBox.style.display = 'flex';
   }
+
+
 
   function hideAlert() {
     alertBox.style.display = 'none';
@@ -695,6 +834,18 @@ document.addEventListener('DOMContentLoaded', () => {
     regPwdConfirm.addEventListener('input', validatePasswordMatch);
   }
 
+  // Слушатели ввода нового пароля при сбросе
+  if (forgotNewPwd) {
+    forgotNewPwd.addEventListener('input', (e) => {
+      checkForgotPwdStrength(e.target.value);
+      if (forgotNewPwdConfirm && forgotNewPwdConfirm.value.length > 0) validateForgotPwdMatch();
+    });
+  }
+
+  if (forgotNewPwdConfirm) {
+    forgotNewPwdConfirm.addEventListener('input', validateForgotPwdMatch);
+  }
+
   // Слушатели событий табов и ссылок
   tabLogin.addEventListener('click', () => setMode('login'));
   tabRegister.addEventListener('click', () => setMode('register'));
@@ -714,12 +865,25 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     setMode('login');
   });
+  if (linkForgotBackToStep1) {
+    linkForgotBackToStep1.addEventListener('click', (e) => {
+      e.preventDefault();
+      setMode('forgot');
+    });
+  }
+  if (linkForgotCancel) {
+    linkForgotCancel.addEventListener('click', (e) => {
+      e.preventDefault();
+      setMode('login');
+    });
+  }
   if (linkBackToRegister) {
     linkBackToRegister.addEventListener('click', (e) => {
       e.preventDefault();
       setMode('register');
     });
   }
+
 
   document.querySelectorAll('.checkbox-label a.link-btn').forEach(link => {
     link.addEventListener('click', (e) => {
@@ -798,8 +962,9 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('auth_token', data.token);
       localStorage.setItem('user_profile', JSON.stringify(data.user));
 
-      showAlert('✓ Успешная авторизация! Перенаправление в личный кабинет...', 'success');
+      showAlert('Успешная авторизация! Перенаправление в личный кабинет...', 'success');
       setTimeout(() => {
+
         window.location.href = 'dashboard.html';
       }, 300);
 
@@ -1068,7 +1233,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('user_profile', JSON.stringify(data.user));
       }
 
-      showAlert('🎉 Поздравляем! Ваш E-mail подтвержден, аккаунт сохранен в базе данных. Перенаправление в личный кабинет...', 'success');
+      showAlert('Поздравляем! Ваш E-mail подтвержден, аккаунт сохранен в базе данных. Перенаправление в личный кабинет...', 'success');
       
       setTimeout(() => {
         window.location.href = 'dashboard.html';
@@ -1112,41 +1277,226 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Отправка формы восстановления пароля
-  formForgot.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    hideAlert();
-    clearValidationErrors();
+  // ===============================================================
+  // 8. Сброс пароля — Шаг 1: Запрос проверочного кода на E-mail
+  // ===============================================================
+  if (formForgot) {
+    formForgot.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+      clearValidationErrors();
 
-    const email = document.getElementById('forgot-email').value.trim();
-    const captchaInput = document.getElementById('forgot-captcha-input');
-    const captchaVal = captchaInput ? captchaInput.value.trim().toUpperCase() : '';
+      const email = document.getElementById('forgot-email').value.trim();
+      const captchaInput = document.getElementById('forgot-captcha-input');
+      const captchaVal = captchaInput ? captchaInput.value.trim().toUpperCase() : '';
 
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      markInvalid('forgot-email');
-      showAlert('Пожалуйста, укажите корректный адрес электронной почты (E-mail)');
-      return;
-    }
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        markInvalid('forgot-email');
+        showAlert('Пожалуйста, укажите корректный адрес электронной почты (E-mail)');
+        return;
+      }
 
-    if (!captchaVal || captchaVal !== forgotCaptchaCode) {
-      markInvalid('forgot-captcha-input');
-      showAlert('Неверно указан защитный код с картинки (капча). Мы обновили код, попробуйте еще раз');
-      refreshForgotCaptcha();
-      return;
-    }
+      if (!captchaVal || captchaVal !== forgotCaptchaCode) {
+        markInvalid('forgot-captcha-input');
+        showAlert('Неверно указан защитный код с картинки (капча). Мы обновили код, попробуйте еще раз');
+        refreshForgotCaptcha();
+        return;
+      }
 
-    const btn = formForgot.querySelector('.btn-primary');
-    const originalText = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span> Отправка запроса...';
+      const btn = document.getElementById('btn-submit-forgot') || formForgot.querySelector('.btn-primary');
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Отправка проверочного письма...';
 
-    setTimeout(() => {
-      btn.disabled = false;
-      btn.innerHTML = originalText;
-      showAlert('Инструкции и ссылка для сброса пароля направлены на адрес ' + email, 'success');
-      refreshForgotCaptcha();
-    }, 600);
-  });
+      try {
+        const response = await fetch('/api/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email })
+        });
+        const data = await response.json();
+
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+
+        if (!data.success) {
+          showAlert(data.error || 'Ошибка при отправке письма для сброса пароля');
+          refreshForgotCaptcha();
+          return;
+        }
+
+        // Переход на Шаг 2: Ввод проверочного кода
+        pendingForgotEmail = email;
+        setMode('forgot-verify');
+        showAlert('Письмо с 6-значным проверочным кодом отправлено на адрес ' + email + '. Пожалуйста, проверьте ваш почтовый ящик.', 'success');
+
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        showAlert('Ошибка связи с сервером при отправке письма');
+        refreshForgotCaptcha();
+      }
+    });
+  }
+
+  // ===============================================================
+  // 9. Сброс пароля — Шаг 2: Проверка проверочного кода из письма
+  // ===============================================================
+  if (formForgotVerify) {
+    formForgotVerify.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+      clearValidationErrors();
+
+      const code = forgotCodeInput ? forgotCodeInput.value.trim() : '';
+
+      if (!code || code.length !== 6) {
+        if (forgotCodeInput) markInvalid('forgot-code-input');
+        showAlert('Пожалуйста, введите полный 6-значный проверочный код из электронного письма');
+        return;
+      }
+
+      const btn = document.getElementById('btn-submit-forgot-verify');
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Проверка проверочного кода...';
+
+      try {
+        const response = await fetch('/api/auth/forgot-verify-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: pendingForgotEmail,
+            code: code
+          })
+        });
+        const data = await response.json();
+
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+
+        if (!data.success || !data.verified) {
+          if (forgotCodeInput) markInvalid('forgot-code-input');
+          showAlert(data.error || 'Введен неверный проверочный код из электронного письма');
+          return;
+        }
+
+        // Переход на Шаг 3: Установка нового пароля
+        pendingResetToken = data.resetToken;
+        setMode('forgot-new-pwd');
+        showAlert('Проверочный код подтвержден! Придумайте и введите новый пароль.', 'success');
+
+
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        showAlert('Ошибка связи с сервером при проверке кода');
+      }
+    });
+  }
+
+  // Повторная отправка кода сброса пароля
+  if (btnForgotResend) {
+    btnForgotResend.addEventListener('click', async (e) => {
+      e.preventDefault();
+      hideAlert();
+
+      const originalText = btnForgotResend.innerText;
+      btnForgotResend.innerText = 'Отправка...';
+
+      try {
+        const response = await fetch('/api/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: pendingForgotEmail })
+        });
+        const data = await response.json();
+        btnForgotResend.innerText = originalText;
+
+        if (data.success) {
+          startForgotTimer(60);
+          showAlert('Новое письмо с проверочным кодом отправлено на адрес ' + pendingForgotEmail, 'success');
+        } else {
+          showAlert(data.error || 'Не удалось отправить проверочный код повторно');
+        }
+      } catch (err) {
+        btnForgotResend.innerText = originalText;
+        showAlert('Ошибка связи с сервером при повторной отправке');
+      }
+    });
+  }
+
+  // ===============================================================
+  // 10. Сброс пароля — Шаг 3: Сохранение нового пароля в БД
+  // ===============================================================
+  if (formForgotNewPwd) {
+    formForgotNewPwd.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+      clearValidationErrors();
+
+      const newPassword = forgotNewPwd ? forgotNewPwd.value : '';
+      const newPasswordConfirm = forgotNewPwdConfirm ? forgotNewPwdConfirm.value : '';
+
+      if (newPassword.length < 8) {
+        if (forgotNewPwd) markInvalid('forgot-new-password');
+        showAlert('Новый пароль должен содержать не менее 8 символов');
+        return;
+      }
+
+      if (newPassword !== newPasswordConfirm) {
+        if (forgotNewPwdConfirm) markInvalid('forgot-new-password-confirm');
+        showAlert('Введенные пароли не совпадают. Пожалуйста, проверьте правильность ввода');
+        return;
+      }
+
+      const btn = document.getElementById('btn-submit-save-new-pwd');
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Сохранение нового пароля в базе данных...';
+
+      try {
+        const response = await fetch('/api/auth/forgot-reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: pendingForgotEmail,
+            resetToken: pendingResetToken,
+            newPassword: newPassword
+          })
+        });
+        const data = await response.json();
+
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+
+        if (!data.success) {
+          showAlert(data.error || 'Ошибка при обновлении пароля');
+          return;
+        }
+
+        // УСПЕХ! Пароль обновлен!
+        const loginEmailInput = document.getElementById('login-email');
+        if (loginEmailInput) {
+          loginEmailInput.value = pendingForgotEmail;
+        }
+        const loginPwdInput = document.getElementById('login-password');
+        if (loginPwdInput) {
+          loginPwdInput.value = '';
+        }
+
+        setMode('login');
+        showAlert('Пароль успешно изменен! Введите новый пароль для входа в личный кабинет.', 'success');
+
+
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        showAlert('Ошибка связи с сервером при сохранении нового пароля');
+      }
+    });
+  }
+
 
   // Переключатель тем
   if (themeToggle) {

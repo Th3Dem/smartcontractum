@@ -1,0 +1,17 @@
+{
+  "task": "TASK-28",
+  "name": "fix-topics-dropdown-zindex",
+  "state": "DONE",
+  "completed_at": "2026-08-31T23:41:57+03:00",
+  "rework_count": 0,
+  "required_gates": {
+    "product": true,
+    "tech": true,
+    "ux": true,
+    "data": true,
+    "security": true,
+    "qa": true,
+    "release": true
+  },
+  "created_at": "2026-08-31T23:41:17+03:00"
+}
