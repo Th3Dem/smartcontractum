@@ -871,7 +871,32 @@
 
 2026-09-01T00:26:10+03:00 | TASK-33 | ops_bot | RELEASE_READY | Подготовлен релизный отчет [tasks/TASK-33-hero-nav-reorder-and-search/RELEASE_REPORT.md](file:///home/dem/Projects_01/tasks/TASK-33-hero-nav-reorder-and-search/RELEASE_REPORT.md). Версия `v2.20.0-hero-nav-reorder-and-search` выпущена в релиз.
 
-2026-09-01T00:26:12+03:00 | TASK-33 | pm_bot | TASK_COMPLETED | Задача TASK-33 успешно завершена и сдана в статусе Done-Done. Все 7 Required Gates утверждены (`APPROVED`), артефакт состояния [tasks/TASK-33-hero-nav-reorder-and-search/TASK_STATE.json](file:///home/dem/Projects_01/tasks/TASK-33-hero-nav-reorder-and-search/TASK_STATE.json) переведен в `DONE`.
+---
+
+## 35. TASK-34: Переработка информационной архитектуры Сообщества SmartContractum (Этап 1, Инкремент 1)
+
+2026-09-01T01:28:15+03:00 | TASK-34 | pm_bot | PROJECT_START | Инициализирована стратегическая задача TASK-34 по модернизации информационной архитектуры Сообщества SmartContractum в рамках первого этапа платформы. Сформирована базовая проектная документация: аудит текущего состояния [docs/product/stage1-current-state.md](file:///home/dem/Projects_01/docs/product/stage1-current-state.md), целевая модель [docs/product/stage1-target-state.md](file:///home/dem/Projects_01/docs/product/stage1-target-state.md), бэклог из 12 эпиков [docs/product/stage1-backlog.md](file:///home/dem/Projects_01/docs/product/stage1-backlog.md), репутационная модель [docs/product/reputation-model.md](file:///home/dem/Projects_01/docs/product/reputation-model.md), типология контента [docs/product/content-types.md](file:///home/dem/Projects_01/docs/product/content-types.md), таксономия [docs/product/topic-taxonomy.md](file:///home/dem/Projects_01/docs/product/topic-taxonomy.md), доменная модель [docs/architecture/stage1-domain-model.md](file:///home/dem/Projects_01/docs/architecture/stage1-domain-model.md), SEO/GEO [docs/seo/stage1-seo-geo.md](file:///home/dem/Projects_01/docs/seo/stage1-seo-geo.md), критерии приемки [docs/qa/stage1-acceptance.md](file:///home/dem/Projects_01/docs/qa/stage1-acceptance.md). Созданы артефакты [tasks/TASK-34-community-feed-stage1-ia/TASK.md](file:///home/dem/Projects_01/tasks/TASK-34-community-feed-stage1-ia/TASK.md) и [tasks/TASK-34-community-feed-stage1-ia/TASK_STATE.json](file:///home/dem/Projects_01/tasks/TASK-34-community-feed-stage1-ia/TASK_STATE.json).
+
+2026-09-01T01:28:19+03:00 | TASK-34 | product_bot | PRODUCT_READY | Разработана продуктовая спецификация [tasks/TASK-34-community-feed-stage1-ia/PRODUCT_SPEC.md](file:///home/dem/Projects_01/tasks/TASK-34-community-feed-stage1-ia/PRODUCT_SPEC.md).
+
+2026-09-01T01:28:23+03:00 | TASK-34 | architect_bot | ARCH_READY | Разработана техническая спецификация [tasks/TASK-34-community-feed-stage1-ia/TECH_SPEC.md](file:///home/dem/Projects_01/tasks/TASK-34-community-feed-stage1-ia/TECH_SPEC.md).
+
+2026-09-01T01:28:26+03:00 | TASK-34 | ux_bot | UX_READY | Разработана интерфейсная спецификация [tasks/TASK-34-community-feed-stage1-ia/UX_SPEC.md](file:///home/dem/Projects_01/tasks/TASK-34-community-feed-stage1-ia/UX_SPEC.md).
+
+2026-09-01T01:28:28+03:00 | TASK-34 | data_bot | DATA_REVIEW_READY | Проведен аудит данных [tasks/TASK-34-community-feed-stage1-ia/DATA_REVIEW.md](file:///home/dem/Projects_01/tasks/TASK-34-community-feed-stage1-ia/DATA_REVIEW.md).
+
+2026-09-01T01:28:29+03:00 | TASK-34 | security_bot | SECURITY_APPROVED | Проведен аудит безопасности [tasks/TASK-34-community-feed-stage1-ia/SECURITY_REVIEW.md](file:///home/dem/Projects_01/tasks/TASK-34-community-feed-stage1-ia/SECURITY_REVIEW.md).
+
+2026-09-01T01:30:30+03:00 | TASK-34 | frontend_bot | IMPLEMENTATION_READY | В [public/feed.html](file:///home/dem/Projects_01/public/feed.html), [public/forum_social.css](file:///home/dem/Projects_01/public/forum_social.css) и [public/forum_social.js](file:///home/dem/Projects_01/public/forum_social.js) внедрены: верхняя навигация «Главная / Сообщество / База знаний», CTA «+ Создать», целевые вкладки ленты («Для вас», «Подписки», «Вопросы», «Статьи», «Обсуждения», «Кейсы»), универсальный поиск «Поиск по знаниям, людям и компаниям...», профессиональные действия («Полезно», «Ответы/Комментарии», «Сохранить», «Поделиться», «Подписаться»), сниппеты репутации, карточка короткого инсайта (Post 106) и сайдбар («Сейчас обсуждают», «Ждут ответа», «Эксперты сообщества», «Популярные хабы»).
+
+2026-09-01T01:30:46+03:00 | TASK-34 | dev_bot | DEV_HANDOVER_READY | Изменения собраны и протестированы. Подготовлен отчет [tasks/TASK-34-community-feed-stage1-ia/DEV_HANDOVER.md](file:///home/dem/Projects_01/tasks/TASK-34-community-feed-stage1-ia/DEV_HANDOVER.md).
+
+2026-09-01T01:30:49+03:00 | TASK-34 | qa_bot | QA_APPROVED | Проведен полный прогон регрессионного набора тестов (30 / 30 PASSED, 100% OK). Подготовлен отчет [tasks/TASK-34-community-feed-stage1-ia/QA_REVIEW.md](file:///home/dem/Projects_01/tasks/TASK-34-community-feed-stage1-ia/QA_REVIEW.md).
+
+2026-09-01T01:30:51+03:00 | TASK-34 | ops_bot | RELEASE_READY | Подготовлен релизный отчет [tasks/TASK-34-community-feed-stage1-ia/RELEASE_REPORT.md](file:///home/dem/Projects_01/tasks/TASK-34-community-feed-stage1-ia/RELEASE_REPORT.md). Версия `v2.21.0-community-feed-ia` выпущена в релиз.
+
+2026-09-01T01:30:58+03:00 | TASK-34 | pm_bot | TASK_COMPLETED | Задача TASK-34 успешно завершена со статусом Done-Done. Все 7 Required Gates утверждены (`APPROVED`), артефакт состояния [tasks/TASK-34-community-feed-stage1-ia/TASK_STATE.json](file:///home/dem/Projects_01/tasks/TASK-34-community-feed-stage1-ia/TASK_STATE.json) переведен в `DONE`.
+
 
 
 

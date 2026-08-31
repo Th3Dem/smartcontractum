@@ -468,6 +468,24 @@ body.dark-theme-feed {
     color: #0284c7 !important;
 }
 
+[data-theme="light"] .sidebar-discuss-item,
+[data-theme="light"] .sidebar-unanswered-item {
+    background: #f8fafc !important;
+    border-color: rgba(203, 213, 225, 0.9) !important;
+}
+
+[data-theme="light"] .sidebar-discuss-item:hover,
+[data-theme="light"] .sidebar-unanswered-item:hover {
+    background: #f1f5f9 !important;
+    border-color: #0284c7 !important;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.1) !important;
+}
+
+[data-theme="light"] .discuss-item-title,
+[data-theme="light"] .unanswered-title {
+    color: #0f172a !important;
+}
+
 [data-theme="light"] .poll-mini-title {
     color: #0f172a !important;
 }
@@ -2304,6 +2322,88 @@ body.dark-theme-feed {
 .btn-sidebar-secondary:hover {
     background: #27354a;
     border-color: var(--feed-accent-cyan);
+}
+
+/* Sidebar Discussions */
+.sidebar-discuss-list,
+.sidebar-unanswered-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-discuss-item,
+.sidebar-unanswered-item {
+    display: block;
+    padding: 10px 12px;
+    background: #152238;
+    border: 1px solid rgba(56, 189, 248, 0.12);
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar-discuss-item:hover,
+.sidebar-unanswered-item:hover {
+    background: #1c2e4a;
+    border-color: rgba(56, 189, 248, 0.35);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.discuss-type-tag {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--feed-accent-amber);
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    padding: 1px 6px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+}
+
+.discuss-item-title,
+.unanswered-title {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #f8fafc;
+    line-height: 1.4;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.discuss-meta-bar,
+.unanswered-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--feed-text-dim);
+}
+
+.unanswered-cat {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--feed-accent-cyan);
+    font-size: 11px;
+}
+
+.unanswered-bounty {
+    font-weight: 700;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 1px 6px;
+    border-radius: 6px;
+}
+
+.unanswered-replies {
+    color: var(--feed-text-dim);
+}
+
+.btn-follow-author.is-following {
+    background: #10b981 !important;
+    border-color: #10b981 !important;
+    color: #ffffff !important;
 }
 
 /* Sidebar Polls */

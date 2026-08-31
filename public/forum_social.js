@@ -347,18 +347,37 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
     // 10. FILTERING & SEARCH CONTROLLER
     // =========================================================================
-    const feedCards = document.querySelectorAll('.feed-card');
-    let activeType = 'all';
+    let activeType = 'for-you';
     let activeCat = 'all';
     let activeSearch = '';
 
     function applyFilters() {
-        feedCards.forEach(card => {
-            const cardType = card.dataset.type;
+        const cards = document.querySelectorAll('.feed-card');
+        cards.forEach(card => {
+            const cardType = card.dataset.type; // question, article, discussion, poll, case, post
             const cardCat = card.dataset.cat;
             const cardText = card.textContent.toLowerCase();
 
-            const matchType = (activeType === 'all' || cardType === activeType);
+            let matchType = false;
+            if (activeType === 'for-you' || activeType === 'all') {
+                matchType = true;
+            } else if (activeType === 'following') {
+                // Curated followed authors / verified materials
+                matchType = true;
+            } else if (activeType === 'question') {
+                matchType = (cardType === 'question');
+            } else if (activeType === 'article') {
+                matchType = (cardType === 'article');
+            } else if (activeType === 'discussion') {
+                matchType = (cardType === 'discussion' || cardType === 'poll');
+            } else if (activeType === 'case') {
+                matchType = (cardType === 'case');
+            } else if (activeType === 'post') {
+                matchType = (cardType === 'post');
+            } else {
+                matchType = (cardType === activeType);
+            }
+
             const matchCat = (activeCat === 'all' || cardCat === activeCat);
             const matchSearch = (!activeSearch || cardText.includes(activeSearch));
 
@@ -366,48 +385,57 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Hero Nav Tabs (Статьи, Посты, Новости, Авторы, Компании)
+    // Hero Nav Tabs (Для вас, Подписки, Вопросы, Статьи, Обсуждения, Кейсы)
     document.querySelectorAll('.feed-hero-tab').forEach(tab => {
         tab.addEventListener('click', function () {
             document.querySelectorAll('.feed-hero-tab').forEach(t => t.classList.remove('is-active'));
             this.classList.add('is-active');
 
             const heroTab = this.dataset.heroTab;
+            activeType = heroTab;
 
-            if (heroTab === 'all') {
-                activeType = 'all';
-                document.querySelectorAll('.type-tab-btn').forEach(b => b.classList.toggle('is-active', b.dataset.type === 'all'));
-                showToast('Показаны все материалы сообщества', '⚡');
+            if (heroTab === 'for-you' || heroTab === 'all') {
+                showToast('Лента «Для вас»: актуальные материалы и обсуждения', '⚡');
+            } else if (heroTab === 'following') {
+                showToast('Лента «Подписки»: активность отслеживаемых экспертов и тем', '⭐');
+            } else if (heroTab === 'question') {
+                showToast('Фильтр: Инженерные и юридические вопросы (Q&A)', '❓');
             } else if (heroTab === 'article') {
-                activeType = 'article';
-                document.querySelectorAll('.type-tab-btn').forEach(b => b.classList.toggle('is-active', b.dataset.type === 'article'));
-                showToast('Фильтр: Статьи и технические разборы', '📄');
-            } else if (heroTab === 'post') {
-                activeType = 'post';
-                document.querySelectorAll('.type-tab-btn').forEach(b => b.classList.toggle('is-active', b.dataset.type === 'post'));
-                showToast('Фильтр: Посты и короткие публикации', '💬');
-            } else if (heroTab === 'news') {
-                activeType = 'poll';
-                document.querySelectorAll('.type-tab-btn').forEach(b => b.classList.toggle('is-active', b.dataset.type === 'poll'));
-                showToast('Фильтр: Новости платформы и голосования RFC', '📰');
-            } else if (heroTab === 'authors') {
-                activeType = 'all';
-                showToast('Эксперты и авторы экосистемы SmartContractum', '👥');
-            } else if (heroTab === 'companies') {
-                activeType = 'case';
-                document.querySelectorAll('.type-tab-btn').forEach(b => b.classList.toggle('is-active', b.dataset.type === 'case'));
-                showToast('Фильтр: Паспорта и решения компаний', '💼');
+                showToast('Фильтр: Экспертные статьи и технические руководства', '📄');
+            } else if (heroTab === 'discussion') {
+                showToast('Фильтр: Обсуждения стандартов и голосования RFC', '📊');
+            } else if (heroTab === 'case') {
+                showToast('Фильтр: Паспорта сценариев и отраслевые кейсы', '💼');
             }
 
             applyFilters();
         });
     });
 
-    // Hero Write Button
+    // Follow Author Buttons in Leaderboard / Cards
+    document.querySelectorAll('.btn-follow-author').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const isFollowing = this.classList.contains('is-following');
+            if (isFollowing) {
+                this.classList.remove('is-following');
+                this.textContent = '+';
+                this.title = 'Подписаться на эксперта';
+                showToast('Вы отписались от обновлений автора', '👤');
+            } else {
+                this.classList.add('is-following');
+                this.textContent = '✓';
+                this.title = 'Вы подписаны на эксперта';
+                showToast('Вы успешно подписались на эксперта!', '⭐');
+            }
+        });
+    });
+
+    // Hero Write Button (+ Создать)
     const btnHeroWrite = document.getElementById('btnHeroWrite');
     if (btnHeroWrite) {
         btnHeroWrite.addEventListener('click', () => {
-            openQuickModal('post');
+            openQuickModal('question');
         });
     }
 
