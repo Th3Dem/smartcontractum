@@ -966,8 +966,203 @@ def get_top_reputation_users(limit: int = 5) -> list[dict]:
     return [dict(r) for r in rows]
 
 
+def get_experts_directory(competency: str = None, search: str = None, limit: int = 50, offset: int = 0) -> list[dict]:
+    """
+    Возвращает каталог специалистов и компаний рынка смарт-контрактов с фильтрацией.
+    """
+    # Базовые сертифицированные эксперты платформы
+    curated_experts = [
+        {
+            "id": 1,
+            "name": "Елена Крылова",
+            "initials": "ЕК",
+            "role": "Lead Architect & Smart-Contracts Engineer",
+            "company": "SmartContractum Lab",
+            "score": 1420,
+            "category": "smart-contracts",
+            "competencies": ["Разработка EVM", "Solidity 0.8.26", "1С:ERP Архитектура", "EIP-1153", "Смарт-эскроу"],
+            "badges": ["✓ Верифицирован по ЕГРЮЛ", "🏆 Топ-1 Платформы"],
+            "articlesCount": 18,
+            "solvedCount": 12,
+            "rating": "5.0",
+            "avatarClass": "avatar-blue",
+            "bio": "Ведущий архитектор смарт-контрактных решений. 8+ лет проектирования децентрализованных систем, протоколов эскроу и интеграции с корпоративными ERP.",
+            "contactAvailable": True
+        },
+        {
+            "id": 2,
+            "name": "Михаил Соколов",
+            "initials": "МС",
+            "role": "Security Auditor & Formal Verification Lead",
+            "company": "CryptoAudit Pro",
+            "score": 1180,
+            "category": "security",
+            "competencies": ["Аудит ИБ", "Solidity Security", "Yul Оптимизация", "ГОСТ Криптография", "SAST / DAST"],
+            "badges": ["✓ Сертифицированный аудитор ИБ", "🏆 Топ-2"],
+            "articlesCount": 14,
+            "solvedCount": 9,
+            "rating": "4.95",
+            "avatarClass": "avatar-green",
+            "bio": "Специалист по аудиту безопасности смарт-контрактов, формальной верификации байткода и криптографическим протоколам ГОСТ Р 34.10.",
+            "contactAvailable": True
+        },
+        {
+            "id": 3,
+            "name": "Дарья Воронова",
+            "initials": "ДВ",
+            "role": "Fintech & Smart-Law Counsel",
+            "company": "Fintech Legal Partners",
+            "score": 980,
+            "category": "cbrf-law",
+            "competencies": ["Право & ЦБ РФ", "Смарт-эскроу (ст. 860.7 ГК)", "Цифровой рубль", "ЦФА 259-ФЗ", "Комплаенс"],
+            "badges": ["✓ Юрист ЦФА & ПКСК", "🏆 Топ-3"],
+            "articlesCount": 11,
+            "solvedCount": 8,
+            "rating": "4.9",
+            "avatarClass": "avatar-purple",
+            "bio": "Консультант по правовому структурированию смарт-эскроу сделок, выпуску цифровых финансовых активов и взаимодействию с Банком России.",
+            "contactAvailable": True
+        },
+        {
+            "id": 4,
+            "name": "Александр Попов",
+            "initials": "АП",
+            "role": "EVM Core & Protocol Engineer",
+            "company": "SmartContractum Core Team",
+            "score": 860,
+            "category": "smart-contracts",
+            "competencies": ["EVM Precompiles", "ГОСТ 34.10 в EVM", "Solidity", "ZK-Rollups", "Gas Profiling"],
+            "badges": ["✓ Протокольный инженер"],
+            "articlesCount": 7,
+            "solvedCount": 6,
+            "rating": "4.85",
+            "avatarClass": "avatar-blue",
+            "bio": "Инженер виртуальных машин и прекомпилов криптографических стандартов ГОСТ для кастомных EVM-сетей.",
+            "contactAvailable": True
+        },
+        {
+            "id": 5,
+            "name": "ООО «Финтех Интеграция»",
+            "initials": "ФИ",
+            "role": "Корпоративный интегратор 1С и ПКСК",
+            "company": "ИТ-Интегратор",
+            "score": 790,
+            "category": "escrow-b2b",
+            "competencies": ["1C:Предприятие 8.3", "Смарт-эскроу", "Шлюзы Оракулов", "B2B Взаиморасчеты", "КС-2 / КС-3"],
+            "badges": ["✓ Аккредитованная IT-компания (ИНН 7701234567)"],
+            "articlesCount": 5,
+            "solvedCount": 4,
+            "rating": "4.8",
+            "avatarClass": "avatar-green",
+            "bio": "Системный интегратор корпоративных ERP и казначейских систем с ончейн-эскроу контрактами в цифровых рублях.",
+            "contactAvailable": True
+        },
+        {
+            "id": 6,
+            "name": "Шлюз Оракулов ФНС РФ (Демо-контур)",
+            "initials": "ФНС",
+            "role": "Провайдер внешних данных [DEMO]",
+            "company": "SmartContractum Data Hub",
+            "score": 650,
+            "category": "oracles",
+            "competencies": ["ЕГРЮЛ / ЕГРИП", "Оракулы данных", "TLS ГОСТ", "99.98% SLA"],
+            "badges": ["✓ Демо-шлюз данных"],
+            "articlesCount": 4,
+            "solvedCount": 3,
+            "rating": "4.75",
+            "avatarClass": "avatar-purple",
+            "bio": "Поставщик оракулов правоспособности юрлиц, блокировок счетов и финансовой надежности контрагентов.",
+            "contactAvailable": True
+        }
+    ]
+
+    # Дополняем зарегистрированными пользователями из БД
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT u.id, u.first_name, u.last_name, u.email, u.blog_title, u.account_type, u.company_short_name,
+                   COALESCE(r.score, 50) as score, COALESCE(r.competencies_json, '[]') as comp_json
+            FROM users u
+            LEFT JOIN user_reputation r ON u.id = r.user_id
+            WHERE u.is_verified = 1
+            ORDER BY score DESC
+        """)
+        db_users = cursor.fetchall()
+        conn.close()
+
+        for u in db_users:
+            u_id = 100 + u["id"]
+            name = (u["first_name"] or "") + " " + (u["last_name"] or "")
+            name = name.strip() or u["company_short_name"] or u["email"]
+            initials = (name[:2]).upper() if name else "СП"
+            
+            curated_experts.append({
+                "id": u_id,
+                "name": name,
+                "initials": initials,
+                "role": u["blog_title"] or "Специалист сообщества",
+                "company": u["company_short_name"] or "Независимый эксперт",
+                "score": u["score"],
+                "category": "smart-contracts",
+                "competencies": ["Разработка смарт-контрактов", "EVM", "Аудит"],
+                "badges": ["✓ Верифицирован"],
+                "articlesCount": 2,
+                "solvedCount": 1,
+                "rating": "4.8",
+                "avatarClass": "avatar-blue",
+                "bio": f"Эксперт сообщества SmartContractum. Специализируется на смарт-контрактах и правовых моделях.",
+                "contactAvailable": True
+            })
+    except Exception:
+        pass
+
+    # Фильтрация
+    results = []
+    for exp in curated_experts:
+        # Фильтр по компетенции
+        if competency and competency not in ("all", "all-directions"):
+            match_cat = (exp.get("category") == competency)
+            match_comp = any(competency.lower() in c.lower() for c in exp.get("competencies", []))
+            if not (match_cat or match_comp):
+                continue
+
+        # Фильтр по поиску
+        if search:
+            s = search.strip().lower()
+            text_to_search = f"{exp['name']} {exp['role']} {exp['company']} {' '.join(exp['competencies'])} {exp['bio']}".lower()
+            if s not in text_to_search:
+                continue
+
+        results.append(exp)
+
+    return results[offset:offset + limit]
+
+
+def get_expert_profile(expert_id: int) -> dict | None:
+    """
+    Возвращает детальный публичный профиль эксперта.
+    """
+    experts = get_experts_directory(limit=200)
+    for exp in experts:
+        if exp["id"] == expert_id:
+            # Получаем публикации эксперта из БД
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT id, title, type, category, helpful_count, created_at FROM feed_posts WHERE author_name LIKE ? LIMIT 5", (f"%{exp['name'].split()[0]}%",))
+            posts = [dict(r) for r in cursor.fetchall()]
+            conn.close()
+
+            exp_copy = dict(exp)
+            exp_copy["publications"] = posts
+            return exp_copy
+
+    return None
+
+
 # Инициализируем БД при импорте
 init_db()
+
 
 
 

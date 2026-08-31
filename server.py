@@ -607,6 +607,29 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
             self.send_json({"success": True, "leaders": leaders})
             return
 
+        # 3.5 API каталога экспертов и специалистов (/api/experts)
+        if parsed.path == "/api/experts":
+            params = urllib.parse.parse_qs(parsed.query)
+            comp = params.get("competency", [None])[0]
+            search = params.get("search", [None])[0]
+            limit = int(params.get("limit", ["50"])[0])
+            offset = int(params.get("offset", ["0"])[0])
+            experts = db.get_experts_directory(competency=comp, search=search, limit=limit, offset=offset)
+            self.send_json({"success": True, "count": len(experts), "experts": experts})
+            return
+
+        # 3.6 API профиля конкретного эксперта (/api/experts/<id>)
+        if parsed.path.startswith("/api/experts/"):
+            parts = parsed.path.strip("/").split("/")
+            if len(parts) == 3 and parts[2].isdigit():
+                exp_id = int(parts[2])
+                profile = db.get_expert_profile(exp_id)
+                if profile:
+                    self.send_json({"success": True, "expert": profile})
+                else:
+                    self.send_json({"success": False, "error": "Профиль эксперта не найден"}, 404)
+                return
+
 
         # 4. Проверка Host для поддомена второго уровня (auth.localhost, auth.smartcontractum.ru и т.п.)
         host_header = self.headers.get("Host", "").lower().split(":")[0]
@@ -635,7 +658,12 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
             self.serve_static_file(os.path.join(PUBLIC_DIR, "feed.html"))
             return
 
-        # 9. Маршрутизация Редактора статей
+        # 9. Маршрутизация Каталога экспертов и специалистов
+        if parsed.path in ["/experts", "/experts/", "/experts.html", "/directory", "/directory.html"]:
+            self.serve_static_file(os.path.join(PUBLIC_DIR, "experts.html"))
+            return
+
+        # 10. Маршрутизация Редактора статей
         if parsed.path in ["/editor", "/editor/", "/editor.html", "/feed/create"]:
             self.serve_static_file(os.path.join(PUBLIC_DIR, "editor.html"))
             return

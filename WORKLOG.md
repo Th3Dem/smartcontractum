@@ -923,6 +923,33 @@
 
 2026-09-01T01:38:22+03:00 | TASK-40 | pm_bot | TASK_COMPLETED | Задача TASK-40 успешно завершена со статусом Done-Done. Все 7 Required Gates утверждены (`APPROVED`), артефакт состояния [tasks/TASK-40-qa-core-and-reputation/TASK_STATE.json](file:///home/dem/Projects_01/tasks/TASK-40-qa-core-and-reputation/TASK_STATE.json) переведен в `DONE`.
 
+---
+
+## 37. TASK-42: Публичный профиль эксперта и каталог специалистов рынка смарт-контрактов (Этап 1, Инкремент 3)
+
+2026-09-01T01:40:01+03:00 | TASK-42 | pm_bot | PROJECT_START | Инициализирована задача TASK-42 по разработке каталога специалистов рынка смарт-контрактов (`/experts`), публичных профилей экспертов и механизма поиска участников по подтвержденным компетенциям. Созданы артефакты [tasks/TASK-42-expert-profiles-and-directory/TASK.md](file:///home/dem/Projects_01/tasks/TASK-42-expert-profiles-and-directory/TASK.md) и [tasks/TASK-42-expert-profiles-and-directory/TASK_STATE.json](file:///home/dem/Projects_01/tasks/TASK-42-expert-profiles-and-directory/TASK_STATE.json).
+
+2026-09-01T01:40:06+03:00 | TASK-42 | product_bot | PRODUCT_READY | Разработана продуктовая спецификация [tasks/TASK-42-expert-profiles-and-directory/PRODUCT_SPEC.md](file:///home/dem/Projects_01/tasks/TASK-42-expert-profiles-and-directory/PRODUCT_SPEC.md).
+
+2026-09-01T01:40:08+03:00 | TASK-42 | architect_bot | ARCH_READY | Разработана техническая спецификация [tasks/TASK-42-expert-profiles-and-directory/TECH_SPEC.md](file:///home/dem/Projects_01/tasks/TASK-42-expert-profiles-and-directory/TECH_SPEC.md).
+
+2026-09-01T01:40:12+03:00 | TASK-42 | ux_bot | UX_READY | Разработана интерфейсная спецификация [tasks/TASK-42-expert-profiles-and-directory/UX_SPEC.md](file:///home/dem/Projects_01/tasks/TASK-42-expert-profiles-and-directory/UX_SPEC.md).
+
+2026-09-01T01:40:14+03:00 | TASK-42 | data_bot | DATA_REVIEW_READY | Проведен аудит модели данных [tasks/TASK-42-expert-profiles-and-directory/DATA_REVIEW.md](file:///home/dem/Projects_01/tasks/TASK-42-expert-profiles-and-directory/DATA_REVIEW.md).
+
+2026-09-01T01:40:18+03:00 | TASK-42 | security_bot | SECURITY_APPROVED | Проведен аудит безопасности [tasks/TASK-42-expert-profiles-and-directory/SECURITY_REVIEW.md](file:///home/dem/Projects_01/tasks/TASK-42-expert-profiles-and-directory/SECURITY_REVIEW.md).
+
+2026-09-01T01:40:53+03:00 | TASK-42 | frontend_bot | IMPLEMENTATION_READY | Разработаны интерфейс каталога [public/experts.html](file:///home/dem/Projects_01/public/experts.html) и клиентский контроллер [public/experts.js](file:///home/dem/Projects_01/public/experts.js). Внедрены фильтры по направлениям, живой поиск, карточки экспертов со статистикой репутации и модальное окно портфолио. В [public/feed.html](file:///home/dem/Projects_01/public/feed.html) добавлена ссылка на каталог экспертов.
+
+2026-09-01T01:41:23+03:00 | TASK-42 | dev_bot | DEV_HANDOVER_READY | В модулях [db.py](file:///home/dem/Projects_01/db.py) и [server.py](file:///home/dem/Projects_01/server.py) реализованы функции `get_experts_directory()`, `get_expert_profile()`, эндпоинты `/api/experts`, `/api/experts/<id>` и маршрут `/experts`. Подготовлен отчет передачи [tasks/TASK-42-expert-profiles-and-directory/DEV_HANDOVER.md](file:///home/dem/Projects_01/tasks/TASK-42-expert-profiles-and-directory/DEV_HANDOVER.md).
+
+2026-09-01T01:41:25+03:00 | TASK-42 | qa_bot | QA_APPROVED | Разработан и выполнен тестовый набор [tests/test_experts_directory.py](file:///home/dem/Projects_01/tests/test_experts_directory.py). Полный регрессионный прогон платформы завершился со 100% успехом (38 / 38 PASSED, OK). Подготовлен отчет [tasks/TASK-42-expert-profiles-and-directory/QA_REVIEW.md](file:///home/dem/Projects_01/tasks/TASK-42-expert-profiles-and-directory/QA_REVIEW.md).
+
+2026-09-01T01:41:28+03:00 | TASK-42 | ops_bot | RELEASE_READY | Подготовлен релизный отчет [tasks/TASK-42-expert-profiles-and-directory/RELEASE_REPORT.md](file:///home/dem/Projects_01/tasks/TASK-42-expert-profiles-and-directory/RELEASE_REPORT.md). Выполнен горячий перезапуск сервера на порту 3000. Версия `v2.23.0-expert-directory` выпущена в релиз.
+
+2026-09-01T01:41:30+03:00 | TASK-42 | pm_bot | TASK_COMPLETED | Задача TASK-42 успешно завершена со статусом Done-Done. Все 7 Required Gates утверждены (`APPROVED`), артефакт состояния [tasks/TASK-42-expert-profiles-and-directory/TASK_STATE.json](file:///home/dem/Projects_01/tasks/TASK-42-expert-profiles-and-directory/TASK_STATE.json) переведен в `DONE`.
+
+
 
 
 
