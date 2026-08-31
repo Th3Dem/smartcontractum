@@ -1,163 +1,472 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Редактор статей и смарт-контрактов SmartContractum — WYSIWYG / Markdown, подсветка Solidity/Yul, формулы LaTeX, автосохранение.">
-    <title>Редактор публикаций & Спецификаций смарт-контрактов — SmartContractum</title>
+    <meta name="description" content="Продвинутый редактор статей, спецификаций смарт-контрактов и опросов RFC платформы SmartContractum.">
+    <title>Редактор публикаций & Спецификаций смарт-контрактов | SmartContractum</title>
 
-    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <!-- Google Fonts: Inter & JetBrains Mono & Manrope -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="landing_main.css?v=2.2.0">
-    <link rel="stylesheet" href="forum_editor.css?v=2.2.0">
+    <link rel="stylesheet" href="/forum_social.css">
+    <style>
+        .editor-page-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px 24px 80px;
+        }
+
+        .editor-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--feed-bg-card);
+            border: 1px solid var(--feed-border-light);
+            border-radius: 16px;
+            padding: 16px 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(16px);
+        }
+
+        .editor-header-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .btn-back-feed {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #38bdf8;
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .btn-back-feed:hover {
+            color: #7dd3fc;
+        }
+
+        .editor-view-switcher {
+            display: flex;
+            background: #111c33;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 3px;
+            gap: 2px;
+        }
+
+        .view-btn {
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            background: transparent;
+            color: var(--feed-text-muted);
+            transition: all 0.15s;
+        }
+
+        .view-btn.is-active {
+            background: #1e293b;
+            color: #ffffff;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+
+        .editor-header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .draft-status-indicator {
+            font-size: 13px;
+            color: var(--feed-text-dim);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-publish-main {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            color: #ffffff;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+            box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35);
+        }
+
+        .btn-publish-main:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.5);
+        }
+
+        /* Workspace Layout */
+        .editor-workspace-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 300px;
+            gap: 24px;
+        }
+
+        .editor-panes-box {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        .editor-form-card {
+            background: var(--feed-bg-card);
+            border: 1px solid var(--feed-border-light);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(16px);
+        }
+
+        .meta-select-row {
+            display: grid;
+            grid-template-columns: 180px 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .editor-select, .editor-input {
+            width: 100%;
+            background: #111c33;
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: #ffffff;
+            font-size: 13.5px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .editor-select:focus, .editor-input:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+        }
+
+        .editor-title-field {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 0 16px;
+            color: #ffffff;
+            font-family: 'Manrope', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            outline: none;
+            margin-bottom: 18px;
+            transition: border-color 0.2s;
+        }
+
+        .editor-title-field:focus {
+            border-bottom-color: #38bdf8;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            background: #111c33;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 8px 12px;
+            margin-bottom: 16px;
+        }
+
+        .t-btn {
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .t-btn:hover {
+            border-color: #38bdf8;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        .editor-textarea {
+            width: 100%;
+            min-height: 480px;
+            background: #0b1426;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 18px;
+            color: #f1f5f9;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14.5px;
+            line-height: 1.7;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .editor-textarea:focus {
+            border-color: #38bdf8;
+        }
+
+        /* Preview Column */
+        .preview-card {
+            background: var(--feed-bg-card);
+            border: 1px solid var(--feed-border-light);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(16px);
+            min-height: 480px;
+            display: none;
+        }
+
+        .preview-type-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            margin-bottom: 12px;
+        }
+
+        .preview-title-rendered {
+            font-family: 'Manrope', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
+            margin: 0 0 16px;
+        }
+
+        .preview-body-rendered {
+            color: var(--feed-text-muted);
+            font-size: 14.5px;
+            line-height: 1.7;
+        }
+
+        /* Sidebar Guidelines */
+        .guidelines-card {
+            background: var(--feed-bg-card);
+            border: 1px solid var(--feed-border-light);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(16px);
+            margin-bottom: 20px;
+        }
+
+        .guidelines-title {
+            font-family: 'Manrope', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0 0 12px;
+        }
+
+        .guidelines-list {
+            padding-left: 18px;
+            margin: 0;
+            font-size: 13px;
+            color: var(--feed-text-muted);
+            line-height: 1.6;
+        }
+
+        /* Light Theme Overrides */
+        [data-theme="light"] .editor-header-bar { background: #ffffff !important; border-color: rgba(203, 213, 225, 0.9) !important; }
+        [data-theme="light"] .editor-view-switcher { background: #f1f5f9 !important; border-color: rgba(203, 213, 225, 0.8) !important; }
+        [data-theme="light"] .view-btn.is-active { background: #ffffff !important; color: #0284c7 !important; }
+        [data-theme="light"] .editor-form-card, [data-theme="light"] .preview-card, [data-theme="light"] .guidelines-card { background: #ffffff !important; border-color: rgba(203, 213, 225, 0.9) !important; box-shadow: 0 4px 20px rgba(0,0,0,0.05) !important; }
+        [data-theme="light"] .editor-select, [data-theme="light"] .editor-input { background: #f8fafc !important; border-color: rgba(203, 213, 225, 0.9) !important; color: #0f172a !important; }
+        [data-theme="light"] .editor-title-field { color: #0f172a !important; border-bottom-color: rgba(203, 213, 225, 0.9) !important; }
+        [data-theme="light"] .editor-toolbar { background: #f8fafc !important; border-color: rgba(203, 213, 225, 0.9) !important; }
+        [data-theme="light"] .t-btn { background: #ffffff !important; border-color: rgba(203, 213, 225, 0.9) !important; color: #0f172a !important; }
+        [data-theme="light"] .editor-textarea { background: #f8fafc !important; border-color: rgba(203, 213, 225, 0.9) !important; color: #0f172a !important; }
+        [data-theme="light"] .preview-title-rendered { color: #0f172a !important; }
+        [data-theme="light"] .preview-body-rendered { color: #334155 !important; }
+        [data-theme="light"] .guidelines-title { color: #0f172a !important; }
+    </style>
 </head>
-<body class="app-body light-theme-editor" style="background-color: #ffffff; color: #1e293b;">
+<body>
 
-    <div class="habr-editor-page-wrapper">
+    <!-- ================================================================
+         1. GLOBAL STICKY HEADER
+    ================================================================= -->
+    <header class="app-header" id="appHeader">
+        <div class="header-container">
+            <div class="header-left">
+                <a href="/" class="header-logo" title="На главную SmartContractum">
+                    <span class="logo-smart">Smart</span><span class="logo-contractum">Contractum</span>
+                </a>
+                <span class="header-badge-phase">Фаза НИР (до 2027)</span>
+            </div>
 
-        <!-- 1. TOP TOOLBAR -->
-        <header class="habr-editor-topbar" style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 12px 24px; position: sticky; top: 0; z-index: 100;">
-            <div class="editor-topbar-inner" style="display: flex; align-items: center; justify-content: space-between; max-width: 1400px; margin: 0 auto;">
-                <div class="editor-topbar-left" style="display: flex; align-items: center; gap: 16px;">
-                    <a href="/feed" class="btn-back-feed" title="Вернуться в ленту сообщества" style="display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: #0284c7; text-decoration: none;">
-                        <svg class="back-svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-                            <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
-                        </svg>
-                        <span>В ленту</span>
-                    </a>
-                    <div style="width: 1px; height: 20px; background: #cbd5e1;"></div>
-                    <h1 class="editor-page-title" style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0;">Создание публикации</h1>
-                    
-                    <!-- Mode Switcher: [✎ Редактор] [👁 Предпросмотр] [◫ Сплит] -->
-                    <div class="sc-segmented-nav" id="editorViewSwitcher" style="display: flex; background: #f1f5f9; padding: 3px; border-radius: 8px; gap: 2px;">
-                        <button type="button" class="sc-segmented-btn is-active" data-view="editor" id="btnViewEditor" style="border:none; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; background: #ffffff; color: #0284c7; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                            ✎ Редактор
-                        </button>
-                        <button type="button" class="sc-segmented-btn" data-view="preview" id="btnViewPreview" style="border:none; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; background: transparent; color: #64748b;">
-                            👁 Предпросмотр
-                        </button>
-                        <button type="button" class="sc-segmented-btn" data-view="split" id="btnViewSplit" style="border:none; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; background: transparent; color: #64748b;">
-                            ◫ Сплит
-                        </button>
-                    </div>
-                </div>
+            <nav class="header-nav" aria-label="Основная навигация">
+                <a href="/" class="nav-link">Главная</a>
+                <a href="/feed" class="nav-link">Сообщество</a>
+                <a href="/hubs" class="nav-link">База знаний</a>
+                <a href="/experts" class="nav-link">Эксперты</a>
+                <a href="/editor" class="nav-link active">Редактор</a>
+                <a href="/dashboard" class="nav-link" id="navLinkDashboard">Кабинет</a>
+            </nav>
 
-                <div class="editor-topbar-right" style="display: flex; align-items: center; gap: 16px;">
-                    <!-- Auto-save Status Indicator -->
-                    <div class="draft-status-box" style="font-size: 13px; color: #64748b; display: flex; align-items: center; gap: 6px;">
-                        <span id="draftStatusDot" style="width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
-                        <span id="draftStatusText">Черновик сохранен</span>
-                    </div>
+            <div class="header-actions">
+                <button type="button" class="theme-toggle-btn" id="btnThemeToggle" title="Переключить тему (Светлая / Темная)">
+                    <span class="theme-icon" id="themeIcon">🌙</span>
+                </button>
+                <a href="/auth" class="btn-header-login" id="btnHeaderAuth">Войти</a>
+            </div>
+        </div>
+    </header>
 
-                    <button type="button" class="btn-publish-post" id="btnPublishPost" style="background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff; border: none; padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: 0 2px 4px rgba(2,132,199,0.25);">
-                        Опубликовать статью →
-                    </button>
+    <!-- ================================================================
+         2. EDITOR WORKSPACE
+    ================================================================= -->
+    <div class="editor-page-wrapper">
+        
+        <!-- Editor Header Bar -->
+        <div class="editor-header-bar">
+            <div class="editor-header-left">
+                <a href="/feed" class="btn-back-feed" title="Вернуться в ленту сообщества">← В ленту</a>
+                <div style="width: 1px; height: 18px; background: rgba(255, 255, 255, 0.12); margin: 0 4px;"></div>
+                <h1 class="editor-page-title" style="font-size: 16px; font-weight: 700; color: #ffffff; margin: 0;">Создание публикации</h1>
+                <div class="editor-view-switcher">
+                    <button type="button" class="view-btn is-active" id="btnModeEditor" data-mode="editor">✎ Редактор</button>
+                    <button type="button" class="view-btn" id="btnModePreview" data-mode="preview">👁 Предпросмотр</button>
+                    <button type="button" class="view-btn" id="btnModeSplit" data-mode="split">◫ Сплит</button>
                 </div>
             </div>
-        </header>
 
-        <!-- 2. MAIN WORKSPACE (Editor Column + Live Preview Pane + Guidelines Sidebar) -->
-        <div class="habr-editor-main-grid" style="display: grid; grid-template-columns: minmax(0, 1fr) 320px; max-width: 1400px; margin: 24px auto; padding: 0 24px; gap: 32px;" id="editorMainGrid">
+            <div class="editor-header-right">
+                <div class="draft-status-indicator">
+                    <span id="draftDot" style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+                    <span id="draftStatus">Черновик сохранен</span>
+                </div>
+                <button type="button" class="btn-publish-main" id="btnSubmitPost">Опубликовать в базу знаний →</button>
+            </div>
+        </div>
 
-            <!-- Writing & Preview Columns Container -->
-            <div class="editor-panes-wrapper" id="editorPanesWrapper" style="display: grid; grid-template-columns: 1fr; gap: 24px;">
-
-                <!-- 2.1 WRITING COLUMN -->
-                <main class="habr-editor-main-column" id="editorMainColumn">
-                    <div class="editor-step-panel" id="editorStepText">
-                        
-                        <!-- Title Input -->
-                        <div class="editor-title-container" style="margin-bottom: 16px;">
-                            <textarea class="habr-title-textarea" id="articleTitleInput" 
-                                      placeholder="Заголовок публикации или спецификации смарт-контракта..." 
-                                      rows="1" 
-                                      style="width: 100%; border: none; outline: none; font-size: 28px; font-weight: 800; color: #0f172a; resize: none; font-family: inherit;"></textarea>
-                        </div>
-
-                        <!-- Hubs and Categories Select -->
-                        <div class="editor-meta-row" style="display: flex; gap: 12px; margin-bottom: 16px;">
-                            <select id="articleCategorySelect" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px; background: #f8fafc; font-family: inherit;">
-                                <option value="smart-contracts">Разработка смарт-контрактов</option>
-                                <option value="infosec-audit">Информационная безопасность & Аудит</option>
-                                <option value="oracles">Оракулы & Данные</option>
-                                <option value="safe-deals">Регуляторика & ЦБ РФ</option>
-                                <option value="treasury-b2b">Казначейство & B2B расчеты</option>
+        <!-- Main Form & Guidelines Grid -->
+        <div class="editor-workspace-grid">
+            
+            <div class="editor-panes-box" id="editorPanesBox">
+                
+                <!-- 2.1 WRITING CARD -->
+                <div class="editor-form-card" id="editorCard">
+                    
+                    <div class="meta-select-row">
+                        <div>
+                            <select class="editor-select" id="postTypeSelect" aria-label="Формат материала">
+                                <option value="article">📄 Статья / Гайд</option>
+                                <option value="question">❓ Вопрос к Q&amp;A</option>
+                                <option value="discussion">💬 Обсуждение / RFC</option>
+                                <option value="case">💼 Кейс / Паспорт</option>
                             </select>
-                            <input type="text" id="articleTagsInput" placeholder="Теги через запятую (например: #solidity, #oracles, #eip1153)" style="flex: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px; font-family: inherit;">
                         </div>
-
-                        <!-- Formatting Toolbar -->
-                        <div class="habr-format-toolbar" id="formatToolbar" style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px; margin-bottom: 16px;">
-                            <button type="button" class="toolbar-btn" data-action="bold" title="Жирный"><strong>B</strong></button>
-                            <button type="button" class="toolbar-btn" data-action="italic" title="Курсив"><em>I</em></button>
-                            <button type="button" class="toolbar-btn" data-action="h2" title="Заголовок H2"><strong>H2</strong></button>
-                            <button type="button" class="toolbar-btn" data-action="h3" title="Заголовок H3"><strong>H3</strong></button>
-                            <div style="width:1px; height:18px; background:#cbd5e1; margin:0 4px;"></div>
-                            <button type="button" class="toolbar-btn" data-action="quote" title="Цитата">❝ Цитата</button>
-                            <button type="button" class="toolbar-btn" data-action="code" title="Блок кода">&lt;/&gt; Код</button>
-                            <button type="button" class="toolbar-btn" data-action="formula" title="Формула LaTeX">∑ Формула</button>
-                            <button type="button" class="toolbar-btn" data-action="solidity" title="Шаблон смарт-контракта">📄 Solidity</button>
-                            <button type="button" class="toolbar-btn" data-action="link" title="Вставить ссылку">🔗 Ссылка</button>
-                            <div style="width:1px; height:18px; background:#cbd5e1; margin:0 4px;"></div>
-                            <button type="button" class="toolbar-btn" id="btnTypograf" title="Авто-типограф" style="color: #0284c7;">« » Типограф</button>
+                        <div>
+                            <select class="editor-select" id="postCatSelect" aria-label="Тематический раздел">
+                                <option value="smart-contracts">⚡ Разработка EVM &amp; Смарт-контракты</option>
+                                <option value="security">🛡️ Аудит ИБ &amp; Верификация</option>
+                                <option value="oracles">🌐 Оракулы &amp; Рынок данных</option>
+                                <option value="cbrf-law">🏛️ Право, ЦБ РФ &amp; ЦФА</option>
+                                <option value="escrow-b2b">💼 Смарт-эскроу &amp; 1С:Предприятие</option>
+                                <option value="marketplace-jobs">🤝 Биржа заказов &amp; Проектные команды</option>
+                            </select>
                         </div>
+                        <div>
+                            <input type="text" class="editor-input" id="postTagsInput" placeholder="Теги (например: #solidity, #eip1153, #1c-erp)">
+                        </div>
+                    </div>
 
-                        <!-- Editable Content Textarea / Canvas -->
-                        <div class="habr-editor-canvas-wrapper">
-                            <textarea class="habr-editor-canvas" id="editorCanvas" 
-                                      placeholder="Введите текст публикации в формате Markdown или обычного текста...
+                    <input type="text" class="editor-title-field" id="articleTitleInput" placeholder="Заголовок публикации или вопроса...">
 
-## Введение
-Опишите архитектуру смарт-контракта или бизнес-задачу...
+                    <div class="editor-toolbar">
+                        <button type="button" class="t-btn" data-act="bold" title="Жирный"><strong>B</strong></button>
+                        <button type="button" class="t-btn" data-act="italic" title="Курсив"><em>I</em></button>
+                        <button type="button" class="t-btn" data-act="h2" title="Заголовок H2">H2</button>
+                        <button type="button" class="t-btn" data-act="h3" title="Заголовок H3">H3</button>
+                        <button type="button" class="t-btn" data-act="quote" title="Цитата">❝ Цитата</button>
+                        <button type="button" class="t-btn" data-act="code" title="Блок кода">&lt;/&gt; Код</button>
+                        <button type="button" class="t-btn" data-act="solidity" title="Вставить шаблон смарт-контракта" style="color: #38bdf8;">⚡ Solidity Контракт</button>
+                        <button type="button" class="t-btn" data-act="poll" title="Вставить опрос RFC" style="color: #f59e0b;">📊 Опрос RFC</button>
+                        <button type="button" class="t-btn" data-act="link" title="Вставить ссылку">🔗 Ссылка</button>
+                        <button type="button" class="t-btn" id="btnTypograf" title="Авто-типограф" style="margin-left: auto; color: #10b981;">« » Типограф</button>
+                    </div>
+
+                    <textarea class="editor-textarea" id="editorCanvas" placeholder="Введите текст публикации в формате Markdown...
+
+## Архитектура решения
+Опишите бизнес-логику и архитектуру взаимодействия со смарт-контрактом...
 
 ```solidity
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
+pragma solidity ^0.8.26;
 
-contract ExampleContract {
-    // Код смарт-контракта
+contract SmartEscrowContract {
+    address public immutable buyer;
+    address public immutable seller;
+    uint256 public immutable amount;
+
+    constructor(address _seller) payable {
+        buyer = msg.sender;
+        seller = _seller;
+        amount = msg.value;
+    }
 }
-```" 
-                                      style="width: 100%; min-height: 480px; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 15px; line-height: 1.7; font-family: 'JetBrains Mono', monospace; resize: vertical; outline: none;"></textarea>
-                        </div>
-                    </div>
-                </main>
+```"></textarea>
+                </div>
 
-                <!-- 2.2 LIVE PREVIEW PANE -->
-                <section class="habr-editor-preview-column" id="editorPreviewColumn" style="display: none; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; background: #fafafa; min-height: 520px;">
-                    <div class="preview-header-meta" style="margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
-                        <span style="font-size: 12px; font-weight: 700; color: #0284c7; text-transform: uppercase;">Живой предпросмотр статьи</span>
-                        <h2 id="previewTitle" style="font-size: 26px; font-weight: 800; color: #0f172a; margin: 8px 0;">Заголовок статьи</h2>
-                        <div id="previewTags" style="display: flex; gap: 6px; font-size: 13px; color: #0284c7;"></div>
-                    </div>
-                    <div class="preview-content-body" id="previewContentBody" style="font-size: 15px; line-height: 1.7; color: #334155;">
+                <!-- 2.2 PREVIEW CARD -->
+                <div class="preview-card" id="previewCard">
+                    <span class="preview-type-badge" id="previewTypeBadge">📄 Статья</span>
+                    <h2 class="preview-title-rendered" id="previewTitle">Предпросмотр заголовка</h2>
+                    <div id="previewTagsRow" style="display: flex; gap: 6px; margin-bottom: 16px;"></div>
+                    <div class="preview-body-rendered" id="previewBody">
                         <p style="color: #94a3b8;">Здесь будет отображаться предпросмотр статьи в реальном времени...</p>
                     </div>
-                </section>
+                </div>
 
             </div>
 
-            <!-- 2.3 RIGHT SIDEBAR (Help & Guidelines) -->
-            <aside class="habr-editor-sidebar" id="editorSidebar">
-                <div class="editor-sidebar-card" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
-                    <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin-top: 0;">💡 Памятка автору</h3>
-                    <ul style="padding-left: 18px; margin: 8px 0; font-size: 13px; color: #64748b; line-height: 1.6;">
-                        <li>Соблюдайте стандарты ПКСК Банка России.</li>
+            <!-- Guidelines Sidebar -->
+            <aside class="editor-sidebar-col">
+                <div class="guidelines-card">
+                    <h3 class="guidelines-title">💡 Рекомендации автору</h3>
+                    <ul class="guidelines-list">
                         <li>Форматируйте код через блоки <code>```solidity</code>.</li>
                         <li>Указывайте оценку расхода Gas в EVM.</li>
-                        <li>Используйте <strong>«Типограф»</strong> для чистых кавычек «» и тире —.</li>
+                        <li>Для консультаций RFC добавляйте опрос через кнопку «📊 Опрос RFC».</li>
+                        <li>Используйте <strong>«Типограф»</strong> для автозамены кавычек «» и тире —.</li>
                     </ul>
                 </div>
 
-                <div class="editor-sidebar-card" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
-                    <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin-top: 0;">🛡️ Правила модерации</h3>
-                    <p style="font-size: 13px; color: #64748b; line-height: 1.5; margin: 4px 0;">
-                        Публикации с полезным кодом и архитектурными разборами получают статус <strong>«Верифицировано ПКСК»</strong> и попадают в базу знаний.
+                <div class="guidelines-card">
+                    <h3 class="guidelines-title">🏆 Начисление репутации</h3>
+                    <p style="font-size: 13px; color: var(--feed-text-muted); line-height: 1.5; margin: 0;">
+                        За полезные технические статьи начисляется <strong>+15 репутации</strong>. За каждый голос «Полезно» начисляется <strong>+10 репутации</strong>.
                     </p>
                 </div>
             </aside>
@@ -166,186 +475,283 @@ contract ExampleContract {
 
     </div>
 
-    <!-- Scripts -->
+    <!-- Toast Notification -->
+    <div class="feed-toast" id="feedToast" style="display: none;">
+        <span class="toast-icon">✨</span>
+        <span class="toast-msg" id="feedToastMsg">Действие выполнено!</span>
+    </div>
+
+    <!-- Editor Controller Script -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const titleInput = document.getElementById('articleTitleInput');
-        const editorCanvas = document.getElementById('editorCanvas');
-        const categorySelect = document.getElementById('articleCategorySelect');
-        const tagsInput = document.getElementById('articleTagsInput');
-        const draftStatusText = document.getElementById('draftStatusText');
-        const draftStatusDot = document.getElementById('draftStatusDot');
-        const btnPublish = document.getElementById('btnPublishPost');
+    document.addEventListener('DOMContentLoaded', () => {
+        // =========================================================================
+        // 1. THEME MANAGER
+        // =========================================================================
+        const btnThemeToggle = document.getElementById('btnThemeToggle');
+        const themeIcon = document.getElementById('themeIcon');
 
-        const btnViewEditor = document.getElementById('btnViewEditor');
-        const btnViewPreview = document.getElementById('btnViewPreview');
-        const btnViewSplit = document.getElementById('btnViewSplit');
-        const editorMainColumn = document.getElementById('editorMainColumn');
-        const editorPreviewColumn = document.getElementById('editorPreviewColumn');
-        const editorPanesWrapper = document.getElementById('editorPanesWrapper');
-        const previewTitle = document.getElementById('previewTitle');
-        const previewTags = document.getElementById('previewTags');
-        const previewContentBody = document.getElementById('previewContentBody');
-
-        // 1. Restore draft from localStorage
-        const savedDraft = localStorage.getItem('article_draft');
-        if (savedDraft) {
-            try {
-                const d = JSON.parse(savedDraft);
-                if (d.title) titleInput.value = d.title;
-                if (d.body) editorCanvas.value = d.body;
-                if (d.category) categorySelect.value = d.category;
-                if (d.tags) tagsInput.value = d.tags;
-            } catch(e) {}
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('sc_theme', theme);
+            if (themeIcon) {
+                themeIcon.textContent = (theme === 'light') ? '☀️' : '🌙';
+            }
         }
 
-        // 2. Auto-save
+        const savedTheme = localStorage.getItem('sc_theme') || 'dark';
+        applyTheme(savedTheme);
+
+        if (btnThemeToggle) {
+            btnThemeToggle.addEventListener('click', () => {
+                const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+                const next = (cur === 'dark') ? 'light' : 'dark';
+                applyTheme(next);
+            });
+        }
+
+        // =========================================================================
+        // 2. TOAST NOTIFICATIONS
+        // =========================================================================
+        const feedToast = document.getElementById('feedToast');
+        const feedToastMsg = document.getElementById('feedToastMsg');
+        let toastTimeout = null;
+
+        function showToast(msg, icon = '✨') {
+            if (!feedToast) return;
+            if (toastTimeout) clearTimeout(toastTimeout);
+            if (feedToastMsg) feedToastMsg.textContent = msg;
+            const iconEl = feedToast.querySelector('.toast-icon');
+            if (iconEl) iconEl.textContent = icon;
+            feedToast.style.display = 'flex';
+            toastTimeout = setTimeout(() => {
+                feedToast.style.display = 'none';
+            }, 3200);
+        }
+
+        // =========================================================================
+        // 3. FORM ELEMENTS & AUTO-SAVE
+        // =========================================================================
+        const titleInput = document.getElementById('articleTitleInput') || document.getElementById('postTitleInput');
+        const typeSelect = document.getElementById('postTypeSelect');
+        const catSelect = document.getElementById('postCatSelect');
+        const tagsInput = document.getElementById('postTagsInput');
+        const contentArea = document.getElementById('editorCanvas') || document.getElementById('postContentArea');
+        const draftDot = document.getElementById('draftDot');
+        const draftStatus = document.getElementById('draftStatus');
+        const btnSubmit = document.getElementById('btnSubmitPost');
+
+        const btnModeEditor = document.getElementById('btnModeEditor');
+        const btnModePreview = document.getElementById('btnModePreview');
+        const btnModeSplit = document.getElementById('btnModeSplit');
+        const editorCard = document.getElementById('editorCard');
+        const previewCard = document.getElementById('previewCard');
+        const editorPanesBox = document.getElementById('editorPanesBox');
+        const previewTitle = document.getElementById('previewTitle');
+        const previewTagsRow = document.getElementById('previewTagsRow');
+        const previewBody = document.getElementById('previewBody');
+        const previewTypeBadge = document.getElementById('previewTypeBadge');
+
+        // Restore Draft
+        const draft = localStorage.getItem('sc_editor_draft');
+        if (draft) {
+            try {
+                const d = JSON.parse(draft);
+                if (d.title) titleInput.value = d.title;
+                if (d.type) typeSelect.value = d.type;
+                if (d.category) catSelect.value = d.category;
+                if (d.tags) tagsInput.value = d.tags;
+                if (d.content) contentArea.value = d.content;
+            } catch (e) {}
+        }
+
         function saveDraft() {
             const d = {
                 title: titleInput.value,
-                body: editorCanvas.value,
-                category: categorySelect.value,
+                type: typeSelect.value,
+                category: catSelect.value,
                 tags: tagsInput.value,
-                updatedAt: new Date().toISOString()
+                content: contentArea.value,
+                savedAt: new Date().toISOString()
             };
-            localStorage.setItem('article_draft', JSON.stringify(d));
-            draftStatusDot.style.background = '#10b981';
-            draftStatusText.textContent = 'Черновик сохранен в ' + new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
+            localStorage.setItem('sc_editor_draft', JSON.stringify(d));
+            draftDot.style.background = '#10b981';
+            draftStatus.textContent = 'Черновик сохранен в ' + new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
             updatePreview();
         }
 
         let saveTimeout;
-        [titleInput, editorCanvas, categorySelect, tagsInput].forEach(el => {
+        [titleInput, typeSelect, catSelect, tagsInput, contentArea].forEach(el => {
             el.addEventListener('input', () => {
-                draftStatusDot.style.background = '#f59e0b';
-                draftStatusText.textContent = 'Сохранение...';
+                draftDot.style.background = '#f59e0b';
+                draftStatus.textContent = 'Сохранение...';
                 clearTimeout(saveTimeout);
-                saveTimeout = setTimeout(saveDraft, 600);
+                saveTimeout = setTimeout(saveDraft, 500);
             });
         });
 
-        // 3. Simple Markdown Parser for Preview
+        // =========================================================================
+        // 4. LIVE PREVIEW RENDERER
+        // =========================================================================
         function updatePreview() {
             previewTitle.textContent = titleInput.value.trim() || 'Без заголовка';
             
-            const rawTags = tagsInput.value.split(',').map(t => t.trim()).filter(Boolean);
-            previewTags.innerHTML = rawTags.map(t => `<span style="background:#e0f2fe; padding:2px 8px; border-radius:4px; font-weight:600;">${t.startsWith('#') ? t : '#' + t}</span>`).join(' ');
+            const typeLabels = {
+                article: '📄 Статья',
+                question: '❓ Вопрос Q&A',
+                discussion: '💬 Обсуждение RFC',
+                case: '💼 Кейс / Паспорт'
+            };
+            previewTypeBadge.textContent = typeLabels[typeSelect.value] || '📄 Публикация';
 
-            let html = editorCanvas.value
+            const rawTags = tagsInput.value.split(',').map(t => t.trim()).filter(Boolean);
+            previewTagsRow.innerHTML = rawTags.map(t => `<span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">${t.startsWith('#') ? t : '#' + t}</span>`).join(' ');
+
+            let html = contentArea.value
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
-                .replace(/```solidity([\s\S]*?)```/g, '<pre style="background:#0b1426; color:#38bdf8; padding:14px; border-radius:6px; font-family:monospace; overflow-x:auto;"><code>$1</code></pre>')
-                .replace(/```([\s\S]*?)```/g, '<pre style="background:#1e293b; color:#f8fafc; padding:14px; border-radius:6px; font-family:monospace; overflow-x:auto;"><code>$1</code></pre>')
-                .replace(/^### (.*$)/gim, '<h4 style="font-size:17px; font-weight:700; margin:16px 0 8px;">$1</h4>')
-                .replace(/^## (.*$)/gim, '<h3 style="font-size:20px; font-weight:700; margin:20px 0 10px;">$1</h3>')
-                .replace(/^# (.*$)/gim, '<h2 style="font-size:24px; font-weight:800; margin:24px 0 12px;">$1</h2>')
+                .replace(/```solidity([\s\S]*?)```/g, '<div style="background: #0b1426; border: 1px solid rgba(56,189,248,0.2); border-radius: 8px; padding: 14px; margin: 14px 0;"><div style="display: flex; justify-content: space-between; font-size: 11px; color: #38bdf8; margin-bottom: 8px; font-weight: 700;"><span>⚡ SOLIDITY 0.8.26</span><span>⛽ GAS: ~42 500</span></div><pre style="margin:0; color:#38bdf8; font-family:JetBrains Mono, monospace; overflow-x:auto;"><code>$1</code></pre></div>')
+                .replace(/```([\s\S]*?)```/g, '<pre style="background: #111c33; color: #f8fafc; padding: 14px; border-radius: 8px; font-family: monospace; overflow-x: auto; margin: 14px 0;"><code>$1</code></pre>')
+                .replace(/^### (.*$)/gim, '<h4 style="font-size: 16px; font-weight: 700; color: #ffffff; margin: 18px 0 8px;">$1</h4>')
+                .replace(/^## (.*$)/gim, '<h3 style="font-size: 19px; font-weight: 700; color: #ffffff; margin: 22px 0 10px;">$1</h3>')
+                .replace(/^# (.*$)/gim, '<h2 style="font-size: 23px; font-weight: 800; color: #ffffff; margin: 26px 0 12px;">$1</h2>')
                 .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
                 .replace(/\*(.*?)\*/gim, '<em>$1</em>')
-                .replace(/\n\n/g, '</p><p style="margin:12px 0;">')
+                .replace(/\n\n/g, '</p><p style="margin: 12px 0;">')
                 .replace(/\n/g, '<br>');
 
-            previewContentBody.innerHTML = `<p style="margin:12px 0;">${html}</p>`;
+            previewBody.innerHTML = `<p style="margin: 12px 0;">${html}</p>`;
         }
 
-        // 4. View Switcher
+        // =========================================================================
+        // 5. VIEW SWITCHER (Editor / Preview / Split)
+        // =========================================================================
         function setViewMode(mode) {
-            [btnViewEditor, btnViewPreview, btnViewSplit].forEach(b => {
-                b.style.background = 'transparent';
-                b.style.color = '#64748b';
-                b.style.boxShadow = 'none';
-            });
+            [btnModeEditor, btnModePreview, btnModeSplit].forEach(b => b.classList.remove('is-active'));
 
             if (mode === 'editor') {
-                btnViewEditor.style.background = '#ffffff';
-                btnViewEditor.style.color = '#0284c7';
-                btnViewEditor.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-                editorPanesWrapper.style.gridTemplateColumns = '1fr';
-                editorMainColumn.style.display = 'block';
-                editorPreviewColumn.style.display = 'none';
+                btnModeEditor.classList.add('is-active');
+                editorPanesBox.style.gridTemplateColumns = '1fr';
+                editorCard.style.display = 'block';
+                previewCard.style.display = 'none';
             } else if (mode === 'preview') {
-                btnViewPreview.style.background = '#ffffff';
-                btnViewPreview.style.color = '#0284c7';
-                btnViewPreview.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-                editorPanesWrapper.style.gridTemplateColumns = '1fr';
-                editorMainColumn.style.display = 'none';
-                editorPreviewColumn.style.display = 'block';
+                btnModePreview.classList.add('is-active');
+                editorPanesBox.style.gridTemplateColumns = '1fr';
+                editorCard.style.display = 'none';
+                previewCard.style.display = 'block';
                 updatePreview();
             } else if (mode === 'split') {
-                btnViewSplit.style.background = '#ffffff';
-                btnViewSplit.style.color = '#0284c7';
-                btnViewSplit.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-                editorPanesWrapper.style.gridTemplateColumns = '1fr 1fr';
-                editorMainColumn.style.display = 'block';
-                editorPreviewColumn.style.display = 'block';
+                btnModeSplit.classList.add('is-active');
+                editorPanesBox.style.gridTemplateColumns = '1fr 1fr';
+                editorCard.style.display = 'block';
+                previewCard.style.display = 'block';
                 updatePreview();
             }
         }
 
-        btnViewEditor.addEventListener('click', () => setViewMode('editor'));
-        btnViewPreview.addEventListener('click', () => setViewMode('preview'));
-        btnViewSplit.addEventListener('click', () => setViewMode('split'));
+        btnModeEditor.addEventListener('click', () => setViewMode('editor'));
+        btnModePreview.addEventListener('click', () => setViewMode('preview'));
+        btnModeSplit.addEventListener('click', () => setViewMode('split'));
 
-        // 5. Formatting Toolbar Actions
-        document.querySelectorAll('.toolbar-btn').forEach(btn => {
+        // =========================================================================
+        // 6. TOOLBAR FORMATTING ACTIONS
+        // =========================================================================
+        document.querySelectorAll('.t-btn[data-act]').forEach(btn => {
             btn.addEventListener('click', function() {
-                const action = this.dataset.action;
-                const start = editorCanvas.selectionStart;
-                const end = editorCanvas.selectionEnd;
-                const val = editorCanvas.value;
-                const selected = val.substring(start, end);
+                const act = this.dataset.act;
+                const start = contentArea.selectionStart;
+                const end = contentArea.selectionEnd;
+                const val = contentArea.value;
+                const sel = val.substring(start, end);
 
                 let insert = '';
-                if (action === 'bold') insert = `**${selected || 'жирный текст'}**`;
-                else if (action === 'italic') insert = `*${selected || 'курсив'}*`;
-                else if (action === 'h2') insert = `\n## ${selected || 'Заголовок раздела'}\n`;
-                else if (action === 'h3') insert = `\n### ${selected || 'Подзаголовок'}\n`;
-                else if (action === 'quote') insert = `\n> ${selected || 'Цитата или важное примечание'}\n`;
-                else if (action === 'code') insert = `\n\`\`\`solidity\n${selected || '// Код смарт-контракта'}\n\`\`\`\n`;
-                else if (action === 'formula') insert = ` $$ \\sum_{i=1}^n x_i $$ `;
-                else if (action === 'solidity') insert = `\n\`\`\`solidity\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.24;\n\ncontract NewSmartContract {\n    // Вставьте логику контракта\n}\n\`\`\`\n`;
-                else if (action === 'link') insert = `[${selected || 'текст ссылки'}](https://smartcontractum.ru)`;
+                if (act === 'bold') insert = `**${sel || 'жирный текст'}**`;
+                else if (act === 'italic') insert = `*${sel || 'курсив'}*`;
+                else if (act === 'h2') insert = `\n## ${sel || 'Заголовок раздела'}\n`;
+                else if (act === 'h3') insert = `\n### ${sel || 'Подзаголовок'}\n`;
+                else if (act === 'quote') insert = `\n> ${sel || 'Важное примечание или цитата'}\n`;
+                else if (act === 'code') insert = `\n\`\`\`solidity\n${sel || '// Код смарт-контракта'}\n\`\`\`\n`;
+                else if (act === 'solidity') insert = `\n\`\`\`solidity\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.26;\n\ncontract SmartContractExample {\n    // Вставьте бизнес-логику\n}\n\`\`\`\n`;
+                else if (act === 'poll') insert = `\n:::poll\nВопрос для голосования:\n- Вариант 1\n- Вариант 2\n- Вариант 3\n:::\n`;
+                else if (act === 'link') insert = `[${sel || 'текст ссылки'}](https://smartcontractum.ru)`;
 
                 if (insert) {
-                    editorCanvas.value = val.substring(0, start) + insert + val.substring(end);
-                    editorCanvas.focus();
+                    contentArea.value = val.substring(0, start) + insert + val.substring(end);
+                    contentArea.focus();
                     saveDraft();
                 }
             });
         });
 
-        // 6. Typographer
-        document.getElementById('btnTypograf').addEventListener('click', function() {
-            let t = editorCanvas.value;
-            // Quotes « »
+        // Typographer
+        document.getElementById('btnTypograf').addEventListener('click', () => {
+            let t = contentArea.value;
             t = t.replace(/(^|[\s(])"([^\"]+)"/g, '$1«$2»');
-            // Dashes —
             t = t.replace(/(\s)-(\s)/g, '$1—$2');
             t = t.replace(/(\s)--(\s)/g, '$1—$2');
-            editorCanvas.value = t;
+            contentArea.value = t;
             saveDraft();
-            alert('Типограф применен: кавычки и тире обновлены.');
+            showToast('Типограф применен: обновлены кавычки «» и тире —', '✨');
         });
 
-        // 7. Publish Post
-        btnPublish.addEventListener('click', function() {
+        // =========================================================================
+        // 7. PUBLISH TO BACKEND REST API
+        // =========================================================================
+        btnSubmit.addEventListener('click', () => {
             const title = titleInput.value.trim();
-            const body = editorCanvas.value.trim();
+            const content = contentArea.value.trim();
+            const category = catSelect.value;
+            const type = typeSelect.value;
+            const tags = tagsInput.value.trim();
 
             if (!title) {
                 alert('Пожалуйста, введите заголовок публикации.');
                 titleInput.focus();
                 return;
             }
-            if (!body) {
-                alert('Пожалуйста, введите текст статьи.');
-                editorCanvas.focus();
+            if (!content) {
+                alert('Пожалуйста, введите текст статьи или вопроса.');
+                contentArea.focus();
                 return;
             }
 
-            alert('Статья успешно опубликована и отправлена в ленту сообщества!');
-            localStorage.removeItem('article_draft');
-            window.location.href = '/feed';
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = 'Публикация...';
+
+            const token = localStorage.getItem('auth_token');
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            fetch('/api/feed/posts', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    title: title,
+                    type: type,
+                    category: category,
+                    tags: tags,
+                    content: content
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.post) {
+                    localStorage.removeItem('sc_editor_draft');
+                    showToast('Материал успешно опубликован в базе знаний!', '🚀');
+                    setTimeout(() => {
+                        window.location.href = `/feed#post-${data.post.id}`;
+                    }, 800);
+                } else {
+                    alert('Ошибка публикации: ' + (data.error || 'Неизвестная ошибка'));
+                    btnSubmit.disabled = false;
+                    btnSubmit.textContent = 'Опубликовать в базу знаний →';
+                }
+            })
+            .catch(() => {
+                alert('Сетевая ошибка при отправке публикации.');
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = 'Опубликовать в базу знаний →';
+            });
         });
     });
     </script>

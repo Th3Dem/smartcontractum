@@ -975,6 +975,32 @@
 
 2026-09-01T01:44:50+03:00 | TASK-44 | pm_bot | TASK_COMPLETED | Задача TASK-44 успешно завершена со статусом Done-Done. Все 7 Required Gates утверждены (`APPROVED`), артефакт состояния [tasks/TASK-44-knowledge-hubs-and-taxonomy/TASK_STATE.json](file:///home/dem/Projects_01/tasks/TASK-44-knowledge-hubs-and-taxonomy/TASK_STATE.json) переведен в `DONE`.
 
+---
+
+## 39. TASK-36: Продвинутый редактор статей, кода смарт-контрактов и RFC-консультаций (Этап 1, Инкремент 5)
+
+2026-09-01T01:49:10+03:00 | TASK-36 | pm_bot | PROJECT_START | Инициализирована задача TASK-36 по модернизации редактора публикаций [public/editor.html](file:///home/dem/Projects_01/public/editor.html). Созданы артефакты [tasks/TASK-36-advanced-editor-and-rfc/TASK.md](file:///home/dem/Projects_01/tasks/TASK-36-advanced-editor-and-rfc/TASK.md) и [tasks/TASK-36-advanced-editor-and-rfc/TASK_STATE.json](file:///home/dem/Projects_01/tasks/TASK-36-advanced-editor-and-rfc/TASK_STATE.json).
+
+2026-09-01T01:49:16+03:00 | TASK-36 | product_bot | PRODUCT_READY | Разработана продуктовая спецификация [tasks/TASK-36-advanced-editor-and-rfc/PRODUCT_SPEC.md](file:///home/dem/Projects_01/tasks/TASK-36-advanced-editor-and-rfc/PRODUCT_SPEC.md).
+
+2026-09-01T01:49:19+03:00 | TASK-36 | architect_bot | ARCH_READY | Разработана техническая спецификация [tasks/TASK-36-advanced-editor-and-rfc/TECH_SPEC.md](file:///home/dem/Projects_01/tasks/TASK-36-advanced-editor-and-rfc/TECH_SPEC.md).
+
+2026-09-01T01:49:22+03:00 | TASK-36 | ux_bot | UX_READY | Разработана интерфейсная спецификация [tasks/TASK-36-advanced-editor-and-rfc/UX_SPEC.md](file:///home/dem/Projects_01/tasks/TASK-36-advanced-editor-and-rfc/UX_SPEC.md).
+
+2026-09-01T01:49:25+03:00 | TASK-36 | data_bot | DATA_REVIEW_READY | Проведен аудит модели данных [tasks/TASK-36-advanced-editor-and-rfc/DATA_REVIEW.md](file:///home/dem/Projects_01/tasks/TASK-36-advanced-editor-and-rfc/DATA_REVIEW.md).
+
+2026-09-01T01:49:27+03:00 | TASK-36 | security_bot | SECURITY_APPROVED | Проведен аудит безопасности [tasks/TASK-36-advanced-editor-and-rfc/SECURITY_REVIEW.md](file:///home/dem/Projects_01/tasks/TASK-36-advanced-editor-and-rfc/SECURITY_REVIEW.md).
+
+2026-09-01T01:49:50+03:00 | TASK-36 | frontend_bot | IMPLEMENTATION_READY | Модернизирован интерфейс [public/editor.html](file:///home/dem/Projects_01/public/editor.html): внедрены 3 режима отображения (Редактор / Предпросмотр / Сплит), селекторы форматов и 6 тематических разделов базы знаний, сниппеты Solidity с расчетом газа, вставка опросов RFC, автосохранение в `localStorage`, «Типограф» и прямая публикация через `POST /api/feed/posts`.
+
+2026-09-01T01:50:53+03:00 | TASK-36 | dev_bot | DEV_HANDOVER_READY | Подготовлен отчет передачи разработки в тестирование [tasks/TASK-36-advanced-editor-and-rfc/DEV_HANDOVER.md](file:///home/dem/Projects_01/tasks/TASK-36-advanced-editor-and-rfc/DEV_HANDOVER.md).
+
+2026-09-01T01:50:56+03:00 | TASK-36 | qa_bot | QA_APPROVED | Разработан и запущен тест [tests/test_editor_and_publishing.py](file:///home/dem/Projects_01/tests/test_editor_and_publishing.py). Полный регрессионный прогон платформы завершился со 100% успехом (44 / 44 PASSED, OK за 8.8s). Подготовлен отчет [tasks/TASK-36-advanced-editor-and-rfc/QA_REVIEW.md](file:///home/dem/Projects_01/tasks/TASK-36-advanced-editor-and-rfc/QA_REVIEW.md).
+
+2026-09-01T01:50:58+03:00 | TASK-36 | ops_bot | RELEASE_READY | Подготовлен релизный отчет [tasks/TASK-36-advanced-editor-and-rfc/RELEASE_REPORT.md](file:///home/dem/Projects_01/tasks/TASK-36-advanced-editor-and-rfc/RELEASE_REPORT.md). Версия `v2.25.0-advanced-editor` выпущена в релиз.
+
+2026-09-01T01:51:00+03:00 | TASK-36 | pm_bot | TASK_COMPLETED | Задача TASK-36 успешно завершена со статусом Done-Done. Все 7 Required Gates утверждены (`APPROVED`), артефакт состояния [tasks/TASK-36-advanced-editor-and-rfc/TASK_STATE.json](file:///home/dem/Projects_01/tasks/TASK-36-advanced-editor-and-rfc/TASK_STATE.json) переведен в `DONE`.
+
 
 
 
