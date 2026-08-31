@@ -6,47 +6,82 @@
 :root {
     --feed-bg-primary: #0b1426;
     --feed-bg-surface: #0f172a;
-    --feed-bg-card: rgba(15, 23, 42, 0.85);
+    --feed-bg-card: rgba(15, 23, 42, 0.82);
     --feed-bg-hover: #1e293b;
-    --feed-border-light: rgba(56, 189, 248, 0.15);
+    --feed-border-light: rgba(56, 189, 248, 0.14);
     --feed-border-active: #38bdf8;
     --feed-accent-cyan: #38bdf8;
-    --feed-accent-emerald: #10b981;
+    --feed-accent-blue: #3861fb;
+    --feed-accent-emerald: #16c784;
     --feed-accent-amber: #f59e0b;
     --feed-accent-purple: #8b5cf6;
     --feed-accent-rose: #f43f5e;
-    --feed-text-main: #f8fafc;
+    --feed-text-main: #ffffff;
     --feed-text-muted: #94a3b8;
     --feed-text-dim: #64748b;
-    --feed-radius: 14px;
+    --feed-radius: 16px;
+    --feed-font-heading: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --feed-font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --feed-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
 /* Light Theme Variables */
 [data-theme="light"] {
     --feed-bg-primary: #f8fafc;
     --feed-bg-surface: #ffffff;
-    --feed-bg-card: rgba(255, 255, 255, 0.96);
+    --feed-bg-card: rgba(255, 255, 255, 0.98);
     --feed-bg-hover: #e2e8f0;
-    --feed-border-light: rgba(203, 213, 225, 0.8);
+    --feed-border-light: rgba(203, 213, 225, 0.85);
     --feed-border-active: #0284c7;
     --feed-accent-cyan: #0284c7;
+    --feed-accent-blue: #2563eb;
     --feed-accent-emerald: #059669;
     --feed-accent-amber: #d97706;
     --feed-accent-purple: #7c3aed;
     --feed-accent-rose: #e11d48;
     --feed-text-main: #0f172a;
-    --feed-text-muted: #475569;
+    --feed-text-muted: #334155;
     --feed-text-dim: #64748b;
 }
 
-body.dark-theme-feed {
+/* Global Typography & Font Stacks */
+body.dark-theme-feed,
+.app-body {
     background-color: var(--feed-bg-primary);
     color: var(--feed-text-main);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: var(--feed-font-body);
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6,
+.post-title,
+.logo-title,
+.feed-community-brand-title,
+.sidebar-widget-title,
+.author-name,
+.topic-item-title,
+.preview-title-rendered,
+.modal-tab-btn {
+    font-family: var(--feed-font-heading) !important;
+    letter-spacing: -0.015em;
+}
+
+code, pre,
+.code-box,
+.karma-val,
+.opt-percent,
+.tag-pill,
+.stat-views-badge,
+.stat-comments-badge,
+.badge-mono,
+.leader-rank,
+.pass-val,
+.spec-val {
+    font-family: var(--feed-font-mono) !important;
 }
 
 /* Header Right Group & Theme Toggle Button */
