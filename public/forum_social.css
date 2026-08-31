@@ -2935,3 +2935,100 @@ code, pre,
         width: 100%;
     }
 }
+
+/* ==========================================================================
+   14. UNIFIED SVG ICONS & POLISHED ACCENTS
+   ========================================================================== */
+.badge-svg-icon {
+    display: inline-block;
+    vertical-align: -2px;
+    margin-right: 4px;
+    flex-shrink: 0;
+}
+
+.mini-svg {
+    display: inline-block;
+    vertical-align: -1.5px;
+    margin-right: 3px;
+    flex-shrink: 0;
+}
+
+.step-pill-badge,
+.shield-badge,
+.badge-solved,
+.badge-bounty,
+.badge-time,
+.modal-tab-btn,
+.discuss-type-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.karma-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.karma-btn svg {
+    transition: transform 0.15s ease;
+}
+
+.karma-btn.upvote:hover svg {
+    transform: translateY(-1px);
+}
+
+.karma-btn.downvote:hover svg {
+    transform: translateY(1px);
+}
+
+.poll-circle-svg {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+    flex-shrink: 0;
+}
+
+.btn-follow-author {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    color: #38bdf8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 0;
+    margin-left: auto;
+}
+
+.btn-follow-author:hover {
+    background: #38bdf8;
+    color: #0b1426;
+    border-color: #38bdf8;
+    transform: scale(1.05);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+}
+
+[data-theme="light"] .btn-follow-author {
+    background: #f1f5f9;
+    border-color: rgba(203, 213, 225, 0.9);
+    color: #0284c7;
+}
+
+[data-theme="light"] .btn-follow-author:hover {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #0284c7;
+}
+

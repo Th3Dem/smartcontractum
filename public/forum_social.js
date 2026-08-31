@@ -128,12 +128,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 optionRows.forEach(r => {
                     r.classList.remove('is-voted');
                     const check = r.querySelector('.opt-check');
-                    if (check) check.textContent = '◯';
+                    if (check) {
+                        check.innerHTML = '<svg class="poll-circle-svg" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.8" fill="none"></circle></svg>';
+                    }
                 });
 
                 row.classList.add('is-voted');
                 const check = row.querySelector('.opt-check');
-                if (check) check.textContent = '●';
+                if (check) {
+                    check.innerHTML = '<svg class="poll-circle-svg" viewBox="0 0 20 20" fill="#38bdf8" width="14" height="14"><circle cx="10" cy="10" r="7" fill="#38bdf8"></circle><path d="M7 10l2 2 4-4" stroke="#0b1426" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
+                }
 
                 totalVotes += 1;
                 pollBox.dataset.totalVotes = totalVotes;
@@ -142,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const metaVotes = pollBox.querySelector('.poll-footer-meta strong');
                 if (metaVotes) metaVotes.textContent = totalVotes.toLocaleString('ru-RU');
 
-                showToast('Ваш голос по стандарту ПКСК успешно учтен!', '📊');
+                showToast('Ваш голос по стандарту ПКСК успешно учтен!', '✓');
             });
         });
     });
@@ -704,7 +708,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="author-info">
                             <div class="author-line">
                                 <span class="author-name">${escapeHtml(authorName)}</span>
-                                <span class="shield-badge badge-verified">✓ Автор</span>
+                                <span class="shield-badge badge-verified">
+                                    <svg class="badge-svg-icon" viewBox="0 0 20 20" fill="currentColor" width="13" height="13">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>Автор</span>
+                                </span>
                             </div>
                             <div class="author-role-sub">Сообщество SmartContractum · только что</div>
                         </div>
@@ -722,9 +731,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="feed-card-footer">
                     <div class="footer-actions-left">
                         <div class="karma-lever" data-post-id="${newId}">
-                            <button type="button" class="karma-btn upvote">▲</button>
+                            <button type="button" class="karma-btn upvote" title="Поддержать">
+                                <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+                            </button>
                             <span class="karma-val text-emerald">+1</span>
-                            <button type="button" class="karma-btn downvote">▼</button>
+                            <button type="button" class="karma-btn downvote" title="Против">
+                                <svg viewBox="0 0 20 20" fill="currentColor" width="12" height="12"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                            </button>
                         </div>
                         <button type="button" class="btn-thread-toggle" data-target-thread="thread-${newId}">
                             <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
