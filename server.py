@@ -630,6 +630,24 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
                     self.send_json({"success": False, "error": "Профиль эксперта не найден"}, 404)
                 return
 
+        # 3.7 API хабов базы знаний (/api/hubs)
+        if parsed.path == "/api/hubs":
+            hubs = db.get_hubs_list()
+            self.send_json({"success": True, "hubs": hubs})
+            return
+
+        # 3.8 API конкретного хаба (/api/hubs/<slug>)
+        if parsed.path.startswith("/api/hubs/"):
+            parts = parsed.path.strip("/").split("/")
+            if len(parts) == 3:
+                slug = parts[2]
+                details = db.get_hub_details(slug)
+                if details:
+                    self.send_json({"success": True, "data": details})
+                else:
+                    self.send_json({"success": False, "error": "Хаб не найден"}, 404)
+                return
+
 
         # 4. Проверка Host для поддомена второго уровня (auth.localhost, auth.smartcontractum.ru и т.п.)
         host_header = self.headers.get("Host", "").lower().split(":")[0]
@@ -653,17 +671,22 @@ class SmartContractumHandler(SimpleHTTPRequestHandler):
             self.serve_static_file(os.path.join(PUBLIC_DIR, "dashboard.html"))
             return
 
-        # 8. Маршрутизация Ленты статей и Базы знаний (Хабр 2.0)
+        # 8. Маршрутизация Ленты статей и Сообщества (Хабр 2.0)
         if parsed.path in ["/feed", "/feed/", "/feed.html", "/forum", "/forum.html"]:
             self.serve_static_file(os.path.join(PUBLIC_DIR, "feed.html"))
             return
 
-        # 9. Маршрутизация Каталога экспертов и специалистов
+        # 9. Маршрутизация Хабов базы знаний
+        if parsed.path in ["/hubs", "/hubs/", "/hubs.html", "/knowledge", "/knowledge.html"]:
+            self.serve_static_file(os.path.join(PUBLIC_DIR, "hubs.html"))
+            return
+
+        # 10. Маршрутизация Каталога экспертов и специалистов
         if parsed.path in ["/experts", "/experts/", "/experts.html", "/directory", "/directory.html"]:
             self.serve_static_file(os.path.join(PUBLIC_DIR, "experts.html"))
             return
 
-        # 10. Маршрутизация Редактора статей
+        # 11. Маршрутизация Редактора статей
         if parsed.path in ["/editor", "/editor/", "/editor.html", "/feed/create"]:
             self.serve_static_file(os.path.join(PUBLIC_DIR, "editor.html"))
             return

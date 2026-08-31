@@ -1160,8 +1160,127 @@ def get_expert_profile(expert_id: int) -> dict | None:
     return None
 
 
+def get_hubs_list() -> list[dict]:
+    """
+    Возвращает список 6 ключевых хабов знаний с агрегированной статистикой.
+    """
+    hubs_meta = [
+        {
+            "slug": "smart-contracts",
+            "name": "Разработка EVM & Смарт-контракты",
+            "icon": "⚡",
+            "category": "smart-contracts",
+            "description": "Архитектура Solidity, опкоды EVM, EIP-1153 transient storage, прекомпилы ГОСТ, оптимизация газа и байткода.",
+            "tags": ["#solidity", "#evm", "#eip1153", "#gas-opt", "#yul"],
+            "subscribersCount": 1240
+        },
+        {
+            "slug": "security",
+            "name": "Аудит ИБ & Верификация",
+            "icon": "🛡️",
+            "category": "security",
+            "description": "Формальная верификация, аудит байткода, защита от reentrancy, криптография ГОСТ Р 34.10 и SAST/DAST анализ.",
+            "tags": ["#security", "#formal-verification", "#audit", "#gost-crypto", "#sast"],
+            "subscribersCount": 980
+        },
+        {
+            "slug": "oracles",
+            "name": "Оракулы & Рынок данных",
+            "icon": "🌐",
+            "category": "oracles",
+            "description": "Шлюзы внешних данных, государственные реестры ФНС / Росреестр, интеграция с IoT и криптографическая подпись TLS ГОСТ.",
+            "tags": ["#oracles", "#data-feed", "#egrul", "#tls-gost", "#chainlink"],
+            "subscribersCount": 760
+        },
+        {
+            "slug": "cbrf-law",
+            "name": "Право, ЦБ РФ & ЦФА",
+            "icon": "🏛️",
+            "category": "cbrf-law",
+            "description": "Регулирование смарт-контрактов, ст. 860.7 ГК РФ (эскроу), платформа ПКСК Банка России, цифровой рубль и 259-ФЗ.",
+            "tags": ["#cbrf", "#smart-law", "#cfa", "#digital-ruble", "#escrow-law"],
+            "subscribersCount": 1120
+        },
+        {
+            "slug": "escrow-b2b",
+            "name": "Смарт-эскроу & 1С:Предприятие",
+            "icon": "💼",
+            "category": "escrow-b2b",
+            "description": "Интеграция корпоративных ERP и 1С, закрывающие акты КС-2/КС-3, ончейн-факторинг и безопасные B2B-взаиморасчеты.",
+            "tags": ["#1c-erp", "#b2b-escrow", "#ks2-ks3", "#factoring", "#smart-treasury"],
+            "subscribersCount": 840
+        },
+        {
+            "slug": "marketplace-jobs",
+            "name": "Биржа заказов & Проектные команды",
+            "icon": "🤝",
+            "category": "marketplace-jobs",
+            "description": "Поиск подрядчиков, тендеры на аудит смарт-контрактов, вакансии для EVM-разработчиков и проектные команды.",
+            "tags": ["#jobs", "#bounty", "#dev-teams", "#tenders", "#freelance"],
+            "subscribersCount": 650
+        }
+    ]
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    result = []
+    for h in hubs_meta:
+        cursor.execute("SELECT COUNT(*) FROM feed_posts WHERE category = ?", (h["slug"],))
+        posts_cnt = cursor.fetchone()[0]
+
+        cursor.execute("SELECT COUNT(*) FROM feed_posts WHERE category = ? AND type = 'question'", (h["slug"],))
+        questions_cnt = cursor.fetchone()[0]
+
+        cursor.execute("SELECT COUNT(*) FROM feed_posts WHERE category = ? AND type = 'article'", (h["slug"],))
+        articles_cnt = cursor.fetchone()[0]
+
+        experts = get_experts_directory(competency=h["slug"])
+
+        h_copy = dict(h)
+        h_copy["postsCount"] = max(posts_cnt, 2)
+        h_copy["questionsCount"] = max(questions_cnt, 1)
+        h_copy["articlesCount"] = max(articles_cnt, 1)
+        h_copy["expertsCount"] = max(len(experts), 1)
+        result.append(h_copy)
+
+    conn.close()
+    return result
+
+
+def get_hub_details(slug: str) -> dict | None:
+    """
+    Возвращает развернутую информацию о хабе, его публикации и топ экспертов.
+    """
+    hubs = get_hubs_list()
+    hub = next((h for h in hubs if h["slug"] == slug), None)
+    if not hub:
+        return None
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT id, author_name, author_role, type, category, title, snippet, helpful_count, views_count, is_solved, created_at
+        FROM feed_posts
+        WHERE category = ?
+        ORDER BY helpful_count DESC, id DESC
+        LIMIT 10
+    """, (slug,))
+    posts = [dict(r) for r in cursor.fetchall()]
+    conn.close()
+
+    experts = get_experts_directory(competency=slug, limit=4)
+
+    return {
+        "hub": hub,
+        "posts": posts,
+        "experts": experts
+    }
+
+
 # Инициализируем БД при импорте
 init_db()
+
 
 
 

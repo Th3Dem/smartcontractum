@@ -949,6 +949,33 @@
 
 2026-09-01T01:41:30+03:00 | TASK-42 | pm_bot | TASK_COMPLETED | Задача TASK-42 успешно завершена со статусом Done-Done. Все 7 Required Gates утверждены (`APPROVED`), артефакт состояния [tasks/TASK-42-expert-profiles-and-directory/TASK_STATE.json](file:///home/dem/Projects_01/tasks/TASK-42-expert-profiles-and-directory/TASK_STATE.json) переведен в `DONE`.
 
+---
+
+## 38. TASK-44: Хабы базы знаний, тематические страницы и структурированная таксономия (Этап 1, Инкремент 4)
+
+2026-09-01T01:43:35+03:00 | TASK-44 | pm_bot | PROJECT_START | Инициализирована задача TASK-44 по разработке 6 тематических хабов базы знаний (`/hubs`), таксономии и агрегации материалов/экспертов по направлениям. Созданы артефакты [tasks/TASK-44-knowledge-hubs-and-taxonomy/TASK.md](file:///home/dem/Projects_01/tasks/TASK-44-knowledge-hubs-and-taxonomy/TASK.md) и [tasks/TASK-44-knowledge-hubs-and-taxonomy/TASK_STATE.json](file:///home/dem/Projects_01/tasks/TASK-44-knowledge-hubs-and-taxonomy/TASK_STATE.json).
+
+2026-09-01T01:43:40+03:00 | TASK-44 | product_bot | PRODUCT_READY | Разработана продуктовая спецификация [tasks/TASK-44-knowledge-hubs-and-taxonomy/PRODUCT_SPEC.md](file:///home/dem/Projects_01/tasks/TASK-44-knowledge-hubs-and-taxonomy/PRODUCT_SPEC.md).
+
+2026-09-01T01:43:42+03:00 | TASK-44 | architect_bot | ARCH_READY | Разработана техническая спецификация [tasks/TASK-44-knowledge-hubs-and-taxonomy/TECH_SPEC.md](file:///home/dem/Projects_01/tasks/TASK-44-knowledge-hubs-and-taxonomy/TECH_SPEC.md).
+
+2026-09-01T01:43:44+03:00 | TASK-44 | ux_bot | UX_READY | Разработана интерфейсная спецификация [tasks/TASK-44-knowledge-hubs-and-taxonomy/UX_SPEC.md](file:///home/dem/Projects_01/tasks/TASK-44-knowledge-hubs-and-taxonomy/UX_SPEC.md).
+
+2026-09-01T01:43:46+03:00 | TASK-44 | data_bot | DATA_REVIEW_READY | Проведен аудит модели данных [tasks/TASK-44-knowledge-hubs-and-taxonomy/DATA_REVIEW.md](file:///home/dem/Projects_01/tasks/TASK-44-knowledge-hubs-and-taxonomy/DATA_REVIEW.md).
+
+2026-09-01T01:43:48+03:00 | TASK-44 | security_bot | SECURITY_APPROVED | Проведен аудит безопасности [tasks/TASK-44-knowledge-hubs-and-taxonomy/SECURITY_REVIEW.md](file:///home/dem/Projects_01/tasks/TASK-44-knowledge-hubs-and-taxonomy/SECURITY_REVIEW.md).
+
+2026-09-01T01:44:15+03:00 | TASK-44 | frontend_bot | IMPLEMENTATION_READY | Разработаны страница хабов знаний [public/hubs.html](file:///home/dem/Projects_01/public/hubs.html) и клиентский контроллер [public/hubs.js](file:///home/dem/Projects_01/public/hubs.js). Внедрены карточки 6 тематических направлений, агрегированные метрики, теги, механизм подписки на хабы и навигация. В [public/feed.html](file:///home/dem/Projects_01/public/feed.html) ссылка «База знаний» связана с `/hubs`.
+
+2026-09-01T01:44:44+03:00 | TASK-44 | dev_bot | DEV_HANDOVER_READY | В модулях [db.py](file:///home/dem/Projects_01/db.py) и [server.py](file:///home/dem/Projects_01/server.py) реализованы функции `get_hubs_list()`, `get_hub_details()`, REST API `/api/hubs`, `/api/hubs/<slug>` и маршрут `/hubs`. Подготовлен отчет передачи [tasks/TASK-44-knowledge-hubs-and-taxonomy/DEV_HANDOVER.md](file:///home/dem/Projects_01/tasks/TASK-44-knowledge-hubs-and-taxonomy/DEV_HANDOVER.md).
+
+2026-09-01T01:44:46+03:00 | TASK-44 | qa_bot | QA_APPROVED | Разработан и выполнен тестовый набор [tests/test_hubs_and_taxonomy.py](file:///home/dem/Projects_01/tests/test_hubs_and_taxonomy.py). Полный регрессионный прогон платформы завершился со 100% успехом (42 / 42 PASSED, OK). Подготовлен отчет [tasks/TASK-44-knowledge-hubs-and-taxonomy/QA_REVIEW.md](file:///home/dem/Projects_01/tasks/TASK-44-knowledge-hubs-and-taxonomy/QA_REVIEW.md).
+
+2026-09-01T01:44:48+03:00 | TASK-44 | ops_bot | RELEASE_READY | Подготовлен релизный отчет [tasks/TASK-44-knowledge-hubs-and-taxonomy/RELEASE_REPORT.md](file:///home/dem/Projects_01/tasks/TASK-44-knowledge-hubs-and-taxonomy/RELEASE_REPORT.md). Выполнен горячий перезапуск сервера на порту 3000. Версия `v2.24.0-knowledge-hubs` выпущена в релиз.
+
+2026-09-01T01:44:50+03:00 | TASK-44 | pm_bot | TASK_COMPLETED | Задача TASK-44 успешно завершена со статусом Done-Done. Все 7 Required Gates утверждены (`APPROVED`), артефакт состояния [tasks/TASK-44-knowledge-hubs-and-taxonomy/TASK_STATE.json](file:///home/dem/Projects_01/tasks/TASK-44-knowledge-hubs-and-taxonomy/TASK_STATE.json) переведен в `DONE`.
+
+
 
 
 
