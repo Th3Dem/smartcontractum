@@ -196,48 +196,23 @@ code, pre,
     background: radial-gradient(circle, rgba(2, 132, 199, 0.12) 0%, transparent 70%);
 }
 
-[data-theme="light"] .feed-community-kicker-badge {
-    background: rgba(2, 132, 199, 0.08) !important;
-    border-color: rgba(2, 132, 199, 0.25) !important;
-    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.08) !important;
-}
-
-[data-theme="light"] .kicker-text {
+[data-theme="light"] .hero-community-lead {
     color: #0f172a !important;
+    text-shadow: none !important;
 }
 
-[data-theme="light"] .kicker-sub-tag {
-    color: #0284c7 !important;
-    background: rgba(2, 132, 199, 0.12) !important;
-}
-
-[data-theme="light"] .feed-community-title-text,
-[data-theme="light"] .logo-smart {
+[data-theme="light"] .hero-community-brand-title .logo-smart {
     color: #0f172a !important;
+    text-shadow: none !important;
 }
 
-[data-theme="light"] .feed-community-slogan {
+[data-theme="light"] .hero-community-slogan {
     color: #475569 !important;
+    text-shadow: none !important;
 }
 
-[data-theme="light"] .slogan-accent {
+[data-theme="light"] .hero-community-slogan .slogan-accent {
     color: #0f172a !important;
-}
-
-[data-theme="light"] .hero-val-item {
-    background: #ffffff !important;
-    border-color: rgba(203, 213, 225, 0.9) !important;
-    color: #475569 !important;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04) !important;
-}
-
-[data-theme="light"] .hero-val-item:hover {
-    color: #0284c7 !important;
-    border-color: #0284c7 !important;
-}
-
-[data-theme="light"] .hero-val-sep {
-    color: rgba(203, 213, 225, 0.8) !important;
 }
 
 [data-theme="light"] .feed-hero-search-box {
@@ -751,209 +726,82 @@ code, pre,
     z-index: 55;
 }
 
-.feed-hero-header-left {
+/* ================================================================
+   2.1 COMMUNITY HERO HEADER (Landing Page Design Language)
+================================================================ */
+.feed-community-hero-block {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     position: relative;
     z-index: 10;
 }
 
-/* Glass Kicker Capsule Badge */
-.feed-community-kicker-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(56, 189, 248, 0.08);
-    border: 1px solid rgba(56, 189, 248, 0.28);
-    border-radius: 30px;
-    padding: 4px 14px 4px 10px;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 12px rgba(56, 189, 248, 0.12);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    transition: all 0.2s ease;
-}
-
-.feed-community-kicker-badge:hover {
-    border-color: rgba(56, 189, 248, 0.45);
-    background: rgba(56, 189, 248, 0.12);
-    box-shadow: 0 4px 18px rgba(56, 189, 248, 0.2);
-}
-
-.kicker-pulse-ring {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 10px;
-    height: 10px;
-}
-
-.kicker-pulse-dot {
-    width: 6px;
-    height: 6px;
-    background: #16c784;
-    border-radius: 50%;
-    box-shadow: 0 0 8px #16c784;
-    position: relative;
-}
-
-.kicker-pulse-ring::after {
-    content: '';
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: rgba(22, 199, 132, 0.35);
-    animation: kickerPulse 2s infinite ease-out;
-}
-
-@keyframes kickerPulse {
-    0% {
-        transform: scale(0.8);
-        opacity: 0.9;
-    }
-    100% {
-        transform: scale(2.2);
-        opacity: 0;
-    }
-}
-
-.kicker-text {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: 0.01em;
-}
-
-.kicker-sub-tag {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 11.5px;
-    font-weight: 600;
-    color: #38bdf8;
-    background: rgba(56, 189, 248, 0.15);
-    padding: 1px 8px;
-    border-radius: 20px;
-    letter-spacing: 0.02em;
-}
-
-.feed-community-brand-wrap {
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-bottom: 6px;
-}
-
-.feed-community-brand-title {
+/* Line 1: Lead greeting matching landing page display typography */
+.hero-community-lead {
     font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: clamp(38px, 5.5vw, 54px);
+    font-size: clamp(26px, 3.8vw, 38px);
     font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    color: #ffffff;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.75);
+    margin: 0 0 2px 0;
+}
+
+/* Line 2: Brand Headline with Glowing Gradient Flow */
+.hero-community-brand-title {
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(42px, 6.2vw, 58px);
+    font-weight: 900;
     letter-spacing: -0.035em;
+    line-height: 1.05;
     margin: 0;
-    line-height: 1.08;
     display: inline-flex;
     align-items: baseline;
     justify-content: flex-start;
-    gap: 12px;
-    flex-wrap: wrap;
     text-align: left;
 }
 
-.feed-community-title-text {
+.hero-community-brand-title .logo-smart {
     color: #ffffff;
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    font-weight: 900;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.85);
 }
 
-.logo-smart-contractum {
-    display: inline-flex;
-    align-items: baseline;
-    letter-spacing: -0.025em;
-    font-weight: 800;
-}
-
-.logo-smart {
-    color: #ffffff;
-    font-weight: 800;
-}
-
-.logo-contractum {
-    background: linear-gradient(135deg, #38bdf8 0%, #6188ff 50%, #16c784 100%);
+.hero-community-brand-title .logo-contractum {
+    background: linear-gradient(135deg, #38bdf8 0%, #6188ff 45%, #10b981 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-weight: 800;
-    filter: drop-shadow(0 2px 14px rgba(56, 189, 248, 0.25));
+    font-weight: 900;
+    filter: drop-shadow(0 0 28px rgba(56, 189, 248, 0.45)) drop-shadow(0 2px 16px rgba(0, 0, 0, 0.9));
 }
 
-.feed-community-slogan {
+/* Line 3: Community USP Description */
+.hero-community-slogan {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 17px;
+    font-size: 17.5px;
     font-weight: 500;
-    color: var(--feed-text-muted, #94a3b8);
-    margin: 6px 0 14px 0;
-    max-width: 780px;
-    line-height: 1.55;
+    color: #cbd5e1;
+    line-height: 1.6;
+    max-width: 820px;
+    margin: 10px 0 0 0;
     text-align: left;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
 }
 
-.slogan-accent {
-    color: #e2e8f0;
+.hero-community-slogan .slogan-accent {
+    color: #ffffff;
     font-weight: 600;
 }
 
-.slogan-accent-gradient {
-    background: linear-gradient(135deg, #38bdf8 0%, #6188ff 100%);
+.hero-community-slogan .slogan-accent-gradient {
+    background: linear-gradient(90deg, #38bdf8 0%, #6188ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 700;
-}
-
-/* Micro Value Props Chips */
-.feed-hero-value-props {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 6px;
-}
-
-.hero-val-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-family: 'Inter', sans-serif;
-    font-size: 12.5px;
-    font-weight: 600;
-    color: #94a3b8;
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(56, 189, 248, 0.16);
-    padding: 3px 10px;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-}
-
-.hero-val-item:hover {
-    color: #ffffff;
-    border-color: rgba(56, 189, 248, 0.4);
-    background: rgba(30, 41, 59, 0.8);
-    transform: translateY(-1px);
-}
-
-.hero-val-icon {
-    width: 14px !important;
-    height: 14px !important;
-    color: #38bdf8;
-    flex-shrink: 0;
-}
-
-.hero-val-sep {
-    color: rgba(56, 189, 248, 0.3);
-    font-size: 10px;
-    user-select: none;
 }
 
 /* Hero Navigation & Filter Menu Bar */
