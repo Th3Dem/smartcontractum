@@ -30,6 +30,14 @@
     <link rel="stylesheet" href="landing_main.css?v=2.1.0">
     <link rel="stylesheet" href="hero.css?v=2.1.0">
     <link rel="stylesheet" href="hero_constellation.css?v=2.1.0">
+    <script>
+        (function() {
+            try {
+                var theme = localStorage.getItem('sc_theme') || 'dark';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch(e) {}
+        })();
+    </script>
 </head>
 <body class="app-body">
     <!-- 0.1 ВЕРХНЕЕ МЕНЮ И ШАПКА (Sticky Header) -->
@@ -60,44 +68,83 @@
                 </div>
             </a>
 
-            <!-- Mobile Hamburger Toggle -->
-            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Открыть навигационное меню" aria-expanded="false">
-                <span class="hamburger-bar"></span>
-                <span class="hamburger-bar"></span>
-                <span class="hamburger-bar"></span>
-            </button>
-
             <!-- Navigation Links -->
             <nav class="header-nav" id="headerNav" aria-label="Основная навигация">
                 <ul class="nav-list">
                     <li class="nav-item">
+                        <a href="/" class="nav-link active">
+                            <span class="nav-icon-box">
+                                <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Главная</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="/feed" class="nav-link">
                             <span class="nav-icon-box">
                                 <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.25 1a.75.75 0 00-.75.75v.5c0 .414.336.75.75.75h9.5a.75.75 0 00.75-.75v-.5a.75.75 0 00-.75-.75h-9.5zm0 4a.75.75 0 000 1.5h9.5a.75.75 0 000-1.5h-9.5zm0 3.5a.75.75 0 000 1.5h5.5a.75.75 0 000-1.5h-5.5z" clip-rule="evenodd"></path>
+                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
                                 </svg>
                             </span>
-                            <span class="nav-text">Лента</span>
+                            <span class="nav-text">Сообщество</span>
+                            <span class="nav-badge-live">LIVE</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/experts" class="nav-link">
+                            <span class="nav-icon-box">
+                                <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Эксперты</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/hubs" class="nav-link" id="navKnowledgeBase">
+                            <span class="nav-icon-box">
+                                <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">База знаний</span>
                         </a>
                     </li>
                 </ul>
-
             </nav>
 
-            <!-- User Login / Profile Action Button -->
-            <div class="header-user-bar">
-                <a href="/auth.html" class="header-login-action-btn" id="headerLoginBtn" title="Перейти в Личный Кабинет">
-                    <div class="btn-user-avatar-wrap" aria-hidden="true">
-                        <svg class="btn-user-svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+            <!-- Header Right Group: Theme Switcher + Auth -->
+            <div class="header-right-group">
+                <!-- Theme Toggle Button (Dark / Light) -->
+                <button type="button" class="btn-theme-toggle" id="btnThemeToggle" title="Переключить тему оформления" aria-label="Переключить тему оформления">
+                    <span class="theme-icon-box" aria-hidden="true">
+                        <svg class="theme-icon-sun" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
                         </svg>
-                        <span class="btn-user-status-dot" id="headerUserDot" title="Верифицирован в ПКСК" style="display: none;"></span>
-                    </div>
-                    <span class="btn-user-label" id="headerUserLabel">Войти / Регистрация</span>
-                    <svg class="btn-user-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z" clip-rule="evenodd"></path>
-                    </svg>
-                </a>
+                        <svg class="theme-icon-moon" viewBox="0 0 20 20" fill="currentColor" style="display: none;">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </span>
+                    <span class="theme-toggle-text" id="themeToggleText">Тема</span>
+                </button>
+
+                <!-- User Login / Profile Action Button (Header Session State) -->
+                <div class="header-user-bar">
+                    <a href="/auth.html" class="header-login-action-btn" id="headerLoginBtn" title="Войти в личный кабинет">
+                        <div class="btn-user-avatar-wrap" aria-hidden="true">
+                            <svg class="btn-user-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="btn-user-status-dot" id="headerUserDot" title="Верифицирован в ПКСК" style="display: none;"></span>
+                        </div>
+                        <span class="btn-user-label" id="headerUserLabel">Войти / Регистрация</span>
+                        <svg class="btn-user-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z" clip-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                </div>
             </div>
         </div>
     </header>
@@ -692,9 +739,10 @@
     <script src="hero.js?v=2.1.0" defer></script>
     <script src="hero_constellation.js?v=2.1.0" defer></script>
 
-    <!-- Session & Navigation Sync -->
+    <!-- Session, Theme & Navigation Sync -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // 1. Session & Auth State
         const userBtn = document.getElementById('headerLoginBtn');
         const userLabel = document.getElementById('headerUserLabel');
         const userDot = document.getElementById('headerUserDot');
@@ -728,6 +776,42 @@
                 userBtn.setAttribute('title', 'Войти в личный кабинет');
                 userBtn.onclick = null;
             }
+        }
+
+        // 2. Theme Toggle Controller
+        const btnThemeToggle = document.getElementById('btnThemeToggle');
+        const sunIcon = btnThemeToggle ? btnThemeToggle.querySelector('.theme-icon-sun') : null;
+        const moonIcon = btnThemeToggle ? btnThemeToggle.querySelector('.theme-icon-moon') : null;
+        const themeText = document.getElementById('themeToggleText');
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            try {
+                localStorage.setItem('sc_theme', theme);
+            } catch (e) {}
+
+            if (theme === 'light') {
+                if (sunIcon) sunIcon.style.display = 'none';
+                if (moonIcon) moonIcon.style.display = 'block';
+                if (themeText) themeText.textContent = 'Тёмная';
+                if (btnThemeToggle) btnThemeToggle.setAttribute('title', 'Переключить на тёмную тему');
+            } else {
+                if (sunIcon) sunIcon.style.display = 'block';
+                if (moonIcon) moonIcon.style.display = 'none';
+                if (themeText) themeText.textContent = 'Светлая';
+                if (btnThemeToggle) btnThemeToggle.setAttribute('title', 'Переключить на светлую тему');
+            }
+        }
+
+        const currentTheme = localStorage.getItem('sc_theme') || document.documentElement.getAttribute('data-theme') || 'dark';
+        applyTheme(currentTheme);
+
+        if (btnThemeToggle) {
+            btnThemeToggle.addEventListener('click', () => {
+                const active = document.documentElement.getAttribute('data-theme') || 'dark';
+                const next = active === 'dark' ? 'light' : 'dark';
+                applyTheme(next);
+            });
         }
     });
     </script>

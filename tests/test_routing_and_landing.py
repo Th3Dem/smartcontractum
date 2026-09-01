@@ -41,7 +41,7 @@ class TestRoutingAndLanding(unittest.TestCase):
             return resp.status, resp.read().decode("utf-8")
 
     def test_01_landing_page_on_root(self):
-        """Главная страница открывается на / и содержит портал SmartContractum с 3D Hero баннером и меню Лента"""
+        """Главная страница открывается на / и содержит портал SmartContractum с 3D Hero баннером и меню Сообщество"""
         status, html = self.get_url("/")
         self.assertEqual(status, 200)
         self.assertIn("SmartContractum", html)
@@ -52,7 +52,8 @@ class TestRoutingAndLanding(unittest.TestCase):
         self.assertIn("id=\"constellationCanvas\"", html)
         self.assertIn("id=\"pkscTimeline\"", html)
         self.assertIn("id=\"headerLoginBtn\"", html)
-        self.assertIn("<span class=\"nav-text\">Лента</span>", html)
+        self.assertIn("<span class=\"nav-text\">Сообщество</span>", html)
+        self.assertIn("href=\"/feed\"", html)
 
     def test_02_auth_page_on_auth_paths(self):
         """Страница авторизации открывается на /auth, /auth/, /auth.html, /login, /register"""
