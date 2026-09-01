@@ -170,17 +170,49 @@
         <canvas id="feedCosmicCanvas" class="feed-cosmic-canvas" width="1400" height="200" aria-hidden="true"></canvas>
 
         <div class="feed-hero-container">
-            <!-- Top Row: Welcome Kicker + Brand Title + Slogan (Left-Aligned) -->
+            <!-- Top Row: Welcome Kicker Badge + Brand Title + Slogan + Value Highlights (Left-Aligned) -->
             <div class="feed-hero-header-left">
-                <span class="feed-community-kicker">Добро пожаловать в</span>
+                <div class="feed-community-kicker-badge">
+                    <span class="kicker-pulse-ring" aria-hidden="true">
+                        <span class="kicker-pulse-dot"></span>
+                    </span>
+                    <span class="kicker-text">Добро пожаловать в</span>
+                    <span class="kicker-sub-tag">Открытое комьюнити</span>
+                </div>
+
                 <div class="feed-community-brand-wrap">
                     <h1 class="feed-community-brand-title">
-                        <span class="feed-community-title-text">Сообщество</span> <span class="logo-smart-contractum"><span class="logo-smart">Smart</span><span class="logo-contractum">Contractum</span></span>
+                        <span class="feed-community-title-text">Сообщество</span>
+                        <span class="logo-smart-contractum"><span class="logo-smart">Smart</span><span class="logo-contractum">Contractum</span></span>
                     </h1>
                 </div>
+
                 <p class="feed-community-slogan">
-                    Место, где идеи встречаются с людьми и создаются смарт-контракты.
+                    Место, где <span class="slogan-accent">идеи встречаются с людьми</span> и создаются <span class="slogan-accent-gradient">смарт-контракты</span>.
                 </p>
+
+                <div class="feed-hero-value-props" aria-label="Ключевые ориентиры сообщества">
+                    <div class="hero-val-item">
+                        <svg class="hero-val-icon" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.496 2.132a1 1 0 00-.992 0l-7 4A1 1 0 003 7v1a1 1 0 001 1h12a1 1 0 001-1V7a1 1 0 00-.504-.868l-7-4zM4 11a1 1 0 100 2h1v3H4a1 1 0 100 2h12a1 1 0 100-2h-1v-3h1a1 1 0 100-2H4zm4 5v-3h4v3H8z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>Стандарты ПКСК</span>
+                    </div>
+                    <div class="hero-val-sep" aria-hidden="true">•</div>
+                    <div class="hero-val-item">
+                        <svg class="hero-val-icon" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>EVM &amp; Смарт-эскроу</span>
+                    </div>
+                    <div class="hero-val-sep" aria-hidden="true">•</div>
+                    <div class="hero-val-item">
+                        <svg class="hero-val-icon" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682-.057-1.35-.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>Верифицированные эксперты</span>
+                    </div>
+                </div>
             </div>
 
             <!-- Row 1: Action Buttons + Filter Tabs + Topics Dropdown -->
