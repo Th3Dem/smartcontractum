@@ -289,26 +289,26 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 20px;">
                                 <div class="expert-avatar ${exp.avatarClass || 'avatar-blue'}" style="width: 64px; height: 64px; font-size: 24px;">${escapeHtml(exp.initials)}</div>
                                 <div>
-                                    <h2 style="font-size: 20px; font-weight: 800; color: #ffffff; margin: 0 0 4px; font-family: var(--exp-font-heading);">${escapeHtml(exp.name)}</h2>
+                                    <h2 style="font-size: 20px; font-weight: 800; color: #ffffff; margin: 0 0 4px; font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;">${escapeHtml(exp.name)}</h2>
                                     <div style="color: var(--feed-text-muted); font-size: 13.5px;">${escapeHtml(exp.role)}</div>
                                     <div style="color: #38bdf8; font-size: 12.5px; font-weight: 600; margin-top: 2px;">${escapeHtml(exp.company)}</div>
                                 </div>
                             </div>
 
                             <div style="background: #111c33; border: 1px solid rgba(56, 189, 248, 0.15); border-radius: 12px; padding: 16px; margin-bottom: 20px;">
-                                <h4 style="color: #ffffff; margin: 0 0 8px; font-size: 14px; font-family: var(--exp-font-heading);">О специалисте</h4>
+                                <h4 style="color: #ffffff; margin: 0 0 8px; font-size: 14px; font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;">О специалисте</h4>
                                 <p style="color: var(--feed-text-muted); font-size: 13.5px; line-height: 1.6; margin: 0;">${escapeHtml(exp.bio)}</p>
                             </div>
 
                             <div style="margin-bottom: 20px;">
-                                <h4 style="color: #ffffff; margin: 0 0 10px; font-size: 14px; font-family: var(--exp-font-heading);">Подтвержденные компетенции</h4>
+                                <h4 style="color: #ffffff; margin: 0 0 10px; font-size: 14px; font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;">Подтвержденные компетенции</h4>
                                 <div style="display: flex; flex-wrap: wrap; gap: 6px;">
                                     ${(exp.competencies || []).map(c => `<span class="skill-tag" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">#${escapeHtml(c)}</span>`).join('')}
                                 </div>
                             </div>
 
                             <div style="margin-bottom: 24px;">
-                                <h4 style="color: #ffffff; margin: 0 0 10px; font-size: 14px; font-family: var(--exp-font-heading);">Материалы и принятые решения (${(exp.publications || []).length})</h4>
+                                <h4 style="color: #ffffff; margin: 0 0 10px; font-size: 14px; font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;">Материалы и принятые решения (${(exp.publications || []).length})</h4>
                                 <div style="display: flex; flex-direction: column; gap: 8px;">
                                     ${(exp.publications || []).length > 0 
                                         ? exp.publications.map(p => `

@@ -2,8 +2,9 @@
 <html lang="ru" data-theme="dark">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Эксперты и интеграторы смарт-контрактов | SmartContractum</title>
+    <title>Каталог сертифицированных экспертов и специалистов | SmartContractum</title>
     <meta name="description" content="Каталог сертифицированных специалистов, разработчиков Solidity, аудиторов ИБ и юристов по смарт-контрактам и ПКСК Банка России.">
 
     <!-- Fonts: Inter, Manrope & JetBrains Mono -->
@@ -11,49 +12,87 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="/forum_social.css?v=2.2.0">
+    <!-- Core Platform Stylesheets -->
+    <link rel="stylesheet" href="/landing_main.css?v=2.7.0">
+    <link rel="stylesheet" href="/hero_constellation.css?v=2.7.0">
+    <link rel="stylesheet" href="/forum_social.css?v=2.7.0">
 
     <!-- Early Theme Init Script -->
     <script>
         (function() {
             try {
-                var theme = localStorage.getItem('sc_theme') || 'dark';
-                document.documentElement.setAttribute('data-theme', theme);
+                var theme = localStorage.getItem("sc_theme") || "dark";
+                document.documentElement.setAttribute("data-theme", theme);
             } catch(e) {}
         })();
     </script>
 
     <style>
         :root {
-            --exp-font-heading: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            --exp-font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            --exp-font-mono: 'JetBrains Mono', monospace;
+            --exp-heading-font: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --exp-body-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --exp-mono-font: "JetBrains Mono", monospace;
         }
 
+        /* Base Body */
         body {
-            font-family: var(--exp-font-body);
-            background-color: var(--feed-bg-main, #070d18);
-            color: var(--feed-text-main, #ffffff);
-            min-height: 100vh;
+            background-color: var(--bg-primary, #0b1426);
+            color: #ffffff;
+            font-family: var(--exp-body-font);
             margin: 0;
+            min-height: 100vh;
             line-height: 1.5;
         }
 
+        /* SVG Global Safety: never explode in size */
+        svg {
+            max-width: 100%;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .smart-contract-logo-svg {
+            width: 32px !important;
+            height: 32px !important;
+            min-width: 32px;
+        }
+
+        .nav-svg-icon {
+            width: 18px !important;
+            height: 18px !important;
+            min-width: 18px;
+        }
+
+        .theme-icon-sun, .theme-icon-moon {
+            width: 18px !important;
+            height: 18px !important;
+            min-width: 18px;
+        }
+
+        .btn-user-svg {
+            width: 18px !important;
+            height: 18px !important;
+            min-width: 18px;
+        }
+
+        .btn-user-arrow {
+            width: 14px !important;
+            height: 14px !important;
+            min-width: 14px;
+        }
+
+        /* Main Container */
         .experts-page-container {
             max-width: 1360px;
             margin: 0 auto;
-            padding: 32px 24px 80px;
+            padding: 36px 24px 80px;
         }
 
-        /* ------------------------------------------------------------------
-           1. HERO SECTION
-        ------------------------------------------------------------------ */
+        /* Hero Section */
         .experts-hero-box {
             text-align: center;
-            max-width: 880px;
-            margin: 0 auto 44px;
-            position: relative;
+            max-width: 860px;
+            margin: 0 auto 40px;
         }
 
         .experts-hero-badge {
@@ -62,23 +101,22 @@
             gap: 8px;
             padding: 6px 16px;
             background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.3);
+            border: 1px solid rgba(56, 189, 248, 0.28);
             border-radius: 9999px;
             color: #38bdf8;
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 700;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.05em;
             text-transform: uppercase;
-            margin-bottom: 18px;
-            box-shadow: 0 0 16px rgba(56, 189, 248, 0.15);
+            margin-bottom: 20px;
         }
 
         .badge-pulse-dot {
-            width: 7px;
-            height: 7px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            background: #10b981;
-            box-shadow: 0 0 8px #10b981;
+            background: #16c784;
+            box-shadow: 0 0 10px #16c784;
             animation: dotPulse 2s infinite ease-in-out;
         }
 
@@ -88,21 +126,21 @@
         }
 
         .experts-hero-title {
-            font-family: var(--exp-font-heading);
-            font-size: 36px;
+            font-family: var(--exp-heading-font);
+            font-size: 38px;
             font-weight: 800;
-            line-height: 1.25;
+            line-height: 1.22;
             color: #ffffff;
             margin: 0 0 16px;
-            letter-spacing: -0.025em;
+            letter-spacing: -0.02em;
         }
 
         .experts-hero-desc {
             font-size: 16px;
-            color: var(--feed-text-muted, #94a3b8);
+            color: #94a3b8;
             line-height: 1.65;
             margin: 0 auto 32px;
-            max-width: 760px;
+            max-width: 740px;
         }
 
         /* Search Bar */
@@ -114,22 +152,22 @@
 
         .experts-search-input {
             width: 100%;
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(56, 189, 248, 0.28);
+            background: #111c33;
+            border: 1px solid rgba(56, 189, 248, 0.24);
             border-radius: 14px;
             padding: 14px 44px 14px 46px;
             color: #ffffff;
-            font-family: var(--exp-font-body);
-            font-size: 14.5px;
+            font-family: var(--exp-body-font);
+            font-size: 14px;
             outline: none;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
             box-sizing: border-box;
         }
 
         .experts-search-input:focus {
             border-color: #38bdf8;
-            background: rgba(15, 23, 42, 0.98);
+            background: #17233f;
             box-shadow: 0 0 20px rgba(56, 189, 248, 0.3), 0 4px 24px rgba(0, 0, 0, 0.5);
         }
 
@@ -143,6 +181,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .experts-search-icon svg {
+            width: 18px !important;
+            height: 18px !important;
+            min-width: 18px;
         }
 
         .btn-clear-search {
@@ -169,7 +213,7 @@
             color: #ffffff;
         }
 
-        /* Filter Tabs Bar */
+        /* Filter Tabs */
         .experts-filter-bar {
             display: flex;
             align-items: center;
@@ -179,12 +223,12 @@
         }
 
         .expert-filter-btn {
-            background: rgba(15, 23, 42, 0.8);
+            background: #111c33;
             border: 1px solid rgba(56, 189, 248, 0.18);
-            color: var(--feed-text-muted, #94a3b8);
-            padding: 9px 18px;
+            color: #94a3b8;
+            padding: 10px 18px;
             border-radius: 12px;
-            font-family: var(--exp-font-body);
+            font-family: var(--exp-body-font);
             font-size: 13.5px;
             font-weight: 600;
             cursor: pointer;
@@ -196,13 +240,14 @@
         }
 
         .expert-tab-svg {
-            display: inline-block;
-            vertical-align: middle;
+            width: 15px !important;
+            height: 15px !important;
+            min-width: 15px;
             flex-shrink: 0;
         }
 
         .expert-filter-btn:hover {
-            background: rgba(30, 41, 59, 0.9);
+            background: #1e293b;
             border-color: rgba(56, 189, 248, 0.5);
             color: #ffffff;
             transform: translateY(-1px);
@@ -210,20 +255,311 @@
         }
 
         .expert-filter-btn.is-active {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.24) 0%, rgba(97, 136, 255, 0.24) 100%);
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.22) 0%, rgba(97, 136, 255, 0.22) 100%);
             border-color: #38bdf8;
             color: #ffffff;
             box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
         }
 
-        /* ------------------------------------------------------------------
-           3. LIGHT THEME OVERRIDES
-        ------------------------------------------------------------------ */
-        [data-theme="light"] {
-            --feed-bg-main: #f8fafc;
-            --feed-text-main: #0f172a;
-            --feed-text-muted: #475569;
-            --feed-text-dim: #64748b;
+        /* Experts Grid & Cards */
+        .experts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 24px;
+        }
+
+        .expert-card {
+            background: #111c33;
+            border: 1px solid rgba(56, 189, 248, 0.14);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s, box-shadow 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .expert-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.4), transparent);
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .expert-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(56, 189, 248, 0.5);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(56, 189, 248, 0.16);
+        }
+
+        .expert-card:hover::before {
+            opacity: 1;
+        }
+
+        .expert-head {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .expert-avatar-wrap {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .expert-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--exp-heading-font);
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffffff;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .avatar-blue { background: linear-gradient(135deg, #0284c7, #2563eb); }
+        .avatar-green { background: linear-gradient(135deg, #059669, #10b981); }
+        .avatar-purple { background: linear-gradient(135deg, #7c3aed, #a855f7); }
+        .avatar-gold { background: linear-gradient(135deg, #d97706, #f59e0b); }
+
+        .expert-rank-badge {
+            position: absolute;
+            bottom: -6px;
+            right: -6px;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 2px 7px;
+            border-radius: 8px;
+            background: #0b1426;
+            border: 1px solid rgba(245, 158, 11, 0.5);
+            color: #f59e0b;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .expert-rank-badge svg {
+            width: 11px !important;
+            height: 11px !important;
+            min-width: 11px;
+        }
+
+        .expert-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .expert-name {
+            font-family: var(--exp-heading-font);
+            font-size: 18px;
+            font-weight: 800;
+            color: #ffffff;
+            margin: 0 0 4px;
+            letter-spacing: -0.01em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .expert-role {
+            font-size: 13px;
+            color: #94a3b8;
+            margin: 0 0 6px;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .expert-company {
+            font-size: 12px;
+            color: #38bdf8;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .expert-company svg {
+            width: 13px !important;
+            height: 13px !important;
+            min-width: 13px;
+            flex-shrink: 0;
+        }
+
+        .expert-bio {
+            font-size: 13.5px;
+            color: rgba(226, 232, 240, 0.85);
+            line-height: 1.55;
+            margin: 0 0 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 42px;
+        }
+
+        /* 3-Column Stats Row */
+        .expert-stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            background: #0b1426;
+            border: 1px solid rgba(56, 189, 248, 0.12);
+            border-radius: 12px;
+            padding: 10px 8px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .expert-stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .stat-num {
+            font-family: var(--exp-heading-font);
+            font-size: 15px;
+            font-weight: 800;
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .stat-num svg {
+            width: 13px !important;
+            height: 13px !important;
+            min-width: 13px;
+            flex-shrink: 0;
+        }
+
+        .stat-lbl {
+            font-size: 10.5px;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        /* Skills Tags Cloud */
+        .expert-skills-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 20px;
+            min-height: 28px;
+        }
+
+        .skill-tag {
+            font-size: 11.5px;
+            font-family: var(--exp-mono-font);
+            padding: 3px 9px;
+            border-radius: 6px;
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #94a3b8;
+            transition: all 0.15s;
+        }
+
+        .skill-tag:hover {
+            border-color: rgba(56, 189, 248, 0.4);
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        /* Card Action Buttons */
+        .expert-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            padding-top: 16px;
+            margin-top: auto;
+        }
+
+        .btn-expert-contact {
+            flex: 1;
+            background: linear-gradient(135deg, #0284c7 0%, #059669 100%);
+            color: #ffffff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-family: var(--exp-body-font);
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+        }
+
+        .btn-expert-contact svg {
+            width: 14px !important;
+            height: 14px !important;
+            min-width: 14px;
+            flex-shrink: 0;
+        }
+
+        .btn-expert-contact:hover {
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.5);
+            transform: translateY(-1px);
+            filter: brightness(1.08);
+        }
+
+        .btn-expert-profile {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.22);
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-family: var(--exp-body-font);
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-expert-profile svg {
+            width: 14px !important;
+            height: 14px !important;
+            min-width: 14px;
+            flex-shrink: 0;
+        }
+
+        .btn-expert-profile:hover {
+            border-color: #38bdf8;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        /* Light Theme Overrides */
+        [data-theme="light"] body {
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
         }
 
         [data-theme="light"] .experts-hero-title { color: #0f172a !important; }
@@ -432,7 +768,7 @@
     <div class="modal-overlay-backdrop" id="modalExpertProfile" style="display: none;">
         <div class="quick-create-modal-card" style="max-width: 680px;">
             <div class="modal-header-line">
-                <h3 style="margin: 0; color: #ffffff; font-size: 18px; font-family: var(--exp-font-heading);" id="modalExpertName">Профиль эксперта</h3>
+                <h3 style="margin: 0; color: #ffffff; font-size: 18px; font-family: var(--exp-heading-font);" id="modalExpertName">Профиль эксперта</h3>
                 <button type="button" class="btn-close-quick-modal" id="btnCloseExpertModal">✕</button>
             </div>
             <div class="modal-body-form" style="padding: 24px;" id="modalExpertBody">
