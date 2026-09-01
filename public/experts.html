@@ -6,306 +6,230 @@
     <title>Эксперты и интеграторы смарт-контрактов | SmartContractum</title>
     <meta name="description" content="Каталог сертифицированных специалистов, разработчиков Solidity, аудиторов ИБ и юристов по смарт-контрактам и ПКСК Банка России.">
 
-    <!-- Fonts & Icons -->
+    <!-- Fonts: Inter, Manrope & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="/forum_social.css">
+    <link rel="stylesheet" href="/forum_social.css?v=2.2.0">
+
+    <!-- Early Theme Init Script -->
+    <script>
+        (function() {
+            try {
+                var theme = localStorage.getItem('sc_theme') || 'dark';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch(e) {}
+        })();
+    </script>
+
     <style>
+        :root {
+            --exp-font-heading: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --exp-font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --exp-font-mono: 'JetBrains Mono', monospace;
+        }
+
+        body {
+            font-family: var(--exp-font-body);
+            background-color: var(--feed-bg-main, #070d18);
+            color: var(--feed-text-main, #ffffff);
+            min-height: 100vh;
+            margin: 0;
+            line-height: 1.5;
+        }
+
         .experts-page-container {
             max-width: 1360px;
             margin: 0 auto;
-            padding: 30px 24px 80px;
+            padding: 32px 24px 80px;
         }
 
+        /* ------------------------------------------------------------------
+           1. HERO SECTION
+        ------------------------------------------------------------------ */
         .experts-hero-box {
             text-align: center;
-            max-width: 860px;
-            margin: 0 auto 40px;
+            max-width: 880px;
+            margin: 0 auto 44px;
+            position: relative;
+        }
+
+        .experts-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 9999px;
+            color: #38bdf8;
+            font-size: 12.5px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.15);
+        }
+
+        .badge-pulse-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+            animation: dotPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.6; }
         }
 
         .experts-hero-title {
-            font-family: 'Manrope', sans-serif;
-            font-size: 38px;
+            font-family: var(--exp-font-heading);
+            font-size: 36px;
             font-weight: 800;
-            line-height: 1.2;
+            line-height: 1.25;
             color: #ffffff;
             margin: 0 0 16px;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.025em;
         }
 
         .experts-hero-desc {
-            font-size: 16.5px;
-            color: var(--feed-text-muted);
-            line-height: 1.6;
-            margin: 0 0 28px;
+            font-size: 16px;
+            color: var(--feed-text-muted, #94a3b8);
+            line-height: 1.65;
+            margin: 0 auto 32px;
+            max-width: 760px;
         }
 
+        /* Search Bar */
+        .experts-search-wrap {
+            max-width: 620px;
+            margin: 0 auto 28px;
+            position: relative;
+        }
+
+        .experts-search-input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(56, 189, 248, 0.28);
+            border-radius: 14px;
+            padding: 14px 44px 14px 46px;
+            color: #ffffff;
+            font-family: var(--exp-font-body);
+            font-size: 14.5px;
+            outline: none;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+            box-sizing: border-box;
+        }
+
+        .experts-search-input:focus {
+            border-color: #38bdf8;
+            background: rgba(15, 23, 42, 0.98);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.3), 0 4px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        .experts-search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #38bdf8;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-clear-search {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #94a3b8;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s;
+        }
+
+        .btn-clear-search:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        /* Filter Tabs Bar */
         .experts-filter-bar {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
-            margin-bottom: 24px;
         }
 
         .expert-filter-btn {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(56, 189, 248, 0.16);
-            color: var(--feed-text-muted);
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.18);
+            color: var(--feed-text-muted, #94a3b8);
             padding: 9px 18px;
             border-radius: 12px;
-            font-family: 'Inter', sans-serif;
+            font-family: var(--exp-font-body);
             font-size: 13.5px;
             font-weight: 600;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .expert-tab-svg {
+            display: inline-block;
+            vertical-align: middle;
+            flex-shrink: 0;
         }
 
         .expert-filter-btn:hover {
-            background: rgba(30, 41, 59, 0.85);
-            border-color: rgba(56, 189, 248, 0.4);
+            background: rgba(30, 41, 59, 0.9);
+            border-color: rgba(56, 189, 248, 0.5);
             color: #ffffff;
             transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
         }
 
         .expert-filter-btn.is-active {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.22) 0%, rgba(97, 136, 255, 0.22) 100%);
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.24) 0%, rgba(97, 136, 255, 0.24) 100%);
             border-color: #38bdf8;
             color: #ffffff;
-            box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
         }
 
-        .experts-search-wrap {
-            max-width: 580px;
-            margin: 0 auto 36px;
-            position: relative;
+        /* ------------------------------------------------------------------
+           3. LIGHT THEME OVERRIDES
+        ------------------------------------------------------------------ */
+        [data-theme="light"] {
+            --feed-bg-main: #f8fafc;
+            --feed-text-main: #0f172a;
+            --feed-text-muted: #475569;
+            --feed-text-dim: #64748b;
         }
 
-        .experts-search-input {
-            width: 100%;
-            background: #111c33;
-            border: 1px solid rgba(56, 189, 248, 0.25);
-            border-radius: 12px;
-            padding: 12px 18px 12px 42px;
-            color: #ffffff;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .experts-search-input:focus {
-            border-color: #38bdf8;
-            box-shadow: 0 0 14px rgba(56, 189, 248, 0.25);
-        }
-
-        .experts-search-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #38bdf8;
-            pointer-events: none;
-        }
-
-        /* Experts Grid */
-        .experts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 24px;
-        }
-
-        .expert-card {
-            background: var(--feed-bg-card);
-            border: 1px solid var(--feed-border-light);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(16px);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s;
-        }
-
-        .expert-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(56, 189, 248, 0.4);
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
-        }
-
-        .expert-head {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .expert-avatar-wrap {
-            position: relative;
-        }
-
-        .expert-avatar {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Manrope', sans-serif;
-            font-size: 20px;
-            font-weight: 800;
-            color: #ffffff;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-        }
-
-        .expert-rank-badge {
-            position: absolute;
-            bottom: -6px;
-            right: -6px;
-            font-size: 11px;
-            font-weight: 800;
-            padding: 2px 6px;
-            border-radius: 8px;
-            background: #0f172a;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .expert-info {
-            flex: 1;
-        }
-
-        .expert-name {
-            font-family: 'Manrope', sans-serif;
-            font-size: 18px;
-            font-weight: 800;
-            color: #ffffff;
-            margin: 0 0 4px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .expert-role {
-            font-size: 13px;
-            color: var(--feed-text-muted);
-            margin: 0 0 6px;
-            line-height: 1.4;
-        }
-
-        .expert-company {
-            font-size: 12px;
-            color: var(--feed-accent-cyan);
-            font-weight: 600;
-        }
-
-        .expert-bio {
-            font-size: 13.5px;
-            color: var(--feed-text-dim);
-            line-height: 1.5;
-            margin-bottom: 16px;
-            flex: 1;
-        }
-
-        .expert-stats-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            background: #111c33;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 16px;
-            text-align: center;
-        }
-
-        .expert-stat-item {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .stat-num {
-            font-size: 14px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .stat-lbl {
-            font-size: 10.5px;
-            color: var(--feed-text-dim);
-            text-transform: uppercase;
-        }
-
-        .expert-skills-cloud {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 20px;
-        }
-
-        .skill-tag {
-            font-size: 11.5px;
-            font-family: 'JetBrains Mono', monospace;
-            padding: 3px 8px;
-            border-radius: 6px;
-            background: #1e293b;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: var(--feed-text-muted);
-        }
-
-        .expert-card-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding-top: 16px;
-        }
-
-        .btn-expert-contact {
-            flex: 1;
-            background: linear-gradient(135deg, #0284c7, #0369a1);
-            color: #ffffff;
-            border: none;
-            padding: 9px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-
-        .btn-expert-contact:hover {
-            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
-            transform: translateY(-1px);
-        }
-
-        .btn-expert-profile {
-            background: #1e293b;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            padding: 9px 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-
-        .btn-expert-profile:hover {
-            border-color: #38bdf8;
-            color: #38bdf8;
-        }
-
-        /* Light Theme Overrides */
         [data-theme="light"] .experts-hero-title { color: #0f172a !important; }
-        [data-theme="light"] .experts-search-input { background: #ffffff !important; border-color: rgba(203, 213, 225, 0.9) !important; color: #0f172a !important; }
-        [data-theme="light"] .expert-filter-btn { background: #ffffff !important; border-color: rgba(203, 213, 225, 0.9) !important; color: #475569 !important; }
-        [data-theme="light"] .expert-filter-btn.is-active { background: #0284c7 !important; color: #ffffff !important; border-color: #0284c7 !important; }
+        [data-theme="light"] .experts-search-input { background: #ffffff !important; border-color: rgba(203, 213, 225, 0.9) !important; color: #0f172a !important; box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important; }
+        [data-theme="light"] .expert-filter-btn { background: #ffffff !important; border-color: rgba(203, 213, 225, 0.9) !important; color: #475569 !important; box-shadow: 0 2px 6px rgba(0,0,0,0.04) !important; }
+        [data-theme="light"] .expert-filter-btn.is-active { background: #0284c7 !important; color: #ffffff !important; border-color: #0284c7 !important; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25) !important; }
         [data-theme="light"] .expert-card { background: #ffffff !important; border-color: rgba(203, 213, 225, 0.9) !important; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important; }
         [data-theme="light"] .expert-name { color: #0f172a !important; }
         [data-theme="light"] .expert-bio { color: #475569 !important; }
@@ -319,30 +243,111 @@
 <body>
 
     <!-- ================================================================
-         1. GLOBAL STICKY HEADER
+         1. GLOBAL STICKY HEADER (Synchronized with Ecosystem)
     ================================================================= -->
     <header class="app-header" id="appHeader">
         <div class="header-container">
-            <div class="header-left">
-                <a href="/" class="header-logo" title="На главную SmartContractum">
-                    <span class="logo-smart">Smart</span><span class="logo-contractum">Contractum</span>
-                </a>
-                <span class="header-badge-phase">Фаза НИР (до 2027)</span>
-            </div>
+            <!-- Brand Logo -->
+            <a href="/" class="brand-logo" aria-label="SmartContractum Главная">
+                <div class="logo-icon-box" aria-hidden="true">
+                    <svg class="smart-contract-logo-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="scDocGradExpertsUnified" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#38bdf8"></stop>
+                                <stop offset="0.5" stop-color="#6188ff"></stop>
+                                <stop offset="1" stop-color="#16c784"></stop>
+                            </linearGradient>
+                        </defs>
+                        <path d="M7 3.5h11.5l7.5 7.5v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5.5a2 2 0 0 1 2-2z" fill="rgba(56, 189, 248, 0.06)" stroke="url(#scDocGradExpertsUnified)" stroke-width="1.8" stroke-linejoin="round"></path>
+                        <path d="M18.5 3.5v6a1.5 1.5 0 0 0 1.5 1.5h6" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <line x1="9.5" y1="12.5" x2="15.5" y2="12.5" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round"></line>
+                        <line x1="9.5" y1="17.5" x2="19.5" y2="17.5" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round"></line>
+                        <line x1="9.5" y1="22.5" x2="16.5" y2="22.5" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round"></line>
+                        <circle cx="23" cy="23" r="5" fill="#0b1426" stroke="#16c784" stroke-width="1.8"></circle>
+                        <path d="M21 23l1.5 1.5 3-3" stroke="#16c784" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-title"><span class="logo-smart">Smart</span><span class="logo-contractum">Contractum</span></span>
+                </div>
+            </a>
 
-            <nav class="header-nav" aria-label="Основная навигация">
-                <a href="/" class="nav-link">Главная</a>
-                <a href="/feed" class="nav-link">Сообщество</a>
-                <a href="/experts" class="nav-link active">Эксперты</a>
-                <a href="/editor" class="nav-link">Редактор</a>
-                <a href="/dashboard" class="nav-link" id="navLinkDashboard">Кабинет</a>
+            <!-- Navigation Links -->
+            <nav class="header-nav" id="headerNav" aria-label="Основная навигация">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link">
+                            <span class="nav-icon-box">
+                                <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Главная</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/feed" class="nav-link">
+                            <span class="nav-icon-box">
+                                <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Сообщество</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/experts" class="nav-link active">
+                            <span class="nav-icon-box">
+                                <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">Эксперты</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/hubs" class="nav-link" id="navKnowledgeBase">
+                            <span class="nav-icon-box">
+                                <svg class="nav-svg-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path>
+                                </svg>
+                            </span>
+                            <span class="nav-text">База знаний</span>
+                        </a>
+                    </li>
+                </ul>
             </nav>
 
-            <div class="header-actions">
-                <button type="button" class="theme-toggle-btn" id="btnThemeToggle" title="Переключить тему (Светлая / Темная)">
-                    <span class="theme-icon" id="themeIcon">🌙</span>
+            <!-- Header Right Group: Theme Switcher + Auth -->
+            <div class="header-right-group">
+                <!-- Theme Toggle Button (Dark / Light) -->
+                <button type="button" class="btn-theme-toggle" id="btnThemeToggle" title="Переключить тему оформления" aria-label="Переключить тему оформления">
+                    <span class="theme-icon-box" aria-hidden="true">
+                        <svg class="theme-icon-sun" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                        </svg>
+                        <svg class="theme-icon-moon" viewBox="0 0 20 20" fill="currentColor" style="display: none;">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </span>
+                    <span class="theme-toggle-text" id="themeToggleText">Тема</span>
                 </button>
-                <a href="/auth" class="btn-header-login" id="btnHeaderAuth">Войти</a>
+
+                <!-- User Login / Profile Action Button (Header Session State) -->
+                <div class="header-user-bar">
+                    <a href="/auth.html" class="header-login-action-btn" id="headerLoginBtn" title="Войти в личный кабинет">
+                        <div class="btn-user-avatar-wrap" aria-hidden="true">
+                            <svg class="btn-user-svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="btn-user-status-dot" id="headerUserDot" title="Верифицирован в ПКСК" style="display: none;"></span>
+                        </div>
+                        <span class="btn-user-label" id="headerUserLabel">Войти / Регистрация</span>
+                        <svg class="btn-user-arrow" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M6.22 3.22a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L9.94 8 6.22 4.28a.75.75 0 010-1.06z" clip-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                </div>
             </div>
         </div>
     </header>
@@ -352,25 +357,66 @@
     ================================================================= -->
     <div class="experts-page-container">
         <div class="experts-hero-box">
-            <h1 class="experts-hero-title">Каталог сертифицированных экспертов и интеграторов</h1>
-            <p class="experts-hero-desc">
-                Проверенные разработчики смарт-контрактов EVM, сертифицированные аудиторы информационной безопасности, юристы в сфере ЦФА и интеграторы 1С:Предприятие для платформы ПКСК Банка России.
-            </p>
-
-            <div class="experts-search-wrap">
-                <svg class="experts-search-icon" viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
-                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
-                </svg>
-                <input type="text" class="experts-search-input" id="expertSearchInput" placeholder="Поиск по имени, компетенциям (#solidity, #аудит, #1c-erp) или компании...">
+            <div class="experts-hero-badge">
+                <span class="badge-pulse-dot"></span>
+                <span>Реестр специалистов ПКСК Банка России</span>
             </div>
 
+            <h1 class="experts-hero-title">Каталог сертифицированных экспертов и интеграторов</h1>
+            <p class="experts-hero-desc">
+                Проверенные разработчики смарт-контрактов EVM/Yul, сертифицированные аудиторы информационной безопасности, юристы в сфере ЦФА и интеграторы 1С:Предприятие для контура ПКСК Банка России.
+            </p>
+
+            <!-- Search Bar with SVG Icon & Clear Button -->
+            <div class="experts-search-wrap">
+                <span class="experts-search-icon">
+                    <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
+                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+                    </svg>
+                </span>
+                <input type="text" class="experts-search-input" id="expertSearchInput" placeholder="Поиск по имени, компетенциям (#solidity, #аудит, #1c-erp) или компании...">
+                <button type="button" class="btn-clear-search" id="btnClearExpertSearch" style="display: none;" title="Очистить поиск">✕</button>
+            </div>
+
+            <!-- Direction Filter Tabs with Vector SVGs -->
             <div class="experts-filter-bar">
-                <button type="button" class="expert-filter-btn is-active" data-comp="all">Все направления</button>
-                <button type="button" class="expert-filter-btn" data-comp="smart-contracts">⚡ Разработка EVM</button>
-                <button type="button" class="expert-filter-btn" data-comp="security">🛡️ Аудит ИБ</button>
-                <button type="button" class="expert-filter-btn" data-comp="cbrf-law">🏛️ Право &amp; ЦБ РФ</button>
-                <button type="button" class="expert-filter-btn" data-comp="escrow-b2b">💼 1C:Эскроу</button>
-                <button type="button" class="expert-filter-btn" data-comp="oracles">🌐 Оракулы данных</button>
+                <button type="button" class="expert-filter-btn is-active" data-comp="all">
+                    <svg class="expert-tab-svg" viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                        <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
+                    </svg>
+                    <span>Все направления</span>
+                </button>
+                <button type="button" class="expert-filter-btn" data-comp="smart-contracts">
+                    <svg class="expert-tab-svg" viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                        <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>Разработка EVM</span>
+                </button>
+                <button type="button" class="expert-filter-btn" data-comp="security">
+                    <svg class="expert-tab-svg" viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                        <path fill-rule="evenodd" d="M10 1.944A11.954 11.954 0 012.166 5C2.056 5.649 2 6.319 2 7c0 5.225 3.34 9.67 8 11.317C14.66 16.67 18 12.225 18 7c0-.682-.057-1.35-.166-2.001A11.954 11.954 0 0110 1.944zM11 14a1 1 0 11-2 0 1 1 0 012 0zm0-7a1 1 0 10-2 0v3a1 1 0 102 0V7z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>Аудит ИБ</span>
+                </button>
+                <button type="button" class="expert-filter-btn" data-comp="cbrf-law">
+                    <svg class="expert-tab-svg" viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                        <path fill-rule="evenodd" d="M10.496 2.132a1 1 0 00-.992 0l-7 4A1 1 0 003 7v1a1 1 0 001 1h12a1 1 0 001-1V7a1 1 0 00-.504-.868l-7-4zM4 11a1 1 0 100 2h1v3H4a1 1 0 100 2h12a1 1 0 100-2h-1v-3h1a1 1 0 100-2H4zm4 5v-3h4v3H8z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>Право &amp; ЦБ РФ</span>
+                </button>
+                <button type="button" class="expert-filter-btn" data-comp="escrow-b2b">
+                    <svg class="expert-tab-svg" viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                        <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                        <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z"></path>
+                    </svg>
+                    <span>1C:Эскроу</span>
+                </button>
+                <button type="button" class="expert-filter-btn" data-comp="oracles">
+                    <svg class="expert-tab-svg" viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v.183a2 2 0 01-.44 1.258l-.678.814a6.002 6.002 0 01-7.466-7.226z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>Оракулы данных</span>
+                </button>
             </div>
         </div>
 
@@ -381,12 +427,12 @@
     </div>
 
     <!-- ================================================================
-         3. EXPERT PROFILE MODAL
+         3. EXPERT PROFILE & CONTACT MODAL
     ================================================================= -->
     <div class="modal-overlay-backdrop" id="modalExpertProfile" style="display: none;">
         <div class="quick-create-modal-card" style="max-width: 680px;">
             <div class="modal-header-line">
-                <h3 style="margin: 0; color: #ffffff; font-size: 18px;" id="modalExpertName">Профиль эксперта</h3>
+                <h3 style="margin: 0; color: #ffffff; font-size: 18px; font-family: var(--exp-font-heading);" id="modalExpertName">Профиль эксперта</h3>
                 <button type="button" class="btn-close-quick-modal" id="btnCloseExpertModal">✕</button>
             </div>
             <div class="modal-body-form" style="padding: 24px;" id="modalExpertBody">
@@ -402,6 +448,6 @@
     </div>
 
     <!-- Script -->
-    <script src="/experts.js"></script>
+    <script src="/experts.js?v=2.2.0"></script>
 </body>
 </html>
