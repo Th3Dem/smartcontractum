@@ -54,7 +54,6 @@ body.dark-theme-feed,
     padding: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -718,7 +717,6 @@ code, pre,
     position: relative;
     overflow: hidden;
     z-index: 50;
-    transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .feed-cosmic-canvas {

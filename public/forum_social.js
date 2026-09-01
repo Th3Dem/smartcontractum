@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const moonIcon = btnThemeToggle ? btnThemeToggle.querySelector('.theme-icon-moon') : null;
     const themeText = document.getElementById('themeToggleText');
 
-    function applyTheme(theme, notify = false) {
+    function applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
         try {
             localStorage.setItem('sc_theme', theme);
@@ -71,24 +71,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (moonIcon) moonIcon.style.display = 'block';
             if (themeText) themeText.textContent = 'Тёмная';
             if (btnThemeToggle) btnThemeToggle.setAttribute('title', 'Переключить на тёмную тему');
-            if (notify) showToast('Включена светлая тема оформления', '☀️');
         } else {
             if (sunIcon) sunIcon.style.display = 'block';
             if (moonIcon) moonIcon.style.display = 'none';
             if (themeText) themeText.textContent = 'Светлая';
             if (btnThemeToggle) btnThemeToggle.setAttribute('title', 'Переключить на светлую тему');
-            if (notify) showToast('Включена тёмная тема оформления', '🌙');
         }
     }
 
     const currentTheme = localStorage.getItem('sc_theme') || document.documentElement.getAttribute('data-theme') || 'dark';
-    applyTheme(currentTheme, false);
+    applyTheme(currentTheme);
 
     if (btnThemeToggle) {
         btnThemeToggle.addEventListener('click', () => {
             const active = document.documentElement.getAttribute('data-theme') || 'dark';
             const next = active === 'dark' ? 'light' : 'dark';
-            applyTheme(next, true);
+            applyTheme(next);
         });
     }
 
