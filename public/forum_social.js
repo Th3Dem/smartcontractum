@@ -375,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function applyFilters() {
         const cards = document.querySelectorAll('.feed-card');
-        const streamContainer = document.getElementById('feedStream');
+        const streamContainer = document.getElementById('feedPostsStream') || document.getElementById('feedStream');
         let matchedCount = 0;
 
         cards.forEach(card => {
@@ -618,7 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 applyFilters();
                 if (activeSearch) {
                     showToast(`Поиск по запросу: «${this.value.trim()}»`, '🔍');
-                    const stream = document.getElementById('feedStream');
+                    const stream = document.getElementById('feedPostsStream') || document.getElementById('feedStream');
                     if (stream) {
                         stream.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
@@ -633,7 +633,7 @@ document.addEventListener('DOMContentLoaded', () => {
             applyFilters();
             if (activeSearch) {
                 showToast(`Поиск по запросу: «${heroSearchInput.value.trim()}»`, '🔍');
-                const stream = document.getElementById('feedStream');
+                const stream = document.getElementById('feedPostsStream') || document.getElementById('feedStream');
                 if (stream) {
                     stream.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }

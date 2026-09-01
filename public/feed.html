@@ -170,7 +170,7 @@
         <canvas id="feedCosmicCanvas" class="feed-cosmic-canvas" width="1400" height="200" aria-hidden="true"></canvas>
 
         <div class="feed-hero-container">
-            <!-- Top Row: Brand Title + Slogan + Main Prominent Search Form -->
+            <!-- Top Row: Brand Title + Slogan -->
             <div class="feed-hero-header-center">
                 <div class="feed-community-brand-wrap">
                     <div class="brand-logo-icon-box" aria-hidden="true">
@@ -200,37 +200,9 @@
                 <p class="feed-community-slogan">
                     Добро пожаловать в открытое комьюнити. Место, где идеи встречаются с людьми и создаются смарт-контракты.
                 </p>
-
-                <!-- Big Prominent Search Form (Core Feature) -->
-                <div class="feed-hero-large-search-wrap" id="feedHeroLargeSearchWrap">
-                    <div class="feed-hero-large-search-bar" id="feedHeroSearchBox">
-                        <span class="hero-large-search-icon" aria-hidden="true">
-                            <svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
-                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
-                            </svg>
-                        </span>
-                        <input type="text" id="feedHeroSearchInput" class="feed-hero-large-search-input" placeholder="Поиск по темам, ключевым словам, людям, проектам и т.д." aria-label="Поиск по темам, ключевым словам, людям, проектам и т.д." autocomplete="off">
-                        <button type="button" id="btnClearHeroSearch" class="btn-clear-hero-search" title="Очистить поиск" style="display: none;">✕</button>
-                        <button type="button" id="btnSubmitHeroSearch" class="btn-hero-search-action" title="Искать">
-                            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-                                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span>Найти</span>
-                        </button>
-                    </div>
-                    <div class="feed-search-quick-tags" id="feedSearchQuickTags">
-                        <span class="quick-tags-label">Быстрый поиск:</span>
-                        <button type="button" class="quick-search-chip" data-query="Solidity">#solidity</button>
-                        <button type="button" class="quick-search-chip" data-query="Аудит ИБ">#аудит-иб</button>
-                        <button type="button" class="quick-search-chip" data-query="ПКСК">#пкск</button>
-                        <button type="button" class="quick-search-chip" data-query="1С:Эскроу">#1с-эскроу</button>
-                        <button type="button" class="quick-search-chip" data-query="Оракулы">#оракулы</button>
-                        <button type="button" class="quick-search-chip" data-query="ЦФА">#цфа</button>
-                    </div>
-                </div>
             </div>
 
-            <!-- Bottom Row: Navigation & Filtering Menu Bar + Write Button -->
+            <!-- Bottom Row: Navigation & Filtering Menu Bar + Write Button & Search Form -->
             <div class="feed-hero-nav-bar">
                 <div class="feed-hero-nav-tabs" role="tablist" aria-label="Разделы ленты сообщества">
                     <!-- 1. Primary Action: Create CTA (Leftmost) -->
@@ -272,6 +244,23 @@
                             <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z"></path>
                         </svg>
                         <span>Кейсы</span>
+                    </button>
+                </div>
+
+                <!-- 3. Search Box & Button in the Filter Block -->
+                <div class="feed-hero-search-box" id="feedHeroSearchBox">
+                    <span class="hero-search-svg-icon" aria-hidden="true">
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+                        </svg>
+                    </span>
+                    <input type="text" id="feedHeroSearchInput" class="feed-hero-search-input" placeholder="Поиск по ленте, темам..." aria-label="Поиск по ленте" autocomplete="off">
+                    <button type="button" id="btnClearHeroSearch" class="btn-clear-hero-search" title="Очистить поиск" style="display: none;">✕</button>
+                    <button type="button" id="btnSubmitHeroSearch" class="btn-hero-search-submit" title="Искать">
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13">
+                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>Найти</span>
                     </button>
                 </div>
             </div>
@@ -367,6 +356,17 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- Quick Topic / Search Tags -->
+                <div class="feed-search-quick-tags" id="feedSearchQuickTags">
+                    <span class="quick-tags-label">Быстрый поиск:</span>
+                    <button type="button" class="quick-search-chip" data-query="Solidity">#solidity</button>
+                    <button type="button" class="quick-search-chip" data-query="Аудит ИБ">#аудит-иб</button>
+                    <button type="button" class="quick-search-chip" data-query="ПКСК">#пкск</button>
+                    <button type="button" class="quick-search-chip" data-query="1С:Эскроу">#1с-эскроу</button>
+                    <button type="button" class="quick-search-chip" data-query="Оракулы">#оракулы</button>
+                    <button type="button" class="quick-search-chip" data-query="ЦФА">#цфа</button>
                 </div>
             </div>
         </div>
