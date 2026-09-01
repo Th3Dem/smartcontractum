@@ -750,14 +750,16 @@ code, pre,
 
 .feed-community-brand-title {
     font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 34px;
+    font-size: clamp(30px, 4.5vw, 42px);
     font-weight: 800;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.03em;
     margin: 0;
-    line-height: 1.2;
+    line-height: 1.15;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .feed-community-title-text {
