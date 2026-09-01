@@ -963,70 +963,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // =========================================================================
-    // 8. COSMIC PARTICLE CANVAS & 3D SPATIAL BLOCKCHAIN MATRIX PHYSICS
+    // 8. COSMIC PARTICLE CANVAS FOR FEED HERO STRIP
     // =========================================================================
-    const feedCube = document.getElementById('feedCrystal3dCube');
-    const feedMatrix = document.getElementById('feed3dBgMatrix');
-
-    if (feedCube || feedMatrix) {
-        let targetRotX = -18;
-        let targetRotY = 32;
-        let currentRotX = -18;
-        let currentRotY = 32;
-        let targetTransX = 0;
-        let targetTransY = 0;
-        let currentTransX = 0;
-        let currentTransY = 0;
-        let idleClock = 0;
-        let pointerPending = false;
-
-        function onFeedPointerMove(clientX, clientY) {
-            if (pointerPending) return;
-            pointerPending = true;
-            requestAnimationFrame(() => {
-                const normX = (clientX / window.innerWidth - 0.5) * 2;
-                const normY = (clientY / window.innerHeight - 0.5) * 2;
-                targetRotX = -18 - normY * 24;
-                targetRotY = 32 + normX * 32;
-                targetTransX = normX * 12;
-                targetTransY = normY * 8;
-                pointerPending = false;
-            });
-        }
-
-        window.addEventListener('mousemove', (e) => {
-            onFeedPointerMove(e.clientX, e.clientY);
-        }, { passive: true });
-
-        window.addEventListener('touchmove', (e) => {
-            if (e.touches && e.touches[0]) {
-                onFeedPointerMove(e.touches[0].clientX, e.touches[0].clientY);
-            }
-        }, { passive: true });
-
-        function renderFeed3DPhysics() {
-            idleClock += 0.015;
-            const idleOffset = Math.sin(idleClock) * 3;
-
-            currentRotX += (targetRotX - currentRotX) * 0.06;
-            currentRotY += (targetRotY - currentRotY) * 0.06;
-            currentTransX += (targetTransX - currentTransX) * 0.05;
-            currentTransY += (targetTransY - currentTransY) * 0.05;
-
-            if (feedCube) {
-                feedCube.style.transform = `translate3d(${currentTransX.toFixed(1)}px, ${(currentTransY + idleOffset).toFixed(1)}px, 0) rotateX(${currentRotX.toFixed(1)}deg) rotateY(${currentRotY.toFixed(1)}deg)`;
-            }
-
-            if (feedMatrix) {
-                feedMatrix.style.transform = `translate(calc(-50% + ${(currentTransX * 0.25).toFixed(1)}px), calc(-50% + ${(currentTransY * 0.25).toFixed(1)}px))`;
-            }
-
-            requestAnimationFrame(renderFeed3DPhysics);
-        }
-
-        renderFeed3DPhysics();
-    }
-
     function initFeedCanvas() {
         const canvas = document.getElementById('feedCosmicCanvas');
         if (!canvas) return;
