@@ -196,6 +196,10 @@ code, pre,
     background: radial-gradient(circle, rgba(2, 132, 199, 0.12) 0%, transparent 70%);
 }
 
+[data-theme="light"] .feed-community-kicker {
+    color: #0284c7 !important;
+}
+
 [data-theme="light"] .feed-community-title-text,
 [data-theme="light"] .logo-smart {
     color: #0f172a !important;
@@ -716,62 +720,58 @@ code, pre,
     z-index: 55;
 }
 
-.feed-hero-header-center {
+.feed-hero-header-left {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin-bottom: 20px;
+    align-items: flex-start;
+    text-align: left;
+    margin-bottom: 12px;
     position: relative;
     z-index: 10;
+}
+
+.feed-community-kicker {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #38bdf8;
+    letter-spacing: 0.01em;
+    margin-bottom: 6px;
+    display: inline-block;
 }
 
 .feed-community-brand-wrap {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 14px;
-    margin-bottom: 4px;
-}
-
-.brand-logo-icon-box {
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(15, 23, 42, 0.85);
-    border: 1px solid rgba(56, 189, 248, 0.25);
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(56, 189, 248, 0.15);
-    backdrop-filter: blur(8px);
-    flex-shrink: 0;
+    justify-content: flex-start;
+    margin-bottom: 6px;
 }
 
 .feed-community-brand-title {
     font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: clamp(30px, 4.5vw, 42px);
+    font-size: clamp(36px, 5.5vw, 50px);
     font-weight: 800;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.035em;
     margin: 0;
-    line-height: 1.15;
+    line-height: 1.1;
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 12px;
     flex-wrap: wrap;
+    text-align: left;
 }
 
 .feed-community-title-text {
     color: #ffffff;
     font-weight: 800;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
 }
 
 .logo-smart-contractum {
     display: inline-flex;
-    align-items: center;
-    letter-spacing: -0.02em;
+    align-items: baseline;
+    letter-spacing: -0.025em;
     font-weight: 800;
 }
 
@@ -789,12 +789,13 @@ code, pre,
 
 .feed-community-slogan {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 15.5px;
+    font-size: 16.5px;
     font-weight: 500;
     color: var(--feed-text-muted, #94a3b8);
-    margin: 8px auto 20px;
-    max-width: 680px;
+    margin: 4px 0 0 0;
+    max-width: 740px;
     line-height: 1.55;
+    text-align: left;
 }
 
 /* Hero Navigation & Filter Menu Bar */
