@@ -231,6 +231,10 @@ code, pre,
     background: rgba(0, 0, 0, 0.05) !important;
 }
 
+[data-theme="light"] .feed-hero-search-filter-row {
+    border-top-color: rgba(203, 213, 225, 0.6) !important;
+}
+
 [data-theme="light"] .quick-search-chip {
     background: #ffffff !important;
     border-color: rgba(203, 213, 225, 0.9) !important;
@@ -1007,21 +1011,37 @@ code, pre,
     transform: translateY(0);
 }
 
-/* Hero Topics Dropdown Row & Quick Tags */
-.feed-hero-topics-row {
+/* Hero Search & Quick Tags Row (Under the filter buttons row) */
+.feed-hero-search-filter-row {
     display: flex;
     align-items: center;
-    gap: 14px;
+    justify-content: flex-start;
+    gap: 16px;
     flex-wrap: wrap;
-    position: relative;
-    z-index: 60;
-    margin-top: 10px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(56, 189, 248, 0.12);
 }
 
-.feed-search-quick-tags {
-    display: inline-flex;
+.feed-hero-search-filter-row .feed-hero-search-box {
+    margin-left: 0;
+    flex: 0 1 360px;
+    max-width: 460px;
+}
+
+.feed-hero-search-filter-row .feed-hero-search-input {
+    width: 200px;
+    flex: 1;
+}
+
+.feed-hero-search-filter-row .feed-hero-search-input:focus {
+    width: 260px;
+}
+
+.feed-hero-search-filter-row .feed-search-quick-tags {
+    display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     flex-wrap: wrap;
 }
 

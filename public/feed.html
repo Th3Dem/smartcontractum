@@ -202,7 +202,7 @@
                 </p>
             </div>
 
-            <!-- Bottom Row: Navigation & Filtering Menu Bar + Write Button & Search Form -->
+            <!-- Row 1: Action Buttons + Filter Tabs + Topics Dropdown -->
             <div class="feed-hero-nav-bar">
                 <div class="feed-hero-nav-tabs" role="tablist" aria-label="Разделы ленты сообщества">
                     <!-- 1. Primary Action: Create CTA (Leftmost) -->
@@ -247,26 +247,7 @@
                     </button>
                 </div>
 
-                <!-- 3. Search Box & Button in the Filter Block -->
-                <div class="feed-hero-search-box" id="feedHeroSearchBox">
-                    <span class="hero-search-svg-icon" aria-hidden="true">
-                        <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
-                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
-                        </svg>
-                    </span>
-                    <input type="text" id="feedHeroSearchInput" class="feed-hero-search-input" placeholder="Поиск по ленте, темам..." aria-label="Поиск по ленте" autocomplete="off">
-                    <button type="button" id="btnClearHeroSearch" class="btn-clear-hero-search" title="Очистить поиск" style="display: none;">✕</button>
-                    <button type="button" id="btnSubmitHeroSearch" class="btn-hero-search-submit" title="Искать">
-                        <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13">
-                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span>Найти</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Sub Row: Topics Dropdown & Quick Filter Bar -->
-            <div class="feed-hero-topics-row">
+                <!-- Topics Dropdown (Right side of buttons row) -->
                 <div class="feed-topics-dropdown-wrap" id="feedTopicsDropdownWrap">
                     <button type="button" class="btn-feed-topics" id="btnFeedTopicsDropdown" aria-haspopup="true" aria-expanded="false">
                         <svg class="topics-svg-icon" viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
@@ -357,14 +338,34 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Row 2: Search Form + Quick Search Tags (Directly under the buttons) -->
+            <div class="feed-hero-search-filter-row">
+                <!-- Search Box & Action Button -->
+                <div class="feed-hero-search-box" id="feedHeroSearchBox">
+                    <span class="hero-search-svg-icon" aria-hidden="true">
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+                        </svg>
+                    </span>
+                    <input type="text" id="feedHeroSearchInput" class="feed-hero-search-input" placeholder="Поиск по темам, статьям, вопросам, людям..." aria-label="Поиск по ленте" autocomplete="off">
+                    <button type="button" id="btnClearHeroSearch" class="btn-clear-hero-search" title="Очистить поиск" style="display: none;">✕</button>
+                    <button type="button" id="btnSubmitHeroSearch" class="btn-hero-search-submit" title="Искать">
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13">
+                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>Найти</span>
+                    </button>
+                </div>
 
                 <!-- Quick Topic / Search Tags -->
                 <div class="feed-search-quick-tags" id="feedSearchQuickTags">
                     <span class="quick-tags-label">Быстрый поиск:</span>
-                    <button type="button" class="quick-search-chip" data-query="Solidity">#solidity</button>
+                    <button type="button" class="quick-search-chip" data-query="Цифровой рубль">#цифровой-рубль</button>
                     <button type="button" class="quick-search-chip" data-query="Аудит ИБ">#аудит-иб</button>
                     <button type="button" class="quick-search-chip" data-query="ПКСК">#пкск</button>
-                    <button type="button" class="quick-search-chip" data-query="1С:Эскроу">#1с-эскроу</button>
+                    <button type="button" class="quick-search-chip" data-query="Смарт-эскроу">#смарт-эскроу</button>
                     <button type="button" class="quick-search-chip" data-query="Оракулы">#оракулы</button>
                     <button type="button" class="quick-search-chip" data-query="ЦФА">#цфа</button>
                 </div>
