@@ -375,6 +375,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function applyFilters() {
         const cards = document.querySelectorAll('.feed-card');
+        const streamContainer = document.getElementById('feedStream');
+        let matchedCount = 0;
+
         cards.forEach(card => {
             const cardType = card.dataset.type; // question, article, discussion, poll, case, post
             const cardCat = card.dataset.cat;
@@ -403,8 +406,52 @@ document.addEventListener('DOMContentLoaded', () => {
             const matchCat = (activeCat === 'all' || cardCat === activeCat);
             const matchSearch = (!activeSearch || cardText.includes(activeSearch));
 
-            card.style.display = (matchType && matchCat && matchSearch) ? 'block' : 'none';
+            const isVisible = (matchType && matchCat && matchSearch);
+            card.style.display = isVisible ? 'block' : 'none';
+            if (isVisible) matchedCount++;
         });
+
+        // No Results State Display
+        let noResultsEl = document.getElementById('feedNoResultsNotice');
+        if (matchedCount === 0 && (activeSearch || activeCat !== 'all' || activeType !== 'for-you')) {
+            if (!noResultsEl && streamContainer) {
+                noResultsEl = document.createElement('div');
+                noResultsEl.id = 'feedNoResultsNotice';
+                noResultsEl.className = 'feed-no-results-card';
+                noResultsEl.style.cssText = 'background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(56, 189, 248, 0.18); border-radius: 16px; padding: 44px 24px; text-align: center; color: #94a3b8; margin: 24px 0; backdrop-filter: blur(12px);';
+                streamContainer.appendChild(noResultsEl);
+            }
+            if (noResultsEl) {
+                noResultsEl.style.display = 'block';
+                noResultsEl.innerHTML = `
+                    <div style="font-size: 32px; margin-bottom: 10px;">🔍</div>
+                    <h3 style="color: #ffffff; font-family: 'Manrope', sans-serif; font-size: 18px; font-weight: 800; margin: 0 0 8px;">
+                        ${activeSearch ? `По запросу «${escapeHtml(activeSearch)}» ничего не найдено` : 'Публикации по выбранным фильтрам не найдены'}
+                    </h3>
+                    <p style="font-size: 14px; margin: 0 0 16px; color: #94a3b8;">Попробуйте использовать другие ключевые слова или сбросить фильтры.</p>
+                    <button type="button" class="btn-sidebar-primary" id="btnResetSearchFilter" style="padding: 8px 18px; font-size: 13.5px; margin: 0 auto; display: inline-flex;">Сбросить фильтры и поиск</button>
+                `;
+                const btnReset = document.getElementById('btnResetSearchFilter');
+                if (btnReset) {
+                    btnReset.onclick = function() {
+                        const heroInput = document.getElementById('feedHeroSearchInput');
+                        if (heroInput) {
+                            heroInput.value = '';
+                            heroInput.dispatchEvent(new Event('input'));
+                        }
+                        activeCat = 'all';
+                        activeType = 'for-you';
+                        document.querySelectorAll('.feed-hero-tab').forEach(t => t.classList.toggle('is-active', t.dataset.heroTab === 'for-you'));
+                        const currentTopic = document.getElementById('currentTopicLabel');
+                        if (currentTopic) currentTopic.textContent = 'Все темы';
+                        applyFilters();
+                        showToast('Фильтры и поиск сброшены', '🔄');
+                    };
+                }
+            }
+        } else if (noResultsEl) {
+            noResultsEl.style.display = 'none';
+        }
     }
 
     // Hero Nav Tabs (Для вас, Подписки, Вопросы, Статьи, Обсуждения, Кейсы)
@@ -541,15 +588,58 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Live Search (Hero Search Bar)
+    // Live Search (Large Prominent Hero Search Bar)
     const heroSearchInput = document.getElementById('feedHeroSearchInput');
+    const heroSearchBox = document.getElementById('feedHeroSearchBox');
     const btnClearHeroSearch = document.getElementById('btnClearHeroSearch');
+    const btnSubmitHeroSearch = document.getElementById('btnSubmitHeroSearch');
 
     if (heroSearchInput) {
         heroSearchInput.addEventListener('input', function () {
             activeSearch = this.value.toLowerCase().trim();
-            if (btnClearHeroSearch) btnClearHeroSearch.style.display = activeSearch ? 'block' : 'none';
+            if (btnClearHeroSearch) btnClearHeroSearch.style.display = activeSearch ? 'flex' : 'none';
             applyFilters();
+        });
+
+        heroSearchInput.addEventListener('focus', function () {
+            if (heroSearchBox) heroSearchBox.classList.add('is-expanded');
+        });
+
+        heroSearchInput.addEventListener('blur', function () {
+            if (heroSearchBox && !this.value.trim()) {
+                heroSearchBox.classList.remove('is-expanded');
+            }
+        });
+
+        heroSearchInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                activeSearch = this.value.toLowerCase().trim();
+                applyFilters();
+                if (activeSearch) {
+                    showToast(`Поиск по запросу: «${this.value.trim()}»`, '🔍');
+                    const stream = document.getElementById('feedStream');
+                    if (stream) {
+                        stream.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            }
+        });
+    }
+
+    if (btnSubmitHeroSearch && heroSearchInput) {
+        btnSubmitHeroSearch.addEventListener('click', () => {
+            activeSearch = heroSearchInput.value.toLowerCase().trim();
+            applyFilters();
+            if (activeSearch) {
+                showToast(`Поиск по запросу: «${heroSearchInput.value.trim()}»`, '🔍');
+                const stream = document.getElementById('feedStream');
+                if (stream) {
+                    stream.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            } else {
+                heroSearchInput.focus();
+            }
         });
     }
 
@@ -559,9 +649,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 heroSearchInput.value = '';
                 heroSearchInput.dispatchEvent(new Event('input'));
                 heroSearchInput.focus();
+                showToast('Поисковый запрос очищен', '✕');
             }
         });
     }
+
+    // Quick Search Chips
+    document.querySelectorAll('.quick-search-chip').forEach(chip => {
+        chip.addEventListener('click', function () {
+            const query = this.dataset.query || this.textContent.replace('#', '').trim();
+            if (heroSearchInput) {
+                heroSearchInput.value = query;
+                heroSearchInput.dispatchEvent(new Event('input'));
+                heroSearchInput.focus();
+                showToast(`Быстрый поиск: ${query}`, '🏷️');
+            }
+        });
+    });
 
     // =========================================================================
     // 11. QUICK CREATOR MODAL
